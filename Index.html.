@@ -71,7 +71,6 @@ button,select{font:inherit}button{cursor:pointer;color:var(--ink);background:#38
     <p class="tiny" id="savedHint">Nessun salvataggio trovato su questo dispositivo.</p>
 
   </section>
-    </section>
 
   <main id="game" class="hide">
 
