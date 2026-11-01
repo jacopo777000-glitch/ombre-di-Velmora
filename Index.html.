@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+
+<html lang="it">
+
+<head>
+
+<meta charset="utf-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<meta name="theme-color" content="#15120f">
+
+<title>Ombre di Velmora — Prototipo</title>
+
+<style>
+
+:root{--bg:#15120f;--panel:#211c17;--panel2:#2c241c;--ink:#eee2c8;--muted:#b4a58a;--gold:#c8a96b;--red:#a7473f;--green:#66866a;--line:#514332}
+
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#30251b 0,#15120f 60%);color:var(--ink);font-family:Georgia,'Times New Roman',serif;min-height:100vh}
+
+button,select{font:inherit}button{cursor:pointer;color:var(--ink);background:#382b20;border:1px solid #806747;border-radius:10px;padding:12px 14px;min-height:44px;transition:.15s}button:active{transform:scale(.98);background:#57402a}button:disabled{opacity:.35;cursor:not-allowed}
+
+.wrap{max-width:760px;margin:auto;padding:16px 14px 32px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid var(--line);padding-bottom:12px}.brand{font-size:clamp(20px,5vw,28px);letter-spacing:.06em;color:var(--gold)}.sub{font-size:12px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-top:3px}.tiny{font-size:12px;color:var(--muted)}.hero{margin:18px 0 14px;padding:24px 18px;border:1px solid #59442e;border-radius:16px;background:linear-gradient(135deg,rgba(71,48,29,.8),rgba(24,20,16,.96)),repeating-linear-gradient(45deg,#302419 0,#302419 1px,#241c15 1px,#241c15 5px);position:relative;overflow:hidden}.hero:after{content:"☾";position:absolute;right:12px;top:-16px;font-size:112px;color:#c8a96b12}.eyebrow{color:var(--gold);font-size:12px;text-transform:uppercase;letter-spacing:.16em}.hero h1{font-size:clamp(28px,7vw,42px);line-height:1.05;margin:8px 0 10px;font-weight:normal}.hero p{color:#d0c2a7;line-height:1.5;margin:0;max-width:550px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.card{background:linear-gradient(180deg,#292119,#201a15);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}.card h2{font-size:19px;font-weight:normal;color:var(--gold);margin:0 0 10px}.card h3{font-size:17px;margin:0 0 6px;font-weight:normal}.statline{display:flex;justify-content:space-between;gap:10px;margin:8px 0;font-size:14px}.bar{height:8px;background:#100e0c;border-radius:10px;overflow:hidden;margin-top:5px;border:1px solid #44372a}.fill{height:100%;background:linear-gradient(90deg,#863b34,#c05e4d);width:100%;transition:width .2s}.fill.xp{background:linear-gradient(90deg,#8c6b2f,#d3b568)}.muted{color:var(--muted);font-size:13px;line-height:1.45}.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.actions button{width:100%;text-align:left}.wide{width:100%;margin-top:8px}.log{max-height:260px;overflow:auto;display:flex;flex-direction:column;gap:8px}.entry{border-left:2px solid #826341;padding:6px 10px;background:#181410;color:#d8c9ae;font-size:14px;line-height:1.45}.entry strong{color:var(--gold);font-weight:normal}.enemy{display:flex;align-items:center;gap:12px}.sigil{width:66px;height:66px;flex-shrink:0;display:grid;place-items:center;border:1px solid #74533a;border-radius:12px;background:#17120f;font-size:34px}.pill{border:1px solid var(--line);padding:5px 8px;border-radius:999px;font-size:12px;color:var(--muted)}.classes{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.classes button{text-align:center;padding:12px 5px}.classes button .emoji{display:block;font-size:25px;margin-bottom:5px}.classes button small{display:block;color:#c4b49a;font-size:11px;margin-top:4px}.choices{display:grid;gap:8px}.footer{color:#81745e;text-align:center;font-size:11px;margin-top:20px;line-height:1.5}.hide{display:none!important}
+
+@media(min-width:620px){.layout{display:grid;grid-template-columns:1fr 1fr;gap:12px}.layout .full{grid-column:1/-1}}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="wrap">
+
+  <header class="top">
+
+    <div><div class="brand">OMBRE DI VELMORA</div><div class="sub">Cronache di un regno perduto</div></div>
+
+    <button id="saveBtn" aria-label="Salva partita">Salva</button>
+
+  </header>
+
+  <section class="hero">
+
+    <div class="eyebrow">Un RPG dark fantasy</div>
+
+    <h1>Il villaggio<br>senza ombre</h1>
+
+    <p>La campana suona senza mani. Nelle strade di Velmora, nessuno proietta più un'ombra. Sotto la cappella, qualcosa si è svegliato.</p>
+
+  </section>
+
+  <section class="card" id="creation">
+
+    <h2>✦ Scegli chi diventerai</h2>
+
+    <p class="muted">Ogni cammino ha un prezzo. Scegli una classe per iniziare la tua avventura.</p>
+
+    <div class="classes">
+
+      <button data-class="Guerriero"><span class="emoji">⚔️</span><b>Guerriero</b><small>Resistente e potente</small></button>
+
+      <button data-class="Mago"><span class="emoji">🔮</span><b>Mago</b><small>Magia e colpi critici</small></button>
+
+      <button data-class="Ladro"><span class="emoji">🗡️</span><b>Ladro</b><small>Agile e astuto</small></button>
+
+    </div>
+
+    <button class="wide" id="continueBtn">Continua partita salvata</button>
+
+    <p class="tiny" id="savedHint">Nessun salvataggio trovato su questo dispositivo.</p>
+
+  </section>
+    </section>
+
+  <main id="game" class="hide">
+
+    <div class="layout">
+
+      <section class="card">
+
+        <h2>✦ Il tuo eroe</h2>
+
+        <div class="statline"><span id="heroName">Viandante</span><span class="pill" id="heroClass">Guerriero · Lv 1</span></div>
+
+        <div class="statline"><span>Salute</span><b id="hpText">30 / 30</b></div>
+
+        <div class="bar"><div class="fill" id="hpBar"></div></div>
+
+        <div class="statline"><span>Esperienza</span><b id="xpText">0 / 20</b></div>
+
+        <div class="bar"><div class="fill xp" id="xpBar"></div></div>
+
+        <div class="statline"><span>Attacco</span><b id="atk">5</b></div>
+
+        <div class="statline"><span>Difesa</span><b id="def">2</b></div>
+
+        <div class="statline"><span>Oro</span><b>🪙 <span id="gold">0</span></b></div>
+
+        <div class="statline"><span>Pozioni</span><b>🧪 <span id="pots">2</span></b></div>
+
+      </section>
+
+      <section class="card">
+
+        <h2>✦ Equipaggiamento</h2>
+
+        <div class="statline"><span>Arma</span><b id="weapon">Lama scheggiata</b></div>
+
+        <div class="statline"><span>Armatura</span><b id="armor">Mantello logoro</b></div>
+
+        <p class="muted" id="gearText">Ogni reliquia trovata potrebbe cambiare il tuo destino.</p>
+
+        <button class="wide" id="potionBtn">Bevi una pozione</button>
+
+      </section>
+
+      <section class="card full" id="sceneCard">
+
+        <h2>✦ La tua storia</h2>
+
+        <div id="sceneText" style="line-height:1.6">Le porte del villaggio sono aperte, ma nessuno viene ad accoglierti.</div>
+
+        <div id="choiceBox" class="choices" style="margin-top:12px"></div>
+
+      </section>
+
+      <section class="card full" id="combatCard">
+
+        <h2>✦ Incontro</h2>
+
+        <div class="enemy">
+
+          <div class="sigil" id="enemyIcon">💀</div>
+
+          <div style="flex:1">
+
+            <h3 id="enemyName">Scheletro maledetto</h3>
+
+            <div class="muted" id="enemyDesc">Un osso dopo l'altro, si rialza dalla terra nera.</div>
+
+            <div class="statline"><span>Salute nemico</span><b id="enemyHp">18 / 18</b></div>
+
+            <div class="bar"><div class="fill" id="enemyBar"></div></div>
+
+          </div>
+
+        </div>
+
+        <div class="actions">
+
+          <button id="attackBtn">⚔️ Attacco normale</button>
+
+          <button id="skillBtn">✨ Abilità speciale</button>
+
+          <button id="defendBtn">🛡️ Difenditi</button>
+
+          <button id="fleeBtn">↩️ Tenta la fuga</button>
+
+        </div>
+
+        <p class="muted" id="combatHint">Tira il d20: il risultato e il tuo attacco determinano se colpisci.</p>
+
+      </section>
+
+      <section class="card full">
+
+        <h2>✦ Cronaca</h2>
+
+        <div class="log" id="log"><div class="entry">La tua storia attende la prima scelta.</div></div>
+
+        <button class="wide" id="resetBtn">Ricomincia da capo</button>
+
+      </section>
+
+    </div>
+
+  </main>
+
+  <div class="footer">
+
+    PROTOTIPO 0.1 · Gioco originale in sviluppo · I dadi sono simulati localmente.<br>
+
+    Salvataggio memorizzato nel browser di questo dispositivo.
+
+  </div>
+
+</div>
+<script>
+
+(()=>{
+
+const $=id=>document.getElementById(id);
+
+const initial=()=>({started:false,cls:"Guerriero",level:1,xp:0,hp:30,maxHp:30,atk:5,def:2,gold:0,pots:2,weapon:"Lama scheggiata",armor:"Mantello logoro",scene:0,enemy:null,won:0,turn:0,guard:false,skillReady:true,dead:false,storyFlags:[],log:["La tua storia attende la prima scelta."]});
+
+let s=initial();
+
+const classes={
+
+ "Guerriero":{hp:36,atk:6,def:3,weapon:"Spada da sentinella",desc:"Hai imparato a resistere quando ogni speranza cede."},
+
+ "Mago":{hp:26,atk:7,def:1,weapon:"Bastone di frassino",desc:"Le rune sussurrano il tuo nome nel buio."},
+
+ "Ladro":{hp:29,atk:5,def:2,weapon:"Pugnali gemelli",desc:"Sai che ogni serratura ha un segreto e ogni guardia un punto cieco."}
+
+};
+
+const enemies=[
+
+ {name:"Scheletro maledetto",icon:"💀",desc:"Le ossa scricchiolano come rami secchi.",hp:18,maxHp:18,atk:4,def:2,xp:10,gold:5},
+
+ {name:"Corvo divoratore",icon:"🐦‍⬛",desc:"Il suo becco è sporco di cera nera.",hp:24,maxHp:24,atk:5,def:3,xp:14,gold:8},
+
+ {name:"Custode della cripta",icon:"👹",desc:"La campana vibra dentro il suo petto vuoto.",hp:38,maxHp:38,atk:7,def:4,xp:25,gold:18,boss:true}
+
+];
+
+function log(msg){s.log.unshift(msg);s.log=s.log.slice(0,30);renderLog()}
+
+function renderLog(){$("log").innerHTML=s.log.map(x=>`<div class="entry">${x}</div>`).join("")}
+
+function save(){try{localStorage.setItem("ombreVelmoraSave",JSON.stringify(s));$("savedHint").textContent="Partita salvata su questo dispositivo."}catch(e){$("savedHint").textContent="Salvataggio non disponibile in questa modalità del browser."}}
+
+function load(){try{const raw=localStorage.getItem("ombreVelmoraSave");if(!raw)return false;s=Object.assign(initial(),JSON.parse(raw));return s.started}catch(e){return false}}
+
+function start(cls){s=initial();s.started=true;s.cls=cls;const c=classes[cls];s.maxHp=c.hp;s.hp=c.hp;s.atk=c.atk;s.def=c.def;s.weapon=c.weapon;s.scene=0;s.enemy=null;s.log=[];$("creation").classList.add("hide");$("game").classList.remove("hide");log(`<strong>${cls}:</strong> ${c.desc}`);log("Il villaggio di Velmora ti attende. La campana suona sotto terra.");render();story()}
+
+function render(){
+
+ $("heroName").textContent=s.cls;$("heroClass").textContent=`${s.cls} · Lv ${s.level}`;
+
+ $("hpText").textContent=`${s.hp} / ${s.maxHp}`;$("hpBar").style.width=Math.max(0,s.hp/s.maxHp*100)+"%";
+
+ $("xpText").textContent=`${s.xp} / ${s.level*20}`;$("xpBar").style.width=Math.min(100,s.xp/(s.level*20)*100)+"%";
+
+ $("atk").textContent=s.atk;$("def").textContent=s.def;$("gold").textContent=s.gold;$("pots").textContent=s.pots;$("weapon").textContent=s.weapon;$("armor").textContent=s.armor;
+
+ const e=s.enemy;
+
+ $("combatCard").classList.toggle("hide",!e||s.dead);
+
+ if(e){$("enemyName").textContent=e.name;$("enemyIcon").textContent=e.icon;$("enemyDesc").textContent=e.desc;$("enemyHp").textContent=`${Math.max(0,e.hp)} / ${e.maxHp}`;$("enemyBar").style.width=Math.max(0,e.hp/e.maxHp*100)+"%"}
+
+ $("potionBtn").disabled=s.pots<=0||s.hp>=s.maxHp||s.dead;
+
+ $("attackBtn").disabled=!e||s.dead;$("skillBtn").disabled=!e||s.dead||!s.skillReady;$("defendBtn").disabled=!e||s.dead;$("fleeBtn").disabled=!e||s.dead;
+
+ renderLog()
+
+}
+
+function setScene(text,choices){$("sceneText").textContent=text;$("choiceBox").innerHTML="";choices.forEach(c=>{const b=document.createElement("button");b.textContent=c.label;b.onclick=c.action;$("choiceBox").appendChild(b)})}
+
+function story(){
+
+ if(s.dead){setScene("La tua luce si spegne tra le pietre fredde. Puoi ricominciare la storia.",[{label:"Ricomincia l'avventura",action:()=>start(s.cls)}]);return}
+
+ if(s.scene===0){setScene("Le case sono mute. Un vecchio guardiano ti indica la cappella: «Sotto l'altare c'è la radice della maledizione. Ma la cripta chiede sempre un prezzo».",[
+
+ {label:"Parla con il guardiano",action:()=>{log("Il guardiano ti consegna una pozione. «Non fidarti delle ombre che parlano»");s.pots++;s.storyFlags.push("guardiano");s.scene=1;render();story()}},
+
+ {label:"Entra subito nella cappella",action:()=>{log("Scendi nella cappella. Qualcosa raschia dietro il muro.");s.scene=1;render();story()}}
+
+ ]);}
+
+ else if(s.scene===1){setScene("Dietro l'altare trovi una scala coperta di radici. Un sussurro sale dal buio: «Lascia una goccia di sangue e ti mostrerò la via».",[
+
+ {label:"Scendi con cautela",action:()=>{log("Un mucchio di ossa si solleva dal pavimento!");s.scene=2;spawn(0)}},
+
+ {label:"Esamina le rune",action:()=>{const r=roll();if(r>=11){log(`Tiro di Sapienza: ${r} — scopri una runa protettiva. Difesa +1.`);s.def++;s.storyFlags.push("runa")}else log(`Tiro di Sapienza: ${r} — le rune si spengono senza rivelare nulla.`);s.scene=2;render();story()}}
+
+ ]);}
+
+ else if(s.scene===2&&!s.enemy&&s.won===1){setScene("Il corridoio si apre su una sala piena di piume nere. Una creatura si stacca dal soffitto, con occhi come braci.",[{label:"Avanza verso il suono della campana",action:()=>{s.scene=3;spawn(1)}}]);}
+
+ else if(s.scene===3&&!s.enemy&&s.won===2){setScene("Dietro una porta di ferro trovi una scala a spirale. In cima, la campana pulsa come un cuore. Il Custode della cripta ti sbarra il passo.",[{label:"Affronta il Custode",action:()=>{s.scene=4;spawn(2)}}]);}
+
+ else if(s.scene===4&&!s.enemy&&s.won>=3){setScene("Il Custode cade in ginocchio. La campana si spezza e le ombre tornano lentamente ai piedi degli abitanti. Ma nel frammento più grande vedi un occhio che si apre.",[
+
+ {label:"Distruggi il frammento",action:()=>ending(false)},
+
+ {label:"Conserva il frammento",action:()=>ending(true)}
+
+ ]);}
+
+}
+
+function ending(keep){s.scene=5;s.storyFlags.push(keep?"frammento":"distrutto");$("combatCard").classList.add("hide");setScene(keep?"La maledizione svanisce dal villaggio, ma il frammento sussurra il tuo nome. Hai scelto il potere, e forse un giorno tornerà a reclamarti. FINE DEL CAPITOLO 1.":"Il frammento si dissolve in cenere. Velmora è salva, almeno per ora. Lontano, un'altra campana risponde. FINE DEL CAPITOLO 1.",[{label:"Ricomincia l'avventura",action:()=>start(s.cls)}]);log(keep?"Finale: il frammento è tuo.":"Finale: il frammento è distrutto.");render();save()}
+
+function spawn(i){s.enemy={...enemies[i]};s.guard=false;s.skillReady=true;render();log(`<strong>Incontro:</strong> ${s.enemy.name} appare davanti a te.`);setScene("Il nemico ti blocca la strada. Scegli la tua azione nel pannello di combattimento.",[])}
+
+function roll(){return Math.floor(Math.random()*20)+1}
+
+function playerAttack(special=false){
+
+ const e=s.enemy;if(!e||s.dead)return;
+
+ const r=roll();const bonus=s.atk+(special?(s.cls==="Mago"?3:s.cls==="Ladro"?2:1):0);
+
+ const target=10+e.def;let hit=r===20||r+bonus>=target;
+
+ let dmg=0;let msg=`Tiro d20: ${r}. `;
+
+ if(r===1)hit=false;
+
+ if(hit){dmg=Math.max(1,Math.floor(s.atk/2)+r%6+1-e.def);if(r===20)dmg+=5;if(special)dmg+=s.cls==="Mago"?5:s.cls==="Ladro"?4:3;e.hp-=dmg;msg+=`Colpisci ${e.name} e infliggi ${dmg} danni${r===20?" — CRITICO!":""}.`;}
+
+ else msg+="Mancato! Il nemico schiva il colpo.";
+
+ if(special){s.skillReady=false;msg+=" Hai usato la tua abilità speciale."}
+
+ log(msg);
+
+ if(e.hp<=0){victory();return}
+
+ enemyTurn()
+
+}
+  function enemyTurn(){const e=s.enemy;if(!e)return;const r=roll();let dmg=Math.max(1,e.atk+Math.floor(r/7)-s.def-(s.guard?4:0));if(r===1){dmg=0;log(`${e.name} inciampa e manca il colpo!`)}else{ s.hp-=dmg;log(`${e.name} attacca (d20 ${r}): subisci ${dmg} danni${s.guard?" grazie alla difesa":""}.`)}s.guard=false;if(s.hp<=0){s.hp=0;s.dead=true;log("Sei caduto. La cripta inghiotte il suono dei tuoi passi.");story()}render()}
+
+function victory(){const e=s.enemy;s.won++;s.xp+=e.xp;s.gold+=e.gold;log(`<strong>Vittoria!</strong> ${e.name} sconfitto. +${e.xp} PE, +${e.gold} oro.`);s.enemy=null;s.skillReady=true;
+
+ if(s.xp>=s.level*20){s.xp-=s.level*20;s.level++;s.maxHp+=5;s.hp=Math.min(s.maxHp,s.hp+8);s.atk++;if(s.level%2===0)s.def++;log(`<strong>Livello ${s.level}!</strong> Salute massima +5, attacco +1 e recuperi salute.`)}
+
+ if(s.won===2){s.weapon="Lama della cripta";s.atk+=1;log("Hai raccolto una lama antica: attacco +1.")}
+
+ render();story();save()}
+
+$("saveBtn").onclick=()=>{save();log("Partita salvata.")};
+
+document.querySelectorAll("[data-class]").forEach(b=>b.onclick=()=>start(b.dataset.class));
+
+$("continueBtn").onclick=()=>{if(load()){$("creation").classList.add("hide");$("game").classList.remove("hide");render();story();log("Bentornato a Velmora.")}else{$("savedHint").textContent="Non c'è una partita salvata da continuare."}};
+
+$("attackBtn").onclick=()=>playerAttack(false);$("skillBtn").onclick=()=>playerAttack(true);
+
+$("defendBtn").onclick=()=>{s.guard=true;log("Ti prepari a difenderti: ridurrai il prossimo danno.");enemyTurn()};
+
+$("fleeBtn").onclick=()=>{const r=roll();if(r>=12){log(`Fuga riuscita (d20 ${r}). Ti allontani dal nemico.`);s.enemy=null;render();setScene("Ti nascondi in un passaggio laterale. Dopo un momento, riprendi il cammino.",[{label:"Prosegui",action:()=>{if(s.won===0){s.scene=1}else if(s.won===1){s.scene=2}else{s.scene=3}story()}}])}else{log(`Fuga fallita (d20 ${r}). Il nemico ti raggiunge!`);enemyTurn()}};
+
+$("potionBtn").onclick=()=>{if(s.pots>0&&s.hp<s.maxHp&&!s.dead){const heal=Math.min(12,s.maxHp-s.hp);s.hp+=heal;s.pots--;log(`Bevi una pozione e recuperi ${heal} salute.`);render()}};
+
+$("resetBtn").onclick=()=>{if(confirm("Vuoi cancellare la partita e ricominciare?")){try{localStorage.removeItem("ombreVelmoraSave")}catch(e){}start("Guerriero")}};
+
+})();
+
+</script>
+
+</body></html>
