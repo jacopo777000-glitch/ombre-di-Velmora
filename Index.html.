@@ -346,4 +346,6 @@ $("resetBtn").onclick=()=>{if(confirm("Vuoi cancellare la partita e ricominciare
 
 </script>
 
-</body></html>
+</body>
+<h1 style="color:red;background:yellow;padding:20px">PROVA VELMORA</h1>
+</html>
