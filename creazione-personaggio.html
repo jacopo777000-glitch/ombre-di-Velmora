@@ -24,11 +24,17 @@ body {
 
   margin: 0;
 
-  background: #100e0c;
+  background:
+
+    linear-gradient(rgba(12, 15, 12, 0.48), rgba(12, 10, 9, 0.78)),
+
+    url("valle_velmora.jpg") center center / cover fixed;
 
   color: #e9dfc8;
 
   font-family: Georgia, serif;
+
+  min-height: 100vh;
 
 }
 
@@ -38,9 +44,11 @@ header {
 
   padding: 22px 10px;
 
-  background: linear-gradient(#292016, #100e0c);
+  background: linear-gradient(rgba(20, 25, 19, 0.88), rgba(16, 14, 12, 0.72));
 
   border-bottom: 1px solid #96713b;
+
+  backdrop-filter: blur(5px);
 
 }
 
@@ -58,9 +66,31 @@ h1 {
 
 header p {
 
-  color: #b9a98b;
+  color: #d0c2a6;
 
   font-size: 13px;
+
+}
+
+.music-button {
+
+  margin-top: 8px;
+
+  padding: 9px 16px;
+
+  border: 1px solid #96713b;
+
+  border-radius: 20px;
+
+  background: rgba(35, 31, 23, 0.9);
+
+  color: #e9c783;
+
+  font-family: Georgia, serif;
+
+  font-size: 13px;
+
+  cursor: pointer;
 
 }
 
@@ -74,7 +104,7 @@ main {
 
 .panel {
 
-  background: #1d1915;
+  background: rgba(29, 25, 21, 0.91);
 
   border: 1px solid #69502e;
 
@@ -83,6 +113,8 @@ main {
   padding: 14px;
 
   margin-bottom: 16px;
+
+  backdrop-filter: blur(5px);
 
 }
 
@@ -306,11 +338,13 @@ h2 {
 
 .note {
 
-  color: #96866d;
+  color: #e0d0ad;
 
   font-size: 11px;
 
   text-align: center;
+
+  text-shadow: 1px 1px 3px #000;
 
 }
 
@@ -381,6 +415,18 @@ h2 {
   <h1>OMBRE DI VELMORA</h1>
 
   <p>Crea il tuo eroe · Cronache di un regno perduto</p>
+
+  <button class="music-button" id="musicToggle" type="button">
+
+    ♫ Musica: OFF
+
+  </button>
+
+  <audio id="backgroundMusic" loop preload="none">
+
+    <source src="musica_valle.mp3" type="audio/mpeg">
+
+  </audio>
 
 </header>
 
@@ -833,6 +879,44 @@ document.querySelectorAll("[data-gender]").forEach(button => {
     refresh();
 
   });
+
+});
+
+const music = document.getElementById("backgroundMusic");
+
+const musicToggle = document.getElementById("musicToggle");
+
+musicToggle.addEventListener("click", async () => {
+
+  if (music.paused) {
+
+    try {
+
+      await music.play();
+
+      musicToggle.textContent = "♫ Musica: ON";
+
+    } catch (error) {
+
+      musicToggle.textContent = "♫ Riprova ad attivare";
+
+      console.log("Impossibile avviare la musica:", error);
+
+    }
+
+  } else {
+
+    music.pause();
+
+    musicToggle.textContent = "♫ Musica: OFF";
+
+  }
+
+});
+
+music.addEventListener("error", () => {
+
+  musicToggle.textContent = "♫ Audio non disponibile";
 
 });
 
