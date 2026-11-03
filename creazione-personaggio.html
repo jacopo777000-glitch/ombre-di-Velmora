@@ -20,21 +20,55 @@
 
 }
 
+html {
+
+  min-height: 100%;
+
+  background: #100e0c;
+
+}
+
 body {
+
+  position: relative;
+
+  isolation: isolate;
 
   margin: 0;
 
-  background:
-
-    linear-gradient(rgba(12, 15, 12, 0.48), rgba(12, 10, 9, 0.78)),
-
-    url("valle_velmora.jpg") center center / cover fixed;
+  background: transparent;
 
   color: #e9dfc8;
 
   font-family: Georgia, serif;
 
   min-height: 100vh;
+
+}
+
+body::before {
+
+  content: "";
+
+  position: fixed;
+
+  inset: 0;
+
+  z-index: -1;
+
+  background:
+
+    linear-gradient(
+
+      rgba(12, 15, 12, 0.35),
+
+      rgba(12, 10, 9, 0.72)
+
+    ),
+
+    url("https://jacopo777000-glitch.github.io/ombre-di-Velmora/valle_velmora.jpg")
+
+    center center / cover no-repeat;
 
 }
 
