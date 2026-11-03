@@ -1,0 +1,359 @@
+
+
+<!DOCTYPE html>
+
+<html lang="it">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Ombre di Velmora - Creazione personaggio</title>
+
+<style>
+
+*{box-sizing:border-box}
+
+body{
+
+ margin:0;padding:15px;color:#ead9bd;
+
+ font-family:Georgia,serif;
+
+ background:radial-gradient(ellipse at top,#493526,#17110e 55%,#080706);
+
+ min-height:100vh
+
+}
+
+main{max-width:1000px;margin:auto}
+
+h1{text-align:center;color:#dfb875;letter-spacing:3px;font-size:29px;margin-bottom:5px}
+
+.subtitle{text-align:center;color:#a89172;font-style:italic;margin-bottom:20px}
+
+h2,h3{color:#d8b477}
+
+h2{border-bottom:1px solid #735638;padding-bottom:9px}
+
+.layout{display:grid;grid-template-columns:1fr 1.5fr 1fr;gap:12px}
+
+.panel{
+
+ background:linear-gradient(145deg,#302319,#17120f);
+
+ border:1px solid #765737;border-radius:9px;padding:13px;
+
+ box-shadow:0 7px 20px #0008
+
+}
+
+.choice{
+
+ display:block;width:100%;text-align:left;margin:6px 0;
+
+ padding:10px;background:#211912;color:#d9c5a4;
+
+ border:1px solid #62472d;border-radius:5px;
+
+ font-family:Georgia,serif;font-size:14px
+
+}
+
+.choice.active{background:#62452b;border-color:#e1b66e;color:#fff0cf}
+
+button{cursor:pointer}
+
+.choice:hover,button:hover{filter:brightness(1.3)}
+
+.preview{
+
+ min-height:320px;border:1px solid #9b7444;border-radius:8px;
+
+ background:radial-gradient(ellipse at 50% 35%,#92704a,#382719 48%,#120e0b 85%);
+
+ display:flex;align-items:center;justify-content:center;
+
+ flex-direction:column;text-align:center;position:relative;overflow:hidden;
+
+}
+
+.preview:before{
+
+ content:"";position:absolute;inset:0;
+
+ background:linear-gradient(transparent 60%,#100b08);
+
+ pointer-events:none
+
+}
+
+.figure{font-size:105px;filter:drop-shadow(0 10px 10px #000);z-index:1}
+
+.race-name{font-size:23px;color:#f0d5a3;z-index:1}
+
+.race-desc{font-size:13px;color:#d0b995;padding:8px;z-index:1}
+
+.gender{display:flex;gap:8px;margin-top:12px}
+
+.gender button,.start{
+
+ flex:1;background:#302116;color:#f0d9b2;
+
+ border:1px solid #a17a49;border-radius:5px;padding:11px
+
+}
+
+.gender button.active{background:#76512e}
+
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+
+.stat{background:#17120f;border:1px solid #483322;padding:9px;border-radius:5px;font-size:13px}
+
+.stat strong{color:#e4bd7c;float:right}
+
+input,select{
+
+ width:100%;padding:12px;background:#17120f;
+
+ color:#f0ddbd;border:1px solid #80603c;border-radius:5px;
+
+ font-family:Georgia,serif;font-size:15px
+
+}
+
+.start{width:100%;margin-top:16px;background:linear-gradient(#8c6338,#4d321d);font-size:17px;font-weight:bold}
+
+.small{color:#a99579;font-size:12px;line-height:1.5}
+
+#result{display:none}
+
+@media(max-width:650px){
+
+ .layout{grid-template-columns:1fr}
+
+ .preview{min-height:290px}
+
+ .left{order:1}.center{order:2}.right{order:3}
+
+ h1{font-size:25px}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<main>
+
+<h1>OMBRE DI VELMORA</h1>
+
+<div class="subtitle">La nascita di una nuova leggenda</div>
+
+<div class="layout">
+
+<section class="panel left">
+
+<h2>Razza</h2>
+
+<div id="raceChoices"></div>
+
+<p class="small">La tua origine influenzerà le statistiche e il modo in cui il mondo reagirà a te.</p>
+
+</section>
+
+<section class="panel center">
+
+<h2>Il tuo eroe</h2>
+
+<div class="preview">
+
+<div class="figure" id="figure">🧙</div>
+
+<div class="race-name" id="raceName">Umano</div>
+
+<div class="race-desc" id="raceDesc">Versatili e adattabili, gli umani si distinguono in ogni terra.</div>
+
+</div>
+
+<div class="gender">
+
+<button id="male" class="active" onclick="setGender('Maschio')">♂ Maschio</button>
+
+<button id="female" onclick="setGender('Femmina')">♀ Femmina</button>
+
+</div>
+
+<h3>Nome del personaggio</h3>
+
+<input id="heroName" maxlength="20" value="Viandante" placeholder="Scrivi il tuo nome">
+
+<h3>Statistiche</h3>
+
+<div class="stats">
+
+<div class="stat">Forza <strong id="strength">5</strong></div>
+
+<div class="stat">Agilità <strong id="agility">5</strong></div>
+
+<div class="stat">Vitalità <strong id="vitality">5</strong></div>
+
+<div class="stat">Intelletto <strong id="intellect">5</strong></div>
+
+<div class="stat">Volontà <strong id="will">5</strong></div>
+
+<div class="stat">Percezione <strong id="perception">5</strong></div>
+
+<div class="stat">Carisma <strong id="charisma">5</strong></div>
+
+</div>
+
+</section>
+
+<section class="panel right">
+
+<h2>Classe</h2>
+
+<div id="classChoices"></div>
+
+<h3>Descrizione</h3>
+
+<p id="classDesc" class="small"></p>
+
+<h3>Predisposizione razziale</h3>
+
+<p id="trait" class="small"></p>
+
+</section>
+
+</div>
+
+<button class="start" onclick="begin()">⚔ INIZIA IL VIAGGIO ⚔</button>
+
+<section class="panel" id="result">
+
+<h2>Il tuo destino comincia</h2>
+
+<p id="summary"></p>
+
+<p>La creazione del personaggio è completata. La prossima tappa sarà collegare questo eroe alla prima avventura di Velmora.</p>
+
+</section>
+
+<p class="small" style="text-align:center">OMBRE DI VELMORA · PROTOTIPO DI CREAZIONE PERSONAGGIO</p>
+
+</main>
+
+<script>
+
+const races=[
+
+{name:"Umano",icon:"🛡️",desc:"Versatili e adattabili, gli umani si distinguono in ogni terra.",trait:"Adattamento: imparano rapidamente e si adattano alle difficoltà.",mods:{charisma:1,perception:1}},
+
+{name:"Elfo",icon:"🏹",desc:"Antichi e agili, gli elfi custodiscono una profonda eredità arcana.",trait:"Eredità arcana: predisposizione all'apprendimento della magia.",mods:{agility:1,intellect:1,vitality:-1}},
+
+{name:"Orco",icon:"🪓",desc:"Forti e resistenti, gli orchi portano nel sangue una volontà indomabile.",trait:"Sangue indomito: maggiore resistenza quando la vita è in pericolo.",mods:{strength:1,vitality:1,intellect:-1}},
+
+{name:"Leonide",icon:"🦁",desc:"Il popolo leonide è fiero, possente e guidato da un antico codice d'onore.",trait:"Ruggito intimidatorio: incute timore negli avversari.",mods:{strength:1,charisma:1,agility:-1}},
+
+{name:"Popolo Lupo",icon:"🐺",desc:"Predatori vigili, capaci di percepire pericoli nascosti.",trait:"Istinto predatorio: maggiore attenzione alle imboscate.",mods:{agility:1,perception:1,charisma:-1}},
+
+{name:"Nano",icon:"⚒️",desc:"Tenaci artigiani e combattenti, difficili da piegare.",trait:"Tenacia: resistenza alle condizioni debilitanti.",mods:{vitality:1,will:1,agility:-1}},
+
+{name:"Coniglio guerriero",icon:"🐇",desc:"Una stirpe agile e sorprendentemente vigorosa, abituata a combattere senza paura.",trait:"Salto devastante: predisposizione agli attacchi improvvisi.",mods:{strength:1,agility:1}},
+
+{name:"Coniglio mistico",icon:"✨",desc:"Una stirpe sensibile alle energie arcane e ai misteri del mondo.",trait:"Istinto arcano: predisposizione all'uso della magia.",mods:{intellect:1,will:1}}
+
+];
+
+const classes=[
+
+{name:"Guerriero",icon:"⚔️",desc:"Combattente esperto nelle armi e nella difesa. Resiste agli scontri più duri.",mods:{strength:2,vitality:2,agility:0,intellect:0,will:0,perception:0,charisma:0}},
+
+{name:"Ladro",icon:"🗡️",desc:"Agile e astuto, sfrutta precisione, furtività e opportunità.",mods:{strength:0,vitality:0,agility:2,intellect:1,will:0,perception:2,charisma:0}},
+
+{name:"Mago",icon:"🔮",desc:"Studioso delle forze arcane. Domina incantesimi e conoscenze proibite.",mods:{strength:0,vitality:0,agility:0,intellect:3,will:2,perception:0,charisma:0}}
+
+];
+
+let raceIndex=0,classIndex=0,gender="Maschio";
+
+function drawChoices(){
+
+ document.getElementById("raceChoices").innerHTML=races.map((r,i)=>
+
+ `<button class="choice ${i===raceIndex?'active':''}" onclick="selectRace(${i})">${r.icon} ${r.name}</button>`).join("");
+
+ document.getElementById("classChoices").innerHTML=classes.map((c,i)=>
+
+ `<button class="choice ${i===classIndex?'active':''}" onclick="selectClass(${i})">${c.icon} ${c.name}</button>`).join("");
+
+}
+
+function selectRace(i){raceIndex=i;refresh()}
+
+function selectClass(i){classIndex=i;refresh()}
+
+function setGender(g){
+
+ gender=g;
+
+ document.getElementById("male").classList.toggle("active",g==="Maschio");
+
+ document.getElementById("female").classList.toggle("active",g==="Femmina");
+
+}
+
+function refresh(){
+
+ let r=races[raceIndex],c=classes[classIndex];
+
+ document.getElementById("figure").textContent=r.icon;
+
+ document.getElementById("raceName").textContent=r.name;
+
+ document.getElementById("raceDesc").textContent=r.desc;
+
+ document.getElementById("classDesc").textContent=c.desc;
+
+ document.getElementById("trait").textContent=r.trait;
+
+ let stats={strength:5,agility:5,vitality:5,intellect:5,will:5,perception:5,charisma:5};
+
+ Object.keys(r.mods).forEach(k=>stats[k]+=r.mods[k]);
+
+ Object.keys(c.mods).forEach(k=>stats[k]+=c.mods[k]);
+
+ Object.keys(stats).forEach(k=>document.getElementById(k).textContent=stats[k]);
+
+ drawChoices();
+
+}
+
+function begin(){
+
+ let name=document.getElementById("heroName").value.trim()||"Viandante";
+
+ let r=races[raceIndex],c=classes[classIndex];
+
+ document.getElementById("summary").textContent=
+
+ name+" · "+gender+" · "+r.name+" · "+c.name;
+
+ document.getElementById("result").style.display="block";
+
+ document.getElementById("result").scrollIntoView({behavior:"smooth"});
+
+}
+
+refresh();
+
+</script>
+
+</body>
+
+</html>
