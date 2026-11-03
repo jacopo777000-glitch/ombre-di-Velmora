@@ -10,11 +10,15 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Ombre di Velmora - Crea il tuo eroe</title>
+<title>Ombre di Velmora - Creazione personaggio</title>
 
 <style>
 
-* { box-sizing: border-box; }
+* {
+
+  box-sizing: border-box;
+
+}
 
 body {
 
@@ -32,7 +36,7 @@ header {
 
   text-align: center;
 
-  padding: 24px 12px;
+  padding: 22px 10px;
 
   background: linear-gradient(#292016, #100e0c);
 
@@ -46,19 +50,25 @@ h1 {
 
   letter-spacing: 3px;
 
-  margin: 5px 0;
+  font-size: 25px;
 
-  font-size: 27px;
+  margin: 5px 0;
 
 }
 
-header p { color: #b9a98b; }
+header p {
+
+  color: #b9a98b;
+
+  font-size: 13px;
+
+}
 
 main {
 
   width: min(1100px, 94%);
 
-  margin: 20px auto;
+  margin: 18px auto;
 
 }
 
@@ -70,9 +80,9 @@ main {
 
   border-radius: 12px;
 
-  padding: 16px;
+  padding: 14px;
 
-  margin-bottom: 18px;
+  margin-bottom: 16px;
 
 }
 
@@ -80,9 +90,33 @@ h2 {
 
   color: #d6b16c;
 
-  font-size: 19px;
+  font-size: 18px;
 
   margin-top: 0;
+
+}
+
+.creation-layout {
+
+  display: grid;
+
+  grid-template-columns: 0.95fr 1.05fr;
+
+  gap: 12px;
+
+  align-items: start;
+
+}
+
+.small-title {
+
+  color: #d6b16c;
+
+  font-size: 13px;
+
+  letter-spacing: 1px;
+
+  margin-bottom: 10px;
 
 }
 
@@ -90,9 +124,9 @@ h2 {
 
   display: grid;
 
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, 1fr);
 
-  gap: 9px;
+  gap: 7px;
 
 }
 
@@ -104,15 +138,15 @@ h2 {
 
   color: #e9dfc8;
 
-  border-radius: 8px;
+  border-radius: 7px;
 
-  padding: 12px 5px;
+  padding: 10px 3px;
 
   cursor: pointer;
 
   font-family: inherit;
 
-  font-size: 14px;
+  font-size: 12px;
 
 }
 
@@ -126,41 +160,19 @@ h2 {
 
 }
 
-.gender, .classes {
+.preview-area {
 
-  display: flex;
-
-  gap: 10px;
-
-  flex-wrap: wrap;
-
-}
-
-.gender button, .classes button {
-
-  flex: 1;
-
-  min-width: 90px;
-
-}
-
-.hero {
-
-  display: grid;
-
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-
-  gap: 18px;
-
-  align-items: center;
+  text-align: center;
 
 }
 
 .portrait {
 
+  display: block;
+
   width: 100%;
 
-  max-height: 430px;
+  max-height: 310px;
 
   aspect-ratio: 3 / 4;
 
@@ -170,7 +182,47 @@ h2 {
 
   border: 2px solid #96713b;
 
-  border-radius: 10px;
+  border-radius: 9px;
+
+}
+
+.preview-area h2 {
+
+  margin: 10px 0 5px;
+
+}
+
+.description {
+
+  color: #c8b99e;
+
+  line-height: 1.45;
+
+  font-size: 13px;
+
+}
+
+.gender-area {
+
+  margin-top: 17px;
+
+  border-top: 1px solid #69502e;
+
+  padding-top: 13px;
+
+}
+
+.gender, .classes {
+
+  display: flex;
+
+  gap: 9px;
+
+}
+
+.gender button, .classes button {
+
+  flex: 1;
 
 }
 
@@ -178,7 +230,7 @@ h2 {
 
   width: 100%;
 
-  padding: 13px;
+  padding: 12px;
 
   border-radius: 7px;
 
@@ -190,15 +242,7 @@ h2 {
 
   font-size: 16px;
 
-}
-
-.description {
-
-  color: #c8b99e;
-
-  line-height: 1.5;
-
-  font-size: 14px;
+  margin-top: 7px;
 
 }
 
@@ -208,7 +252,7 @@ h2 {
 
   grid-template-columns: 1fr 1fr;
 
-  gap: 9px;
+  gap: 8px;
 
 }
 
@@ -224,6 +268,8 @@ h2 {
 
   justify-content: space-between;
 
+  font-size: 13px;
+
 }
 
 .stat span:last-child {
@@ -238,7 +284,7 @@ h2 {
 
   width: 100%;
 
-  padding: 17px;
+  padding: 16px;
 
   background: linear-gradient(#a57a36, #63451e);
 
@@ -254,7 +300,7 @@ h2 {
 
   cursor: pointer;
 
-  margin-top: 10px;
+  margin-top: 5px;
 
 }
 
@@ -262,19 +308,65 @@ h2 {
 
   color: #96866d;
 
-  font-size: 12px;
+  font-size: 11px;
 
   text-align: center;
 
 }
 
-@media(max-width: 600px) {
+@media(min-width: 700px) {
 
-  .grid { grid-template-columns: repeat(2, 1fr); }
+  .creation-layout {
 
-  .hero { grid-template-columns: 1fr; }
+    grid-template-columns: 1fr 1fr;
 
-  .portrait { max-height: 390px; }
+    gap: 25px;
+
+  }
+
+  .creation-layout .grid {
+
+    grid-template-columns: repeat(2, 1fr);
+
+  }
+
+  .portrait {
+
+    max-height: 420px;
+
+  }
+
+}
+
+@media(max-width: 380px) {
+
+  .creation-layout {
+
+    grid-template-columns: 0.9fr 1.1fr;
+
+    gap: 7px;
+
+  }
+
+  .choice {
+
+    font-size: 11px;
+
+    padding: 9px 2px;
+
+  }
+
+  .portrait {
+
+    max-height: 245px;
+
+  }
+
+  .description {
+
+    font-size: 12px;
+
+  }
 
 }
 
@@ -296,55 +388,67 @@ h2 {
 
 <section class="panel">
 
-  <h2>01 · Scegli la tua razza</h2>
+  <h2>01 · Scegli il tuo personaggio</h2>
 
-  <div class="grid" id="races"></div>
-
-  <p class="description" id="raceDescription"></p>
-
-</section>
-
-<section class="panel">
-
-  <h2>02 · Scegli il sesso</h2>
-
-  <div class="gender">
-
-    <button class="choice selected" data-gender="male">Maschio</button>
-
-    <button class="choice" data-gender="female">Femmina</button>
-
-  </div>
-
-</section>
-
-<section class="panel">
-
-  <h2>03 · Il tuo personaggio</h2>
-
-  <div class="hero">
+  <div class="creation-layout">
 
     <div>
 
-      <img id="portrait" class="portrait" src="01_umano_guerriero.png" alt="Ritratto del personaggio">
+      <h2 class="small-title">SCEGLI LA RAZZA</h2>
 
-      <p class="note">Ritratto provvisorio</p>
+      <div class="grid" id="races"></div>
+
+      <p class="description" id="raceDescription"></p>
 
     </div>
 
-    <div>
+    <div class="preview-area">
 
-      <label for="heroName">Nome dell'eroe</label>
+      <h2 class="small-title">ANTEPRIMA</h2>
 
-      <input class="name-input" id="heroName" maxlength="24" placeholder="Scrivi il tuo nome">
+      <img id="portrait"
 
-      <h2 style="margin-top:20px" id="heroTitle">Umano</h2>
+           class="portrait"
+
+           src="01_umano_guerriero.png"
+
+           alt="Ritratto del personaggio">
+
+      <h2 id="heroTitle">Umano</h2>
 
       <p class="description" id="heroDescription"></p>
 
     </div>
 
   </div>
+
+  <div class="gender-area">
+
+    <h2 class="small-title">02 · SCEGLI IL SESSO</h2>
+
+    <div class="gender">
+
+      <button class="choice selected" data-gender="male">Maschio</button>
+
+      <button class="choice" data-gender="female">Femmina</button>
+
+    </div>
+
+  </div>
+
+</section>
+
+<section class="panel">
+
+  <h2>03 · Nome dell'eroe</h2>
+
+  <input class="name-input"
+
+         id="heroName"
+
+         maxlength="24"
+
+         placeholder="Scrivi il nome del tuo eroe">
 
 </section>
 
@@ -366,9 +470,17 @@ h2 {
 
 </section>
 
-<button class="start" onclick="startAdventure()">INIZIA IL VIAGGIO</button>
+<button class="start" onclick="startAdventure()">
 
-<p class="note">Le tue scelte daranno forma al destino di Velmora.</p>
+  INIZIA IL VIAGGIO
+
+</button>
+
+<p class="note">
+
+  Le tue scelte daranno forma al destino di Velmora.
+
+</p>
 
 </main>
 
@@ -378,7 +490,9 @@ const races = [
 
   {
 
-    id:"human", name:"Umano",
+    id:"human",
+
+    name:"Umano",
 
     description:"Versatile e adattabile. Gli umani sono presenti in ogni angolo di Velmora.",
 
@@ -394,7 +508,9 @@ const races = [
 
   {
 
-    id:"elf", name:"Elfo",
+    id:"elf",
+
+    name:"Elfo",
 
     description:"Antica stirpe legata alla magia e alla natura. Agili e intelligenti.",
 
@@ -410,7 +526,9 @@ const races = [
 
   {
 
-    id:"orc", name:"Orco",
+    id:"orc",
+
+    name:"Orco",
 
     description:"Una razza fiera e resistente, dotata di grande forza fisica.",
 
@@ -426,7 +544,9 @@ const races = [
 
   {
 
-    id:"leonid", name:"Leonide",
+    id:"leonid",
+
+    name:"Leonide",
 
     description:"Guerrieri fieri, dall'aspetto leonino e dalla presenza imponente.",
 
@@ -442,7 +562,9 @@ const races = [
 
   {
 
-    id:"wolf", name:"Popolo Lupo",
+    id:"wolf",
+
+    name:"Popolo Lupo",
 
     description:"Predatori vigili, dotati di sensi affinati e grande agilità.",
 
@@ -458,7 +580,9 @@ const races = [
 
   {
 
-    id:"dwarf", name:"Nano",
+    id:"dwarf",
+
+    name:"Nano",
 
     description:"Popolo tenace, resistente e legato alle antiche tradizioni.",
 
@@ -474,7 +598,9 @@ const races = [
 
   {
 
-    id:"rabbitwarrior", name:"Coniglio Guerriero",
+    id:"rabbitwarrior",
+
+    name:"Coniglio guerriero",
 
     description:"Agile e combattivo, capace di balzi e attacchi sorprendenti.",
 
@@ -490,7 +616,9 @@ const races = [
 
   {
 
-    id:"rabbitmage", name:"Coniglio Mistico",
+    id:"rabbitmage",
+
+    name:"Coniglio mistico",
 
     description:"Una stirpe agile e ricettiva alle energie arcane.",
 
@@ -510,7 +638,9 @@ const classes = [
 
   {
 
-    id:"warrior", name:"Guerriero",
+    id:"warrior",
+
+    name:"Guerriero",
 
     description:"Specialista nel combattimento ravvicinato. Resistente e potente.",
 
@@ -520,7 +650,9 @@ const classes = [
 
   {
 
-    id:"thief", name:"Ladro",
+    id:"thief",
+
+    name:"Ladro",
 
     description:"Silenzioso, rapido e letale. Predilige agilità e precisione.",
 
@@ -530,7 +662,9 @@ const classes = [
 
   {
 
-    id:"mage", name:"Mago",
+    id:"mage",
+
+    name:"Mago",
 
     description:"Studioso delle arti arcane. Domina la magia e la forza della volontà.",
 
@@ -572,11 +706,15 @@ function imageForRace(race) {
 
 function renderRaces() {
 
-  document.getElementById("races").innerHTML = races.map(r =>
+  document.getElementById("races").innerHTML =
 
-    `<button class="choice ${r.id===selectedRace.id?"selected":""}" data-race="${r.id}">${r.name}</button>`
+    races.map(r =>
 
-  ).join("");
+      `<button class="choice ${r.id===selectedRace.id?"selected":""}"
+
+      data-race="${r.id}">${r.name}</button>`
+
+    ).join("");
 
   document.querySelectorAll("[data-race]").forEach(button => {
 
@@ -594,11 +732,15 @@ function renderRaces() {
 
 function renderClasses() {
 
-  document.getElementById("classes").innerHTML = classes.map(c =>
+  document.getElementById("classes").innerHTML =
 
-    `<button class="choice ${c.id===selectedClass.id?"selected":""}" data-class="${c.id}">${c.name}</button>`
+    classes.map(c =>
 
-  ).join("");
+      `<button class="choice ${c.id===selectedClass.id?"selected":""}"
+
+      data-class="${c.id}">${c.name}</button>`
+
+    ).join("");
 
   document.querySelectorAll("[data-class]").forEach(button => {
 
@@ -618,19 +760,25 @@ function renderStats() {
 
   const keys = Object.keys(statNames);
 
-  const html = keys.map(key => {
+  document.getElementById("stats").innerHTML =
 
-    const value = 5 +
+    keys.map(key => {
 
-      (selectedRace.mod[key] || 0) +
+      const value = 5 +
 
-      (selectedClass.mod[key] || 0);
+        (selectedRace.mod[key] || 0) +
 
-    return `<div class="stat"><span>${statNames[key]}</span><span>${value}</span></div>`;
+        (selectedClass.mod[key] || 0);
 
-  }).join("");
+      return `<div class="stat">
 
-  document.getElementById("stats").innerHTML = html;
+        <span>${statNames[key]}</span>
+
+        <span>${value}</span>
+
+      </div>`;
+
+    }).join("");
 
 }
 
@@ -642,11 +790,15 @@ function refresh() {
 
   document.getElementById("portrait").src = imageForRace(selectedRace);
 
-  document.getElementById("heroTitle").textContent = selectedRace.name;
+  document.getElementById("heroTitle").textContent =
+
+    selectedRace.name;
 
   document.getElementById("heroDescription").textContent =
 
-    selectedRace.description + " Tratto razziale: " + selectedRace.trait + ".";
+    selectedRace.description + " Tratto razziale: " +
+
+    selectedRace.trait + ".";
 
   document.getElementById("raceDescription").textContent =
 
@@ -658,7 +810,13 @@ function refresh() {
 
   document.querySelectorAll("[data-gender]").forEach(button => {
 
-    button.classList.toggle("selected", button.dataset.gender === gender);
+    button.classList.toggle(
+
+      "selected",
+
+      button.dataset.gender === gender
+
+    );
 
   });
 
@@ -704,7 +862,13 @@ function startAdventure() {
 
   };
 
-  localStorage.setItem("velmoraCharacter", JSON.stringify(character));
+  localStorage.setItem(
+
+    "velmoraCharacter",
+
+    JSON.stringify(character)
+
+  );
 
   alert(
 
