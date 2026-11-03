@@ -1,0 +1,593 @@
+
+
+<!DOCTYPE html>
+
+<html lang="it">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Ombre di Velmora</title>
+
+<style>
+
+*{box-sizing:border-box}
+
+body{
+
+ margin:0;background:#100e0d;color:#e8dcc5;
+
+ font-family:Georgia,serif;padding:18px;
+
+ background-image:radial-gradient(ellipse at top,#453326 0%,#17110e 55%,#090909 100%);
+
+ min-height:100vh
+
+}
+
+main{max-width:760px;margin:auto}
+
+h1{text-align:center;color:#d7ad69;font-size:32px;letter-spacing:2px}
+
+.subtitle{text-align:center;color:#9d8870;font-style:italic}
+
+.panel{
+
+ background:linear-gradient(145deg,#292019,#171310);
+
+ border:1px solid #705238;border-radius:10px;
+
+ padding:18px;margin:16px 0;box-shadow:0 8px 25px #0009
+
+}
+
+h2{color:#d5ad70;border-bottom:1px solid #62482e;padding-bottom:8px}
+
+h3{color:#c6a16b}
+
+button,select,input{
+
+ background:#30251b;color:#f1dfbd;border:1px solid #9a7446;
+
+ padding:11px;border-radius:6px;font-size:15px;margin:4px
+
+}
+
+button{cursor:pointer}
+
+button:hover{background:#59412a}
+
+button:disabled{opacity:.4}
+
+input{max-width:100%}
+
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+
+.stat{background:#17120f;padding:10px;border-radius:5px}
+
+.bar{height:9px;background:#392b22;border-radius:8px;overflow:hidden}
+
+.fill{height:100%;background:#9c382c}
+
+.gold{color:#d8b36e}
+
+#log{white-space:pre-line;line-height:1.6;color:#d7c5a9}
+
+.hero{
+
+ text-align:center;padding:30px 12px;
+
+ background:linear-gradient(0deg,#100d0b,#59402b,#17100c);
+
+ border:1px solid #765632;border-radius:8px;
+
+}
+
+.hero .symbol{font-size:58px}
+
+.small{font-size:13px;color:#a99780}
+
+.hidden{display:none}
+
+</style>
+
+</head>
+
+<body>
+
+<main>
+
+<h1>OMBRE DI VELMORA</h1>
+
+<div class="subtitle">Cronache di un regno perduto</div>
+
+<section class="panel" id="creation">
+
+<h2>La nascita di un eroe</h2>
+
+<p>Il regno è caduto. Le ombre si muovono tra le rovine. Chi sarai in questo mondo?</p>
+
+<label>Nome del personaggio</label><br>
+
+<input id="heroName" value="Viandante" maxlength="20">
+
+<br><br>
+
+<label>Razza</label><br>
+
+<select id="race">
+
+<option>Umano</option><option>Elfo</option><option>Orco</option>
+
+<option>Leonide</option><option>Popolo Lupo</option>
+
+<option>Nano</option><option>Coniglio guerriero</option>
+
+<option>Coniglio mistico</option>
+
+</select>
+
+<br><br>
+
+<label>Classe</label><br>
+
+<select id="class">
+
+<option>Guerriero</option><option>Ladro</option><option>Mago</option>
+
+</select>
+
+<br><br>
+
+<button onclick="startGame()">Inizia il viaggio</button>
+
+</section>
+
+<section id="game" class="hidden">
+
+<div class="hero">
+
+<div class="symbol">⚔️</div>
+
+<h2 id="sceneTitle">Il villaggio senza ombre</h2>
+
+<p id="sceneText">Una nebbia innaturale avvolge le case. Nessuno parla. In lontananza, qualcosa si muove tra le rovine.</p>
+
+</div>
+
+<div class="panel">
+
+<h2 id="heroTitle">Il tuo personaggio</h2>
+
+<div class="stats">
+
+<div class="stat">❤️ Vita: <span id="hp"></span></div>
+
+<div class="stat">⚔️ Attacco: <span id="atk"></span></div>
+
+<div class="stat">🛡️ Difesa: <span id="def"></span></div>
+
+<div class="stat">⭐ Esperienza: <span id="xp"></span></div>
+
+</div>
+
+<p>Salute</p><div class="bar"><div class="fill" id="healthBar"></div></div>
+
+<p class="small" id="identity"></p>
+
+</div>
+
+<div class="panel" id="story">
+
+<h2>Un incontro inquietante</h2>
+
+<p>Un uomo ferito esce da una casa in fiamme. «Non andate alla cripta... il Custode si è risvegliato!»</p>
+
+<button onclick="startCombat()">Esplora la cripta</button>
+
+<button onclick="talk()">Parla con il ferito</button>
+
+</div>
+
+<div class="panel hidden" id="combat">
+
+<h2>⚔️ Combattimento</h2>
+
+<div class="hero">
+
+<div class="symbol">💀</div>
+
+<h3 id="enemyName">Scheletro maledetto</h3>
+
+<p>Vita nemico: <span id="enemyHp"></span></p>
+
+<div class="bar"><div class="fill" id="enemyBar"></div></div>
+
+</div>
+
+<p id="dice">Il destino attende il lancio del dado...</p>
+
+<button onclick="attack(false)">Attacco normale</button>
+
+<button onclick="attack(true)">Attacco potente</button>
+
+<button onclick="potion()">Usa pozione</button>
+
+<button onclick="flee()">Fuggi</button>
+
+<div id="victory" class="hidden">
+
+<h3>Il nemico è sconfitto!</h3>
+
+<p>Vuoi risparmiarlo oppure finirlo?</p>
+
+<button onclick="spareEnemy()">Risparmia</button>
+
+<button onclick="killEnemy()">Colpo finale</button>
+
+</div>
+
+</div>
+
+<div class="panel">
+
+<h2>Diario di viaggio</h2>
+
+<div id="log">Il tuo viaggio ha inizio...</div>
+
+</div>
+
+<div class="panel">
+
+<h2>Inventario</h2>
+
+<p>🧪 Pozioni: <span id="potions">2</span></p>
+
+<p>🪙 Monete: <span id="coins">0</span></p>
+
+<p>🎒 Equipaggiamento: <span id="equipment">Abiti da viandante</span></p>
+
+</div>
+
+<div class="panel">
+
+<h2>Compagnia</h2>
+
+<p id="party">Nessun compagno al momento.</p>
+
+</div>
+
+<div class="panel">
+
+<button onclick="saveGame()">💾 Salva partita</button>
+
+<button onclick="loadGame()">📂 Carica partita</button>
+
+<button onclick="location.reload()">Nuova partita</button>
+
+</div>
+
+</section>
+
+</main>
+
+<script>
+
+let hero={},enemy={},potions=2,coins=0,xp=0,companion=false;
+
+let finished=false;
+
+function startGame(){
+
+ let name=document.getElementById("heroName").value.trim()||"Viandante";
+
+ let race=document.getElementById("race").value;
+
+ let cls=document.getElementById("class").value;
+
+ let values={
+
+  Guerriero:{hp:38,atk:7,def:4},
+
+  Ladro:{hp:30,atk:8,def:2},
+
+  Mago:{hp:26,atk:10,def:1}
+
+ };
+
+ hero={name,race,cls,...values[cls],max:values[cls].hp};
+
+ document.getElementById("creation").classList.add("hidden");
+
+ document.getElementById("game").classList.remove("hidden");
+
+ document.getElementById("identity").textContent=race+" · "+cls;
+
+ document.getElementById("heroTitle").textContent=name;
+
+ update();
+
+ log("Hai raggiunto il villaggio senza ombre.");
+
+}
+
+function update(){
+
+ document.getElementById("hp").textContent=hero.hp+"/"+hero.max;
+
+ document.getElementById("atk").textContent=hero.atk;
+
+ document.getElementById("def").textContent=hero.def;
+
+ document.getElementById("xp").textContent=xp;
+
+ document.getElementById("healthBar").style.width=(hero.hp/hero.max*100)+"%";
+
+ document.getElementById("potions").textContent=potions;
+
+ document.getElementById("coins").textContent=coins;
+
+}
+
+function log(text){
+
+ document.getElementById("log").textContent=text+"\n\n"+document.getElementById("log").textContent;
+
+}
+
+function talk(){
+
+ log("Il ferito ti consegna una pozione. «Mio fratello è ancora là dentro...»");
+
+ potions++;
+
+ update();
+
+ document.getElementById("story").querySelector("button:nth-of-type(2)").disabled=true;
+
+}
+
+function startCombat(){
+
+ enemy={hp:25,max:25,atk:5,def:1};
+
+ finished=false;
+
+ document.getElementById("story").classList.add("hidden");
+
+ document.getElementById("combat").classList.remove("hidden");
+
+ document.getElementById("victory").classList.add("hidden");
+
+ updateEnemy();
+
+ log("Uno scheletro maledetto emerge dall'oscurità!");
+
+}
+
+function updateEnemy(){
+
+ document.getElementById("enemyHp").textContent=Math.max(0,enemy.hp)+"/"+enemy.max;
+
+ document.getElementById("enemyBar").style.width=Math.max(0,enemy.hp/enemy.max*100)+"%";
+
+}
+
+function roll(){
+
+ return Math.floor(Math.random()*20)+1;
+
+}
+
+function attack(heavy){
+
+ if(finished||enemy.hp<=0)return;
+
+ let d=roll();
+
+ let threshold=heavy?13:8;
+
+ let damage=0;
+
+ if(d===20)damage=hero.atk*2;
+
+ else if(d>=threshold)damage=heavy?hero.atk+5:hero.atk;
+
+ enemy.hp-=damage;
+
+ document.getElementById("dice").textContent=
+
+ "🎲 D20: "+d+" — "+(damage>0?"Colpisci! Danni: "+damage:"Mancato!");
+
+ log("Hai ottenuto "+d+" sul D20 e inflitto "+damage+" danni.");
+
+ updateEnemy();
+
+ if(enemy.hp<=0){win();return;}
+
+ enemyTurn();
+
+}
+
+function enemyTurn(){
+
+ let d=roll();
+
+ let damage=Math.max(1,enemy.atk+Math.floor(d/8)-hero.def);
+
+ hero.hp=Math.max(0,hero.hp-damage);
+
+ document.getElementById("dice").textContent+=" | Il nemico attacca: "+d+"!";
+
+ log("Il nemico ti infligge "+damage+" danni.");
+
+ update();
+
+ if(hero.hp<=0){
+
+  log("Sei caduto. Il destino del tuo viaggio è in bilico.");
+
+  document.getElementById("dice").textContent="Sei stato sconfitto. Ricarica un salvataggio.";
+
+  finished=true;
+
+  return;
+
+ }
+
+}
+
+function potion(){
+
+ if(potions<=0){log("Non hai pozioni.");return;}
+
+ if(hero.hp===hero.max){log("Hai già tutta la salute.");return;}
+
+ potions--;
+
+ let heal=Math.min(15,hero.max-hero.hp);
+
+ hero.hp+=heal;
+
+ log("Hai recuperato "+heal+" punti vita.");
+
+ update();
+
+ enemyTurn();
+
+}
+
+function flee(){
+
+ if(finished)return;
+
+ if(roll()>=10){
+
+  log("Sei riuscito a fuggire!");
+
+  document.getElementById("combat").classList.add("hidden");
+
+  document.getElementById("story").classList.remove("hidden");
+
+  finished=true;
+
+ }else{
+
+  log("La fuga fallisce!");
+
+  enemyTurn();
+
+ }
+
+}
+
+function win(){
+
+ finished=true;
+
+ xp+=30;coins+=8;
+
+ document.getElementById("victory").classList.remove("hidden");
+
+ document.getElementById("dice").textContent="Vittoria! Hai guadagnato 30 XP e 8 monete.";
+
+ update();
+
+}
+
+function spareEnemy(){
+
+ log("Hai risparmiato lo scheletro. Una voce sussurra: «Ricorderò la tua scelta...»");
+
+ document.getElementById("sceneText").textContent="Il villaggio non è più lo stesso. Qualcuno ha visto la tua misericordia.";
+
+ endCombat();
+
+}
+
+function killEnemy(){
+
+ log("Hai distrutto lo scheletro. Il silenzio torna nella cripta.");
+
+ endCombat();
+
+}
+
+function endCombat(){
+
+ document.getElementById("combat").classList.add("hidden");
+
+ document.getElementById("story").classList.remove("hidden");
+
+ document.getElementById("story").innerHTML=
+
+ "<h2>Una nuova presenza</h2><p>Una giovane esploratrice emerge dall'ombra. «Ho visto come hai combattuto. Il mio nome è Lyra. Posso accompagnarti?»</p><button onclick='recruit()'>Accogli Lyra</button><button onclick='continueAlone()'>Prosegui da solo</button>";
+
+}
+
+function recruit(){
+
+ companion=true;
+
+ document.getElementById("party").textContent="Lyra · Esploratrice · Compagna";
+
+ log("Lyra si è unita alla tua compagnia.");
+
+ continueAlone();
+
+}
+
+function continueAlone(){
+
+ document.getElementById("story").innerHTML=
+
+ "<h2>Il viaggio continua</h2><p>Oltre il villaggio, la strada conduce verso le terre dimenticate di Velmora.</p>";
+
+ log("La prima avventura è terminata. Il mondo ti attende.");
+
+}
+
+function saveGame(){
+
+ let data={hero,potions,coins,xp,companion};
+
+ localStorage.setItem("velmoraSave",JSON.stringify(data));
+
+ log("Partita salvata su questo dispositivo.");
+
+}
+
+function loadGame(){
+
+ let data=localStorage.getItem("velmoraSave");
+
+ if(!data){log("Nessun salvataggio trovato.");return;}
+
+ let s=JSON.parse(data);
+
+ hero=s.hero;potions=s.potions;coins=s.coins;xp=s.xp;companion=s.companion;
+
+ document.getElementById("creation").classList.add("hidden");
+
+ document.getElementById("game").classList.remove("hidden");
+
+ document.getElementById("identity").textContent=hero.race+" · "+hero.cls;
+
+ document.getElementById("heroTitle").textContent=hero.name;
+
+ document.getElementById("party").textContent=companion?"Lyra · Esploratrice · Compagna":"Nessun compagno al momento.";
+
+ update();
+
+ log("Salvataggio caricato.");
+
+}
+
+</script>
+
+</body>
+
+</html>
