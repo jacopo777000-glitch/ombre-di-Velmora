@@ -1,0 +1,1041 @@
+
+
+<!DOCTYPE html>
+
+<html lang="it">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Ombre di Velmora - Creazione personaggio</title>
+
+<style>
+
+* {
+
+  box-sizing: border-box;
+
+}
+
+html {
+
+  min-height: 100%;
+
+  background: #100e0c;
+
+}
+
+body {
+
+  position: relative;
+
+  isolation: isolate;
+
+  margin: 0;
+
+  background: transparent;
+
+  color: #e9dfc8;
+
+  font-family: Georgia, serif;
+
+  min-height: 100vh;
+
+}
+
+body::before {
+
+  content: "";
+
+  position: fixed;
+
+  inset: 0;
+
+  z-index: -1;
+
+  background:
+
+    linear-gradient(
+
+      rgba(12, 15, 12, 0.35),
+
+      rgba(12, 10, 9, 0.72)
+
+    ),
+
+    url("https://jacopo777000-glitch.github.io/ombre-di-Velmora/valle_velmora.jpg")
+
+    center center / cover no-repeat;
+
+}
+
+header {
+
+  text-align: center;
+
+  padding: 22px 10px;
+
+  background: linear-gradient(rgba(20, 25, 19, 0.88), rgba(16, 14, 12, 0.72));
+
+  border-bottom: 1px solid #96713b;
+
+  backdrop-filter: blur(5px);
+
+}
+
+h1 {
+
+  color: #d6b16c;
+
+  letter-spacing: 3px;
+
+  font-size: 25px;
+
+  margin: 5px 0;
+
+}
+
+header p {
+
+  color: #d0c2a6;
+
+  font-size: 13px;
+
+}
+
+.music-button {
+
+  margin-top: 8px;
+
+  padding: 9px 16px;
+
+  border: 1px solid #96713b;
+
+  border-radius: 20px;
+
+  background: rgba(35, 31, 23, 0.9);
+
+  color: #e9c783;
+
+  font-family: Georgia, serif;
+
+  font-size: 13px;
+
+  cursor: pointer;
+
+}
+
+main {
+
+  width: min(1100px, 94%);
+
+  margin: 18px auto;
+
+}
+
+.panel {
+
+  background: transparent;
+
+  border: none;
+
+  border-radius: 12px;
+
+  padding: 14px;
+
+  margin-bottom: 16px;
+
+}
+
+h2 {
+
+  color: #d6b16c;
+
+  font-size: 18px;
+
+  margin-top: 0;
+
+}
+
+.creation-layout {
+
+  display: grid;
+
+  grid-template-columns: 0.95fr 1.05fr;
+
+  gap: 12px;
+
+  align-items: start;
+
+}
+
+.small-title {
+
+  color: #d6b16c;
+
+  font-size: 13px;
+
+  letter-spacing: 1px;
+
+  margin-bottom: 10px;
+
+}
+
+.grid {
+
+  display: grid;
+
+  grid-template-columns: repeat(2, 1fr);
+
+  gap: 7px;
+
+}
+
+.choice {
+
+  background: #29221b;
+
+  border: 1px solid #57442b;
+
+  color: #e9dfc8;
+
+  border-radius: 7px;
+
+  padding: 10px 3px;
+
+  cursor: pointer;
+
+  font-family: inherit;
+
+  font-size: 12px;
+
+}
+
+.choice.selected {
+
+  border: 2px solid #d6ae60;
+
+  background: #49351e;
+
+  color: #ffe0a0;
+
+}
+
+.preview-area {
+
+  text-align: center;
+
+}
+
+.portrait {
+
+  display: block;
+
+  width: 100%;
+
+  max-height: 310px;
+
+  aspect-ratio: 3 / 4;
+
+  object-fit: contain;
+
+  background: #100e0c;
+
+  border: 2px solid #96713b;
+
+  border-radius: 9px;
+
+}
+
+.preview-area h2 {
+
+  margin: 10px 0 5px;
+
+}
+
+.description {
+
+  color: #c8b99e;
+
+  line-height: 1.45;
+
+  font-size: 13px;
+
+}
+
+.gender-area {
+
+  margin-top: 17px;
+
+  border-top: 1px solid #69502e;
+
+  padding-top: 13px;
+
+}
+
+.gender, .classes {
+
+  display: flex;
+
+  gap: 9px;
+
+}
+
+.gender button, .classes button {
+
+  flex: 1;
+
+}
+
+.name-input {
+
+  width: 100%;
+
+  padding: 12px;
+
+  border-radius: 7px;
+
+  background: #100e0c;
+
+  border: 1px solid #8a6a3d;
+
+  color: white;
+
+  font-size: 16px;
+
+  margin-top: 7px;
+
+}
+
+.stats {
+
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 8px;
+
+}
+
+.stat {
+
+  background: #29221b;
+
+  padding: 10px;
+
+  border-radius: 6px;
+
+  display: flex;
+
+  justify-content: space-between;
+
+  font-size: 13px;
+
+}
+
+.stat span:last-child {
+
+  color: #e8bd72;
+
+  font-weight: bold;
+
+}
+
+.start {
+
+  width: 100%;
+
+  padding: 16px;
+
+  background: linear-gradient(#a57a36, #63451e);
+
+  color: #fff1d2;
+
+  border: 1px solid #d9b66d;
+
+  border-radius: 8px;
+
+  font-size: 18px;
+
+  font-family: Georgia, serif;
+
+  cursor: pointer;
+
+  margin-top: 5px;
+
+}
+
+.note {
+
+  color: #e0d0ad;
+
+  font-size: 11px;
+
+  text-align: center;
+
+  text-shadow: 1px 1px 3px #000;
+
+}
+
+@media(min-width: 700px) {
+
+  .creation-layout {
+
+    grid-template-columns: 1fr 1fr;
+
+    gap: 25px;
+
+  }
+
+  .creation-layout .grid {
+
+    grid-template-columns: repeat(2, 1fr);
+
+  }
+
+  .portrait {
+
+    max-height: 420px;
+
+  }
+
+}
+
+@media(max-width: 380px) {
+
+  .creation-layout {
+
+    grid-template-columns: 0.9fr 1.1fr;
+
+    gap: 7px;
+
+  }
+
+  .choice {
+
+    font-size: 11px;
+
+    padding: 9px 2px;
+
+  }
+
+  .portrait {
+
+    max-height: 245px;
+
+  }
+
+  .description {
+
+    font-size: 12px;
+
+  }
+
+}
+/* PANNELLI PRINCIPALI TRASPARENTI */
+
+.panel {
+
+  background: transparent !important;
+
+  background-color: transparent !important;
+
+  border: none !important;
+
+  box-shadow: none !important;
+
+}
+
+/* MANTIENI SCURI GLI ELEMENTI DI SELEZIONE */
+
+.choice {
+
+  background: rgba(41, 34, 27, 0.95);
+
+}
+
+.choice.selected {
+
+  background: rgba(73, 53, 30, 0.95);
+
+}
+
+/* MANTIENI IL RITRATTO E LA SUA CORNICE */
+
+.portrait {
+
+  background: rgba(16, 14, 12, 0.95);
+
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+  <h1>OMBRE DI VELMORA</h1>
+
+  <p>Crea il tuo eroe · Cronache di un regno perduto</p>
+
+  <button class="music-button" id="musicToggle" type="button">
+
+    ♫ Musica: OFF
+
+  </button>
+
+  <audio id="backgroundMusic" loop preload="none">
+
+    <source src="musica_valle.mp3" type="audio/mpeg">
+
+  </audio>
+
+</header>
+
+<main>
+
+<section class="panel">
+
+  <h2>01 · Scegli il tuo personaggio</h2>
+
+  <div class="creation-layout">
+
+    <div>
+
+      <h2 class="small-title">SCEGLI LA RAZZA</h2>
+
+      <div class="grid" id="races"></div>
+
+      <p class="description" id="raceDescription"></p>
+
+    </div>
+
+    <div class="preview-area">
+
+      <h2 class="small-title">ANTEPRIMA</h2>
+
+      <img id="portrait"
+
+           class="portrait"
+
+           src="01_umano_guerriero.png"
+
+           alt="Ritratto del personaggio">
+
+      <h2 id="heroTitle">Umano</h2>
+
+      <p class="description" id="heroDescription"></p>
+
+    </div>
+
+  </div>
+
+  <div class="gender-area">
+
+    <h2 class="small-title">02 · SCEGLI IL SESSO</h2>
+
+    <div class="gender">
+
+      <button class="choice selected" data-gender="male">Maschio</button>
+
+      <button class="choice" data-gender="female">Femmina</button>
+
+    </div>
+
+  </div>
+
+</section>
+
+<section class="panel">
+
+  <h2>03 · Nome dell'eroe</h2>
+
+  <input class="name-input"
+
+         id="heroName"
+
+         maxlength="24"
+
+         placeholder="Scrivi il nome del tuo eroe">
+
+</section>
+
+<section class="panel">
+
+  <h2>04 · Scegli la tua classe</h2>
+
+  <div class="classes" id="classes"></div>
+
+  <p class="description" id="classDescription"></p>
+
+</section>
+
+<section class="panel">
+
+  <h2>05 · Caratteristiche</h2>
+
+  <div class="stats" id="stats"></div>
+
+</section>
+
+<button class="start" onclick="startAdventure()">
+
+  INIZIA IL VIAGGIO
+
+</button>
+
+<p class="note">
+
+  Le tue scelte daranno forma al destino di Velmora.
+
+</p>
+
+</main>
+
+<script>
+
+const races = [
+
+  {
+
+    id:"human",
+
+    name:"Umano",
+
+    description:"Versatile e adattabile. Gli umani sono presenti in ogni angolo di Velmora.",
+
+    trait:"Adattabilità",
+
+    male:"01_umano_guerriero.png",
+
+    female:"02_umana_guerriera.png",
+
+    mod:{forza:0, agilita:0, vitalita:0, intelletto:0, volonta:0, percezione:1, carisma:1}
+
+  },
+
+  {
+
+    id:"elf",
+
+    name:"Elfo",
+
+    description:"Antica stirpe legata alla magia e alla natura. Agili e intelligenti.",
+
+    trait:"Eredità arcana",
+
+    male:"05_elfo.png",
+
+    female:"06_elfa.png",
+
+    mod:{forza:0, agilita:1, vitalita:-1, intelletto:1, volonta:0, percezione:0, carisma:0}
+
+  },
+
+  {
+
+    id:"orc",
+
+    name:"Orco",
+
+    description:"Una razza fiera e resistente, dotata di grande forza fisica.",
+
+    trait:"Sangue indomito",
+
+    male:"13_orco.png",
+
+    female:"14_orca.png",
+
+    mod:{forza:1, agilita:0, vitalita:1, intelletto:-1, volonta:0, percezione:0, carisma:0}
+
+  },
+
+  {
+
+    id:"leonid",
+
+    name:"Leonide",
+
+    description:"Guerrieri fieri, dall'aspetto leonino e dalla presenza imponente.",
+
+    trait:"Ruggito intimidatorio",
+
+    male:"15_leonide.png",
+
+    female:"16_leonide_femmina.png",
+
+    mod:{forza:1, agilita:-1, vitalita:0, intelletto:0, volonta:0, percezione:0, carisma:1}
+
+  },
+
+  {
+
+    id:"wolf",
+
+    name:"Popolo Lupo",
+
+    description:"Predatori vigili, dotati di sensi affinati e grande agilità.",
+
+    trait:"Istinto predatorio",
+
+    male:"19_lupo.png",
+
+    female:"20_lupa.png",
+
+    mod:{forza:0, agilita:1, vitalita:0, intelletto:0, volonta:0, percezione:1, carisma:-1}
+
+  },
+
+  {
+
+    id:"dwarf",
+
+    name:"Nano",
+
+    description:"Popolo tenace, resistente e legato alle antiche tradizioni.",
+
+    trait:"Tenacia",
+
+    male:"03_umano_mago.png",
+
+    female:"04_umana_maga.png",
+
+    mod:{forza:0, agilita:-1, vitalita:1, intelletto:0, volonta:1, percezione:0, carisma:0}
+
+  },
+
+  {
+
+    id:"rabbitwarrior",
+
+    name:"Coniglio guerriero",
+
+    description:"Agile e combattivo, capace di balzi e attacchi sorprendenti.",
+
+    trait:"Salto devastante",
+
+    male:"17_coniglio_guerriero.png",
+
+    female:"17_coniglio_guerriero.png",
+
+    mod:{forza:1, agilita:1, vitalita:0, intelletto:0, volonta:0, percezione:0, carisma:0}
+
+  },
+
+  {
+
+    id:"rabbitmage",
+
+    name:"Coniglio mistico",
+
+    description:"Una stirpe agile e ricettiva alle energie arcane.",
+
+    trait:"Istinto arcano",
+
+    male:"18_coniglio_mago.png",
+
+    female:"18_coniglio_mago.png",
+
+    mod:{forza:0, agilita:0, vitalita:0, intelletto:1, volonta:1, percezione:0, carisma:0}
+
+  }
+
+];
+
+const classes = [
+
+  {
+
+    id:"warrior",
+
+    name:"Guerriero",
+
+    description:"Specialista nel combattimento ravvicinato. Resistente e potente.",
+
+    mod:{forza:2, agilita:0, vitalita:2, intelletto:0, volonta:0, percezione:0, carisma:0}
+
+  },
+
+  {
+
+    id:"thief",
+
+    name:"Ladro",
+
+    description:"Silenzioso, rapido e letale. Predilige agilità e precisione.",
+
+    mod:{forza:0, agilita:2, vitalita:0, intelletto:0, volonta:0, percezione:2, carisma:0}
+
+  },
+
+  {
+
+    id:"mage",
+
+    name:"Mago",
+
+    description:"Studioso delle arti arcane. Domina la magia e la forza della volontà.",
+
+    mod:{forza:0, agilita:0, vitalita:0, intelletto:2, volonta:2, percezione:0, carisma:0}
+
+  }
+
+];
+
+const statNames = {
+
+  forza:"Forza",
+
+  agilita:"Agilità",
+
+  vitalita:"Vitalità",
+
+  intelletto:"Intelletto",
+
+  volonta:"Volontà",
+
+  percezione:"Percezione",
+
+  carisma:"Carisma"
+
+};
+
+let selectedRace = races[0];
+
+let selectedClass = classes[0];
+
+let gender = "male";
+
+function imageForRace(race) {
+
+  return race[gender];
+
+}
+
+function renderRaces() {
+
+  document.getElementById("races").innerHTML =
+
+    races.map(r =>
+
+      `<button class="choice ${r.id===selectedRace.id?"selected":""}"
+
+      data-race="${r.id}">${r.name}</button>`
+
+    ).join("");
+
+  document.querySelectorAll("[data-race]").forEach(button => {
+
+    button.addEventListener("click", () => {
+
+      selectedRace = races.find(r => r.id === button.dataset.race);
+
+      refresh();
+
+    });
+
+  });
+
+}
+
+function renderClasses() {
+
+  document.getElementById("classes").innerHTML =
+
+    classes.map(c =>
+
+      `<button class="choice ${c.id===selectedClass.id?"selected":""}"
+
+      data-class="${c.id}">${c.name}</button>`
+
+    ).join("");
+
+  document.querySelectorAll("[data-class]").forEach(button => {
+
+    button.addEventListener("click", () => {
+
+      selectedClass = classes.find(c => c.id === button.dataset.class);
+
+      refresh();
+
+    });
+
+  });
+
+}
+
+function renderStats() {
+
+  const keys = Object.keys(statNames);
+
+  document.getElementById("stats").innerHTML =
+
+    keys.map(key => {
+
+      const value = 5 +
+
+        (selectedRace.mod[key] || 0) +
+
+        (selectedClass.mod[key] || 0);
+
+      return `<div class="stat">
+
+        <span>${statNames[key]}</span>
+
+        <span>${value}</span>
+
+      </div>`;
+
+    }).join("");
+
+}
+
+function refresh() {
+
+  renderRaces();
+
+  renderClasses();
+
+  document.getElementById("portrait").src = imageForRace(selectedRace);
+
+  document.getElementById("heroTitle").textContent =
+
+    selectedRace.name;
+
+  document.getElementById("heroDescription").textContent =
+
+    selectedRace.description + " Tratto razziale: " +
+
+    selectedRace.trait + ".";
+
+  document.getElementById("raceDescription").textContent =
+
+    selectedRace.description;
+
+  document.getElementById("classDescription").textContent =
+
+    selectedClass.description;
+
+  document.querySelectorAll("[data-gender]").forEach(button => {
+
+    button.classList.toggle(
+
+      "selected",
+
+      button.dataset.gender === gender
+
+    );
+
+  });
+
+  renderStats();
+
+}
+
+document.querySelectorAll("[data-gender]").forEach(button => {
+
+  button.addEventListener("click", () => {
+
+    gender = button.dataset.gender;
+
+    refresh();
+
+  });
+
+});
+
+const music = document.getElementById("backgroundMusic");
+
+const musicToggle = document.getElementById("musicToggle");
+
+musicToggle.addEventListener("click", async () => {
+
+  if (music.paused) {
+
+    try {
+
+      await music.play();
+
+      musicToggle.textContent = "♫ Musica: ON";
+
+    } catch (error) {
+
+      musicToggle.textContent = "♫ Riprova ad attivare";
+
+      console.log("Impossibile avviare la musica:", error);
+
+    }
+
+  } else {
+
+    music.pause();
+
+    musicToggle.textContent = "♫ Musica: OFF";
+
+  }
+
+});
+
+music.addEventListener("error", () => {
+
+  musicToggle.textContent = "♫ Audio non disponibile";
+
+});
+
+function startAdventure() {
+
+  const name = document.getElementById("heroName").value.trim();
+
+  if (!name) {
+
+    alert("Devi prima scegliere il nome del tuo eroe!");
+
+    return;
+
+  }
+
+  const character = {
+
+    name:name,
+
+    race:selectedRace.name,
+
+    gender:gender,
+
+    class:selectedClass.name,
+
+    portrait:imageForRace(selectedRace)
+
+  };
+
+  localStorage.setItem(
+
+    "velmoraCharacter",
+
+    JSON.stringify(character)
+
+  );
+
+  alert(
+
+    "Il viaggio di " + name + " sta per cominciare!\n\n" +
+
+    "Razza: " + selectedRace.name + "\n" +
+
+    "Classe: " + selectedClass.name
+
+  );
+
+}
+
+refresh();
+
+</script>
+
+</body>
+
+</html>
