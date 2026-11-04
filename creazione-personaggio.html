@@ -16,11 +16,13 @@
 
 <style>
 
-:root{--bg:#100e0c;--panel:rgba(29,25,21,.94);--panel2:#29221b;--gold:#d6b16c;--gold2:#96713b;--text:#e9dfc8;--muted:#b9a98b;--red:#a94338;--green:#557c50;--blue:#557c91}
+:root{--bg:#100e0c;--panel:rgba(29,25,21,.94);--panel2:#29221b;--gold:#d6b16c;--gold2:#96713b;--text:#e9dfc8;--muted:#b9a98b}
 
 *{box-sizing:border-box}
 
-body{margin:0;background:linear-gradient(rgba(12,9,7,.68),rgba(12,9,7,.82)),url('valle_velmora.jpg') center center/cover fixed;color:var(--text);font-family:Georgia,serif;min-height:100vh}
+html{min-height:100%;background:var(--bg)}
+
+body{margin:0;min-height:100vh;color:var(--text);font-family:Georgia,serif;background-color:var(--bg);background-image:linear-gradient(rgba(12,9,7,.62),rgba(12,9,7,.82)),url("./valle_velmora.jpg");background-position:center;background-size:cover;background-attachment:fixed}
 
 header{text-align:center;padding:20px 12px 15px;background:linear-gradient(rgba(41,32,22,.94),rgba(16,14,12,.85));border-bottom:1px solid var(--gold2)}
 
@@ -40,7 +42,7 @@ p{line-height:1.5}
 
 .small{font-size:12px;color:var(--muted)}
 
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.grid,.classgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
 
 .choice,.btn{background:#29221b;border:1px solid #57442b;color:var(--text);border-radius:8px;padding:11px 8px;font:14px Georgia,serif;cursor:pointer}
 
@@ -54,8 +56,6 @@ p{line-height:1.5}
 
 .btn:disabled{opacity:.38;cursor:not-allowed}
 
-button:active{transform:scale(.99)}
-
 .layout{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
 .portrait{display:block;width:100%;max-height:300px;aspect-ratio:3/4;object-fit:contain;background:#100e0c;border:2px solid var(--gold2);border-radius:9px}
@@ -66,11 +66,9 @@ button:active{transform:scale(.99)}
 
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:7px}
 
-.stat,.unit{background:var(--panel2);padding:9px;border-radius:7px;display:flex;justify-content:space-between;gap:8px;font-size:13px}
+.stat{background:var(--panel2);padding:9px;border-radius:7px;display:flex;justify-content:space-between;gap:8px;font-size:13px}
 
-.stat b,.unit b{color:#e8bd72}
-
-.classgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px}
+.stat b{color:#e8bd72}
 
 .hidden{display:none!important}
 
@@ -88,15 +86,13 @@ button:active{transform:scale(.99)}
 
 .hpbar{height:100%;background:#a9443b}
 
-.apbar{height:100%;background:#5987a1}
-
-.unit{display:flex;align-items:center;gap:10px;margin:7px 0;border:1px solid #4d3b27}
+.unit{display:flex;align-items:center;gap:11px;margin:8px 0;border:1px solid #4d3b27;background:#29221b;padding:8px;border-radius:8px;min-height:120px}
 
 .unit.active{border:2px solid var(--gold);background:#40301d}
 
 .unit.dead{opacity:.42;filter:grayscale(1)}
 
-.unitPortrait{width:76px;height:94px;object-fit:cover;object-position:top center;border:1px solid var(--gold2);border-radius:6px;background:#100e0c;flex-shrink:0}
+.unitPortrait{width:88px;height:108px;object-fit:contain;object-position:center;background:#100e0c;border:1px solid var(--gold2);border-radius:6px;flex-shrink:0}
 
 .unitInfo{flex:1;min-width:0}
 
@@ -132,13 +128,11 @@ hr{border:0;border-top:1px solid #59442b;margin:14px 0}
 
 .preview h2,.preview p{grid-column:2}
 
-.classgrid{grid-template-columns:repeat(2,1fr)}
-
 main{width:94%}
 
 .panel{padding:12px}
 
-.unitPortrait{width:66px;height:84px}
+.unitPortrait{width:78px;height:100px}
 
 }
 
@@ -148,7 +142,7 @@ main{width:94%}
 
 <body>
 
-<audio id="bgMusic" src="musica_valle.mp3" loop preload="auto"></audio>
+<audio id="bgMusic" src="./musica_valle.mp3" loop preload="auto"></audio>
 
 <header>
 
@@ -156,7 +150,7 @@ main{width:94%}
 
 <p>La campana senza eco · Prototipo giocabile</p>
 
-<button class="musicButton" id="musicButton" onclick="toggleMusic()">♫ Attiva musica</button>
+<button class="musicButton" id="musicButton" onclick="toggleMusic()">♫ Musica OFF · Attiva</button>
 
 </header>
 
@@ -164,57 +158,177 @@ main{width:94%}
 
 <section id="creator">
 
- <div class="panel">
+<div class="panel">
 
-  <h2>01 · Crea il tuo eroe</h2>
+<h2>01 · Crea il tuo eroe</h2>
 
-  <div class="layout">
+<div class="layout">
 
-   <div><h3>Scegli la razza</h3><div class="grid" id="races"></div><p class="small" id="raceDescription"></p></div>
+<div>
 
-   <div class="preview"><img class="portrait" id="portrait" src="01_umano_guerriero.png" alt="Anteprima personaggio"><div><h2 id="heroTitle">Umano</h2><p class="small" id="heroDescription"></p></div></div>
+<h3>Scegli la razza</h3>
 
-  </div>
+<div class="grid" id="races"></div>
 
-  <hr><h3>Sesso</h3><div class="row"><button class="choice selected" data-gender="male">Maschio</button><button class="choice" data-gender="female">Femmina</button></div>
+<p class="small" id="raceDescription"></p>
 
- </div>
+</div>
 
- <div class="panel"><h2>02 · Nome dell'eroe</h2><input id="heroName" class="input" maxlength="24" placeholder="Scrivi il nome del tuo eroe"></div>
+<div class="preview">
 
- <div class="panel"><h2>03 · Scegli la classe</h2><div class="classgrid" id="classes"></div><p class="small" id="classDescription"></p></div>
+<img class="portrait" id="portrait" src="./01_umano_guerriero.png" alt="Anteprima personaggio">
 
- <div class="panel"><h2>04 · Caratteristiche</h2><div class="stats" id="stats"></div><p class="small">Valori iniziali: 5 + modificatore razziale + modificatore di classe.</p></div>
+<div>
 
- <button class="btn" style="width:100%;padding:16px;font-size:18px" onclick="startAdventure()">INIZIA IL VIAGGIO</button>
+<h2 id="heroTitle">Umano</h2>
 
- <p class="note">Le tue scelte daranno forma al destino di Velmora.</p>
+<p class="small" id="heroDescription"></p>
+
+</div>
+
+</div>
+
+</div>
+
+<hr>
+
+<h3>Sesso</h3>
+
+<div class="row">
+
+<button class="choice selected" data-gender="male">Maschio</button>
+
+<button class="choice" data-gender="female">Femmina</button>
+
+</div>
+
+</div>
+
+<div class="panel">
+
+<h2>02 · Nome dell'eroe</h2>
+
+<input id="heroName" class="input" maxlength="24" placeholder="Scrivi il nome del tuo eroe">
+
+</div>
+
+<div class="panel">
+
+<h2>03 · Scegli la classe</h2>
+
+<div class="classgrid" id="classes"></div>
+
+<p class="small" id="classDescription"></p>
+
+</div>
+
+<div class="panel">
+
+<h2>04 · Caratteristiche</h2>
+
+<div class="stats" id="stats"></div>
+
+<p class="small">Valori iniziali: 5 + modificatore razziale + modificatore di classe.</p>
+
+</div>
+
+<button class="btn" style="width:100%;padding:16px;font-size:18px" onclick="startAdventure()">INIZIA IL VIAGGIO</button>
+
+<p class="note">Le tue scelte daranno forma al destino di Velmora.</p>
 
 </section>
 
 <section id="game" class="hidden">
 
- <div class="panel"><div class="row" style="justify-content:space-between"><span class="badge" id="chapterBadge">PROLOGO</span><span class="badge" id="levelBadge">Livello 1</span></div><h2 id="sceneTitle"></h2><div id="sceneText" class="story"></div><div id="sceneChoices" class="actions"></div></div>
+<div class="panel">
 
- <div id="combat" class="hidden">
+<div class="row" style="justify-content:space-between">
 
-  <div class="panel"><div class="row" style="justify-content:space-between"><h2 id="battleTitle">Combattimento</h2><span class="badge" id="roundBadge">Turno 1</span></div><p class="small" id="battleHint"></p><h3>Il gruppo</h3><div id="partyList"></div><h3>Avversari</h3><div id="enemyList"></div><hr><h3 id="activeTitle">Turno</h3><p class="small" id="activeInfo"></p><div id="targetArea" class="target"></div><div id="combatActions" class="actions"></div><p class="small" id="actionMessage">Seleziona un'azione.</p><h3>Diario dello scontro</h3><div class="log" id="battleLog"></div></div>
+<span class="badge" id="chapterBadge">PROLOGO</span>
 
- </div>
+<span class="badge" id="levelBadge">Livello 1</span>
 
- <div id="afterCombat" class="panel hidden"></div>
+</div>
 
- <div class="panel"><h2>Inventario</h2><div id="inventory" class="inventory"></div></div>
+<h2 id="sceneTitle"></h2>
 
- <div class="row"><button class="btn secondary" onclick="saveGame()">SALVA PARTITA</button><button class="btn secondary" onclick="loadGame()">CARICA PARTITA</button><button class="btn secondary" onclick="backToCreator()">Torna alla creazione</button></div>
+<div id="sceneText" class="story"></div>
 
- <p class="note">Prototipo locale: i progressi vengono salvati in questo browser su questo dispositivo.</p>
+<div id="sceneChoices" class="actions"></div>
+
+</div>
+
+<div id="combat" class="hidden">
+
+<div class="panel">
+
+<div class="row" style="justify-content:space-between">
+
+<h2 id="battleTitle">Combattimento</h2>
+
+<span class="badge" id="roundBadge">Turno 1</span>
+
+</div>
+
+<p class="small" id="battleHint"></p>
+
+<h3>Il gruppo</h3>
+
+<div id="partyList"></div>
+
+<h3>Avversari</h3>
+
+<div id="enemyList"></div>
+
+<hr>
+
+<h3 id="activeTitle">Turno</h3>
+
+<p class="small" id="activeInfo"></p>
+
+<div id="targetArea" class="target"></div>
+
+<div id="combatActions" class="actions"></div>
+
+<p class="small" id="actionMessage">Seleziona un'azione.</p>
+
+<h3>Diario dello scontro</h3>
+
+<div class="log" id="battleLog"></div>
+
+</div>
+
+</div>
+
+<div id="afterCombat" class="panel hidden"></div>
+
+<div class="panel">
+
+<h2>Inventario</h2>
+
+<div id="inventory" class="inventory"></div>
+
+</div>
+
+<div class="row">
+
+<button class="btn secondary" onclick="saveGame()">SALVA PARTITA</button>
+
+<button class="btn secondary" onclick="loadGame()">CARICA PARTITA</button>
+
+<button class="btn secondary" onclick="backToCreator()">Torna alla creazione</button>
+
+</div>
+
+<p class="note">I progressi vengono salvati in questo browser su questo dispositivo.</p>
 
 </section>
 
 </main>
 
 <script>
+
+const asset=name=>new URL("./"+name,document.baseURI).href;
 
 const races=[
 
@@ -254,127 +368,205 @@ const classes=[
 
 const statNames={forza:"Forza",agilita:"Agilità",vitalita:"Vitalità",intelletto:"Intelletto",volonta:"Volontà",percezione:"Percezione",carisma:"Carisma"};
 
-let selectedRace=races[0],selectedClass=classes[0],gender="male";
-
-let G=null,battle=null,selectedTarget=0;
+let selectedRace=races[0],selectedClass=classes[0],gender="male",G=null,battle=null,selectedTarget=0;
 
 const $=id=>document.getElementById(id);
 
-function tryMusic(){
+function musicLabel(){
 
- const m=$("bgMusic");
-
- if(!m)return;
-
- m.play().then(()=>{$("musicButton").textContent="♫ Musica attiva · Disattiva"}).catch(()=>{$("musicButton").textContent="♫ Tocca per attivare la musica"});
+$("musicButton").textContent=$("bgMusic").paused?"♫ Musica OFF · Attiva":"♫ Musica ON · Disattiva";
 
 }
 
 function toggleMusic(){
 
- const m=$("bgMusic");
+const m=$("bgMusic");
 
- if(m.paused)tryMusic();
+if(m.paused){
 
- else{m.pause();$("musicButton").textContent="♫ Attiva musica"}
+m.volume=.35;
+
+m.play().then(musicLabel).catch(()=>{$("musicButton").textContent="♫ Tocca per attivare"});
+
+}else{
+
+m.pause();
+
+musicLabel();
 
 }
 
-window.addEventListener("load",tryMusic);
-
-document.addEventListener("pointerdown",function(){if($("bgMusic").paused)tryMusic()},{once:true});
+}
 
 function imageForRace(r){return r[gender]||r.male}
 
-function statsFor(){let s={};for(let k in statNames)s[k]=5+(selectedRace.mod[k]||0)+(selectedClass.mod[k]||0);return s}
+function statsFor(){
+
+let s={};
+
+for(let k in statNames)s[k]=5+(selectedRace.mod[k]||0)+(selectedClass.mod[k]||0);
+
+return s;
+
+}
 
 function renderCreator(){
 
- $("races").innerHTML=races.map(r=>`<button class="choice ${r.id===selectedRace.id?'selected':''}" data-race="${r.id}">${r.name}</button>`).join("");
+$("races").innerHTML=races.map(r=>`<button class="choice ${r.id===selectedRace.id?'selected':''}" data-race="${r.id}">${r.name}</button>`).join("");
 
- document.querySelectorAll("[data-race]").forEach(b=>b.onclick=()=>{selectedRace=races.find(r=>r.id===b.dataset.race);renderCreator()});
+document.querySelectorAll("[data-race]").forEach(b=>b.onclick=()=>{
 
- $("classes").innerHTML=classes.map(c=>`<button class="choice ${c.id===selectedClass.id?'selected':''}" data-class="${c.id}">${c.name}</button>`).join("");
+selectedRace=races.find(r=>r.id===b.dataset.race);
 
- document.querySelectorAll("[data-class]").forEach(b=>b.onclick=()=>{selectedClass=classes.find(c=>c.id===b.dataset.class);renderCreator()});
+renderCreator();
 
- document.querySelectorAll("[data-gender]").forEach(b=>{b.classList.toggle("selected",b.dataset.gender===gender);b.onclick=()=>{gender=b.dataset.gender;renderCreator()}});
+});
 
- $("portrait").src=imageForRace(selectedRace);$("heroTitle").textContent=selectedRace.name;
+$("classes").innerHTML=classes.map(c=>`<button class="choice ${c.id===selectedClass.id?'selected':''}" data-class="${c.id}">${c.name}</button>`).join("");
 
- $("heroDescription").textContent=selectedRace.description+" Tratto: "+selectedRace.trait+".";
+document.querySelectorAll("[data-class]").forEach(b=>b.onclick=()=>{
 
- $("raceDescription").textContent=selectedRace.description;
+selectedClass=classes.find(c=>c.id===b.dataset.class);
 
- $("classDescription").textContent=selectedClass.description+" Armatura: "+selectedClass.armor+".";
+renderCreator();
 
- const s=statsFor();$("stats").innerHTML=Object.keys(statNames).map(k=>`<div class="stat"><span>${statNames[k]}</span><b>${s[k]}</b></div>`).join("");
+});
+
+document.querySelectorAll("[data-gender]").forEach(b=>{
+
+b.classList.toggle("selected",b.dataset.gender===gender);
+
+b.onclick=()=>{gender=b.dataset.gender;renderCreator()};
+
+});
+
+$("portrait").src=asset(imageForRace(selectedRace));
+
+$("heroTitle").textContent=selectedRace.name;
+
+$("heroDescription").textContent=selectedRace.description+" Tratto: "+selectedRace.trait+".";
+
+$("raceDescription").textContent=selectedRace.description;
+
+$("classDescription").textContent=selectedClass.description+" Armatura: "+selectedClass.armor+".";
+
+const s=statsFor();
+
+$("stats").innerHTML=Object.keys(statNames).map(k=>`<div class="stat"><span>${statNames[k]}</span><b>${s[k]}</b></div>`).join("");
 
 }
 
 function startAdventure(){
 
- let name=$("heroName").value.trim();if(!name){alert("Scrivi il nome del tuo eroe prima di partire!");return}
+let name=$("heroName").value.trim();
 
- let s=statsFor(),maxhp=26+s.vitalita*3;
+if(!name){alert("Scrivi il nome del tuo eroe prima di partire!");return}
 
- G={hero:{id:"hero",name,race:selectedRace.name,class:selectedClass.name,gender,portrait:imageForRace(selectedRace),stats:s,level:1,xp:0,hp:maxhp,maxhp,ap:5,maxap:5,armor:selectedClass.id==="warrior"?4:selectedClass.id==="cleric"?3:1,weapon:selectedClass.id==="mage"||selectedClass.id==="druid"?4:6,alive:true,down:0,isHero:true},
+let s=statsFor(),maxhp=26+s.vitalita*3;
 
- party:[],inventory:{Pozione:"2",Antidoto:"1",Benda:"1",Purificazione:"1"},gold:12,chapter:0,companions:{wolf:false,lion:false},battleWon:0,finished:false};
+G={
 
- $("creator").classList.add("hidden");$("game").classList.remove("hidden");
+hero:{id:"hero",name,race:selectedRace.name,class:selectedClass.name,gender,portrait:imageForRace(selectedRace),stats:s,level:1,xp:0,hp:maxhp,maxhp,ap:5,maxap:5,armor:selectedClass.id==="warrior"?4:selectedClass.id==="cleric"?3:1,weapon:selectedClass.id==="mage"||selectedClass.id==="druid"?4:6,alive:true,down:0,isHero:true},
 
- showScene("prologue");
+party:[],inventory:{Pozione:2,Antidoto:1,Benda:1,Purificazione:1},gold:12,chapter:0,companions:{wolf:false,lion:false},battleWon:0,finished:false
+
+};
+
+$("creator").classList.add("hidden");
+
+$("game").classList.remove("hidden");
+
+showScene("prologue");
 
 }
 
+const scenes={
+
+prologue:{badge:"PROLOGO",title:"La campana senza eco",text:`<p>Il tuo viaggio conduce a <em>Rovoscuro</em>, un villaggio ai confini della Valle di Velmora. Da tre notti, a mezzanotte, la campana della vecchia torre suona da sola. Ogni volta che risuona, qualcuno scompare.</p><p>Un'anziana donna ti afferra il braccio: «Mio nipote è entrato nella torre tre giorni fa. Non è più tornato. Ti prego, aiutaci».</p><p>Nella locanda incontri due viandanti: <b>Rauk</b>, un guerriero del Popolo Lupo, e <b>Leona</b>, una guerriera Leonide. Entrambi sembrano conoscere qualcosa della torre.</p>`,choices:[["Chiedi a Rauk di unirsi","wolf"],["Chiedi a Leona di unirsi","lion"],["Parti verso il bosco","forest"]]},
+
+forest:{badge:"CAPITOLO I",title:"L'imboscata nel bosco",text:`<p>Il sentiero si stringe tra alberi contorti. Due orchi armati emergono dal sottobosco, accompagnati da un nano razziatore.</p><p><em>«La strada è nostra, viandante. Lascia le tue cose!»</em></p>`,choices:[["Affronta gli aggressori","fight1"]]},
+
+crypt:{badge:"CAPITOLO II",title:"La cripta dimenticata",text:`<p>Una scala di pietra scende sotto la torre. Al centro della cripta, un altare emana luce verdastra. Un orco veterano e due nani guardiani difendono il passaggio.</p>`,choices:[["Entra nella cripta","fight2"]]},
+
+boss:{badge:"CAPITOLO III",title:"Il Custode della Campana",text:`<p>La porta di ferro si apre. Nella sala della campana si erge un cavaliere enorme, avvolto in un'armatura nera. Gli occhi brillano di luce azzurra.</p><p>«Nessuno interromperà il richiamo.»</p>`,choices:[["Affronta il Custode","fight3"]]},
+
+ending:{badge:"FINE DELLA PROVA",title:"La campana tace",text:`<p>Con un ultimo clangore, la campana si spezza. Il silenzio torna nella valle. Hai completato la prima avventura di <em>Ombre di Velmora</em>.</p>`,choices:[["Ricomincia l'avventura","restart"]]}
+
+};
+
 function showScene(key){
 
- $("combat").classList.add("hidden");$("afterCombat").classList.add("hidden");
+$("combat").classList.add("hidden");
 
- const scenes={
+$("afterCombat").classList.add("hidden");
 
- prologue:{badge:"PROLOGO",title:"La campana senza eco",text:`<p>Il tuo viaggio conduce a <em>Rovoscuro</em>, un villaggio ai confini della Valle di Velmora. Da tre notti, a mezzanotte, la campana della vecchia torre suona da sola. Ogni volta che risuona, qualcuno scompare.</p><p>Un'anziana donna ti afferra il braccio: «Mio nipote è entrato nella torre tre giorni fa. Non è più tornato. Ti prego, aiutaci».</p><p>Nella locanda incontri due viandanti: <b>Rauk</b>, un guerriero del Popolo Lupo, e <b>Leona</b>, una guerriera Leonide. Entrambi sembrano conoscere qualcosa della torre.</p>`,choices:[["Chiedi a Rauk di unirsi","wolf"],["Chiedi a Leona di unirsi","lion"],["Parti verso il bosco","forest"]]},
+let sc=scenes[key];
 
- forest:{badge:"CAPITOLO I",title:"L'imboscata nel bosco",text:`<p>Il sentiero si stringe tra alberi contorti. Un ruggito squarcia il silenzio. Due orchi armati emergono dal sottobosco, accompagnati da un nano razziatore.</p><p><em>«La strada è nostra, viandante. Lascia le tue cose!»</em></p>`,choices:[["Affronta gli aggressori","fight1"]]},
+$("chapterBadge").textContent=sc.badge;
 
- crypt:{badge:"CAPITOLO II",title:"La cripta dimenticata",text:`<p>Una scala di pietra scende sotto la torre. L'aria sa di terra bagnata e cera spenta. Al centro della cripta, un altare emana luce verdastra. Un orco veterano e due nani guardiani si preparano a difendere il passaggio.</p>`,choices:[["Entra nella cripta","fight2"]]},
+$("sceneTitle").textContent=sc.title;
 
- boss:{badge:"CAPITOLO III",title:"Il Custode della Campana",text:`<p>La porta di ferro si apre con un gemito. Nella sala della campana si erge un cavaliere enorme, avvolto in un'armatura nera. Il suo volto è nascosto da un elmo antico, decorato con rune naniche. Gli occhi brillano di una luce azzurra.</p><p>«Nessuno interromperà il richiamo. Nessuno uscirà da qui.»</p><p>È il <em>Custode della Campana</em>, ultimo guardiano di un giuramento dimenticato.</p>`,choices:[["Affronta il Custode","fight3"]]},
+$("sceneText").innerHTML=sc.text;
 
- ending:{badge:"FINE DELLA PROVA",title:"La campana tace",text:`<p>Con un ultimo clangore, la campana si spezza. Il silenzio torna nella valle. Le ombre si ritirano dalle pareti e, in lontananza, una voce chiama il nome di qualcuno che credevi perduto.</p><p>Hai completato la prima avventura di prova di <em>Ombre di Velmora</em>.</p>`,choices:[["Ricomincia l'avventura","restart"]]}
+$("sceneChoices").innerHTML=sc.choices.map(([label,act])=>`<button class="btn" onclick="sceneAction('${act}')">${label}</button>`).join("");
 
- };
-
- let sc=scenes[key];$("chapterBadge").textContent=sc.badge;$("sceneTitle").textContent=sc.title;$("sceneText").innerHTML=sc.text;
-
- $("sceneChoices").innerHTML=sc.choices.map(([label,act])=>`<button class="btn" onclick="sceneAction('${act}')">${label}</button>`).join("");
-
- updateHUD();
+updateHUD();
 
 }
 
 function sceneAction(act){
 
- if(act==="wolf"){if(!G.companions.wolf){G.companions.wolf=true;G.party.push(makeCompanion("Rauk","warrior",36,7,3,4,"19_lupo.png"));}showScene("prologue");$("sceneText").innerHTML+='<p><em>Rauk abbassa il capo.</em> «Il mio fiuto ha seguito quella traccia fino alla torre. Verrò con te.»</p>';return}
+if(act==="wolf"){
 
- if(act==="lion"){if(!G.companions.lion){G.companions.lion=true;G.party.push(makeCompanion("Leona","warrior",40,7,4,4,"15_leonide.png"));}showScene("prologue");$("sceneText").innerHTML+='<p><em>Leona stringe l\'elsa della spada.</em> «Non permetterò che altre persone scompaiano. Combatterò al tuo fianco.»</p>';return}
+if(!G.companions.wolf){
 
- if(act==="forest"){showScene("forest");return}
+G.companions.wolf=true;
 
- if(act==="fight1"){startBattle(1);return}
-
- if(act==="fight2"){startBattle(2);return}
-
- if(act==="fight3"){startBattle(3);return}
-
- if(act==="restart"){location.reload()}
+G.party.push(makeCompanion("Rauk",36,7,3,4,"19_lupo.png"));
 
 }
 
-function makeCompanion(name,role,hp,str,armor,intel,portrait){
+showScene("prologue");
 
- return{id:name.toLowerCase(),name,class:role,portrait,level:1,stats:{forza:str,agilita:role==="mage"?4:6,vitalita:5,intelletto:intel,volonta:5,percezione:5,carisma:5},hp,maxhp:hp,ap:5,maxap:5,armor,weapon:6,alive:true,down:0,isHero:false}
+$("sceneText").innerHTML+='<p><em>Rauk abbassa il capo.</em> «Verrò con te.»</p>';
+
+return;
+
+}
+
+if(act==="lion"){
+
+if(!G.companions.lion){
+
+G.companions.lion=true;
+
+G.party.push(makeCompanion("Leona",40,7,4,4,"15_leonide.png"));
+
+}
+
+showScene("prologue");
+
+$("sceneText").innerHTML+='<p><em>Leona stringe l’elsa.</em> «Combatterò al tuo fianco.»</p>';
+
+return;
+
+}
+
+if(act==="forest"){showScene("forest");return}
+
+if(act==="fight1"){startBattle(1);return}
+
+if(act==="fight2"){startBattle(2);return}
+
+if(act==="fight3"){startBattle(3);return}
+
+if(act==="restart")location.reload();
+
+}
+
+function makeCompanion(name,hp,str,armor,intel,portrait){
+
+return{id:name.toLowerCase(),name,class:"warrior",portrait,level:1,stats:{forza:str,agilita:6,vitalita:5,intelletto:intel,volonta:5,percezione:5,carisma:5},hp,maxhp:hp,ap:5,maxap:5,armor,weapon:6,alive:true,down:0,isHero:false};
 
 }
 
@@ -382,135 +574,159 @@ function aliveParty(){return [G.hero,...G.party].filter(p=>p.alive&&p.hp>0)}
 
 function startBattle(n){
 
- const sets={
+const sets={
 
- 1:[
+1:[
 
- {name:"Orco predone",hp:25,atk:6,armor:1,kind:"orc",portrait:"13_orco.png"},
+{name:"Orco predone",hp:25,atk:6,armor:1,kind:"orc",portrait:"13_orco.png"},
 
- {name:"Orco predone",hp:25,atk:6,armor:1,kind:"orc",portrait:"13_orco.png"},
+{name:"Orco predone",hp:25,atk:6,armor:1,kind:"orc",portrait:"13_orco.png"},
 
- {name:"Nano razziatore",hp:22,atk:5,armor:2,kind:"dwarf",portrait:"03_umano_mago.png"}],
+{name:"Nano razziatore",hp:22,atk:5,armor:2,kind:"dwarf",portrait:"03_umano_mago.png"}
 
- 2:[
+],
 
- {name:"Orco veterano",hp:34,atk:7,armor:3,kind:"orc",portrait:"13_orco.png"},
+2:[
 
- {name:"Nano guardiano",hp:32,atk:6,armor:4,kind:"dwarf",portrait:"03_umano_mago.png"},
+{name:"Orco veterano",hp:34,atk:7,armor:3,kind:"orc",portrait:"13_orco.png"},
 
- {name:"Nano sciamano",hp:29,atk:7,armor:2,kind:"priest",portrait:"03_umano_mago.png"}],
+{name:"Nano guardiano",hp:32,atk:6,armor:4,kind:"dwarf",portrait:"03_umano_mago.png"},
 
- 3:[
+{name:"Nano sciamano",hp:29,atk:7,armor:2,kind:"priest",portrait:"04_umana_maga.png"}
 
- {name:"Custode della Campana",hp:145,atk:10,armor:5,kind:"boss",portrait:"03_umano_mago.png"}]
+],
 
- };
+3:[
 
- battle={n,round:1,units:sets[n].map((e,i)=>({...e,id:"e"+i,maxhp:e.hp,alive:true,down:0})),order:[],idx:0,log:[],ended:false,actionUsed:false};
+{name:"Custode della Campana",hp:145,atk:10,armor:5,kind:"boss",portrait:"03_umano_mago.png"}
 
- let allies=[G.hero,...G.party];allies.forEach(p=>{p.ap=5;if(p.hp<=0&&p.isHero)p.hp=1});
+]
 
- battle.order=[...allies.filter(p=>p.alive&&p.hp>0),...battle.units].sort((a,b)=>(b.stats?.agilita||3)-(a.stats?.agilita||3)+((Math.random()-.5)*.01));
+};
 
- $("combat").classList.remove("hidden");$("afterCombat").classList.add("hidden");
+battle={n,round:1,units:sets[n].map((e,i)=>({...e,id:"e"+i,maxhp:e.hp,alive:true,down:0})),order:[],idx:0,log:[],ended:false};
 
- $("battleTitle").textContent=n===1?"Combattimento I · L'imboscata":n===2?"Combattimento II · La cripta":"Boss · Il Custode";
+let allies=[G.hero,...G.party];
 
- $("battleHint").textContent="Ordine dei turni determinato dall'Agilità. Un'azione per personaggio a ogni turno.";
+allies.forEach(p=>{p.ap=5;if(p.hp<=0&&p.isHero)p.hp=1});
 
- log("Lo scontro ha inizio. L'ordine è stabilito dall'Agilità.");
+battle.order=[...allies.filter(p=>p.alive&&p.hp>0),...battle.units].sort((a,b)=>(b.stats?.agilita||3)-(a.stats?.agilita||3));
 
- renderBattle();advanceToPlayer();
+$("combat").classList.remove("hidden");
+
+$("afterCombat").classList.add("hidden");
+
+$("battleTitle").textContent=n===1?"Combattimento I · L'imboscata":n===2?"Combattimento II · La cripta":"Boss · Il Custode";
+
+$("battleHint").textContent="Ordine dei turni determinato dall'Agilità. Un'azione per personaggio a ogni turno.";
+
+log("Lo scontro ha inizio. L'ordine è stabilito dall'Agilità.");
+
+renderBattle();
+
+advanceToPlayer();
 
 }
 
-function log(t){battle.log.unshift(t);if(battle.log.length>35)battle.log.pop();$("battleLog").innerHTML=battle.log.map(x=>`<p>${x}</p>`).join("")}
+function log(t){
+
+battle.log.unshift(t);
+
+if(battle.log.length>35)battle.log.pop();
+
+$("battleLog").innerHTML=battle.log.map(x=>`<p>${x}</p>`).join("");
+
+}
 
 function isEnemy(u){return !!u.kind}
 
 function current(){return battle.order[battle.idx]}
 
-function renderBattle(){
+function unitHTML(u,active){
 
- if(!battle)return;
+let max=u.maxhp||u.hp,hp=Math.max(0,u.hp),portrait=u.portrait;
 
- $("roundBadge").textContent="Turno "+battle.round;
+let img=portrait?`<img class="unitPortrait" src="${asset(portrait)}" alt="${u.name}" onerror="this.outerHTML='<div class=\\'unitPortrait\\' style=\\'display:grid;place-items:center;color:#b9a98b;font-size:11px;text-align:center\\'>Ritratto non trovato</div>'">`:"";
 
- $("partyList").innerHTML=[G.hero,...G.party].map(p=>unitHTML(p,current()===p)).join("");
-
- $("enemyList").innerHTML=battle.units.map(e=>unitHTML(e,current()===e)).join("");
-
- $("inventory").innerHTML=Object.entries(G.inventory).map(([k,v])=>`<span>${k}: ${v}</span>`).join("")+`<span>Oro: ${G.gold}</span>`;
-
- updateHUD();
+return `<div class="unit ${active?'active':''} ${!u.alive?'dead':''}">${img}<div class="unitInfo"><div class="unithead"><b>${u.name}</b><span>${!u.alive?'CADUTO':hp+'/'+max+' HP'}</span></div><div class="bars"><div class="hpbar" style="width:${Math.max(0,hp/max*100)}%"></div></div>${!isEnemy(u)&&u.alive?`<div class="small">AP ${u.ap}/5 · Armatura ${u.armor}</div>`:''}${u.status?`<div class="small">Effetto: ${u.status.name} (${u.status.turns} turni)</div>`:''}</div></div>`;
 
 }
 
-function unitHTML(u,active){
+function renderBattle(){
 
- let max=u.maxhp||u.hp,hp=Math.max(0,u.hp);
+if(!battle)return;
 
- let portrait=u.portrait||"";
+$("roundBadge").textContent="Turno "+battle.round;
 
- return `<div class="unit ${active?'active':''} ${!u.alive?'dead':''}">
+$("partyList").innerHTML=[G.hero,...G.party].map(p=>unitHTML(p,current()===p)).join("");
 
- ${portrait?`<img class="unitPortrait" src="${portrait}" alt="${u.name}" onerror="this.style.display='none'">`:''}
+$("enemyList").innerHTML=battle.units.map(e=>unitHTML(e,current()===e)).join("");
 
- <div class="unitInfo"><div class="unithead"><b>${u.name}</b><span>${!u.alive?'CADUTO':hp+'/'+max+' HP'}</span></div>
-
- <div class="bars"><div class="hpbar" style="width:${Math.max(0,hp/max*100)}%"></div></div>
-
- ${!isEnemy(u)&&u.alive?`<div class="small">AP ${u.ap}/5 · Armatura ${u.armor}</div>`:''}
-
- ${u.status?`<div class="small">Effetto: ${u.status.name} (${u.status.turns} turni)</div>`:''}</div></div>`;
+updateHUD();
 
 }
 
 function advanceToPlayer(){
 
- if(!battle||battle.ended)return;
+if(!battle||battle.ended)return;
 
- let safety=0;
+let safety=0;
 
- while(safety++<battle.order.length+2){
+while(safety++<battle.order.length+3){
 
-  if(battle.units.every(e=>!e.alive||e.hp<=0)){winBattle();return}
+if(battle.units.every(e=>!e.alive||e.hp<=0)){winBattle();return}
 
-  if(aliveParty().length===0){loseBattle();return}
+if(aliveParty().length===0){loseBattle();return}
 
-  if(battle.idx>=battle.order.length){battle.idx=0;battle.round++;tickDowned();battle.order=battle.order.filter(u=>isEnemy(u)?u.alive&&u.hp>0:u.alive&&u.hp>0)}
+if(battle.idx>=battle.order.length){
 
-  let u=current();
+battle.idx=0;
 
-  if(!u||!u.alive||u.hp<=0){battle.idx++;continue}
+battle.round++;
 
-  if(isEnemy(u)){enemyTurn(u);battle.idx++;renderBattle();continue}
+tickDowned();
 
-  u.ap=Math.min(5,u.ap+1);
+battle.order=battle.order.filter(u=>isEnemy(u)?u.alive&&u.hp>0:u.alive&&u.hp>0);
 
-  applyStartStatus(u);
+}
 
-  if(!u.alive||u.hp<=0){battle.idx++;continue}
+let u=current();
 
-  battle.actionUsed=false;$("activeTitle").textContent="Turno di "+u.name;
+if(!u||!u.alive||u.hp<=0){battle.idx++;continue}
 
-  $("activeInfo").textContent=`HP ${u.hp}/${u.maxhp} · AP ${u.ap}/5 · Agilità ${u.stats.agilita||5}`;
+if(isEnemy(u)){enemyTurn(u);battle.idx++;renderBattle();continue}
 
-  $("actionMessage").textContent="Scegli una sola azione. L'attacco normale non consuma AP.";
+u.ap=Math.min(5,u.ap+1);
 
-  renderTargets();renderActions();renderBattle();return;
+applyStartStatus(u);
 
- }
+if(!u.alive||u.hp<=0){battle.idx++;continue}
+
+$("activeTitle").textContent="Turno di "+u.name;
+
+$("activeInfo").textContent=`HP ${u.hp}/${u.maxhp} · AP ${u.ap}/5 · Agilità ${u.stats.agilita||5}`;
+
+$("actionMessage").textContent="Scegli una sola azione. L'attacco normale non consuma AP.";
+
+renderTargets();
+
+renderActions();
+
+renderBattle();
+
+return;
+
+}
 
 }
 
 function renderTargets(){
 
- let living=battle.units.filter(e=>e.alive&&e.hp>0);
+let living=battle.units.filter(e=>e.alive&&e.hp>0);
 
- if(!living.some(e=>battle.units.indexOf(e)===selectedTarget))selectedTarget=battle.units.indexOf(living[0]);
+if(!living.some(e=>battle.units.indexOf(e)===selectedTarget))selectedTarget=battle.units.indexOf(living[0]);
 
- $("targetArea").innerHTML=living.map(e=>`<button class="choice ${selectedTarget===battle.units.indexOf(e)?'selected':''}" onclick="selectTarget(${battle.units.indexOf(e)})">${e.name} · ${e.hp} HP</button>`).join("");
+$("targetArea").innerHTML=living.map(e=>`<button class="choice ${selectedTarget===battle.units.indexOf(e)?'selected':''}" onclick="selectTarget(${battle.units.indexOf(e)})">${e.name} · ${e.hp} HP</button>`).join("");
 
 }
 
@@ -518,23 +734,25 @@ function selectTarget(i){selectedTarget=i;renderTargets()}
 
 function renderActions(){
 
- let u=current(),mage=["mage","cleric","druid"].includes(u.class)||u===G.hero&&["Mago","Chierico","Druido"].includes(G.hero.class);
+let u=current();
 
- $("combatActions").innerHTML=`
+let mage=["Mago","Chierico","Druido"].includes(G.hero.class)||["mage","cleric","druid"].includes(u.class);
 
- <button class="btn" onclick="playerAction('attack')">Attacco normale · 0 AP</button>
+$("combatActions").innerHTML=`
 
- <button class="btn" onclick="playerAction('skill')" ${u.ap<2?'disabled':''}>Abilità speciale · 2 AP</button>
+<button class="btn" onclick="playerAction('attack')">Attacco normale · 0 AP</button>
 
- <button class="btn" onclick="playerAction('spell')" ${u.ap<3||!mage?'disabled':''}>Magia · 3 AP</button>
+<button class="btn" onclick="playerAction('skill')" ${u.ap<2?'disabled':''}>Abilità speciale · 2 AP</button>
 
- <button class="btn secondary" onclick="playerAction('potion')" ${Number(G.inventory.Pozione||0)<1?'disabled':''}>Pozione curativa</button>
+<button class="btn" onclick="playerAction('spell')" ${u.ap<3||!mage?'disabled':''}>Magia · 3 AP</button>
 
- <button class="btn secondary" onclick="playerAction('cure')" ${!hasCure()?'disabled':''}>Usa cura</button>
+<button class="btn secondary" onclick="playerAction('potion')" ${G.inventory.Pozione<1?'disabled':''}>Pozione curativa</button>
 
- <button class="btn secondary" onclick="playerAction('rescue')" ${!hasDowned()?'disabled':''}>Soccorri compagno</button>
+<button class="btn secondary" onclick="playerAction('cure')" ${!hasCure()?'disabled':''}>Usa cura</button>
 
- <button class="btn danger" onclick="playerAction('flee')">Tenta la fuga</button>`;
+<button class="btn secondary" onclick="playerAction('rescue')" ${!hasDowned()?'disabled':''}>Soccorri compagno</button>
+
+<button class="btn danger" onclick="playerAction('flee')">Tenta la fuga</button>`;
 
 }
 
@@ -544,67 +762,99 @@ function hasDowned(){return [G.hero,...G.party].some(p=>!p.alive&&p.down>0)}
 
 function playerAction(type){
 
- if(battle.actionUsed)return;
+let u=current(),target=battle.units[selectedTarget];
 
- let u=current(),target=battle.units[selectedTarget];if(!u||!u.alive)return;
+if(!u||!u.alive)return;
 
- if(type==="attack"||type==="skill"||type==="spell"){
+if(["attack","skill","spell"].includes(type)){
 
-  if(!target||!target.alive){$("actionMessage").textContent="Scegli un nemico.";return}
+if(!target||!target.alive)return;
 
-  let cost=type==="skill"?2:type==="spell"?3:0;if(u.ap<cost)return;
+let cost=type==="skill"?2:type==="spell"?3:0;
 
-  u.ap-=cost;let die=roll(),stat=type==="spell"?(u.stats.intelletto||u.stats.volonta||5):(u.stats.forza||5);
+if(u.ap<cost)return;
 
-  let bonus=Math.floor(stat/2),weapon=u.weapon+(type==="skill"?3:type==="spell"?4:0);
+u.ap-=cost;
 
-  let damage=Math.max(1,die+bonus+weapon-target.armor);
+let die=roll();
 
-  if(die===20)damage+=10;
+let stat=type==="spell"?(u.stats.intelletto||u.stats.volonta||5):(u.stats.forza||5);
 
-  target.hp-=damage;log(`${u.name}: D20 ${die} → ${type==="spell"?"incantesimo":type==="skill"?"abilità speciale":"attacco"} su ${target.name}, ${damage} danni${die===20?" (CRITICO!)":""}.`);
+let bonus=Math.floor(stat/2);
 
-  if(target.hp<=0){target.hp=0;target.alive=false;log(`${target.name} è stato sconfitto.`)}
+let weapon=u.weapon+(type==="skill"?3:type==="spell"?4:0);
 
-  if(type==="spell"&&target.alive&&Math.random()<.35){target.status={name:"Bruciatura",turns:2,damage:3};log(`${target.name} è in fiamme!`)}
+let damage=Math.max(1,die+bonus+weapon-target.armor);
 
- }else if(type==="potion"){
+if(die===20)damage+=10;
 
-  if(Number(G.inventory.Pozione||0)<1)return;G.inventory.Pozione=Number(G.inventory.Pozione)-1;
+target.hp-=damage;
 
-  let heal=18;u.hp=Math.min(u.maxhp,u.hp+heal);log(`${u.name} usa una pozione e recupera ${heal} HP.`);
+log(`${u.name}: D20 ${die} → ${type==="spell"?"incantesimo":type==="skill"?"abilità speciale":"attacco"} su ${target.name}, ${damage} danni${die===20?" (CRITICO!)":""}.`);
 
- }else if(type==="cure"){
+if(target.hp<=0){target.hp=0;target.alive=false;log(`${target.name} è stato sconfitto.`)}
 
-  let keys=["Antidoto","Benda","Purificazione"],chosen=keys.find(k=>Number(G.inventory[k]||0)>0);if(!chosen)return;
+}else if(type==="potion"){
 
-  G.inventory[chosen]=Number(G.inventory[chosen])-1;
+if(G.inventory.Pozione<1)return;
 
-  if(u.status){u.status=null;log(`${u.name} usa ${chosen}: effetto negativo rimosso.`)}
+G.inventory.Pozione--;
 
-  else{log(`${u.name} usa ${chosen}, ma non ha alterazioni da curare.`)}
+let heal=18;
 
- }else if(type==="rescue"){
+u.hp=Math.min(u.maxhp,u.hp+heal);
 
-  let p=[G.hero,...G.party].find(p=>!p.alive&&p.down>0);if(!p)return;
+log(`${u.name} usa una pozione e recupera ${heal} HP.`);
 
-  p.alive=true;p.down=0;p.hp=Math.max(8,Math.floor(p.maxhp*.25));log(`${u.name} soccorre ${p.name}, che torna in piedi con ${p.hp} HP.`);
+}else if(type==="cure"){
 
- }else if(type==="flee"){
+let k=["Antidoto","Benda","Purificazione"].find(x=>G.inventory[x]>0);
 
-  if(battle.n===3){log("Il Custode blocca ogni via di fuga.")}
+if(!k)return;
 
-  else if(Math.random()<.55){log("La fuga riesce. Lo scontro termina, ma la missione resta incompleta.");battle.ended=true;$("combat").classList.add("hidden");showScene(battle.n===1?"forest":"crypt");return}
+G.inventory[k]--;
 
-  else{log("La fuga fallisce!")}
+if(u.status){u.status=null;log(`${u.name} usa ${k}: effetto negativo rimosso.`)}
 
- }
+else log(`${u.name} usa ${k}, ma non ha alterazioni da curare.`);
 
- battle.actionUsed=true;renderBattle();
+}else if(type==="rescue"){
 
- if(battle.units.every(e=>!e.alive||e.hp<=0)){winBattle();return}
+let p=[G.hero,...G.party].find(p=>!p.alive&&p.down>0);
 
- battle.idx++;advanceToPlayer();
+if(!p)return;
+
+p.alive=true;p.down=0;p.hp=Math.max(8,Math.floor(p.maxhp*.25));
+
+log(`${u.name} soccorre ${p.name}, che torna in piedi con ${p.hp} HP.`);
+
+}else if(type==="flee"){
+
+if(battle.n===3)log("Il Custode blocca ogni via di fuga.");
+
+else if(Math.random()<.55){
+
+log("La fuga riesce. Lo scontro termina, ma la missione resta incompleta.");
+
+battle.ended=true;
+
+$("combat").classList.add("hidden");
+
+showScene(battle.n===1?"forest":"crypt");
+
+return;
+
+}else log("La fuga fallisce!");
+
+}
+
+renderBattle();
+
+if(battle.units.every(e=>!e.alive||e.hp<=0)){winBattle();return}
+
+battle.idx++;
+
+advanceToPlayer();
 
 }
 
@@ -612,85 +862,153 @@ function roll(){return Math.floor(Math.random()*20)+1}
 
 function enemyTurn(e){
 
- let targets=aliveParty();if(!targets.length)return;
+let targets=aliveParty();
 
- let target=targets.sort((a,b)=>(a.hp/a.maxhp)-(b.hp/b.maxhp))[0];
+if(!targets.length)return;
 
- let die=roll(),damage=Math.max(1,die+e.atk-target.armor);
+let target=targets.sort((a,b)=>(a.hp/a.maxhp)-(b.hp/b.maxhp))[0];
 
- if(die===20)damage+=5;
+let die=roll(),damage=Math.max(1,die+e.atk-target.armor);
 
- target.hp-=damage;log(`${e.name} attacca ${target.name}: D20 ${die}, ${damage} danni.`);
+if(die===20)damage+=5;
 
- if((e.kind==="priest"||e.kind==="dwarf")&&target.hp>0&&Math.random()<.35){target.status={name:"Avvelenamento",turns:3,damage:3};log(`${target.name} è avvelenato!`)}
+target.hp-=damage;
 
- if(e.kind==="boss"&&target.hp>0&&Math.random()<.3){target.status={name:"Sanguinamento",turns:2,damage:4};log(`${target.name} sanguina!`)}
+log(`${e.name} attacca ${target.name}: D20 ${die}, ${damage} danni.`);
 
- if(target.hp<=0){
+if((e.kind==="priest"||e.kind==="dwarf")&&target.hp>0&&Math.random()<.35){
 
-  target.hp=0;
+target.status={name:"Avvelenamento",turns:3,damage:3};
 
-  if(target.isHero){target.hp=1;log(`${target.name} crolla, ma il destino lo protegge: non può morire definitivamente.`)}
+log(`${target.name} è avvelenato!`);
 
-  else{target.alive=false;target.down=3;log(`${target.name} è a terra! Hai 3 turni per soccorrerlo.`)}
+}
 
- }
+if(e.kind==="boss"&&target.hp>0&&Math.random()<.3){
+
+target.status={name:"Sanguinamento",turns:2,damage:4};
+
+log(`${target.name} sanguina!`);
+
+}
+
+if(target.hp<=0){
+
+target.hp=0;
+
+if(target.isHero){target.hp=1;log(`${target.name} crolla, ma il destino lo protegge.`)}
+
+else{target.alive=false;target.down=3;log(`${target.name} è a terra! Hai 3 turni per soccorrerlo.`)}
+
+}
 
 }
 
 function applyStartStatus(u){
 
- if(!u.status)return;
+if(!u.status)return;
 
- let s=u.status;if(s.damage){u.hp-=s.damage;log(`${u.name} subisce ${s.damage} danni da ${s.name.toLowerCase()}.`)}
+let s=u.status;
 
- s.turns--;if(s.turns<=0){log(`L'effetto ${s.name.toLowerCase()} termina su ${u.name}.`);u.status=null}
+if(s.damage){u.hp-=s.damage;log(`${u.name} subisce ${s.damage} danni da ${s.name.toLowerCase()}.`)}
 
- if(u.hp<=0){
+s.turns--;
 
-  if(u.isHero){u.hp=1;log(`${u.name} resiste alla morte.`)}
+if(s.turns<=0){log(`L'effetto ${s.name.toLowerCase()} termina su ${u.name}.`);u.status=null}
 
-  else{u.hp=0;u.alive=false;u.down=3;log(`${u.name} cade a terra a causa dell'alterazione!`)}
+if(u.hp<=0){
 
- }
+if(u.isHero){u.hp=1;log(`${u.name} resiste alla morte.`)}
+
+else{u.hp=0;u.alive=false;u.down=3;log(`${u.name} cade a terra!`)}
+
+}
 
 }
 
 function tickDowned(){
 
- [G.hero,...G.party].forEach(p=>{if(!p.alive&&p.down>0){p.down--;if(p.down===0){log(`${p.name} non è stato soccorso in tempo: è perduto per questa avventura.`)}}});
+[G.hero,...G.party].forEach(p=>{
+
+if(!p.alive&&p.down>0){
+
+p.down--;
+
+if(p.down===0)log(`${p.name} non è stato soccorso in tempo: è perduto.`);
+
+}
+
+});
 
 }
 
 function winBattle(){
 
- if(battle.ended)return;battle.ended=true;G.battleWon++;
+if(battle.ended)return;
 
- let n=battle.n,reward=n===1?{xp:35,gold:18}:n===2?{xp:55,gold:28}:{xp:100,gold:60};
+battle.ended=true;
 
- G.hero.xp+=reward.xp;G.gold+=reward.gold;
+G.battleWon++;
 
- let levelUp="";
+let n=battle.n;
 
- if(G.hero.xp>=G.hero.level*60){G.hero.xp-=G.hero.level*60;G.hero.level++;G.hero.maxhp+=8;G.hero.hp=Math.min(G.hero.maxhp,G.hero.hp+8);levelUp=` ${G.hero.name} sale al livello ${G.hero.level}!`}
+let reward=n===1?{xp:35,gold:18}:n===2?{xp:55,gold:28}:{xp:100,gold:60};
 
- if(n===3){G.inventory["Lama dell'Eco Perduto"]="1";G.finished=true}
+G.hero.xp+=reward.xp;
 
- $("combat").classList.add("hidden");let box=$("afterCombat");box.classList.remove("hidden");
+G.gold+=reward.gold;
 
- box.innerHTML=`<h2>${n===3?"Vittoria! Il Custode è caduto.":"Vittoria!"}</h2><p>Hai ottenuto ${reward.xp} XP e ${reward.gold} monete d'oro.${levelUp}</p>${n===3?'<p><b>Oggetto unico leggendario ottenuto: Lama dell’Eco Perduto.</b> La campana tace e la valle ritrova il silenzio.</p>':''}<button class="btn" onclick="continueAfter(${n})">${n===1?"Prosegui verso la cripta":n===2?"Apri la porta della sala della campana":"Concludi l'avventura"}</button>`;
+let levelUp="";
 
- renderBattle();updateHUD();
+if(G.hero.xp>=G.hero.level*60){
+
+G.hero.xp-=G.hero.level*60;
+
+G.hero.level++;
+
+G.hero.maxhp+=8;
+
+G.hero.hp=Math.min(G.hero.maxhp,G.hero.hp+8);
+
+levelUp=` ${G.hero.name} sale al livello ${G.hero.level}!`;
 
 }
 
-function continueAfter(n){if(n===1)showScene("crypt");else if(n===2)showScene("boss");else showScene("ending")}
+if(n===3){G.inventory["Lama dell'Eco Perduto"]=1;G.finished=true}
+
+$("combat").classList.add("hidden");
+
+let box=$("afterCombat");
+
+box.classList.remove("hidden");
+
+box.innerHTML=`<h2>${n===3?"Vittoria! Il Custode è caduto.":"Vittoria!"}</h2><p>Hai ottenuto ${reward.xp} XP e ${reward.gold} monete d'oro.${levelUp}</p>${n===3?'<p><b>Oggetto unico leggendario ottenuto: Lama dell’Eco Perduto.</b> La campana tace.</p>':''}<button class="btn" onclick="continueAfter(${n})">${n===1?"Prosegui verso la cripta":n===2?"Apri la sala della campana":"Concludi l'avventura"}</button>`;
+
+renderBattle();
+
+}
+
+function continueAfter(n){
+
+if(n===1)showScene("crypt");
+
+else if(n===2)showScene("boss");
+
+else showScene("ending");
+
+}
 
 function loseBattle(){
 
- battle.ended=true;$("combat").classList.add("hidden");let box=$("afterCombat");box.classList.remove("hidden");
+battle.ended=true;
 
- box.innerHTML=`<h2>Il gruppo è sopraffatto</h2><p>La prova finisce qui, ma puoi riprovare. Il protagonista viene soccorso e non muore definitivamente.</p><button class="btn" onclick="restartBattle()">Riprova lo scontro</button>`;
+$("combat").classList.add("hidden");
+
+let box=$("afterCombat");
+
+box.classList.remove("hidden");
+
+box.innerHTML=`<h2>Il gruppo è sopraffatto</h2><p>La prova finisce qui, ma puoi riprovare.</p><button class="btn" onclick="restartBattle()">Riprova lo scontro</button>`;
 
 }
 
@@ -698,49 +1016,57 @@ function restartBattle(){startBattle(battle.n)}
 
 function updateHUD(){
 
- if(!G)return;
+if(!G)return;
 
- $("levelBadge").textContent=`Livello ${G.hero.level} · ${G.hero.xp} XP`;
+$("levelBadge").textContent=`Livello ${G.hero.level} · ${G.hero.xp} XP`;
 
- $("inventory").innerHTML=Object.entries(G.inventory).map(([k,v])=>`<span>${k}: ${v}</span>`).join("")+`<span>Oro: ${G.gold}</span>`;
+$("inventory").innerHTML=Object.entries(G.inventory).map(([k,v])=>`<span>${k}: ${v}</span>`).join("")+`<span>Oro: ${G.gold}</span>`;
 
 }
 
 function saveGame(){
 
- if(!G){alert("Non c'è una partita da salvare.");return}
+if(!G){alert("Non c'è una partita da salvare.");return}
 
- let save={G,battle};localStorage.setItem("velmoraDemoSave",JSON.stringify(save));alert("Partita salvata su questo dispositivo!")
+localStorage.setItem("velmoraDemoSave",JSON.stringify({G,battle}));
+
+alert("Partita salvata su questo dispositivo!");
 
 }
 
 function loadGame(){
 
- let raw=localStorage.getItem("velmoraDemoSave");
+let raw=localStorage.getItem("velmoraDemoSave");
 
- if(!raw){alert("Non è presente un salvataggio.");return}
+if(!raw){alert("Non è presente un salvataggio.");return}
 
- try{
+try{
 
-  let s=JSON.parse(raw);G=s.G;battle=s.battle;
+let s=JSON.parse(raw);
 
-  $("creator").classList.add("hidden");$("game").classList.remove("hidden");
+G=s.G;
 
-  if(battle&&!battle.ended){$("combat").classList.remove("hidden");renderBattle();advanceToPlayer()}
+battle=s.battle;
 
-  else if(G.finished)showScene("ending");
+$("creator").classList.add("hidden");
 
-  else showScene(G.battleWon===0?"prologue":G.battleWon===1?"crypt":G.battleWon===2?"boss":"ending");
+$("game").classList.remove("hidden");
 
-  alert("Partita caricata!")
+if(battle&&!battle.ended){$("combat").classList.remove("hidden");renderBattle();advanceToPlayer()}
 
- }catch(e){alert("Salvataggio non leggibile.")}
+else if(G.finished)showScene("ending");
+
+else showScene(G.battleWon===0?"prologue":G.battleWon===1?"crypt":G.battleWon===2?"boss":"ending");
+
+alert("Partita caricata!");
+
+}catch(e){alert("Salvataggio non leggibile.")}
 
 }
 
 function backToCreator(){
 
- if(confirm("Tornare alla creazione? La partita resterà salvata solo se la salvi prima.")){location.reload()}
+if(confirm("Tornare alla creazione? La partita resterà salvata solo se la salvi prima."))location.reload();
 
 }
 
