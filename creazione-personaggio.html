@@ -16,23 +16,95 @@
 
 <style>
 
-:root{--bg:#100e0c;--panel:rgba(29,25,21,.94);--panel2:#29221b;--gold:#d6b16c;--gold2:#96713b;--text:#e9dfc8;--muted:#b9a98b}
+:root{
+
+--bg:#100e0c;
+
+--panel:rgba(29,25,21,.94);
+
+--panel2:#29221b;
+
+--gold:#d6b16c;
+
+--gold2:#96713b;
+
+--text:#e9dfc8;
+
+--muted:#b9a98b
+
+}
 
 *{box-sizing:border-box}
 
 html{min-height:100%;background:var(--bg)}
 
-body{margin:0;min-height:100vh;color:var(--text);font-family:Georgia,serif;background-color:var(--bg);background-image:linear-gradient(rgba(12,9,7,.62),rgba(12,9,7,.82)),url("./valle_velmora.jpg");background-position:center;background-size:cover;background-attachment:fixed}
+body{
 
-header{text-align:center;padding:20px 12px 15px;background:linear-gradient(rgba(41,32,22,.94),rgba(16,14,12,.85));border-bottom:1px solid var(--gold2)}
+margin:0;
 
-h1{color:var(--gold);letter-spacing:3px;font-size:clamp(21px,5vw,29px);margin:4px 0}
+min-height:100vh;
+
+color:var(--text);
+
+font-family:Georgia,serif;
+
+background-color:var(--bg);
+
+background-image:linear-gradient(rgba(12,9,7,.62),rgba(12,9,7,.82)),url("./valle_velmora.jpg");
+
+background-position:center;
+
+background-size:cover;
+
+background-attachment:fixed
+
+}
+
+header{
+
+text-align:center;
+
+padding:20px 12px 15px;
+
+background:linear-gradient(rgba(41,32,22,.94),rgba(16,14,12,.85));
+
+border-bottom:1px solid var(--gold2)
+
+}
+
+h1{
+
+color:var(--gold);
+
+letter-spacing:3px;
+
+font-size:clamp(21px,5vw,29px);
+
+margin:4px 0
+
+}
 
 header p{color:var(--muted);font-size:13px;margin:7px 0 0}
 
 main{width:min(920px,94%);margin:16px auto 40px}
 
-.panel{background:var(--panel);border:1px solid #69502e;border-radius:12px;padding:14px;margin-bottom:14px;box-shadow:0 8px 24px #0008;backdrop-filter:blur(3px)}
+.panel{
+
+background:var(--panel);
+
+border:1px solid #69502e;
+
+border-radius:12px;
+
+padding:14px;
+
+margin-bottom:14px;
+
+box-shadow:0 8px 24px #0008;
+
+backdrop-filter:blur(3px)
+
+}
 
 h2{color:var(--gold);font-size:19px;margin:0 0 12px}
 
@@ -42,13 +114,55 @@ p{line-height:1.5}
 
 .small{font-size:12px;color:var(--muted)}
 
-.grid,.classgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.grid,.classgrid{
 
-.choice,.btn{background:#29221b;border:1px solid #57442b;color:var(--text);border-radius:8px;padding:11px 8px;font:14px Georgia,serif;cursor:pointer}
+display:grid;
 
-.choice.selected{border:2px solid var(--gold);background:#49351e;color:#ffe0a0}
+grid-template-columns:repeat(2,minmax(0,1fr));
 
-.btn{background:linear-gradient(#8d682f,#563b1c);border-color:#c49b55;color:#fff0d0;font-weight:bold}
+gap:7px
+
+}
+
+.choice,.btn{
+
+background:#29221b;
+
+border:1px solid #57442b;
+
+color:var(--text);
+
+border-radius:8px;
+
+padding:11px 8px;
+
+font:14px Georgia,serif;
+
+cursor:pointer
+
+}
+
+.choice.selected{
+
+border:2px solid var(--gold);
+
+background:#49351e;
+
+color:#ffe0a0
+
+}
+
+.btn{
+
+background:linear-gradient(#8d682f,#563b1c);
+
+border-color:#c49b55;
+
+color:#fff0d0;
+
+font-weight:bold
+
+}
 
 .btn.secondary{background:#29221b;border-color:#80623a}
 
@@ -58,15 +172,67 @@ p{line-height:1.5}
 
 .layout{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
-.portrait{display:block;width:100%;max-height:300px;aspect-ratio:3/4;object-fit:contain;background:#100e0c;border:2px solid var(--gold2);border-radius:9px}
+.portrait{
+
+display:block;
+
+width:100%;
+
+max-height:300px;
+
+aspect-ratio:3/4;
+
+object-fit:contain;
+
+background:#100e0c;
+
+border:2px solid var(--gold2);
+
+border-radius:9px
+
+}
 
 .preview{text-align:center}
 
-.input{width:100%;padding:12px;border-radius:7px;background:#100e0c;border:1px solid #8a6a3d;color:white;font-size:16px;margin:6px 0 12px}
+.input{
+
+width:100%;
+
+padding:12px;
+
+border-radius:7px;
+
+background:#100e0c;
+
+border:1px solid #8a6a3d;
+
+color:white;
+
+font-size:16px;
+
+margin:6px 0 12px
+
+}
 
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:7px}
 
-.stat{background:var(--panel2);padding:9px;border-radius:7px;display:flex;justify-content:space-between;gap:8px;font-size:13px}
+.stat{
+
+background:var(--panel2);
+
+padding:9px;
+
+border-radius:7px;
+
+display:flex;
+
+justify-content:space-between;
+
+gap:8px;
+
+font-size:13px
+
+}
 
 .stat b{color:#e8bd72}
 
@@ -76,17 +242,61 @@ p{line-height:1.5}
 
 .story em{color:#eac77e}
 
-.actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
+.actions{
+
+display:grid;
+
+grid-template-columns:repeat(2,minmax(0,1fr));
+
+gap:8px;
+
+margin-top:10px
+
+}
 
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 
-.badge{display:inline-block;border:1px solid #80623a;color:#e8c985;border-radius:20px;padding:4px 9px;font-size:11px;margin:2px}
+.badge{
+
+display:inline-block;
+
+border:1px solid #80623a;
+
+color:#e8c985;
+
+border-radius:20px;
+
+padding:4px 9px;
+
+font-size:11px;
+
+margin:2px
+
+}
 
 .bars{height:7px;background:#090807;border-radius:20px;overflow:hidden;margin:5px 0}
 
 .hpbar{height:100%;background:#a9443b;transition:width .3s}
 
-.log{background:#100e0c;border:1px solid #493823;border-radius:8px;padding:10px;max-height:190px;overflow:auto;font-size:13px;line-height:1.5}
+.log{
+
+background:#100e0c;
+
+border:1px solid #493823;
+
+border-radius:8px;
+
+padding:10px;
+
+max-height:190px;
+
+overflow:auto;
+
+font-size:13px;
+
+line-height:1.5
+
+}
 
 .log p{margin:4px 0}
 
@@ -96,15 +306,43 @@ p{line-height:1.5}
 
 .inventory{display:flex;gap:7px;flex-wrap:wrap}
 
-.inventory span{background:#30271d;border:1px solid #6a512f;padding:7px 9px;border-radius:7px;font-size:12px}
+.inventory span{
+
+background:#30271d;
+
+border:1px solid #6a512f;
+
+padding:7px 9px;
+
+border-radius:7px;
+
+font-size:12px
+
+}
 
 hr{border:0;border-top:1px solid #59442b;margin:14px 0}
 
 .note{text-align:center;color:#c0ae8b;font-size:11px}
 
-.musicButton{margin-top:10px;background:#29221b;border:1px solid #80623a;color:#e8c985;border-radius:20px;padding:7px 13px;font:12px Georgia,serif}
+.musicButton{
 
-/* BATTLE FORMATION */
+margin-top:10px;
+
+background:#29221b;
+
+border:1px solid #80623a;
+
+color:#e8c985;
+
+border-radius:20px;
+
+padding:7px 13px;
+
+font:12px Georgia,serif
+
+}
+
+/* FORMAZIONE COMBATTIMENTO */
 
 .battleSideTitle{
 
@@ -138,7 +376,7 @@ background:#59442b
 
 }
 
-/* Una sola linea orizzontale */
+/* Personaggi disposti in una fila orizzontale */
 
 .battleFormation{
 
@@ -154,7 +392,7 @@ align-items:flex-start;
 
 overflow-x:auto;
 
-overflow-y:visible;
+overflow-y:hidden;
 
 padding:5px 2px 12px;
 
@@ -200,13 +438,7 @@ box-shadow:0 0 12px #d6b16c55
 
 }
 
-.battleUnit.dead{
-
-opacity:.35;
-
-filter:grayscale(1)
-
-}
+.battleUnit.dead{opacity:.35;filter:grayscale(1)}
 
 .battleFace{
 
@@ -246,13 +478,7 @@ overflow-wrap:anywhere
 
 }
 
-.battleHP{
-
-font-size:10px;
-
-color:#d4c4a5
-
-}
+.battleHP{font-size:10px;color:#d4c4a5}
 
 .battleBar{
 
@@ -278,15 +504,7 @@ transition:width .25s
 
 }
 
-.battleAP{
-
-font-size:9px;
-
-color:#c5a66e;
-
-margin-top:4px
-
-}
+.battleAP{font-size:9px;color:#c5a66e;margin-top:4px}
 
 .battleUnit.dashHero{
 
@@ -304,11 +522,7 @@ animation:dashDown .38s ease-in-out
 
 }
 
-.battleUnit.hit{
-
-animation:hitFlash .32s ease-in-out
-
-}
+.battleUnit.hit{animation:hitFlash .32s ease-in-out}
 
 @keyframes dashUp{
 
@@ -376,7 +590,7 @@ main{width:94%}
 
 .panel{padding:12px}
 
-.battleFormation{gap:7px}
+.battleFormation{gap:5px}
 
 .battleUnit{
 
@@ -387,34 +601,6 @@ width:88px;
 padding:5px 3px 7px
 
 }
-
-.battleName{
-
-font-size:10px;
-
-min-height:25px
-
-}
-
-.battleHP{font-size:9px}
-
-}
-
-.layout{grid-template-columns:1fr}
-
-.preview{display:grid;grid-template-columns:110px 1fr;gap:10px;text-align:left;align-items:center}
-
-.preview .portrait{height:145px}
-
-.preview h2,.preview p{grid-column:2}
-
-main{width:94%}
-
-.panel{padding:12px}
-
-.battleFormation{gap:5px}
-
-.battleUnit{padding:5px 3px 7px}
 
 .battleName{font-size:10px;min-height:25px}
 
@@ -450,9 +636,29 @@ main{width:94%}
 
 <div class="layout">
 
-<div><h3>Scegli la razza</h3><div class="grid" id="races"></div><p class="small" id="raceDescription"></p></div>
+<div>
 
-<div class="preview"><img class="portrait" id="portrait" src="./01_umano_guerriero.png" alt="Anteprima personaggio"><div><h2 id="heroTitle">Umano</h2><p class="small" id="heroDescription"></p></div></div>
+<h3>Scegli la razza</h3>
+
+<div class="grid" id="races"></div>
+
+<p class="small" id="raceDescription"></p>
+
+</div>
+
+<div class="preview">
+
+<img class="portrait" id="portrait" src="./01_umano_guerriero.png" alt="Anteprima personaggio">
+
+<div>
+
+<h2 id="heroTitle">Umano</h2>
+
+<p class="small" id="heroDescription"></p>
+
+</div>
+
+</div>
 
 </div>
 
@@ -460,15 +666,43 @@ main{width:94%}
 
 <h3>Sesso</h3>
 
-<div class="row"><button class="choice selected" data-gender="male">Maschio</button><button class="choice" data-gender="female">Femmina</button></div>
+<div class="row">
+
+<button class="choice selected" data-gender="male">Maschio</button>
+
+<button class="choice" data-gender="female">Femmina</button>
 
 </div>
 
-<div class="panel"><h2>02 · Nome dell'eroe</h2><input id="heroName" class="input" maxlength="24" placeholder="Scrivi il nome del tuo eroe"></div>
+</div>
 
-<div class="panel"><h2>03 · Scegli la classe</h2><div class="classgrid" id="classes"></div><p class="small" id="classDescription"></p></div>
+<div class="panel">
 
-<div class="panel"><h2>04 · Caratteristiche</h2><div class="stats" id="stats"></div><p class="small">Valori iniziali: 5 + modificatore razziale + modificatore di classe.</p></div>
+<h2>02 · Nome dell'eroe</h2>
+
+<input id="heroName" class="input" maxlength="24" placeholder="Scrivi il nome del tuo eroe">
+
+</div>
+
+<div class="panel">
+
+<h2>03 · Scegli la classe</h2>
+
+<div class="classgrid" id="classes"></div>
+
+<p class="small" id="classDescription"></p>
+
+</div>
+
+<div class="panel">
+
+<h2>04 · Caratteristiche</h2>
+
+<div class="stats" id="stats"></div>
+
+<p class="small">Valori iniziali: 5 + modificatore razziale + modificatore di classe.</p>
+
+</div>
 
 <button class="btn" style="width:100%;padding:16px;font-size:18px" onclick="startAdventure()">INIZIA IL VIAGGIO</button>
 
@@ -480,7 +714,13 @@ main{width:94%}
 
 <div class="panel">
 
-<div class="row" style="justify-content:space-between"><span class="badge" id="chapterBadge">PROLOGO</span><span class="badge" id="levelBadge">Livello 1</span></div>
+<div class="row" style="justify-content:space-between">
+
+<span class="badge" id="chapterBadge">PROLOGO</span>
+
+<span class="badge" id="levelBadge">Livello 1</span>
+
+</div>
 
 <h2 id="sceneTitle"></h2>
 
@@ -494,7 +734,13 @@ main{width:94%}
 
 <div class="panel">
 
-<div class="row" style="justify-content:space-between"><h2 id="battleTitle">Combattimento</h2><span class="badge" id="roundBadge">Turno 1</span></div>
+<div class="row" style="justify-content:space-between">
+
+<h2 id="battleTitle">Combattimento</h2>
+
+<span class="badge" id="roundBadge">Turno 1</span>
+
+</div>
 
 <p class="small" id="battleHint"></p>
 
@@ -530,7 +776,13 @@ main{width:94%}
 
 <div id="afterCombat" class="panel hidden"></div>
 
-<div class="panel"><h2>Inventario</h2><div id="inventory" class="inventory"></div></div>
+<div class="panel">
+
+<h2>Inventario</h2>
+
+<div id="inventory" class="inventory"></div>
+
+</div>
 
 <div class="row">
 
@@ -606,9 +858,19 @@ function toggleMusic(){
 
 const m=$("bgMusic");
 
-if(m.paused){m.volume=.35;m.play().then(musicLabel).catch(()=>{$("musicButton").textContent="♫ Tocca per attivare"});}
+if(m.paused){
 
-else{m.pause();musicLabel();}
+m.volume=.35;
+
+m.play().then(musicLabel).catch(()=>{$("musicButton").textContent="♫ Tocca per attivare";});
+
+}else{
+
+m.pause();
+
+musicLabel();
+
+}
 
 }
 
@@ -630,7 +892,9 @@ $("races").innerHTML=races.map(r=>`<button class="choice ${r.id===selectedRace.i
 
 document.querySelectorAll("[data-race]").forEach(b=>b.onclick=()=>{
 
-selectedRace=races.find(r=>r.id===b.dataset.race);renderCreator();
+selectedRace=races.find(r=>r.id===b.dataset.race);
+
+renderCreator();
 
 });
 
@@ -638,7 +902,9 @@ $("classes").innerHTML=classes.map(c=>`<button class="choice ${c.id===selectedCl
 
 document.querySelectorAll("[data-class]").forEach(b=>b.onclick=()=>{
 
-selectedClass=classes.find(c=>c.id===b.dataset.class);renderCreator();
+selectedClass=classes.find(c=>c.id===b.dataset.class);
+
+renderCreator();
 
 });
 
@@ -678,7 +944,11 @@ G={
 
 hero:{id:"hero",name,race:selectedRace.name,class:selectedClass.name,gender,portrait:imageForRace(selectedRace),stats:s,level:1,xp:0,hp:maxhp,maxhp,ap:5,maxap:5,armor:selectedClass.id==="warrior"?4:selectedClass.id==="cleric"?3:1,weapon:selectedClass.id==="mage"||selectedClass.id==="druid"?4:6,alive:true,down:0,isHero:true},
 
-party:[],inventory:{Pozione:2,Antidoto:1,Benda:1,Purificazione:1},gold:12,chapter:0,companions:{wolf:false,lion:false},battleWon:0,finished:false
+party:[],
+
+inventory:{Pozione:2,Antidoto:1,Benda:1,Purificazione:1},
+
+gold:12,chapter:0,companions:{wolf:false,lion:false},battleWon:0,finished:false
 
 };
 
@@ -730,7 +1000,13 @@ function sceneAction(act){
 
 if(act==="wolf"){
 
-if(!G.companions.wolf){G.companions.wolf=true;G.party.push(makeCompanion("Rauk",36,7,3,4,"19_lupo.png"));}
+if(!G.companions.wolf){
+
+G.companions.wolf=true;
+
+G.party.push(makeCompanion("Rauk",36,7,3,4,"19_lupo.png"));
+
+}
 
 showScene("prologue");
 
@@ -742,7 +1018,13 @@ return;
 
 if(act==="lion"){
 
-if(!G.companions.lion){G.companions.lion=true;G.party.push(makeCompanion("Leona",40,7,4,4,"15_leonide.png"));}
+if(!G.companions.lion){
+
+G.companions.lion=true;
+
+G.party.push(makeCompanion("Leona",40,7,4,4,"15_leonide.png"));
+
+}
 
 showScene("prologue");
 
@@ -1148,7 +1430,15 @@ target.hp-=damage;
 
 log(`${u.name}: D20 ${die} → ${type==="spell"?"incantesimo":type==="skill"?"abilità speciale":"attacco"} su ${target.name}, ${damage} danni${die===20?" (CRITICO!)":""}.`);
 
-if(target.hp<=0){target.hp=0;target.alive=false;log(`${target.name} è stato sconfitto.`);}
+if(target.hp<=0){
+
+target.hp=0;
+
+target.alive=false;
+
+log(`${target.name} è stato sconfitto.`);
+
+}
 
 }else if(type==="potion"){
 
@@ -1218,7 +1508,15 @@ log("La fuga fallisce!");
 
 renderBattle();
 
-if(battle.units.every(e=>!e.alive||e.hp<=0)){busy=false;winBattle();return;}
+if(battle.units.every(e=>!e.alive||e.hp<=0)){
+
+busy=false;
+
+winBattle();
+
+return;
+
+}
 
 battle.idx++;
 
@@ -1384,7 +1682,13 @@ levelUp=` ${G.hero.name} sale al livello ${G.hero.level}!`;
 
 }
 
-if(n===3){G.inventory["Lama dell'Eco Perduto"]=1;G.finished=true;}
+if(n===3){
+
+G.inventory["Lama dell'Eco Perduto"]=1;
+
+G.finished=true;
+
+}
 
 $("combat").classList.add("hidden");
 
