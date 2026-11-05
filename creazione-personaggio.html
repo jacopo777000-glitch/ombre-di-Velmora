@@ -106,45 +106,299 @@ hr{border:0;border-top:1px solid #59442b;margin:14px 0}
 
 /* BATTLE FORMATION */
 
-.battleSideTitle{display:flex;align-items:center;gap:8px;margin:13px 0 9px;color:#e5c88f;font-size:14px;letter-spacing:1px;text-transform:uppercase}
+.battleSideTitle{
 
-.battleSideTitle:after{content:"";height:1px;flex:1;background:#59442b}
+display:flex;
 
-.battleFormation{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;align-items:start}
+align-items:center;
 
-.battleUnit{min-width:0;position:relative;text-align:center;padding:6px 4px 8px;border:1px solid #59442b;border-radius:9px;background:linear-gradient(180deg,#30271e,#191511);transition:border-color .2s,background .2s,opacity .2s}
+gap:8px;
 
-.battleUnit.active{border:2px solid var(--gold);background:linear-gradient(180deg,#594126,#292017);box-shadow:0 0 12px #d6b16c55}
+margin:13px 0 9px;
 
-.battleUnit.dead{opacity:.35;filter:grayscale(1)}
+color:#e5c88f;
 
-.battleFace{width:100%;aspect-ratio:1/1;display:block;object-fit:cover;object-position:center 20%;background:#100e0c;border:1px solid #96713b;border-radius:6px}
+font-size:14px;
 
-.battleName{font-size:11px;line-height:1.2;color:#f0d49b;font-weight:bold;margin:6px 0 4px;min-height:26px;overflow-wrap:anywhere}
+letter-spacing:1px;
 
-.battleHP{font-size:10px;color:#d4c4a5}
+text-transform:uppercase
 
-.battleBar{height:6px;background:#090807;border-radius:10px;overflow:hidden;margin:4px 1px 0}
+}
 
-.battleBar div{height:100%;background:#a9443b;transition:width .25s}
+.battleSideTitle:after{
 
-.battleAP{font-size:9px;color:#c5a66e;margin-top:4px}
+content:"";
 
-.battleUnit.dashHero{z-index:5;animation:dashUp .38s ease-in-out}
+height:1px;
 
-.battleUnit.dashEnemy{z-index:5;animation:dashDown .38s ease-in-out}
+flex:1;
 
-.battleUnit.hit{animation:hitFlash .32s ease-in-out}
+background:#59442b
 
-@keyframes dashUp{0%{transform:translateY(0) scale(1)}45%{transform:translateY(-35px) scale(1.12)}100%{transform:translateY(0) scale(1)}}
+}
 
-@keyframes dashDown{0%{transform:translateY(0) scale(1)}45%{transform:translateY(35px) scale(1.12)}100%{transform:translateY(0) scale(1)}}
+/* Una sola linea orizzontale */
 
-@keyframes hitFlash{0%,100%{filter:brightness(1);transform:translateX(0)}25%{filter:brightness(2.5);transform:translateX(-5px)}60%{filter:brightness(1.8);transform:translateX(5px)}}
+.battleFormation{
 
-.battleDivider{height:1px;background:linear-gradient(90deg,transparent,#80623a,transparent);margin:15px 0}
+display:flex;
+
+flex-direction:row;
+
+flex-wrap:nowrap;
+
+gap:9px;
+
+align-items:flex-start;
+
+overflow-x:auto;
+
+overflow-y:visible;
+
+padding:5px 2px 12px;
+
+-webkit-overflow-scrolling:touch;
+
+scrollbar-width:thin;
+
+scrollbar-color:#80623a #100e0c
+
+}
+
+.battleUnit{
+
+flex:0 0 105px;
+
+width:105px;
+
+min-width:0;
+
+position:relative;
+
+text-align:center;
+
+padding:6px 4px 8px;
+
+border:1px solid #59442b;
+
+border-radius:9px;
+
+background:linear-gradient(180deg,#30271e,#191511);
+
+transition:border-color .2s,background .2s,opacity .2s
+
+}
+
+.battleUnit.active{
+
+border:2px solid var(--gold);
+
+background:linear-gradient(180deg,#594126,#292017);
+
+box-shadow:0 0 12px #d6b16c55
+
+}
+
+.battleUnit.dead{
+
+opacity:.35;
+
+filter:grayscale(1)
+
+}
+
+.battleFace{
+
+width:100%;
+
+aspect-ratio:1/1;
+
+display:block;
+
+object-fit:cover;
+
+object-position:center 20%;
+
+background:#100e0c;
+
+border:1px solid #96713b;
+
+border-radius:6px
+
+}
+
+.battleName{
+
+font-size:11px;
+
+line-height:1.2;
+
+color:#f0d49b;
+
+font-weight:bold;
+
+margin:6px 0 4px;
+
+min-height:26px;
+
+overflow-wrap:anywhere
+
+}
+
+.battleHP{
+
+font-size:10px;
+
+color:#d4c4a5
+
+}
+
+.battleBar{
+
+height:6px;
+
+background:#090807;
+
+border-radius:10px;
+
+overflow:hidden;
+
+margin:4px 1px 0
+
+}
+
+.battleBar div{
+
+height:100%;
+
+background:#a9443b;
+
+transition:width .25s
+
+}
+
+.battleAP{
+
+font-size:9px;
+
+color:#c5a66e;
+
+margin-top:4px
+
+}
+
+.battleUnit.dashHero{
+
+z-index:5;
+
+animation:dashUp .38s ease-in-out
+
+}
+
+.battleUnit.dashEnemy{
+
+z-index:5;
+
+animation:dashDown .38s ease-in-out
+
+}
+
+.battleUnit.hit{
+
+animation:hitFlash .32s ease-in-out
+
+}
+
+@keyframes dashUp{
+
+0%{transform:translateY(0) scale(1)}
+
+45%{transform:translateY(-35px) scale(1.12)}
+
+100%{transform:translateY(0) scale(1)}
+
+}
+
+@keyframes dashDown{
+
+0%{transform:translateY(0) scale(1)}
+
+45%{transform:translateY(35px) scale(1.12)}
+
+100%{transform:translateY(0) scale(1)}
+
+}
+
+@keyframes hitFlash{
+
+0%,100%{filter:brightness(1);transform:translateX(0)}
+
+25%{filter:brightness(2.5);transform:translateX(-5px)}
+
+60%{filter:brightness(1.8);transform:translateX(5px)}
+
+}
+
+.battleDivider{
+
+height:1px;
+
+background:linear-gradient(90deg,transparent,#80623a,transparent);
+
+margin:15px 0
+
+}
 
 @media(max-width:560px){
+
+.layout{grid-template-columns:1fr}
+
+.preview{
+
+display:grid;
+
+grid-template-columns:110px 1fr;
+
+gap:10px;
+
+text-align:left;
+
+align-items:center
+
+}
+
+.preview .portrait{height:145px}
+
+.preview h2,.preview p{grid-column:2}
+
+main{width:94%}
+
+.panel{padding:12px}
+
+.battleFormation{gap:7px}
+
+.battleUnit{
+
+flex:0 0 88px;
+
+width:88px;
+
+padding:5px 3px 7px
+
+}
+
+.battleName{
+
+font-size:10px;
+
+min-height:25px
+
+}
+
+.battleHP{font-size:9px}
+
+}
 
 .layout{grid-template-columns:1fr}
 
