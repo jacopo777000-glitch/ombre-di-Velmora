@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 
 <html lang="it">
@@ -82,23 +80,9 @@ p{line-height:1.5}
 
 .badge{display:inline-block;border:1px solid #80623a;color:#e8c985;border-radius:20px;padding:4px 9px;font-size:11px;margin:2px}
 
-.bars{height:9px;background:#090807;border-radius:20px;overflow:hidden;margin:5px 0}
+.bars{height:7px;background:#090807;border-radius:20px;overflow:hidden;margin:5px 0}
 
-.hpbar{height:100%;background:#a9443b}
-
-.unit{display:flex;align-items:center;gap:11px;margin:8px 0;border:1px solid #4d3b27;background:#29221b;padding:8px;border-radius:8px;min-height:120px}
-
-.unit.active{border:2px solid var(--gold);background:#40301d}
-
-.unit.dead{opacity:.42;filter:grayscale(1)}
-
-.unitPortrait{width:88px;height:108px;object-fit:contain;object-position:center;background:#100e0c;border:1px solid var(--gold2);border-radius:6px;flex-shrink:0}
-
-.unitInfo{flex:1;min-width:0}
-
-.unithead{display:flex;justify-content:space-between;gap:8px;align-items:center}
-
-.unithead b{color:#f0d49b}
+.hpbar{height:100%;background:#a9443b;transition:width .3s}
 
 .log{background:#100e0c;border:1px solid #493823;border-radius:8px;padding:10px;max-height:190px;overflow:auto;font-size:13px;line-height:1.5}
 
@@ -118,6 +102,216 @@ hr{border:0;border-top:1px solid #59442b;margin:14px 0}
 
 .musicButton{margin-top:10px;background:#29221b;border:1px solid #80623a;color:#e8c985;border-radius:20px;padding:7px 13px;font:12px Georgia,serif}
 
+/* NUOVA SCHERMATA DI COMBATTIMENTO */
+
+.battleSideTitle{
+
+display:flex;
+
+align-items:center;
+
+gap:8px;
+
+margin:13px 0 9px;
+
+color:#e5c88f;
+
+font-size:14px;
+
+letter-spacing:1px;
+
+text-transform:uppercase
+
+}
+
+.battleSideTitle:after{
+
+content:"";
+
+height:1px;
+
+flex:1;
+
+background:#59442b
+
+}
+
+.battleFormation{
+
+display:grid;
+
+grid-template-columns:repeat(4,minmax(0,1fr));
+
+gap:8px;
+
+align-items:start;
+
+}
+
+.battleUnit{
+
+min-width:0;
+
+position:relative;
+
+text-align:center;
+
+padding:6px 4px 8px;
+
+border:1px solid #59442b;
+
+border-radius:9px;
+
+background:linear-gradient(180deg,#30271e,#191511);
+
+transition:border-color .2s,background .2s,opacity .2s;
+
+}
+
+.battleUnit.active{
+
+border:2px solid var(--gold);
+
+background:linear-gradient(180deg,#594126,#292017);
+
+box-shadow:0 0 12px #d6b16c55
+
+}
+
+.battleUnit.dead{
+
+opacity:.35;
+
+filter:grayscale(1)
+
+}
+
+.battleFace{
+
+width:100%;
+
+aspect-ratio:1/1;
+
+display:block;
+
+object-fit:cover;
+
+object-position:center 20%;
+
+background:#100e0c;
+
+border:1px solid #96713b;
+
+border-radius:6px;
+
+}
+
+.battleName{
+
+font-size:11px;
+
+line-height:1.2;
+
+color:#f0d49b;
+
+font-weight:bold;
+
+margin:6px 0 4px;
+
+min-height:26px;
+
+overflow-wrap:anywhere
+
+}
+
+.battleHP{
+
+font-size:10px;
+
+color:#d4c4a5;
+
+}
+
+.battleBar{
+
+height:6px;
+
+background:#090807;
+
+border-radius:10px;
+
+overflow:hidden;
+
+margin:4px 1px 0
+
+}
+
+.battleBar div{
+
+height:100%;
+
+background:#a9443b;
+
+transition:width .25s
+
+}
+
+.battleAP{
+
+font-size:9px;
+
+color:#c5a66e;
+
+margin-top:4px
+
+}
+
+.battleUnit.dashHero{z-index:5;animation:dashUp .38s ease-in-out}
+
+.battleUnit.dashEnemy{z-index:5;animation:dashDown .38s ease-in-out}
+
+.battleUnit.hit{animation:hitFlash .32s ease-in-out}
+
+@keyframes dashUp{
+
+0%{transform:translateY(0) scale(1)}
+
+45%{transform:translateY(-35px) scale(1.12)}
+
+100%{transform:translateY(0) scale(1)}
+
+}
+
+@keyframes dashDown{
+
+0%{transform:translateY(0) scale(1)}
+
+45%{transform:translateY(35px) scale(1.12)}
+
+100%{transform:translateY(0) scale(1)}
+
+}
+
+@keyframes hitFlash{
+
+0%,100%{filter:brightness(1);transform:translateX(0)}
+
+25%{filter:brightness(2.5);transform:translateX(-5px)}
+
+60%{filter:brightness(1.8);transform:translateX(5px)}
+
+}
+
+.battleDivider{
+
+height:1px;
+
+background:linear-gradient(90deg,transparent,#80623a,transparent);
+
+margin:15px 0
+
+}
+
 @media(max-width:560px){
 
 .layout{grid-template-columns:1fr}
@@ -132,7 +326,13 @@ main{width:94%}
 
 .panel{padding:12px}
 
-.unitPortrait{width:78px;height:100px}
+.battleFormation{gap:5px}
+
+.battleUnit{padding:5px 3px 7px}
+
+.battleName{font-size:10px;min-height:25px}
+
+.battleHP{font-size:9px}
 
 }
 
@@ -272,13 +472,15 @@ main{width:94%}
 
 <p class="small" id="battleHint"></p>
 
-<h3>Il gruppo</h3>
+<div class="battleSideTitle">Avversari</div>
 
-<div id="partyList"></div>
+<div id="enemyList" class="battleFormation"></div>
 
-<h3>Avversari</h3>
+<div class="battleDivider"></div>
 
-<div id="enemyList"></div>
+<div class="battleSideTitle">La tua squadra</div>
+
+<div id="partyList" class="battleFormation"></div>
 
 <hr>
 
@@ -368,7 +570,7 @@ const classes=[
 
 const statNames={forza:"Forza",agilita:"Agilità",vitalita:"Vitalità",intelletto:"Intelletto",volonta:"Volontà",percezione:"Percezione",carisma:"Carisma"};
 
-let selectedRace=races[0],selectedClass=classes[0],gender="male",G=null,battle=null,selectedTarget=0;
+let selectedRace=races[0],selectedClass=classes[0],gender="male",G=null,battle=null,selectedTarget=0,busy=false;
 
 const $=id=>document.getElementById(id);
 
@@ -574,6 +776,8 @@ function aliveParty(){return [G.hero,...G.party].filter(p=>p.alive&&p.hp>0)}
 
 function startBattle(n){
 
+busy=false;
+
 const sets={
 
 1:[
@@ -618,7 +822,7 @@ $("afterCombat").classList.add("hidden");
 
 $("battleTitle").textContent=n===1?"Combattimento I · L'imboscata":n===2?"Combattimento II · La cripta":"Boss · Il Custode";
 
-$("battleHint").textContent="Ordine dei turni determinato dall'Agilità. Un'azione per personaggio a ogni turno.";
+$("battleHint").textContent="Ordine dei turni determinato dall'Agilità. I nemici attaccano dall'alto, la tua squadra combatte dal basso.";
 
 log("Lo scontro ha inizio. L'ordine è stabilito dall'Agilità.");
 
@@ -644,11 +848,27 @@ function current(){return battle.order[battle.idx]}
 
 function unitHTML(u,active){
 
-let max=u.maxhp||u.hp,hp=Math.max(0,u.hp),portrait=u.portrait;
+let max=u.maxhp||u.hp,hp=Math.max(0,u.hp);
 
-let img=portrait?`<img class="unitPortrait" src="${asset(portrait)}" alt="${u.name}" onerror="this.outerHTML='<div class=\\'unitPortrait\\' style=\\'display:grid;place-items:center;color:#b9a98b;font-size:11px;text-align:center\\'>Ritratto non trovato</div>'">`:"";
+let image=asset(u.portrait||"");
 
-return `<div class="unit ${active?'active':''} ${!u.alive?'dead':''}">${img}<div class="unitInfo"><div class="unithead"><b>${u.name}</b><span>${!u.alive?'CADUTO':hp+'/'+max+' HP'}</span></div><div class="bars"><div class="hpbar" style="width:${Math.max(0,hp/max*100)}%"></div></div>${!isEnemy(u)&&u.alive?`<div class="small">AP ${u.ap}/5 · Armatura ${u.armor}</div>`:''}${u.status?`<div class="small">Effetto: ${u.status.name} (${u.status.turns} turni)</div>`:''}</div></div>`;
+let status=!u.alive?"CADUTO":hp+"/"+max+" HP";
+
+return `<div class="battleUnit ${active?'active':''} ${!u.alive?'dead':''}" data-unit-id="${u.id}">
+
+<img class="battleFace" src="${image}" alt="${u.name}" onerror="this.style.opacity='.25';this.alt='Ritratto non disponibile'">
+
+<div class="battleName">${u.name}</div>
+
+<div class="battleHP">${status}</div>
+
+<div class="battleBar"><div style="width:${Math.max(0,hp/max*100)}%"></div></div>
+
+${!isEnemy(u)&&u.alive?`<div class="battleAP">AP ${u.ap}/5</div>`:""}
+
+${u.status?`<div class="battleAP">${u.status.name}</div>`:""}
+
+</div>`;
 
 }
 
@@ -666,13 +886,49 @@ updateHUD();
 
 }
 
-function advanceToPlayer(){
+function findUnitElement(u){
 
-if(!battle||battle.ended)return;
+return Array.from(document.querySelectorAll(".battleUnit")).find(el=>el.dataset.unitId===String(u.id));
+
+}
+
+function animateStrike(attacker,target){
+
+return new Promise(resolve=>{
+
+let a=findUnitElement(attacker),t=findUnitElement(target);
+
+if(!a||!t){resolve();return}
+
+a.classList.add(isEnemy(attacker)?"dashEnemy":"dashHero");
+
+setTimeout(()=>{
+
+t.classList.add("hit");
+
+setTimeout(()=>{
+
+a.classList.remove("dashEnemy","dashHero");
+
+t.classList.remove("hit");
+
+resolve();
+
+},330);
+
+},180);
+
+});
+
+}
+
+async function advanceToPlayer(){
+
+if(!battle||battle.ended||busy)return;
 
 let safety=0;
 
-while(safety++<battle.order.length+3){
+while(safety++<battle.order.length+5){
 
 if(battle.units.every(e=>!e.alive||e.hp<=0)){winBattle();return}
 
@@ -694,7 +950,33 @@ let u=current();
 
 if(!u||!u.alive||u.hp<=0){battle.idx++;continue}
 
-if(isEnemy(u)){enemyTurn(u);battle.idx++;renderBattle();continue}
+if(isEnemy(u)){
+
+busy=true;
+
+renderBattle();
+
+let targets=aliveParty();
+
+if(targets.length){
+
+let target=targets.slice().sort((a,b)=>(a.hp/a.maxhp)-(b.hp/b.maxhp))[0];
+
+await animateStrike(u,target);
+
+enemyTurn(u,target);
+
+}
+
+battle.idx++;
+
+renderBattle();
+
+busy=false;
+
+continue;
+
+}
 
 u.ap=Math.min(5,u.ap+1);
 
@@ -724,13 +1006,15 @@ function renderTargets(){
 
 let living=battle.units.filter(e=>e.alive&&e.hp>0);
 
+if(!living.length){$("targetArea").innerHTML="";return}
+
 if(!living.some(e=>battle.units.indexOf(e)===selectedTarget))selectedTarget=battle.units.indexOf(living[0]);
 
 $("targetArea").innerHTML=living.map(e=>`<button class="choice ${selectedTarget===battle.units.indexOf(e)?'selected':''}" onclick="selectTarget(${battle.units.indexOf(e)})">${e.name} · ${e.hp} HP</button>`).join("");
 
 }
 
-function selectTarget(i){selectedTarget=i;renderTargets()}
+function selectTarget(i){if(busy)return;selectedTarget=i;renderTargets()}
 
 function renderActions(){
 
@@ -760,21 +1044,29 @@ function hasCure(){return ["Antidoto","Benda","Purificazione"].some(k=>Number(G.
 
 function hasDowned(){return [G.hero,...G.party].some(p=>!p.alive&&p.down>0)}
 
-function playerAction(type){
+async function playerAction(type){
+
+if(busy||!battle||battle.ended)return;
 
 let u=current(),target=battle.units[selectedTarget];
 
 if(!u||!u.alive)return;
 
+busy=true;
+
+$("combatActions").querySelectorAll("button").forEach(b=>b.disabled=true);
+
 if(["attack","skill","spell"].includes(type)){
 
-if(!target||!target.alive)return;
+if(!target||!target.alive){busy=false;return}
 
 let cost=type==="skill"?2:type==="spell"?3:0;
 
-if(u.ap<cost)return;
+if(u.ap<cost){busy=false;return}
 
 u.ap-=cost;
+
+await animateStrike(u,target);
 
 let die=roll();
 
@@ -796,7 +1088,7 @@ if(target.hp<=0){target.hp=0;target.alive=false;log(`${target.name} è stato sco
 
 }else if(type==="potion"){
 
-if(G.inventory.Pozione<1)return;
+if(G.inventory.Pozione<1){busy=false;return}
 
 G.inventory.Pozione--;
 
@@ -810,7 +1102,7 @@ log(`${u.name} usa una pozione e recupera ${heal} HP.`);
 
 let k=["Antidoto","Benda","Purificazione"].find(x=>G.inventory[x]>0);
 
-if(!k)return;
+if(!k){busy=false;return}
 
 G.inventory[k]--;
 
@@ -822,7 +1114,7 @@ else log(`${u.name} usa ${k}, ma non ha alterazioni da curare.`);
 
 let p=[G.hero,...G.party].find(p=>!p.alive&&p.down>0);
 
-if(!p)return;
+if(!p){busy=false;return}
 
 p.alive=true;p.down=0;p.hp=Math.max(8,Math.floor(p.maxhp*.25));
 
@@ -838,6 +1130,8 @@ log("La fuga riesce. Lo scontro termina, ma la missione resta incompleta.");
 
 battle.ended=true;
 
+busy=false;
+
 $("combat").classList.add("hidden");
 
 showScene(battle.n===1?"forest":"crypt");
@@ -850,9 +1144,11 @@ return;
 
 renderBattle();
 
-if(battle.units.every(e=>!e.alive||e.hp<=0)){winBattle();return}
+if(battle.units.every(e=>!e.alive||e.hp<=0)){busy=false;winBattle();return}
 
 battle.idx++;
+
+busy=false;
 
 advanceToPlayer();
 
@@ -860,13 +1156,9 @@ advanceToPlayer();
 
 function roll(){return Math.floor(Math.random()*20)+1}
 
-function enemyTurn(e){
+function enemyTurn(e,target){
 
-let targets=aliveParty();
-
-if(!targets.length)return;
-
-let target=targets.sort((a,b)=>(a.hp/a.maxhp)-(b.hp/b.maxhp))[0];
+if(!target||!target.alive)return;
 
 let die=roll(),damage=Math.max(1,die+e.atk-target.armor);
 
@@ -948,6 +1240,8 @@ if(battle.ended)return;
 
 battle.ended=true;
 
+busy=false;
+
 G.battleWon++;
 
 let n=battle.n;
@@ -1002,6 +1296,8 @@ function loseBattle(){
 
 battle.ended=true;
 
+busy=false;
+
 $("combat").classList.add("hidden");
 
 let box=$("afterCombat");
@@ -1048,13 +1344,21 @@ G=s.G;
 
 battle=s.battle;
 
+busy=false;
+
 $("creator").classList.add("hidden");
 
 $("game").classList.remove("hidden");
 
-if(battle&&!battle.ended){$("combat").classList.remove("hidden");renderBattle();advanceToPlayer()}
+if(battle&&!battle.ended){
 
-else if(G.finished)showScene("ending");
+$("combat").classList.remove("hidden");
+
+renderBattle();
+
+advanceToPlayer();
+
+}else if(G.finished)showScene("ending");
 
 else showScene(G.battleWon===0?"prologue":G.battleWon===1?"crypt":G.battleWon===2?"boss":"ending");
 
