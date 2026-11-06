@@ -8,369 +8,111 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
-<meta name="theme-color" content="#100e0c">
+<meta name="theme-color" content="#100d17">
 
 <title>Ombre di Velmora</title>
 
 <style>
 
-:root{
+:root {
 
-  --bg:#100e0c;
+  --bg:#100d17; --panel:#1c1725; --panel2:#282032;
 
-  --panel:#211b17;
+  --gold:#d7ad65; --red:#a94450; --text:#eee7dc;
 
-  --panel2:#30251e;
-
-  --gold:#c9a45c;
-
-  --gold2:#ead19b;
-
-  --text:#eee4d5;
-
-  --muted:#a99a87;
-
-  --red:#9e3934;
-
-  --green:#54794d;
-
-  --border:#5a4633;
+  --muted:#aaa0b0; --green:#76b58a;
 
 }
 
 *{box-sizing:border-box}
 
-body{
+body {
 
-  margin:0;
+  margin:0; background:radial-gradient(ellipse at top,#302039 0%,#100d17 65%);
 
-  background:var(--bg);
-
-  color:var(--text);
-
-  font-family:Georgia,serif;
-
-  padding-bottom:85px;
+  color:var(--text);font-family:Georgia,serif;min-height:100vh;
 
 }
 
-button{
+header{text-align:center;padding:22px 12px 12px}
 
-  font-family:inherit;
+h1{color:var(--gold);font-size:clamp(27px,7vw,42px);margin:4px 0;text-shadow:0 3px 18px #000}
 
-  cursor:pointer;
+.subtitle{color:var(--muted);font-style:italic;font-size:14px}
 
-  color:var(--text);
+main{max-width:760px;margin:auto;padding:12px 14px 45px}
 
-}
+.panel{background:linear-gradient(145deg,#251e2e,#191521);border:1px solid #59445b;border-radius:14px;padding:17px;margin:12px 0;box-shadow:0 8px 25px #0005}
 
-header{
+h2{color:var(--gold);font-size:23px;margin:3px 0 14px}
 
-  padding:15px;
+h3{color:#e4c58f;margin:12px 0 7px}
 
-  text-align:center;
+p{line-height:1.55}
 
-  background:#191410;
+small,.muted{color:var(--muted)}
 
-  border-bottom:1px solid var(--border);
+label{display:block;color:#d7c9b6;margin:12px 0 5px}
 
-}
+select,input,button{font:inherit}
 
-header h1{
+select,input{width:100%;padding:12px;border-radius:8px;border:1px solid #66516a;background:#17121e;color:white;font-size:16px}
 
-  color:var(--gold);
+button{border:1px solid #a77d48;background:linear-gradient(#72502f,#49301f);color:#fff1d5;padding:12px 15px;border-radius:9px;font-weight:bold;cursor:pointer;min-height:45px}
 
-  margin:0;
+button:active{transform:scale(.98)}
 
-  font-size:24px;
+button.secondary{background:#30283a;border-color:#66546d}
 
-  letter-spacing:2px;
+button.danger{background:#642d37;border-color:#a34e57}
 
-}
+button:disabled{opacity:.4}
 
-header small{color:var(--muted)}
+.buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
 
-main{padding:12px;max-width:850px;margin:auto}
+.buttons button{flex:1}
 
-.panel{
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
 
-  background:linear-gradient(145deg,#29211b,#1b1713);
+.choice{background:#211a2a;border:1px solid #57455f;border-radius:10px;padding:12px;text-align:center;cursor:pointer}
 
-  border:1px solid var(--border);
+.choice.selected{border:2px solid var(--gold);background:#44332c}
 
-  border-radius:10px;
+.choice strong{display:block;color:#f1d49c;margin:5px 0}
 
-  padding:13px;
+.avatar{font-size:75px;text-align:center;padding:12px}
 
-  margin-bottom:12px;
+.avatar-name{text-align:center;color:var(--gold);font-size:19px}
 
-}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
 
-h2,h3{color:var(--gold);margin-top:5px}
+.stat{background:#17121e;border-radius:8px;padding:9px}
 
-h2{font-size:20px}
+.stat b{display:block;color:var(--gold);font-size:20px}
 
-h3{font-size:16px}
+.bar{height:11px;background:#100d17;border-radius:9px;overflow:hidden;margin:5px 0 10px}
 
-p{line-height:1.5}
+.bar span{display:block;height:100%;background:var(--green);width:100%}
 
-button.action{
+.bar.xp span{background:#b78bd5}
 
-  background:#463322;
+.story{font-size:17px;line-height:1.7;white-space:pre-line}
 
-  border:1px solid var(--gold);
+.choicebtn{display:block;width:100%;text-align:left;margin:8px 0;background:#302438;border-color:#73576e}
 
-  border-radius:7px;
+.enemy{text-align:center;font-size:65px;padding:4px}
 
-  padding:10px 13px;
-
-  margin:4px 2px;
-
-}
-
-button.action:disabled{opacity:.35}
-
-button.action.selected{
-
-  background:#75552d;
-
-  color:white;
-
-}
-
-button.danger{background:#632b27;border-color:#a64a43}
-
-button.good{background:#315137;border-color:#63895d}
-
-.muted{color:var(--muted)}
-
-.gold{color:var(--gold2)}
-
-.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-
-.between{justify-content:space-between}
-
-.portrait{
-
-  width:100px;
-
-  height:145px;
-
-  object-fit:contain;
-
-  background:#17120f;
-
-  border:1px solid var(--border);
-
-  border-radius:7px;
-
-}
-
-.character{
-
-  display:flex;
-
-  gap:12px;
-
-  align-items:center;
-
-  padding:10px 0;
-
-  border-bottom:1px solid #49392b;
-
-}
-
-.character:last-child{border:0}
-
-.charinfo{flex:1;min-width:0}
-
-.bar{
-
-  height:9px;
-
-  background:#100d0b;
-
-  border-radius:8px;
-
-  overflow:hidden;
-
-  margin:5px 0;
-
-}
-
-.bar span{display:block;height:100%;background:#9e3934}
-
-.bar.ap span{background:#567e9d}
-
-.bar.xp span{background:#b59a49}
-
-.statgrid{
-
-  display:grid;
-
-  grid-template-columns:repeat(2,1fr);
-
-  gap:7px;
-
-}
-
-.stat{
-
-  background:#17120f;
-
-  padding:9px;
-
-  border-radius:6px;
-
-  border:1px solid #463629;
-
-}
-
-.slotgrid{
-
-  display:grid;
-
-  grid-template-columns:repeat(5,1fr);
-
-  gap:7px;
-
-}
-
-.slot{
-
-  background:#17120f;
-
-  border:1px solid var(--border);
-
-  border-radius:6px;
-
-  min-height:75px;
-
-  padding:5px;
-
-  text-align:center;
-
-  font-size:11px;
-
-  color:var(--muted);
-
-}
-
-.slot strong{display:block;color:var(--gold);font-size:19px}
-
-.enemy{
-
-  display:inline-block;
-
-  background:#30201d;
-
-  border:1px solid #85443b;
-
-  padding:10px;
-
-  margin:4px;
-
-  border-radius:7px;
-
-  min-width:105px;
-
-  text-align:center;
-
-}
-
-.enemy.target{outline:2px solid var(--gold)}
-
-.nav{
-
-  position:fixed;
-
-  bottom:0;
-
-  left:0;
-
-  right:0;
-
-  display:grid;
-
-  grid-template-columns:repeat(4,1fr);
-
-  background:#17120f;
-
-  border-top:1px solid var(--gold);
-
-  padding:7px 3px max(7px,env(safe-area-inset-bottom));
-
-  z-index:20;
-
-}
-
-.nav button{
-
-  background:none;
-
-  border:0;
-
-  color:var(--muted);
-
-  font-size:12px;
-
-  padding:8px 2px;
-
-}
-
-.nav button.active{color:var(--gold2)}
-
-.nav span{display:block;font-size:19px;margin-bottom:3px}
+.log{background:#120f18;border-radius:8px;padding:10px;max-height:150px;overflow:auto;font-size:14px;line-height:1.5;color:#c9bdcc}
 
 .hidden{display:none!important}
 
-.choice{
+hr{border:0;border-top:1px solid #59445b;margin:15px 0}
 
-  display:block;
+footer{text-align:center;color:#796e7e;font-size:12px;padding:15px}
 
-  width:100%;
-
-  text-align:left;
-
-  margin:7px 0;
-
-}
-
-.notice{
-
-  border-left:3px solid var(--gold);
-
-  padding:8px 12px;
-
-  background:#17120f;
-
-  color:#d8c6a8;
-
-}
-
-input,select{
-
-  background:#17120f;
-
-  color:var(--text);
-
-  border:1px solid var(--border);
-
-  padding:9px;
-
-  border-radius:6px;
-
-}
-
-@media(max-width:400px){
-
-  .slotgrid{grid-template-columns:repeat(5,1fr)}
-
-  .portrait{width:85px;height:125px}
-
-}
+@media(max-width:420px){main{padding:8px}.panel{padding:13px}.grid{gap:7px}.choice{padding:9px}}
 
 </style>
 
@@ -380,2250 +122,798 @@ input,select{
 
 <header>
 
-  <h1>OMBRE DI VELMORA</h1>
+<h1>OMBRE DI VELMORA</h1>
 
-  <small>La campana senza eco</small>
+<div class="subtitle">Quando la luce muore, le leggende si risvegliano.</div>
 
 </header>
 
 <main>
 
-<section id="startScreen" class="panel hidden">
+<section id="creation">
 
-  <h2>Le cronache di Velmora</h2>
+ <div class="panel">
 
-  <p>Le ombre si allungano sulle terre del regno. Una campana ha smesso di suonare e qualcosa si è risvegliato sotto le antiche rovine.</p>
+  <h2>La nascita di un eroe</h2>
 
-  <button class="action good" onclick="newAdventure()">Inizia avventura</button>
+  <p>Il regno di Velmora è avvolto dalle tenebre. Antiche creature si risvegliano, i villaggi cadono e una forza sconosciuta corrompe la terra.</p>
 
-  <button class="action" onclick="loadGame()">Carica partita</button>
+  <p>La tua storia comincia qui. Scegli chi vuoi essere.</p>
+
+ </div>
+
+ <div class="panel">
+
+  <h2>1. Razza e genere</h2>
+
+  <div class="grid" id="races">
+
+   <div class="choice selected" data-race="umano" data-gender="uomo"><div>🧔</div><strong>Umano</strong>Uomo</div>
+
+   <div class="choice" data-race="umano" data-gender="donna"><div>👩</div><strong>Umana</strong>Donna</div>
+
+   <div class="choice" data-race="leone" data-gender="uomo"><div>🦁</div><strong>Leone antropomorfo</strong>Uomo</div>
+
+   <div class="choice" data-race="leone" data-gender="donna"><div>🦁</div><strong>Leonessa antropomorfa</strong>Donna</div>
+
+   <div class="choice" data-race="lupo" data-gender="uomo"><div>🐺</div><strong>Lupo antropomorfo</strong>Uomo</div>
+
+   <div class="choice" data-race="lupo" data-gender="donna"><div>🐺</div><strong>Lupa antropomorfa</strong>Donna</div>
+
+   <div class="choice" data-race="orco" data-gender="uomo"><div>👹</div><strong>Orco</strong>Uomo</div>
+
+   <div class="choice" data-race="orco" data-gender="donna"><div>👹</div><strong>Orchessa</strong>Donna</div>
+
+  </div>
+
+ </div>
+
+ <div class="panel">
+
+  <h2>2. Scegli la tua classe</h2>
+
+  <div class="grid" id="classes">
+
+   <div class="choice selected" data-class="guerriero"><div>⚔️</div><strong>Guerriero</strong><small>Resistente, forte e coraggioso.</small></div>
+
+   <div class="choice" data-class="ladro"><div>🗡️</div><strong>Ladro</strong><small>Agile, rapido e letale.</small></div>
+
+   <div class="choice" data-class="mago"><div>🔮</div><strong>Mago</strong><small>Fragile, ma dotato di grande potere.</small></div>
+
+  </div>
+
+ </div>
+
+ <div class="panel">
+
+  <h2>3. Personalizza il tuo aspetto</h2>
+
+  <div id="preview" class="avatar">🧔</div>
+
+  <div id="previewName" class="avatar-name">Umano</div>
+
+  <label for="eyes">Colore degli occhi</label>
+
+  <select id="eyes">
+
+   <option value="Azzurri">Azzurri</option><option value="Verdi">Verdi</option>
+
+   <option value="Marroni">Marroni</option><option value="Dorati">Dorati</option>
+
+   <option value="Viola">Viola</option>
+
+  </select>
+
+  <label for="hair">Capelli, criniera o pelo</label>
+
+  <select id="hair">
+
+   <option>Lisci e lunghi</option><option>Spettinati</option>
+
+   <option>Raccolti</option><option>Intrecciati</option>
+
+   <option>Corti e selvaggi</option>
+
+  </select>
+
+  <label for="clothes">Abbigliamento</label>
+
+  <select id="clothes">
+
+   <option>Armatura da cavaliere</option><option>Abiti da viandante</option>
+
+   <option>Armatura leggera</option><option>Vesti da mago</option>
+
+   <option>Armatura oscura</option>
+
+  </select>
+
+  <label for="body">Corporatura</label>
+
+  <select id="body">
+
+   <option>Agile</option><option>Slanciata</option>
+
+   <option>Atletica</option><option>Robusta</option>
+
+   <option>Morbida e formosa</option>
+
+  </select>
+
+  <label for="heroName">Nome del personaggio</label>
+
+  <input id="heroName" maxlength="20" placeholder="Scrivi il tuo nome..." value="Aren">
+
+  <div class="buttons">
+
+   <button id="start">ENTRA A VELMORA</button>
+
+  </div>
+
+ </div>
 
 </section>
 
-<section id="gameScreen">
+<section id="game" class="hidden">
 
-<div id="topInfo" class="panel">
+ <div class="panel">
 
-  <div class="row between">
+  <div class="avatar" id="gameAvatar">🧔</div>
 
-    <span>Livello <b id="playerLevel">1</b></span>
+  <div class="avatar-name" id="gameName"></div>
 
-    <span>Oro: <b id="gold">0</b> 🪙</span>
+  <div class="stats">
 
-    <span>Gilda: <b id="guildRank">Apprendista</b></span>
+   <div class="stat">Livello<b id="level">1</b></div>
+
+   <div class="stat">Attacco<b id="attack">5</b></div>
+
+   <div class="stat">Difesa<b id="defense">3</b></div>
+
+  </div>
+
+  <p>Salute: <b id="hpText"></b></p><div class="bar"><span id="hpBar"></span></div>
+
+  <p>Esperienza: <b id="xpText"></b></p><div class="bar xp"><span id="xpBar"></span></div>
+
+  <p>🧪 Pozioni: <b id="potions"></b> &nbsp; 🪙 Oro: <b id="gold"></b></p>
+
+ </div>
+
+ <div class="panel">
+
+  <h2 id="chapter">Capitolo I - Le porte della notte</h2>
+
+  <div id="story" class="story"></div>
+
+  <div id="choices"></div>
+
+ </div>
+
+ <div class="panel hidden" id="battle">
+
+  <h2>⚔️ Combattimento</h2>
+
+  <div class="enemy" id="enemyIcon">👹</div>
+
+  <h3 id="enemyName" style="text-align:center"></h3>
+
+  <p id="enemyHpText" style="text-align:center"></p>
+
+  <div class="bar"><span id="enemyHpBar"></span></div>
+
+  <div class="buttons">
+
+   <button id="normal">Attacco</button>
+
+   <button id="heavy">Attacco pesante</button>
 
   </div>
 
-</div>
+  <div class="buttons">
 
-<section id="tab-squadra" class="tab">
+   <button id="potion" class="secondary">Usa pozione</button>
 
-  <div class="panel">
-
-    <h2>La squadra</h2>
-
-    <p class="muted">Fino a quattro avventurieri possono combattere insieme.</p>
-
-    <div id="partyList"></div>
+   <button id="flee" class="danger">Fuggi</button>
 
   </div>
+
+  <hr><div class="log" id="battleLog">Il combattimento ha inizio...</div>
+
+ </div>
+
+ <div class="panel">
+
+  <h3>📜 Diario dell'avventura</h3>
+
+  <div class="log" id="diary">La tua avventura comincia.</div>
+
+ </div>
+
+ <div class="buttons">
+
+  <button class="secondary" id="save">Salva partita</button>
+
+  <button class="secondary" id="load">Carica partita</button>
+
+  <button class="danger" id="restart">Ricomincia</button>
+
+ </div>
 
 </section>
 
-<section id="tab-inventario" class="tab hidden">
-
-  <div class="panel">
-
-    <h2>Inventario</h2>
-
-    <div id="inventoryList"></div>
-
-  </div>
-
-  <div class="panel">
-
-    <h3>Equipaggiamento del personaggio</h3>
-
-    <div id="equipmentView"></div>
-
-  </div>
-
-</section>
-
-<section id="tab-missione" class="tab hidden">
-
-  <div class="panel">
-
-    <h2>Missione attuale</h2>
-
-    <h3 id="sceneTitle">Il villaggio senza ombre</h3>
-
-    <p id="storyText"></p>
-
-    <div id="storyChoices"></div>
-
-  </div>
-
-  <div class="panel">
-
-    <h3>Diario</h3>
-
-    <div id="journal"></div>
-
-  </div>
-
-</section>
-
-<section id="tab-altro" class="tab hidden">
-
-  <div class="panel">
-
-    <h2>Altro</h2>
-
-    <button class="action" onclick="openSub('personaggio')">Personaggio</button>
-
-    <button class="action" onclick="openSub('abilita')">Abilità</button>
-
-    <button class="action" onclick="openSub('statistiche')">Statistiche</button>
-
-    <button class="action" onclick="openSub('gilda')">Gilda</button>
-
-    <button class="action" onclick="openSub('accampamento')">Accampamento</button>
-
-    <button class="action" onclick="openSub('mappa')">Mappa</button>
-
-    <button class="action" onclick="openSub('opzioni')">Opzioni</button>
-
-  </div>
-
-  <div id="subContent"></div>
-
-</section>
-
-<section id="battleScreen" class="hidden">
-
-  <div class="panel">
-
-    <h2>Combattimento</h2>
-
-    <p id="battleMessage">I nemici si avvicinano...</p>
-
-    <div id="enemyList"></div>
-
-  </div>
-
-  <div class="panel">
-
-    <h3>Turno dell'avventuriero</h3>
-
-    <div id="activeFighter"></div>
-
-    <div id="battleActions"></div>
-
-  </div>
-
-  <div class="panel">
-
-    <h3>Ordine di iniziativa</h3>
-
-    <div id="initiative"></div>
-
-  </div>
-
-</section>
-
-</section>
+<footer>OMBRE DI VELMORA · Un'avventura fantasy originale</footer>
 
 </main>
 
-<nav class="nav">
-
-  <button id="nav-squadra" class="active" onclick="openTab('squadra')"><span>⚔️</span>Squadra</button>
-
-  <button id="nav-inventario" onclick="openTab('inventario')"><span>🎒</span>Inventario</button>
-
-  <button id="nav-missione" onclick="openTab('missione')"><span>📜</span>Missione</button>
-
-  <button id="nav-altro" onclick="openTab('altro')"><span>☰</span>Altro</button>
-
-</nav>
-
 <script>
+
+(() => {
 
 "use strict";
 
-/* ==========================================
+const $ = id => document.getElementById(id);
 
-   OMBRE DI VELMORA - DATI E SALVATAGGIO
+let selectedRace="umano", selectedGender="uomo", selectedClass="guerriero";
 
-========================================== */
+let player=null, enemy=null, inBattle=false, currentScene="intro";
 
-const SAVE_KEY = "velmoraDemoSave";
+const raceNames={umano:"Umano",leone:"Leone antropomorfo",lupo:"Lupo antropomorfo",orco:"Orco"};
 
-const CHARACTER_KEY = "velmoraCreatedCharacter";
+const emojis={
 
-const SLOT_NAMES = [
+ umano:{uomo:"🧔",donna:"👩"},
 
-  "Arma destra","Arma sinistra","Elmo","Viso","Armatura",
+ leone:{uomo:"🦁",donna:"🦁"},
 
-  "Gambe","Stivali","Braccia","Accessorio 1","Accessorio 2"
+ lupo:{uomo:"🐺",donna:"🐺"},
 
-];
-
-const CLASS_AP = {
-
-  Guerriero:5,
-
-  Ladro:5,
-
-  Mago:7,
-
-  Chierico:6,
-
-  Druido:7,
-
-  Arciere:5
+ orco:{uomo:"👹",donna:"👹"}
 
 };
 
-let G = null;
+const classData={
 
-let battle = null;
+ guerriero:{hp:115,atk:9,def:5,description:"Guerriero"},
 
-let activeTab = "squadra";
+ ladro:{hp:90,atk:11,def:3,description:"Ladro"},
 
-let selectedEnemy = 0;
+ mago:{hp:75,atk:15,def:2,description:"Mago"}
 
-let selectedCharacter = 0;
+};
 
-/* ==========================================
+const scenes={
 
-   PERSONAGGIO E COMPAGNI
+ intro:{
 
-========================================== */
+  chapter:"Capitolo I - Le porte della notte",
 
-function makeCharacter(data){
+  text:"La pioggia cade sulle mura di Velmora. Da settimane i morti camminano nelle foreste e strane luci illuminano le rovine a nord.\\n\\nQuando raggiungi il villaggio di Brumavia, trovi le porte spalancate e le strade deserte. Un vecchio ferito ti afferra il braccio.\\n\\n«La cripta... qualcosa si è risvegliato. Non lasciarlo raggiungere la città...»",
 
-  const c = data || {};
+  choices:[
 
-  const cls = c.classe || c.class || c.job || "Guerriero";
+   ["Aiuta il vecchio e ascolta il suo racconto","old"],
 
-  const race = c.razza || c.race || "Umano";
+   ["Dirigiti subito verso la cripta","crypt"],
 
-  const stats = c.stats || c.statistiche || {};
-
-  const base = {
-
-    Forza:5, Agilità:5, Vitalità:5,
-
-    Intelletto:5, Volontà:5, Percezione:5, Carisma:5
-
-  };
-
-  Object.keys(base).forEach(k=>{
-
-    if(stats[k] != null) base[k] = Number(stats[k]);
-
-  });
-
-  const hp = Number(c.hp || c.puntiVita || (26 + base.Vitalità*3));
-
-  return {
-
-    id:c.id || "protagonista",
-
-    name:c.nome || c.name || "Avventuriero",
-
-    race,
-
-    class:cls,
-
-    sex:c.sesso || c.sex || "Maschio",
-
-    image:c.immagine || c.image || c.portrait || "",
-
-    level:Number(c.livello || c.level || 1),
-
-    xp:Number(c.xp || 0),
-
-    xpNext:100,
-
-    hp,
-
-    maxHp:Number(c.maxHp || c.hpMax || hp),
-
-    ap:CLASS_AP[cls] || 5,
-
-    maxAp:CLASS_AP[cls] || 5,
-
-    stats:base,
-
-    equipment:{},
-
-    wounds:0,
-
-    falls:0,
-
-    alive:true,
-
-    abilities:[]
-
-  };
-
-}
-
-function companion(name,race,cls,stats,hp,image){
-
-  return {
-
-    id:name.toLowerCase(),
-
-    name,race,class:cls,sex:"Maschio",image:image||"",
-
-    level:1,xp:0,xpNext:100,
-
-    hp,maxHp:hp,
-
-    ap:CLASS_AP[cls]||5,
-
-    maxAp:CLASS_AP[cls]||5,
-
-    stats,equipment:{},
-
-    wounds:0,falls:0,alive:true,abilities:[]
-
-  };
-
-}
-
-function createNewGame(data){
-
-  const hero = makeCharacter(data);
-
-  G = {
-
-    party:[
-
-      hero,
-
-      companion("Rauk","Popolo Lupo","Guerriero",
-
-        {Forza:7,Agilità:6,Vitalità:7,Intelletto:3,Volontà:4,Percezione:6,Carisma:3},34),
-
-      {
-
-        ...companion("Leona","Popolo Leone","Chierico",
-
-        {Forza:5,Agilità:5,Vitalità:6,Intelletto:6,Volontà:8,Percezione:5,Carisma:7},31),
-
-        sex:"Femmina"
-
-      }
-
-    ],
-
-    activeParty:[0,1,2],
-
-    gold:12,
-
-    inventory:[
-
-      {name:"Pozione curativa",qty:3,type:"potion",value:15},
-
-      {name:"Benda",qty:2,type:"bandage",value:5},
-
-      {name:"Antidoto",qty:1,type:"item",value:8}
-
-    ],
-
-    equipmentItems:[],
-
-    journal:["La campana di Rovoscuro ha smesso di suonare."],
-
-    scene:"village",
-
-    sceneTitle:"Il villaggio senza ombre",
-
-    story:"",
-
-    guildRank:"Apprendista",
-
-    reputation:0,
-
-    quests:[],
-
-    visited:["Rovoscuro"],
-
-    relationships:{},
-
-    flags:{},
-
-    gameOver:false
-
-  };
-
-  startPrologue();
-
-  saveGame();
-
-  renderAll();
-
-}
-
-function readCreatedCharacter(){
-
-  const keys = [
-
-    CHARACTER_KEY,
-
-    "velmoraCharacter",
-
-    "personaggioVelmora",
-
-    "createdCharacter"
-
-  ];
-
-  for(const key of keys){
-
-    try{
-
-      const raw = localStorage.getItem(key);
-
-      if(raw){
-
-        const parsed = JSON.parse(raw);
-
-        if(parsed && typeof parsed === "object") return parsed;
-
-      }
-
-    }catch(e){}
-
-  }
-
-  return null;
-
-}
-
-function newAdventure(){
-
-  const data = readCreatedCharacter();
-
-  createNewGame(data || {});
-
-}
-
-function saveGame(){
-
-  if(!G) return;
-
-  localStorage.setItem(SAVE_KEY,JSON.stringify({G,battle}));
-
-  updateTop();
-
-}
-
-function loadGame(){
-
-  try{
-
-    const raw = localStorage.getItem(SAVE_KEY);
-
-    if(!raw){
-
-      alert("Non è presente una partita salvata.");
-
-      return;
-
-    }
-
-    const saved = JSON.parse(raw);
-
-    G = saved.G;
-
-    battle = saved.battle || null;
-
-    renderAll();
-
-    if(battle) showBattle();
-
-  }catch(e){
-
-    alert("Impossibile caricare il salvataggio.");
-
-  }
-
-}
-
-/* ==========================================
-
-   NAVIGAZIONE
-
-========================================== */
-
-function openTab(tab){
-
-  activeTab = tab;
-
-  document.querySelectorAll(".tab").forEach(el=>el.classList.add("hidden"));
-
-  document.getElementById("tab-"+tab).classList.remove("hidden");
-
-  document.querySelectorAll(".nav button").forEach(el=>el.classList.remove("active"));
-
-  document.getElementById("nav-"+tab).classList.add("active");
-
-  if(tab==="squadra") renderParty();
-
-  if(tab==="inventario") renderInventory();
-
-  if(tab==="missione") renderMission();
-
-}
-
-function openSub(name){
-
-  const box = document.getElementById("subContent");
-
-  if(name==="personaggio"){
-
-    box.innerHTML = `
-
-      <div class="panel"><h2>Personaggio</h2>
-
-      <div id="characterDetails"></div></div>`;
-
-    renderCharacterDetails();
-
-  }
-
-  if(name==="statistiche") renderStatistics(box);
-
-  if(name==="abilita") renderAbilities(box);
-
-  if(name==="gilda") renderGuild(box);
-
-  if(name==="accampamento") renderCamp(box);
-
-  if(name==="mappa") renderMap(box);
-
-  if(name==="opzioni") renderOptions(box);
-
-}
-
-/* ==========================================
-
-   SQUADRA
-
-========================================== */
-
-function renderParty(){
-
-  const box = document.getElementById("partyList");
-
-  if(!G) return;
-
-  box.innerHTML = "";
-
-  G.party.forEach((c,i)=>{
-
-    const active = G.activeParty.includes(i);
-
-    const el = document.createElement("div");
-
-    el.className="character";
-
-    const portrait = c.image
-
-      ? `<img class="portrait" src="${escapeAttr(c.image)}" alt="">`
-
-      : `<div class="portrait" style="display:grid;place-items:center;color:#c9a45c">⚔️</div>`;
-
-    el.innerHTML = `
-
-      ${portrait}
-
-      <div class="charinfo">
-
-        <strong class="gold">${escapeHTML(c.name)}</strong>
-
-        <div>${escapeHTML(c.race)} · ${escapeHTML(c.class)}</div>
-
-        <small>Livello ${c.level}</small>
-
-        <div>HP ${c.hp}/${c.maxHp}</div>
-
-        <div class="bar"><span style="width:${percent(c.hp,c.maxHp)}%"></span></div>
-
-        <div>PA ${c.ap}/${c.maxAp}</div>
-
-        <div class="bar ap"><span style="width:${percent(c.ap,c.maxAp)}%"></span></div>
-
-        ${c.wounds?`<small class="muted">Ferite: ${c.wounds}</small>`:""}
-
-        ${c.falls?`<small class="muted">Cadute: ${c.falls}/3</small>`:""}
-
-        <div>
-
-          <button class="action" onclick="selectCharacter(${i})">Scheda</button>
-
-          <button class="action ${active?'good':''}" onclick="toggleParty(${i})">
-
-            ${active?"In squadra":"Aggiungi"}
-
-          </button>
-
-        </div>
-
-      </div>`;
-
-    box.appendChild(el);
-
-  });
-
-}
-
-function selectCharacter(i){
-
-  selectedCharacter=i;
-
-  openTab("altro");
-
-  openSub("personaggio");
-
-}
-
-function toggleParty(i){
-
-  if(G.activeParty.includes(i)){
-
-    if(G.activeParty.length===1){
-
-      alert("Deve rimanere almeno un personaggio in squadra.");
-
-      return;
-
-    }
-
-    G.activeParty=G.activeParty.filter(x=>x!==i);
-
-  }else{
-
-    if(G.activeParty.length>=4){
-
-      alert("La squadra può contenere al massimo quattro personaggi.");
-
-      return;
-
-    }
-
-    G.activeParty.push(i);
-
-  }
-
-  saveGame();
-
-  renderParty();
-
-}
-
-/* ==========================================
-
-   SCHEDA PERSONAGGIO E STATISTICHE
-
-========================================== */
-
-function renderCharacterDetails(){
-
-  const c=G.party[selectedCharacter];
-
-  const box=document.getElementById("characterDetails");
-
-  if(!c || !box)return;
-
-  box.innerHTML=`
-
-    <h3>${escapeHTML(c.name)}</h3>
-
-    <p>${escapeHTML(c.race)} · ${escapeHTML(c.class)} · Livello ${c.level}</p>
-
-    <p>Esperienza: ${c.xp}/${c.xpNext}</p>
-
-    <div class="bar xp"><span style="width:${percent(c.xp,c.xpNext)}%"></span></div>
-
-    <p>HP: ${c.hp}/${c.maxHp}</p>
-
-    <p>PA: ${c.ap}/${c.maxAp}</p>
-
-    <p>Ferite: ${c.wounds} · Cadute: ${c.falls}/3</p>
-
-    <h3>Equipaggiamento</h3>
-
-    <div class="slotgrid" id="charSlots"></div>
-
-  `;
-
-  renderSlots(c,document.getElementById("charSlots"));
-
-}
-
-function renderStatistics(box){
-
-  const c=G.party[selectedCharacter];
-
-  let html=`<div class="panel"><h2>Statistiche</h2>
-
-  <p>${escapeHTML(c.name)} · Livello ${c.level}</p>
-
-  <p>Punti esperienza: ${c.xp}/${c.xpNext}</p>
-
-  <div class="statgrid">`;
-
-  for(const [key,value] of Object.entries(c.stats)){
-
-    html+=`<div class="stat"><strong>${key}</strong><br>${value}
-
-    <br><button class="action" onclick="increaseStat('${key}')">+</button></div>`;
-
-  }
-
-  html+=`</div><p class="muted">I punti statistica saranno assegnati al passaggio di livello.</p></div>`;
-
-  box.innerHTML=html;
-
-}
-
-function increaseStat(key){
-
-  const c=G.party[selectedCharacter];
-
-  if(!c.statPoints || c.statPoints<=0){
-
-    alert("Non hai punti statistica disponibili.");
-
-    return;
-
-  }
-
-  c.stats[key]++;
-
-  c.statPoints--;
-
-  saveGame();
-
-  openSub("statistiche");
-
-}
-
-/* ==========================================
-
-   ABILITÀ
-
-========================================== */
-
-const ABILITIES={
-
-  Guerriero:[
-
-    {name:"Colpo potente",cost:2,desc:"Un attacco fisico più potente.",damage:1.6},
-
-    {name:"Difesa",cost:1,desc:"Riduce i danni subiti nel prossimo attacco.",defend:true}
-
-  ],
-
-  Ladro:[
-
-    {name:"Attacco rapido",cost:2,desc:"Un colpo rapido e preciso.",damage:1.3},
-
-    {name:"Colpo alle spalle",cost:3,desc:"Un attacco molto potente.",damage:2}
-
-  ],
-
-  Mago:[
-
-    {name:"Dardo arcano",cost:2,desc:"Un proiettile magico.",damage:1.5},
-
-    {name:"Esplosione arcana",cost:4,desc:"Danneggia tutti i nemici.",damage:1.2,area:true}
-
-  ],
-
-  Chierico:[
-
-    {name:"Luce sacra",cost:3,desc:"Cura un alleato.",heal:15},
-
-    {name:"Martello sacro",cost:2,desc:"Colpisce un nemico.",damage:1.4}
-
-  ],
-
-  Druido:[
-
-    {name:"Radici",cost:2,desc:"Attacco naturale.",damage:1.3},
-
-    {name:"Rinascita",cost:3,desc:"Cura un alleato.",heal:18}
-
-  ],
-
-  Arciere:[
-
-    {name:"Tiro preciso",cost:2,desc:"Un colpo mirato.",damage:1.5},
-
-    {name:"Pioggia di frecce",cost:4,desc:"Colpisce tutti i nemici.",damage:1.1,area:true}
+   ["Esplora le case abbandonate","houses"]
 
   ]
 
-};
+ },
 
-function renderAbilities(box){
+ old:{
 
-  const c=G.party[selectedCharacter];
+  chapter:"Il racconto del superstite",
 
-  const list=ABILITIES[c.class]||[];
+  text:"Il vecchio ti racconta di un antico sigillo spezzato. Ti consegna una piccola pozione e indica un sentiero nascosto dietro la locanda. «Là troverai la strada per le rovine».",
 
-  let html=`<div class="panel"><h2>Abilità di ${escapeHTML(c.name)}</h2>`;
+  choices:[["Prendi il sentiero verso le rovine","crypt"]], reward:{potions:1}
 
-  list.forEach((a,i)=>{
+ },
 
-    html+=`<div class="stat"><strong>${a.name}</strong>
+ houses:{
 
-    <p>${a.desc}</p><small>Costo: ${a.cost} PA</small></div>`;
+  chapter:"Le case silenziose",
 
-  });
+  text:"Tra le case trovi un baule dimenticato. Dentro ci sono alcune monete e una pozione ancora utilizzabile. Ma un rumore proviene dal vicolo...",
 
-  html+=`</div>`;
+  choices:[["Affronta la creatura nel vicolo","housefight"],["Lascia il villaggio e raggiungi la cripta","crypt"]],
 
-  box.innerHTML=html;
+  reward:{gold:12,potions:1}
 
-}
+ },
 
-/* ==========================================
+ crypt:{
 
-   INVENTARIO ED EQUIPAGGIAMENTO
+  chapter:"Capitolo II - La cripta dimenticata",
 
-========================================== */
+  text:"Il sentiero conduce a un mausoleo coperto di radici. Una porta di pietra è socchiusa. Dall'interno arriva un sussurro: «Il sangue dei vivi aprirà la strada».\\n\\nUn guardiano scheletrico si alza dal pavimento.",
 
-function renderInventory(){
+  choices:[["Preparati a combattere","cryptfight"],["Cerca un passaggio laterale","passage"]]
 
-  const box=document.getElementById("inventoryList");
+ },
 
-  box.innerHTML=`<p>Oro: <strong class="gold">${G.gold}</strong></p>`;
+ passage:{
 
-  G.inventory.forEach((item,i)=>{
+  chapter:"Il passaggio segreto",
 
-    const row=document.createElement("div");
+  text:"Trovi una stretta apertura tra le rocce. Ti permette di evitare il guardiano, ma una trappola ti ferisce mentre attraversi il tunnel.",
 
-    row.className="row between stat";
+  choices:[["Prosegui verso la sala del sigillo","hall"]],
 
-    row.innerHTML=`
+  damage:8
 
-      <span>${escapeHTML(item.name)} × ${item.qty}</span>
+ },
 
-      <button class="action" onclick="useItem(${i})">Usa</button>`;
+ hall:{
 
-    box.appendChild(row);
+  chapter:"Capitolo III - Il sigillo spezzato",
 
-  });
+  text:"La sala sotterranea è illuminata da fiamme viola. Al centro fluttua un frammento di cristallo nero. Una voce risuona nella tua mente: «Unisciti a me e potrai governare ciò che resta del mondo».",
 
-  renderEquipment();
+  choices:[
 
-}
+   ["Distruggi il cristallo","finalfight"],
 
-function renderEquipment(){
+   ["Tocca il cristallo e ascolta la voce","darkpath"],
 
-  const box=document.getElementById("equipmentView");
+   ["Cerca un modo per sigillarlo","sealpath"]
 
-  box.innerHTML="";
+  ]
 
-  G.party.forEach((c,i)=>{
+ },
 
-    const panel=document.createElement("div");
+ darkpath:{
 
-    panel.className="panel";
+  chapter:"La tentazione dell'ombra",
 
-    panel.innerHTML=`<h3>${escapeHTML(c.name)}</h3><div class="slotgrid"></div>`;
+  text:"Il cristallo ti mostra visioni di potere e gloria. La tua pelle si raffredda, ma riesci a resistere alla sua influenza. La voce si trasforma in un urlo e una creatura emerge dal pavimento.",
 
-    box.appendChild(panel);
+  choices:[["Combatti la creatura","finalfight"]]
 
-    renderSlots(c,panel.querySelector(".slotgrid"));
+ },
 
-  });
+ sealpath:{
 
-}
+  chapter:"Il rituale antico",
 
-function renderSlots(c,box){
+  text:"Le iscrizioni sulle pareti descrivono un rituale dimenticato. Devi spezzare la protezione che circonda il cristallo. Un demone custode appare per impedirti di farlo.",
 
-  if(!box)return;
+  choices:[["Affronta il custode","finalfight"]]
 
-  box.innerHTML="";
+ },
 
-  SLOT_NAMES.forEach((name,i)=>{
+ victory:{
 
-    const item=c.equipment[i] || null;
+  chapter:"Capitolo IV - L'alba di Velmora",
 
-    const el=document.createElement("button");
+  text:"Con un ultimo colpo, il cristallo si frantuma. Un'onda di luce attraversa le gallerie e le ombre svaniscono.\\n\\nQuando torni a Brumavia, le campane suonano per la prima volta dopo settimane. Hai salvato Velmora... ma nelle profondità della terra, qualcosa ha ascoltato il tuo nome.\\n\\nLA TUA LEGGENDA È APPENA COMINCIATA.",
 
-    el.className="slot";
+  choices:[["Continua a esplorare Velmora","after"]]
 
-    el.innerHTML=`<strong>${item?"◆":"◇"}</strong>${name}<br>${item?escapeHTML(item.name):"Vuoto"}`;
+ },
 
-    el.onclick=()=>equipmentMenu(c,i);
+ after:{
 
-    box.appendChild(el);
+  chapter:"La leggenda continua",
 
-  });
+  text:"La pace è tornata, ma i confini del regno nascondono ancora misteri. Questa prima avventura è conclusa. Puoi ricominciare per vivere una nuova storia con un altro eroe.",
 
-}
+  choices:[["Torna alla creazione del personaggio","restart"]]
 
-function equipmentMenu(c,slot){
+ },
 
-  const current=c.equipment[slot];
+ death:{
 
-  let message=SLOT_NAMES[slot]+"\n";
+  chapter:"La fine del viaggio",
 
-  if(current) message+="Attualmente: "+current.name+"\n";
+  text:"Le tue forze ti abbandonano. Le ombre di Velmora ti avvolgono e la tua leggenda si interrompe qui. Ma ogni eroe può rialzarsi e tentare ancora.",
 
-  const choices=G.equipmentItems || [];
+  choices:[["Ricomincia l'avventura","restart"]]
 
-  const compatible=choices.filter(x=>x.slot===slot);
-
-  if(!current && !compatible.length){
-
-    alert(message+"Nessun oggetto disponibile per questo slot.");
-
-    return;
-
-  }
-
-  let options=[];
-
-  if(current) options.push("Rimuovi");
-
-  compatible.forEach(x=>options.push("Equipaggia: "+x.name));
-
-  const choice=prompt(message+options.map((x,i)=>(i+1)+". "+x).join("\n")+"\nInserisci numero:");
-
-  const n=Number(choice)-1;
-
-  if(!Number.isInteger(n)||n<0||n>=options.length)return;
-
-  if(current && n===0){
-
-    G.equipmentItems.push({...current,slot});
-
-    delete c.equipment[slot];
-
-  }else{
-
-    const item=compatible[n-(current?1:0)];
-
-    if(!item)return;
-
-    c.equipment[slot]=item;
-
-    G.equipmentItems=G.equipmentItems.filter(x=>x!==item);
-
-  }
-
-  saveGame();
-
-  renderAll();
-
-  openSub("personaggio");
-
-}
-
-function useItem(i){
-
-  const item=G.inventory[i];
-
-  if(!item || item.qty<=0)return;
-
-  const c=G.party[selectedCharacter];
-
-  if(item.type==="potion"){
-
-    c.hp=Math.min(c.maxHp,c.hp+25);
-
-  }else if(item.type==="bandage"){
-
-    c.hp=Math.min(c.maxHp,c.hp+8);
-
-  }else{
-
-    alert("Questo oggetto non è ancora utilizzabile.");
-
-    return;
-
-  }
-
-  item.qty--;
-
-  if(item.qty===0)G.inventory.splice(i,1);
-
-  saveGame();
-
-  renderAll();
-
-}
-
-/* ==========================================
-
-   STORIA E MISSIONI
-
-========================================== */
-
-const SCENES={
-
-  village:{
-
-    title:"Il villaggio senza ombre",
-
-    text:"Rovoscuro è avvolto da una nebbia innaturale. Gli abitanti parlano sottovoce. La campana della vecchia torre non suona da tre notti. Rauk osserva le strade deserte, mentre Leona si avvicina a una donna seduta davanti alla locanda.",
-
-    choices:[
-
-      ["Parlare con la donna", "woman"],
-
-      ["Esaminare la torre campanaria","tower"],
-
-      ["Cercare informazioni nella locanda","inn"],
-
-      ["Lasciare il villaggio e seguire il sentiero","forest"]
-
-    ]
-
-  },
-
-  woman:{
-
-    title:"La donna alla locanda",
-
-    text:"La donna racconta che alcuni abitanti sono scomparsi durante la notte. Prima di sparire, tutti avevano sentito tre rintocchi provenire dalla collina.",
-
-    choices:[
-
-      ["Promettere di aiutarla","tower"],
-
-      ["Chiederle una ricompensa","inn"],
-
-      ["Tornare alla piazza","village"]
-
-    ]
-
-  },
-
-  tower:{
-
-    title:"La torre della campana",
-
-    text:"La torre è antica e le sue pietre sono coperte da simboli sconosciuti. Una traccia di sangue conduce verso il bosco.",
-
-    choices:[
-
-      ["Seguire la traccia","forest"],
-
-      ["Esaminare i simboli","crypt"],
-
-      ["Tornare al villaggio","village"]
-
-    ]
-
-  },
-
-  inn:{
-
-    title:"La locanda del corvo",
-
-    text:"Il locandiere vi offre un tavolo vicino al fuoco. Un mercante parla di una cripta nascosta oltre il bosco.",
-
-    choices:[
-
-      ["Chiedere informazioni al mercante","forest"],
-
-      ["Riposare","camp"],
-
-      ["Tornare alla piazza","village"]
-
-    ]
-
-  },
-
-  forest:{
-
-    title:"Il bosco dei sussurri",
-
-    text:"Gli alberi si fanno sempre più fitti. Tra le radici emergono figure armate. Rauk ringhia e porta la mano all'arma.",
-
-    choices:[
-
-      ["Affrontare i nemici","battle"],
-
-      ["Cercare un sentiero alternativo","crypt"],
-
-      ["Ritirarsi al villaggio","village"]
-
-    ]
-
-  },
-
-  crypt:{
-
-    title:"La cripta dimenticata",
-
-    text:"Una scalinata scende sotto la collina. L'aria è fredda e sulle pareti sono incisi i simboli della campana. Qualcosa si muove nell'oscurità.",
-
-    choices:[
-
-      ["Entrare nella cripta","battleCrypt"],
-
-      ["Studiare le iscrizioni","tower"],
-
-      ["Tornare al bosco","forest"]
-
-    ]
-
-  },
-
-  camp:{
-
-    title:"Accampamento",
-
-    text:"Il gruppo accende un fuoco. Per qualche ora il mondo sembra meno minaccioso.",
-
-    choices:[
-
-      ["Riprendere il viaggio","forest"],
-
-      ["Tornare al villaggio","village"]
-
-    ]
-
-  },
-
-  ending:{
-
-    title:"La campana tace",
-
-    text:"Il Custode è caduto. Il silenzio torna a Rovoscuro, ma nelle profondità del regno qualcosa ha ascoltato la vostra vittoria.",
-
-    choices:[
-
-      ["Ricominciare l'avventura","restart"]
-
-    ]
-
-  }
+ }
 
 };
 
-function startPrologue(){
+const enemies={
 
-  showScene("village");
+ housefight:{name:"Predone corrotto",icon:"👺",hp:35,atk:8,xp:22,gold:8,next:"crypt"},
+
+ cryptfight:{name:"Guardiano scheletrico",icon:"💀",hp:52,atk:10,xp:35,gold:15,next:"hall"},
+
+ finalfight:{name:"Demone del sigillo",icon:"👿",hp:95,atk:14,xp:75,gold:40,next:"victory"}
+
+};
+
+function updatePreview(){
+
+ $("preview").textContent=emojis[selectedRace][selectedGender];
+
+ $("previewName").textContent=raceNames[selectedRace]+" · "+selectedGender;
+
+}
+
+document.querySelectorAll("#races .choice").forEach(el=>{
+
+ el.addEventListener("click",()=>{
+
+  document.querySelectorAll("#races .choice").forEach(x=>x.classList.remove("selected"));
+
+  el.classList.add("selected");
+
+  selectedRace=el.dataset.race;selectedGender=el.dataset.gender;updatePreview();
+
+ });
+
+});
+
+document.querySelectorAll("#classes .choice").forEach(el=>{
+
+ el.addEventListener("click",()=>{
+
+  document.querySelectorAll("#classes .choice").forEach(x=>x.classList.remove("selected"));
+
+  el.classList.add("selected");selectedClass=el.dataset.class;
+
+ });
+
+});
+
+function diary(msg){
+
+ $("diary").innerHTML+= "<br>• "+escapeHtml(msg);
+
+ $("diary").scrollTop=$("diary").scrollHeight;
+
+}
+
+function escapeHtml(s){
+
+ return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+}
+
+function startGame(){
+
+ const base=classData[selectedClass];
+
+ player={
+
+  name:$("heroName").value.trim()||"Aren",
+
+  race:selectedRace,gender:selectedGender,klass:selectedClass,
+
+  eyes:$("eyes").value,hair:$("hair").value,clothes:$("clothes").value,body:$("body").value,
+
+  hp:base.hp,maxHp:base.hp,atk:base.atk,def:base.def,
+
+  level:1,xp:0,nextXp:50,potions:2,gold:10
+
+ };
+
+ $("creation").classList.add("hidden");$("game").classList.remove("hidden");
+
+ $("gameAvatar").textContent=emojis[player.race][player.gender];
+
+ $("gameName").textContent=player.name+" · "+raceNames[player.race]+" · "+player.klass;
+
+ diary("Sei entrato a Velmora come "+player.name+".");
+
+ updateStats();showScene("intro");
+
+}
+
+function updateStats(){
+
+ if(!player)return;
+
+ $("level").textContent=player.level;$("attack").textContent=player.atk;$("defense").textContent=player.def;
+
+ $("hpText").textContent=player.hp+" / "+player.maxHp;
+
+ $("hpBar").style.width=Math.max(0,player.hp/player.maxHp*100)+"%";
+
+ $("xpText").textContent=player.xp+" / "+player.nextXp;
+
+ $("xpBar").style.width=Math.min(100,player.xp/player.nextXp*100)+"%";
+
+ $("potions").textContent=player.potions;$("gold").textContent=player.gold;
 
 }
 
 function showScene(id){
 
-  if(!SCENES[id])return;
+ currentScene=id;inBattle=false;$("battle").classList.add("hidden");
 
-  G.scene=id;
+ const s=scenes[id];if(!s)return;
 
-  G.sceneTitle=SCENES[id].title;
+ if(s.reward){
 
-  G.visited=G.visited||[];
+  player.gold+=(s.reward.gold||0);player.potions+=(s.reward.potions||0);
 
-  if(!G.visited.includes(G.sceneTitle))G.visited.push(G.sceneTitle);
+  diary("Hai trovato una ricompensa.");
 
-  renderMission();
+  s.reward=null;
 
-  openTab("missione");
+ }
 
-  saveGame();
+ if(s.damage){
 
-}
+  player.hp=Math.max(1,player.hp-s.damage);
 
-function renderMission(){
+  diary("Hai perso "+s.damage+" punti salute.");
 
-  if(!G)return;
+  s.damage=0;updateStats();
 
-  const scene=SCENES[G.scene]||SCENES.village;
+ }
 
-  document.getElementById("sceneTitle").textContent=scene.title;
+ $("chapter").textContent=s.chapter;$("story").textContent=s.text;
 
-  document.getElementById("storyText").textContent=scene.text;
+ $("choices").innerHTML="";
 
-  const choices=document.getElementById("storyChoices");
+ s.choices.forEach(([label,next])=>{
 
-  choices.innerHTML="";
+  const b=document.createElement("button");b.className="choicebtn";b.textContent=label;
 
-  scene.choices.forEach(([label,next])=>{
+  b.addEventListener("click",()=>{
 
-    const b=document.createElement("button");
+   if(next==="restart"){restart();return;}
 
-    b.className="action choice";
+   if(enemies[next]){startBattle(next);return;}
 
-    b.textContent=label;
-
-    b.onclick=()=>chooseScene(next);
-
-    choices.appendChild(b);
+   showScene(next);
 
   });
 
-  document.getElementById("journal").innerHTML=
+  $("choices").appendChild(b);
 
-    (G.journal||[]).map(x=>"<p>• "+escapeHTML(x)+"</p>").join("");
-
-}
-
-function chooseScene(next){
-
-  if(next==="battle"){
-
-    startBattle("bandits");
-
-    return;
-
-  }
-
-  if(next==="battleCrypt"){
-
-    startBattle("crypt");
-
-    return;
-
-  }
-
-  if(next==="restart"){
-
-    createNewGame({});
-
-    return;
-
-  }
-
-  if(next==="camp"){
-
-    showScene("camp");
-
-    return;
-
-  }
-
-  showScene(next);
+ });
 
 }
 
-/* ==========================================
+function startBattle(id){
 
-   COMBATTIMENTO D20
+ const data=enemies[id];
 
-========================================== */
+ enemy={...data,maxHp:data.hp};
 
-const ENEMY_TEMPLATES={
+ inBattle=true;$("battle").classList.remove("hidden");
 
-  bandits:[
+ $("choices").innerHTML="";
 
-    {name:"Orco predone",hp:25,atk:6,def:2,xp:20},
+ $("story").textContent="La creatura ti sbarra la strada. Non puoi proseguire senza affrontarla.";
 
-    {name:"Bandito",hp:18,atk:5,def:1,xp:15},
+ $("chapter").textContent="Un nemico ti attacca!";
 
-    {name:"Orco predone",hp:25,atk:6,def:2,xp:20}
+ $("enemyName").textContent=enemy.name;$("enemyIcon").textContent=enemy.icon;
 
-  ],
+ logBattle("Il combattimento contro "+enemy.name+" ha inizio.");
 
-  crypt:[
-
-    {name:"Guardia della cripta",hp:32,atk:7,def:3,xp:25},
-
-    {name:"Scheletro maledetto",hp:20,atk:5,def:1,xp:15},
-
-    {name:"Sacerdote oscuro",hp:24,atk:6,def:2,xp:30}
-
-  ],
-
-  boss:[
-
-    {name:"Custode della Campana",hp:110,atk:10,def:4,xp:120,boss:true}
-
-  ]
-
-};
-
-function startBattle(type){
-
-  const enemies=ENEMY_TEMPLATES[type]||ENEMY_TEMPLATES.bandits;
-
-  battle={
-
-    enemies:enemies.map((e,i)=>({...e,id:i,maxHp:e.hp,alive:true})),
-
-    order:[],
-
-    turn:0,
-
-    activeIndex:0,
-
-    over:false,
-
-    type,
-
-    message:"I nemici si preparano ad attaccare."
-
-  };
-
-  battle.order=G.activeParty
-
-    .map(i=>({partyIndex:i,agility:G.party[i].stats.Agilità}))
-
-    .sort((a,b)=>b.agility-a.agility)
-
-    .map(x=>x.partyIndex);
-
-  battle.order.push(-1);
-
-  battle.turn=0;
-
-  selectedEnemy=0;
-
-  document.getElementById("battleScreen").classList.remove("hidden");
-
-  document.querySelectorAll(".tab").forEach(x=>x.classList.add("hidden"));
-
-  showBattle();
+ updateEnemy();
 
 }
 
-function showBattle(){
+function logBattle(msg){
 
-  if(!battle)return;
+ $("battleLog").innerHTML+= "<br>• "+escapeHtml(msg);
 
-  document.getElementById("battleScreen").classList.remove("hidden");
-
-  document.getElementById("battleMessage").textContent=battle.message;
-
-  const enemyBox=document.getElementById("enemyList");
-
-  enemyBox.innerHTML="";
-
-  battle.enemies.forEach((e,i)=>{
-
-    if(!e.alive)return;
-
-    const b=document.createElement("button");
-
-    b.className="enemy "+(selectedEnemy===i?"target":"");
-
-    b.innerHTML=`<strong>${escapeHTML(e.name)}</strong>
-
-      <div>${e.hp}/${e.maxHp} HP</div>
-
-      <div class="bar"><span style="width:${percent(e.hp,e.maxHp)}%"></span></div>`;
-
-    b.onclick=()=>{selectedEnemy=i;showBattle();};
-
-    enemyBox.appendChild(b);
-
-  });
-
-  const fighter=currentFighter();
-
-  const active=document.getElementById("activeFighter");
-
-  const actions=document.getElementById("battleActions");
-
-  if(!fighter){
-
-    active.innerHTML="<p>Turno dei nemici.</p>";
-
-    actions.innerHTML="";
-
-    return;
-
-  }
-
-  active.innerHTML=`
-
-    <strong>${escapeHTML(fighter.name)}</strong>
-
-    <p>HP ${fighter.hp}/${fighter.maxHp} · PA ${fighter.ap}/${fighter.maxAp}</p>
-
-    <div class="bar"><span style="width:${percent(fighter.hp,fighter.maxHp)}%"></span></div>
-
-    <div class="bar ap"><span style="width:${percent(fighter.ap,fighter.maxAp)}%"></span></div>`;
-
-  actions.innerHTML="";
-
-  addBattleButton(actions,"Attacco",()=>playerAttack(0,1));
-
-  addBattleButton(actions,"Abilità",()=>showBattleSkills());
-
-  addBattleButton(actions,"Pozione",()=>battlePotion());
-
-  addBattleButton(actions,"Termina turno",()=>endTurn());
-
-  document.getElementById("initiative").textContent=
-
-    battle.order.map(i=>i===-1?"Nemici":G.party[i].name).join(" → ");
+ $("battleLog").scrollTop=$("battleLog").scrollHeight;
 
 }
 
-function currentFighter(){
+function updateEnemy(){
 
-  if(!battle)return null;
+ $("enemyHpText").textContent="Salute: "+enemy.hp+" / "+enemy.maxHp;
 
-  const index=battle.order[battle.turn];
-
-  if(index===undefined||index===-1)return null;
-
-  return G.party[index];
+ $("enemyHpBar").style.width=Math.max(0,enemy.hp/enemy.maxHp*100)+"%";
 
 }
 
-function addBattleButton(box,label,fn){
+function roll(){return Math.floor(Math.random()*20)+1;}
 
-  const b=document.createElement("button");
+function playerAttack(heavy){
 
-  b.className="action";
+ if(!inBattle||!enemy)return;
 
-  b.textContent=label;
+ const dice=roll();
 
-  b.onclick=fn;
+ let damage=0;
 
-  box.appendChild(b);
+ if(dice===1){
 
-}
+  logBattle("Hai mancato il bersaglio! (Dado: 1)");
 
-function d20(){
+ }else{
 
-  return Math.floor(Math.random()*20)+1;
+  damage=player.atk+(heavy?Math.floor(player.atk*.7):0)+Math.floor(Math.random()*5);
 
-}
+  if(dice===20){damage*=2;logBattle("COLPO CRITICO! Dado: 20.");}
 
-function playerAttack(cost=0,multiplier=1){
+  else if(dice>=14)logBattle("Colpo preciso! Dado: "+dice+".");
 
-  const c=currentFighter();
+  else logBattle("Hai colpito! Dado: "+dice+".");
 
-  const e=battle.enemies[selectedEnemy];
+  enemy.hp=Math.max(0,enemy.hp-damage);
 
-  if(!c||!e||!e.alive)return;
+  logBattle("Hai inflitto "+damage+" danni.");
 
-  if(c.ap<cost){
+ }
 
-    battle.message="PA insufficienti.";
+ updateEnemy();
 
-    showBattle();
+ if(enemy.hp<=0){winBattle();return;}
 
-    return;
-
-  }
-
-  c.ap-=cost;
-
-  const roll=d20();
-
-  const bonus=Math.floor(c.stats.Forza/2);
-
-  const hit=roll===20 || (roll!==1 && roll+bonus>=10+e.def);
-
-  if(hit){
-
-    const damage=Math.max(1,Math.round((3+c.stats.Forza+Math.floor(Math.random()*5))*multiplier));
-
-    e.hp-=damage;
-
-    battle.message=`${c.name} colpisce ${e.name}! D20: ${roll}. Danni: ${damage}.`;
-
-    if(e.hp<=0){
-
-      e.hp=0;
-
-      e.alive=false;
-
-      battle.message+=` ${e.name} è stato sconfitto!`;
-
-      gainXP(c,e.xp);
-
-      G.gold+=Math.floor(Math.random()*6)+3;
-
-    }
-
-  }else{
-
-    battle.message=`${c.name} manca il bersaglio. D20: ${roll}.`;
-
-  }
-
-  if(battle.enemies.every(x=>!x.alive)){
-
-    victory();
-
-    return;
-
-  }
-
-  showBattle();
-
-  saveGame();
-
-}
-
-function showBattleSkills(){
-
-  const c=currentFighter();
-
-  const box=document.getElementById("battleActions");
-
-  box.innerHTML="";
-
-  const list=ABILITIES[c.class]||[];
-
-  list.forEach(a=>{
-
-    addBattleButton(box,`${a.name} (${a.cost} PA)`,()=>{
-
-      useBattleAbility(a);
-
-    });
-
-  });
-
-  addBattleButton(box,"Indietro",showBattle);
-
-}
-
-function useBattleAbility(a){
-
-  const c=currentFighter();
-
-  if(!c||c.ap<a.cost){
-
-    battle.message="PA insufficienti.";
-
-    showBattle();
-
-    return;
-
-  }
-
-  c.ap-=a.cost;
-
-  if(a.heal){
-
-    const target=G.party.find(x=>x.hp>0 && G.activeParty.includes(G.party.indexOf(x)));
-
-    if(target){
-
-      target.hp=Math.min(target.maxHp,target.hp+a.heal);
-
-      battle.message=`${c.name} cura ${target.name} di ${a.heal} HP.`;
-
-    }
-
-  }else if(a.defend){
-
-    c.defending=true;
-
-    battle.message=`${c.name} si prepara a difendersi.`;
-
-  }else if(a.area){
-
-    battle.enemies.filter(e=>e.alive).forEach(e=>{
-
-      const damage=Math.round((4+c.stats.Intelletto)*a.damage);
-
-      e.hp-=damage;
-
-      if(e.hp<=0){e.hp=0;e.alive=false;gainXP(c,e.xp);G.gold+=3;}
-
-    });
-
-    battle.message=`${c.name} usa ${a.name}!`;
-
-  }else{
-
-    playerAbilityAttack(a);
-
-    return;
-
-  }
-
-  if(battle.enemies.every(x=>!x.alive)){
-
-    victory();
-
-    return;
-
-  }
-
-  showBattle();
-
-  saveGame();
-
-}
-
-function playerAbilityAttack(a){
-
-  const c=currentFighter();
-
-  const e=battle.enemies[selectedEnemy];
-
-  if(!e||!e.alive){showBattle();return;}
-
-  const roll=d20();
-
-  if(roll+Math.floor(c.stats.Agilità/2)>=10+e.def || roll===20){
-
-    const damage=Math.round((5+c.stats.Forza+c.stats.Intelletto/2)*a.damage);
-
-    e.hp-=damage;
-
-    battle.message=`${c.name} usa ${a.name}: ${damage} danni!`;
-
-    if(e.hp<=0){e.hp=0;e.alive=false;gainXP(c,e.xp);G.gold+=3;}
-
-  }else{
-
-    battle.message=`${a.name} fallisce! D20: ${roll}.`;
-
-  }
-
-  if(battle.enemies.every(x=>!x.alive)){victory();return;}
-
-  showBattle();
-
-  saveGame();
-
-}
-
-function battlePotion(){
-
-  const c=currentFighter();
-
-  const index=G.inventory.findIndex(x=>x.type==="potion"&&x.qty>0);
-
-  if(index<0){
-
-    battle.message="Non hai pozioni.";
-
-    showBattle();
-
-    return;
-
-  }
-
-  if(c.ap<1){
-
-    battle.message="Non hai PA sufficienti.";
-
-    showBattle();
-
-    return;
-
-  }
-
-  c.ap--;
-
-  c.hp=Math.min(c.maxHp,c.hp+25);
-
-  G.inventory[index].qty--;
-
-  if(!G.inventory[index].qty)G.inventory.splice(index,1);
-
-  battle.message=`${c.name} usa una pozione curativa.`;
-
-  showBattle();
-
-  saveGame();
-
-}
-
-function endTurn(){
-
-  if(!battle)return;
-
-  battle.turn++;
-
-  if(battle.turn>=battle.order.length){
-
-    battle.turn=0;
-
-  }
-
-  const index=battle.order[battle.turn];
-
-  if(index===-1){
-
-    enemyTurn();
-
-    return;
-
-  }
-
-  const c=G.party[index];
-
-  if(!c||c.hp<=0){
-
-    endTurn();
-
-    return;
-
-  }
-
-  c.ap=Math.min(c.maxAp,c.ap+1);
-
-  battle.message=`Turno di ${c.name}.`;
-
-  showBattle();
+ enemyTurn();
 
 }
 
 function enemyTurn(){
 
-  battle.enemies.filter(e=>e.alive).forEach(e=>{
+ const dice=roll();
 
-    const targets=G.activeParty
+ if(dice===1){logBattle(enemy.name+" manca il colpo.");return;}
 
-      .map(i=>G.party[i])
+ let damage=Math.max(1,enemy.atk+Math.floor(Math.random()*5)-player.def);
 
-      .filter(c=>c.hp>0);
+ if(dice===20)damage+=8;
 
-    if(!targets.length)return;
+ player.hp=Math.max(0,player.hp-damage);
 
-    const target=targets[Math.floor(Math.random()*targets.length)];
+ logBattle(enemy.name+" ti infligge "+damage+" danni (dado: "+dice+").");
 
-    const roll=d20();
+ updateStats();
 
-    const damage=Math.max(1,e.atk-Math.floor(target.stats.Vitalità/4));
-
-    if(target.defending){
-
-      target.hp-=Math.ceil(damage/2);
-
-      target.defending=false;
-
-    }else{
-
-      target.hp-=damage;
-
-    }
-
-    if(target.hp<=0){
-
-      target.hp=0;
-
-      target.falls++;
-
-      target.alive=false;
-
-      battle.message+=` ${target.name} è caduto!`;
-
-      if(target.falls>=3){
-
-        target.permanentDeath=true;
-
-      }
-
-    }
-
-  });
-
-  if(G.party.filter(c=>G.activeParty.includes(G.party.indexOf(c))&&c.hp>0).length===0){
-
-    defeat();
-
-    return;
-
-  }
-
-  battle.turn=0;
-
-  while(battle.order[battle.turn]===-1 ||
-
-        !G.party[battle.order[battle.turn]] ||
-
-        G.party[battle.order[battle.turn]].hp<=0){
-
-    battle.turn++;
-
-    if(battle.turn>=battle.order.length)battle.turn=0;
-
-  }
-
-  const c=currentFighter();
-
-  c.ap=Math.min(c.maxAp,c.ap+1);
-
-  battle.message="I nemici hanno attaccato. È il tuo turno.";
-
-  showBattle();
-
-  saveGame();
+ if(player.hp<=0){inBattle=false;$("battle").classList.add("hidden");showScene("death");}
 
 }
 
-function gainXP(c,xp){
+function winBattle(){
 
-  c.xp+=xp;
+ const defeated=enemy;
 
-  while(c.xp>=c.xpNext){
+ inBattle=false;
 
-    c.xp-=c.xpNext;
+ player.gold+=defeated.gold;gainXp(defeated.xp);
 
-    c.level++;
+ diary("Hai sconfitto "+defeated.name+". Hai ottenuto "+defeated.xp+" XP e "+defeated.gold+" monete.");
 
-    c.xpNext=Math.round(c.xpNext*1.3);
+ $("battle").classList.add("hidden");enemy=null;updateStats();
 
-    c.statPoints=(c.statPoints||0)+2;
-
-    c.maxHp+=5;
-
-    c.hp=c.maxHp;
-
-    c.maxAp=CLASS_AP[c.class]||5;
-
-    c.ap=c.maxAp;
-
-    battle.message+=` ${c.name} è salito al livello ${c.level}!`;
-
-  }
+ showScene(defeated.next);
 
 }
 
-function victory(){
+function gainXp(amount){
 
-  battle.over=true;
+ player.xp+=amount;
 
-  const boss=battle.type==="boss";
+ while(player.xp>=player.nextXp){
 
-  if(boss){
+  player.xp-=player.nextXp;player.level++;player.nextXp=Math.floor(player.nextXp*1.5);
 
-    G.journal.push("Il Custode della Campana è stato sconfitto.");
+  player.maxHp+=12;player.hp=player.maxHp;player.atk+=2;player.def+=1;
 
-    G.flags.bossDefeated=true;
+  diary("LIVELLO AUMENTATO! Ora sei al livello "+player.level+".");
 
-    G.scene="ending";
+ }
 
-  }else{
-
-    G.journal.push("Il gruppo ha vinto uno scontro.");
-
-    G.reputation++;
-
-  }
-
-  battle=null;
-
-  document.getElementById("battleScreen").classList.add("hidden");
-
-  showScene(boss?"ending":"crypt");
-
-  saveGame();
+ updateStats();
 
 }
 
-function defeat(){
+function usePotion(){
 
-  battle=null;
+ if(!inBattle||!player)return;
 
-  document.getElementById("battleScreen").classList.add("hidden");
+ if(player.potions<=0){logBattle("Non hai pozioni.");return;}
 
-  G.journal.push("La squadra è stata sconfitta.");
+ if(player.hp===player.maxHp){logBattle("La tua salute è già al massimo.");return;}
 
-  G.party.forEach(c=>{
+ player.potions--;
 
-    if(c.hp<=0){
+ const heal=Math.min(40,player.maxHp-player.hp);
 
-      c.hp=1;
+ player.hp+=heal;logBattle("Hai recuperato "+heal+" punti salute.");
 
-      c.alive=true;
-
-      c.maxHp=Math.max(1,c.maxHp-3);
-
-      c.wounds++;
-
-    }
-
-  });
-
-  alert("La squadra è stata sconfitta. I caduti tornano con 1 HP e ricevono una ferita.");
-
-  showScene("camp");
-
-  saveGame();
+ updateStats();enemyTurn();
 
 }
 
-/* ==========================================
+function flee(){
 
-   GILDA E RECLUTAMENTO
+ if(!inBattle)return;
 
-========================================== */
+ if(Math.random()<.55){
 
-const NAMES=["Aldren","Mira","Thoren","Selene","Kael","Eryn","Darian","Nessa"];
+  logBattle("Sei riuscito a fuggire!");
 
-const RACES=["Umano","Elfo","Orco","Popolo Leone","Popolo Lupo","Popolo Coniglio"];
+  inBattle=false;$("battle").classList.add("hidden");
 
-const CLASSES=["Guerriero","Ladro","Mago","Chierico","Druido","Arciere"];
+  showScene("crypt");
 
-function renderGuild(box){
+ }else{
 
-  box.innerHTML=`
+  logBattle("Non sei riuscito a fuggire!");
 
-    <div class="panel"><h2>Gilda degli Avventurieri</h2>
+  enemyTurn();
 
-    <p>Rango: ${G.guildRank}</p>
-
-    <p>Reputazione: ${G.reputation}</p>
-
-    <h3>Bacheca delle missioni</h3>
-
-    <p>Le richieste di lavoro vengono aggiornate periodicamente.</p>
-
-    <button class="action" onclick="randomQuest()">Cerca missione</button>
-
-    <button class="action" onclick="recruit()">Cerca recluta</button>
-
-    <div id="guildResult"></div></div>`;
+ }
 
 }
 
-function randomQuest(){
+function save(){
 
-  const quests=[
+ if(!player){alert("Non c'è una partita da salvare.");return;}
 
-    "Caccia ai lupi delle colline",
+ const data={player,currentScene,diary:$("diary").innerHTML};
 
-    "Recupero di materiali nel bosco",
+ localStorage.setItem("velmoraSave",JSON.stringify(data));
 
-    "Scorta di un mercante",
-
-    "Esplorazione di una rovina"
-
-  ];
-
-  const q=quests[Math.floor(Math.random()*quests.length)];
-
-  G.quests.push(q);
-
-  document.getElementById("guildResult").innerHTML=
-
-    `<p class="notice">${q}<br>Ricompensa: oro ed esperienza.</p>
-
-    <button class="action" onclick="completeQuest()">Completa missione</button>`;
-
-  saveGame();
+ alert("Partita salvata su questo dispositivo!");
 
 }
 
-function completeQuest(){
+function load(){
 
-  G.gold+=15;
+ const raw=localStorage.getItem("velmoraSave");
 
-  G.reputation++;
+ if(!raw){alert("Non è stato trovato nessun salvataggio.");return;}
 
-  G.party.forEach(c=>gainXP(c,10));
+ try{
 
-  G.journal.push("Missione della gilda completata.");
+  const data=JSON.parse(raw);
 
-  saveGame();
+  player=data.player;currentScene=data.currentScene;
 
-  alert("Missione completata! Hai ricevuto 15 monete d'oro.");
+  $("creation").classList.add("hidden");$("game").classList.remove("hidden");
 
-}
+  $("gameAvatar").textContent=emojis[player.race][player.gender];
 
-function recruit(){
+  $("gameName").textContent=player.name+" · "+raceNames[player.race]+" · "+player.klass;
 
-  const race=RACES[Math.floor(Math.random()*RACES.length)];
+  $("diary").innerHTML=data.diary||"";
 
-  const cls=CLASSES[Math.floor(Math.random()*CLASSES.length)];
+  updateStats();showScene(currentScene);
 
-  const name=NAMES[Math.floor(Math.random()*NAMES.length)];
+  alert("Partita caricata!");
 
-  const cost=20;
-
-  if(G.gold<cost){
-
-    alert("Non hai abbastanza oro. Servono 20 monete.");
-
-    return;
-
-  }
-
-  if(G.party.length>=4){
-
-    alert("La squadra è già composta da quattro avventurieri.");
-
-    return;
-
-  }
-
-  const c=companion(name,race,cls,
-
-    {Forza:5,Agilità:5,Vitalità:5,Intelletto:5,Volontà:5,Percezione:5,Carisma:5},27);
-
-  G.gold-=cost;
-
-  G.party.push(c);
-
-  G.activeParty.push(G.party.length-1);
-
-  saveGame();
-
-  alert(`${name}, ${race} ${cls}, si è unito alla squadra!`);
-
-  renderParty();
+ }catch(e){alert("Il salvataggio non è valido.");}
 
 }
 
-/* ==========================================
+function restart(){
 
-   ACCAMPAMENTO
+ if(!confirm("Vuoi ricominciare? La partita attuale verrà sostituita."))return;
 
-========================================== */
+ player=null;enemy=null;inBattle=false;
 
-function renderCamp(box){
+ $("game").classList.add("hidden");$("creation").classList.remove("hidden");
 
-  box.innerHTML=`
-
-    <div class="panel"><h2>Accampamento</h2>
-
-    <p>Il fuoco illumina i volti dei compagni. È il momento di riposare.</p>
-
-    <button class="action good" onclick="restParty()">Riposare</button>
-
-    <button class="action" onclick="campTalk()">Parlare con i compagni</button>
-
-    <div id="campResult"></div></div>`;
+ $("diary").textContent="La tua avventura comincia.";
 
 }
 
-function restParty(){
+$("start").addEventListener("click",startGame);
 
-  G.party.forEach(c=>{
+$("normal").addEventListener("click",()=>playerAttack(false));
 
-    c.hp=c.maxHp;
+$("heavy").addEventListener("click",()=>playerAttack(true));
 
-    c.ap=c.maxAp;
+$("potion").addEventListener("click",usePotion);
 
-    c.wounds=0;
+$("flee").addEventListener("click",flee);
 
-    c.alive=true;
+$("save").addEventListener("click",save);
 
-  });
+$("load").addEventListener("click",load);
 
-  saveGame();
+$("restart").addEventListener("click",restart);
 
-  document.getElementById("campResult").textContent=
-
-    "Il gruppo ha recuperato le forze e curato le ferite.";
-
-}
-
-function campTalk(){
-
-  const lines=[
-
-    "Rauk racconta di una caccia nelle montagne del nord.",
-
-    "Leona parla del tempio in cui è cresciuta.",
-
-    "Il fuoco scoppietta mentre i compagni si raccontano le proprie storie."
-
-  ];
-
-  document.getElementById("campResult").textContent=
-
-    lines[Math.floor(Math.random()*lines.length)];
-
-}
-
-/* ==========================================
-
-   MAPPA
-
-========================================== */
-
-function renderMap(box){
-
-  const places=[
-
-    ["Rovoscuro","Villaggio"],
-
-    ["Bosco dei sussurri","Foresta"],
-
-    ["Cripta dimenticata","Dungeon"],
-
-    ["Valle di Velmora","Regione"],
-
-    ["Castello di Nerofumo","Castello"]
-
-  ];
-
-  box.innerHTML=`<div class="panel"><h2>Mappa di Velmora</h2>
-
-  <p class="muted">Le terre conosciute e i luoghi da esplorare.</p>
-
-  <div class="statgrid">`+
-
-  places.map((p,i)=>`
-
-    <button class="action" onclick="travelTo(${i})">
-
-    ${p[0]}<br><small>${p[1]}</small>
-
-    </button>`).join("")+
-
-  `</div></div>`;
-
-}
-
-function travelTo(i){
-
-  const scenes=["village","forest","crypt","forest","crypt"];
-
-  showScene(scenes[i]);
-
-}
-
-/* ==========================================
-
-   OPZIONI
-
-========================================== */
-
-function renderOptions(box){
-
-  box.innerHTML=`
-
-    <div class="panel"><h2>Opzioni</h2>
-
-    <button class="action good" onclick="saveGame();alert('Partita salvata!')">Salva partita</button>
-
-    <button class="action" onclick="loadGame()">Carica partita</button>
-
-    <button class="action danger" onclick="deleteSave()">Elimina salvataggio</button>
-
-    <p class="muted">Il salvataggio è conservato nel browser di questo dispositivo.</p>
-
-    </div>`;
-
-}
-
-function deleteSave(){
-
-  if(confirm("Vuoi eliminare la partita salvata?")){
-
-    localStorage.removeItem(SAVE_KEY);
-
-    alert("Salvataggio eliminato.");
-
-  }
-
-}
-
-/* ==========================================
-
-   UTILITÀ E AVVIO
-
-========================================== */
-
-function updateTop(){
-
-  if(!G)return;
-
-  document.getElementById("playerLevel").textContent=
-
-    G.party[0]?.level||1;
-
-  document.getElementById("gold").textContent=G.gold;
-
-  document.getElementById("guildRank").textContent=G.guildRank;
-
-}
-
-function renderAll(){
-
-  if(!G)return;
-
-  updateTop();
-
-  renderParty();
-
-  renderInventory();
-
-  renderMission();
-
-}
-
-function percent(a,b){
-
-  return Math.max(0,Math.min(100,(Number(a)/Math.max(1,Number(b)))*100));
-
-}
-
-function escapeHTML(s){
-
-  return String(s??"").replace(/[&<>"']/g,ch=>({
-
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-
-  })[ch]);
-
-}
-
-function escapeAttr(s){
-
-  return escapeHTML(s);
-
-}
-
-(function init(){
-
-  try{
-
-    const raw=localStorage.getItem(SAVE_KEY);
-
-    if(raw){
-
-      const saved=JSON.parse(raw);
-
-      if(saved.G){
-
-        G=saved.G;
-
-        battle=saved.battle||null;
-
-        renderAll();
-
-        if(battle)showBattle();
-
-        return;
-
-      }
-
-    }
-
-  }catch(e){}
-
-  const created=readCreatedCharacter();
-
-  if(created){
-
-    createNewGame(created);
-
-  }else{
-
-    document.getElementById("startScreen").classList.remove("hidden");
-
-    document.getElementById("gameScreen").classList.add("hidden");
-
-  }
+updatePreview();
 
 })();
 
 </script>
 
 </body>
-
-</html>
