@@ -14,65 +14,23 @@
 
 <style>
 
-:root{
-
---bg:#100e0c;
-
---panel:rgba(29,25,21,.96);
-
---panel2:#29221b;
-
---gold:#d6b16c;
-
---gold2:#96713b;
-
---text:#e9dfc8;
-
---muted:#b9a98b
-
-}
+:root{--bg:#100e0c;--panel:rgba(29,25,21,.96);--panel2:#29221b;--gold:#d6b16c;--gold2:#96713b;--text:#e9dfc8;--muted:#b9a98b}
 
 *{box-sizing:border-box}
 
-html{min-height:100%;background:var(--bg)}
+html{min-height:100%;background:var(--bg);scroll-behavior:smooth}
 
-body{
+body{margin:0;min-height:100vh;color:var(--text);font-family:Georgia,serif;background-color:var(--bg);background-image:linear-gradient(rgba(12,9,7,.62),rgba(12,9,7,.82)),url("./valle_velmora.jpg");background-position:center;background-size:cover;background-attachment:fixed}
 
-margin:0;min-height:100vh;color:var(--text);
-
-font-family:Georgia,serif;background-color:var(--bg);
-
-background-image:linear-gradient(rgba(12,9,7,.62),rgba(12,9,7,.82)),url("./valle_velmora.jpg");
-
-background-position:center;background-size:cover;background-attachment:fixed
-
-}
-
-header{
-
-text-align:center;padding:20px 12px 15px;
-
-background:linear-gradient(rgba(41,32,22,.94),rgba(16,14,12,.85));
-
-border-bottom:1px solid var(--gold2)
-
-}
+header{text-align:center;padding:20px 12px 15px;background:linear-gradient(rgba(41,32,22,.94),rgba(16,14,12,.85));border-bottom:1px solid var(--gold2)}
 
 h1{color:var(--gold);letter-spacing:3px;font-size:clamp(21px,5vw,29px);margin:4px 0}
 
 header p{color:var(--muted);font-size:13px;margin:7px 0 0}
 
-main{width:min(920px,94%);margin:16px auto 110px}
+main{width:min(920px,94%);margin:16px auto 40px;padding-bottom:25px}
 
-.panel{
-
-background:var(--panel);border:1px solid #69502e;border-radius:12px;
-
-padding:14px;margin-bottom:14px;box-shadow:0 8px 24px #0008;
-
-backdrop-filter:blur(3px)
-
-}
+.panel{background:var(--panel);border:1px solid #69502e;border-radius:12px;padding:14px;margin-bottom:14px;box-shadow:0 8px 24px #0008;backdrop-filter:blur(3px)}
 
 h2{color:var(--gold);font-size:19px;margin:0 0 12px}
 
@@ -84,23 +42,11 @@ p{line-height:1.5}
 
 .grid,.classgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
 
-.choice,.btn{
-
-background:#29221b;border:1px solid #57442b;color:var(--text);
-
-border-radius:8px;padding:11px 8px;font:14px Georgia,serif;cursor:pointer
-
-}
+.choice,.btn{background:#29221b;border:1px solid #57442b;color:var(--text);border-radius:8px;padding:11px 8px;font:14px Georgia,serif;cursor:pointer}
 
 .choice.selected{border:2px solid var(--gold);background:#49351e;color:#ffe0a0}
 
-.btn{
-
-background:linear-gradient(#8d682f,#563b1c);border-color:#c49b55;
-
-color:#fff0d0;font-weight:bold
-
-}
+.btn{background:linear-gradient(#8d682f,#563b1c);border-color:#c49b55;color:#fff0d0;font-weight:bold}
 
 .btn.secondary{background:#29221b;border-color:#80623a}
 
@@ -110,35 +56,15 @@ color:#fff0d0;font-weight:bold
 
 .layout{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
-.portrait{
-
-display:block;width:100%;height:520px;max-height:65vh;aspect-ratio:2/3;
-
-object-fit:contain;object-position:center;background:#100e0c;
-
-border:2px solid var(--gold2);border-radius:9px
-
-}
+.portrait{display:block;width:100%;height:520px;max-height:65vh;aspect-ratio:2/3;object-fit:contain;object-position:center;background:#100e0c;border:2px solid var(--gold2);border-radius:9px}
 
 .preview{text-align:center}
 
-.input{
-
-width:100%;padding:12px;border-radius:7px;background:#100e0c;
-
-border:1px solid #8a6a3d;color:white;font-size:16px;margin:6px 0 12px
-
-}
+.input{width:100%;padding:12px;border-radius:7px;background:#100e0c;border:1px solid #8a6a3d;color:white;font-size:16px;margin:6px 0 12px}
 
 .stats{display:grid;grid-template-columns:1fr 1fr;gap:7px}
 
-.stat{
-
-background:var(--panel2);padding:9px;border-radius:7px;
-
-display:flex;justify-content:space-between;gap:8px;font-size:13px
-
-}
+.stat{background:var(--panel2);padding:9px;border-radius:7px;display:flex;justify-content:space-between;gap:8px;font-size:13px}
 
 .stat b{color:#e8bd72}
 
@@ -152,25 +78,13 @@ display:flex;justify-content:space-between;gap:8px;font-size:13px
 
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 
-.badge{
-
-display:inline-block;border:1px solid #80623a;color:#e8c985;
-
-border-radius:20px;padding:4px 9px;font-size:11px;margin:2px
-
-}
+.badge{display:inline-block;border:1px solid #80623a;color:#e8c985;border-radius:20px;padding:4px 9px;font-size:11px;margin:2px}
 
 .bars{height:7px;background:#090807;border-radius:20px;overflow:hidden;margin:5px 0}
 
 .hpbar{height:100%;background:#a9443b;transition:width .3s}
 
-.log{
-
-background:#100e0c;border:1px solid #493823;border-radius:8px;
-
-padding:10px;max-height:190px;overflow:auto;font-size:13px;line-height:1.5
-
-}
+.log{background:#100e0c;border:1px solid #493823;border-radius:8px;padding:10px;max-height:190px;overflow:auto;font-size:13px;line-height:1.5}
 
 .log p{margin:4px 0}
 
@@ -180,91 +94,31 @@ padding:10px;max-height:190px;overflow:auto;font-size:13px;line-height:1.5
 
 .inventory{display:flex;gap:7px;flex-wrap:wrap}
 
-.inventory span{
-
-background:#30271d;border:1px solid #6a512f;padding:7px 9px;
-
-border-radius:7px;font-size:12px
-
-}
+.inventory span{background:#30271d;border:1px solid #6a512f;padding:7px 9px;border-radius:7px;font-size:12px}
 
 hr{border:0;border-top:1px solid #59442b;margin:14px 0}
 
 .note{text-align:center;color:#c0ae8b;font-size:11px}
 
-.musicButton{
+.musicButton{margin-top:10px;background:#29221b;border:1px solid #80623a;color:#e8c985;border-radius:20px;padding:7px 13px;font:12px Georgia,serif}
 
-margin-top:10px;background:#29221b;border:1px solid #80623a;
-
-color:#e8c985;border-radius:20px;padding:7px 13px;font:12px Georgia,serif
-
-}
-
-.battleSideTitle{
-
-display:flex;align-items:center;gap:8px;margin:13px 0 9px;
-
-color:#e5c88f;font-size:14px;letter-spacing:1px;text-transform:uppercase
-
-}
+.battleSideTitle{display:flex;align-items:center;gap:8px;margin:13px 0 9px;color:#e5c88f;font-size:14px;letter-spacing:1px;text-transform:uppercase}
 
 .battleSideTitle:after{content:"";height:1px;flex:1;background:#59442b}
 
-.battleFormation{
+.battleFormation{display:flex;flex-direction:row;flex-wrap:nowrap;gap:9px;align-items:flex-start;overflow-x:auto;overflow-y:hidden;padding:5px 2px 12px;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:#80623a #100e0c}
 
-display:flex;flex-direction:row;flex-wrap:nowrap;gap:9px;
+.battleUnit{flex:0 0 105px;width:105px;min-width:0;position:relative;text-align:center;padding:6px 4px 8px;border:1px solid #59442b;border-radius:9px;background:linear-gradient(180deg,#30271e,#191511);transition:border-color .2s,background .2s,opacity .2s}
 
-align-items:flex-start;overflow-x:auto;overflow-y:hidden;
-
-padding:5px 2px 12px;-webkit-overflow-scrolling:touch;
-
-scrollbar-width:thin;scrollbar-color:#80623a #100e0c
-
-}
-
-.battleUnit{
-
-flex:0 0 105px;width:105px;min-width:0;position:relative;
-
-text-align:center;padding:6px 4px 8px;border:1px solid #59442b;
-
-border-radius:9px;background:linear-gradient(180deg,#30271e,#191511);
-
-transition:border-color .2s,background .2s,opacity .2s
-
-}
-
-.battleUnit.active{
-
-border:2px solid var(--gold);
-
-background:linear-gradient(180deg,#594126,#292017);
-
-box-shadow:0 0 12px #d6b16c55
-
-}
+.battleUnit.active{border:2px solid var(--gold);background:linear-gradient(180deg,#594126,#292017);box-shadow:0 0 12px #d6b16c55}
 
 .battleUnit.dead{opacity:.35;filter:grayscale(1)}
 
-/* Ritratti interi: niente piedi tagliati */
+/* Tutti i ritratti di battaglia mostrano il corpo intero, senza ritaglio */
 
-.battleFace{
+.battleFace{width:100%;aspect-ratio:2/3;height:auto;max-height:150px;display:block;object-fit:contain;object-position:center;background:#100e0c;border:1px solid #96713b;border-radius:6px}
 
-width:100%;aspect-ratio:2/3;height:auto;max-height:150px;
-
-display:block;object-fit:contain;object-position:center;
-
-background:#100e0c;border:1px solid #96713b;border-radius:6px
-
-}
-
-.battleName{
-
-font-size:11px;line-height:1.2;color:#f0d49b;font-weight:bold;
-
-margin:6px 0 4px;min-height:26px;overflow-wrap:anywhere
-
-}
+.battleName{font-size:11px;line-height:1.2;color:#f0d49b;font-weight:bold;margin:6px 0 4px;min-height:26px;overflow-wrap:anywhere}
 
 .battleHP{font-size:10px;color:#d4c4a5}
 
@@ -288,93 +142,53 @@ margin:6px 0 4px;min-height:26px;overflow-wrap:anywhere
 
 .battleDivider{height:1px;background:linear-gradient(90deg,transparent,#80623a,transparent);margin:15px 0}
 
-/* Navigazione inferiore */
+.bottomNav{position:fixed;z-index:1000;left:0;right:0;bottom:0;display:none;grid-template-columns:repeat(4,1fr);gap:4px;padding:7px 7px calc(7px + env(safe-area-inset-bottom));background:rgba(17,14,11,.97);border-top:1px solid #96713b;box-shadow:0 -5px 20px #0009;backdrop-filter:blur(10px)}
 
-#bottomNav{
+.bottomNav.visible{display:grid}
 
-position:fixed;z-index:1000;bottom:0;left:0;right:0;
+.navBtn{border:1px solid transparent;border-radius:8px;background:transparent;color:#cdbb98;padding:7px 2px 5px;font:11px Georgia,serif;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0}
 
-display:flex;justify-content:space-around;gap:4px;
+.navBtn .navIcon{font-size:19px;line-height:1.1}
 
-padding:8px 5px calc(8px + env(safe-area-inset-bottom));
+.navBtn.active{color:#ffe0a0;background:#49351e;border-color:#96713b}
 
-background:rgba(16,14,12,.98);border-top:1px solid var(--gold2);
+.menuPanel{min-height:220px}
 
-box-shadow:0 -5px 20px #0009
+.menuGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 
-}
+.menuTile{min-height:58px;text-align:left}
 
-.navButton{
+.menuTile strong{display:block;color:#f0d49b;margin-bottom:4px}
 
-flex:1;min-width:0;border:1px solid transparent;border-radius:9px;
+.menuTile small{color:#c0ae8b}
 
-background:transparent;color:#b9a98b;padding:9px 2px;
+.memberCard{display:flex;gap:10px;align-items:center;background:#211b15;border:1px solid #59442b;border-radius:9px;padding:9px;margin:8px 0}
 
-font:12px Georgia,serif;text-align:center
+.memberCard img{width:66px;height:96px;object-fit:contain;background:#100e0c;border:1px solid #80623a;border-radius:6px}
 
-}
+.memberInfo{flex:1;min-width:0}
 
-.navButton span{display:block;font-size:19px;margin-bottom:3px}
+.memberInfo p{font-size:12px;margin:4px 0;color:#cdbb98}
 
-.navButton.active{background:#49351e;border-color:var(--gold2);color:#ffe0a0}
+.pointRow{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;background:#29221b;border-radius:7px;padding:8px;margin:6px 0;font-size:13px}
 
-.menuCard{
+.pointRow button{padding:5px 11px}
 
-background:#211b15;border:1px solid #59442b;border-radius:9px;
+.menuBack{margin-bottom:10px}
 
-padding:12px;margin:8px 0
-
-}
-
-.menuCard p{margin:5px 0}
-
-.menuGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-
-.menuButton{
-
-width:100%;padding:13px 8px;border:1px solid #80623a;
-
-border-radius:8px;background:#29221b;color:#e9dfc8;
-
-font:14px Georgia,serif;text-align:left
-
-}
-
-.menuButton.active{border-color:var(--gold);background:#49351e}
-
-.statAdd{padding:3px 9px;margin-left:6px}
+.menuHint{font-size:12px;color:#b9a98b;line-height:1.5}
 
 @media(max-width:560px){
 
-.layout{grid-template-columns:1fr}
+.layout{grid-template-columns:1fr}.preview{display:block;text-align:center}
 
-.preview{display:block;text-align:center}
+.preview .portrait{width:min(100%,300px);height:390px;max-height:65vh;margin:0 auto 12px;object-fit:contain;aspect-ratio:2/3}
 
-.preview .portrait{
+.preview h2,.preview p{grid-column:auto}main{width:94%;padding-bottom:100px}.panel{padding:12px}
 
-width:min(100%,300px);height:390px;max-height:65vh;
+.battleFormation{gap:5px}.battleUnit{flex:0 0 88px;width:88px;padding:5px 3px 7px}
 
-margin:0 auto 12px;object-fit:contain;aspect-ratio:2/3
-
-}
-
-.preview h2,.preview p{grid-column:auto}
-
-main{width:94%;margin-bottom:105px}
-
-.panel{padding:12px}
-
-.battleFormation{gap:5px}
-
-.battleUnit{flex:0 0 88px;width:88px;padding:5px 3px 7px}
-
-.battleFace{max-height:132px}
-
-.battleName{font-size:10px;min-height:25px}
-
-.battleHP{font-size:9px}
-
-.navButton{font-size:10px}
+.battleFace{max-height:132px}.battleName{font-size:10px;min-height:25px}.battleHP{font-size:9px}
 
 }
 
@@ -406,73 +220,21 @@ main{width:94%;margin-bottom:105px}
 
 <div class="layout">
 
-<div>
+<div><h3>Scegli la razza</h3><div class="grid" id="races"></div><p class="small" id="raceDescription"></p></div>
 
-<h3>Scegli la razza</h3>
-
-<div class="grid" id="races"></div>
-
-<p class="small" id="raceDescription"></p>
+<div class="preview"><img class="portrait" id="portrait" src="./modello_umano_maschile.png.JPG" alt="Anteprima personaggio"><div><h2 id="heroTitle">Umano</h2><p class="small" id="heroDescription"></p></div></div>
 
 </div>
 
-<div class="preview">
-
-<img class="portrait" id="portrait" src="./modello_umano_maschile.png.JPG" alt="Anteprima personaggio">
-
-<div>
-
-<h2 id="heroTitle">Umano</h2>
-
-<p class="small" id="heroDescription"></p>
+<hr><h3>Sesso</h3><div class="row"><button class="choice selected" data-gender="male">Maschio</button><button class="choice" data-gender="female">Femmina</button></div>
 
 </div>
 
-</div>
+<div class="panel"><h2>02 · Nome dell'eroe</h2><input id="heroName" class="input" maxlength="24" placeholder="Scrivi il nome del tuo eroe"></div>
 
-</div>
+<div class="panel"><h2>03 · Scegli la classe</h2><div class="classgrid" id="classes"></div><p class="small" id="classDescription"></p></div>
 
-<hr>
-
-<h3>Sesso</h3>
-
-<div class="row">
-
-<button class="choice selected" data-gender="male">Maschio</button>
-
-<button class="choice" data-gender="female">Femmina</button>
-
-</div>
-
-</div>
-
-<div class="panel">
-
-<h2>02 · Nome dell'eroe</h2>
-
-<input id="heroName" class="input" maxlength="24" placeholder="Scrivi il nome del tuo eroe">
-
-</div>
-
-<div class="panel">
-
-<h2>03 · Scegli la classe</h2>
-
-<div class="classgrid" id="classes"></div>
-
-<p class="small" id="classDescription"></p>
-
-</div>
-
-<div class="panel">
-
-<h2>04 · Caratteristiche</h2>
-
-<div class="stats" id="stats"></div>
-
-<p class="small">Valori iniziali: 5 + modificatore razziale + modificatore di classe.</p>
-
-</div>
+<div class="panel"><h2>04 · Caratteristiche</h2><div class="stats" id="stats"></div><p class="small">Valori iniziali: 5 + modificatore razziale + modificatore di classe.</p></div>
 
 <button class="btn" style="width:100%;padding:16px;font-size:18px" onclick="startAdventure()">INIZIA IL VIAGGIO</button>
 
@@ -482,153 +244,55 @@ main{width:94%;margin-bottom:105px}
 
 <section id="game" class="hidden">
 
-<!-- CONTENUTO DELLA MISSIONE E DEL COMBATTIMENTO -->
-
 <div id="gameContent">
 
-<div class="panel">
+<div class="panel" id="missionPanel">
 
-<div class="row" style="justify-content:space-between">
+<div class="row" style="justify-content:space-between"><span class="badge" id="chapterBadge">PROLOGO</span><span class="badge" id="levelBadge">Livello 1</span></div>
 
-<span class="badge" id="chapterBadge">PROLOGO</span>
-
-<span class="badge" id="levelBadge">Livello 1</span>
+<h2 id="sceneTitle"></h2><div id="sceneText" class="story"></div><div id="sceneChoices" class="actions"></div>
 
 </div>
 
-<h2 id="sceneTitle"></h2>
+<div id="combat" class="hidden"><div class="panel">
 
-<div id="sceneText" class="story"></div>
+<div class="row" style="justify-content:space-between"><h2 id="battleTitle">Combattimento</h2><span class="badge" id="roundBadge">Turno 1</span></div>
 
-<div id="sceneChoices" class="actions"></div>
+<p class="small" id="battleHint"></p><div class="battleSideTitle">Avversari</div><div id="enemyList" class="battleFormation"></div><div class="battleDivider"></div><div class="battleSideTitle">La tua squadra</div><div id="partyList" class="battleFormation"></div>
 
-</div>
+<hr><h3 id="activeTitle">Turno</h3><p class="small" id="activeInfo"></p><div id="targetArea" class="target"></div><div id="combatActions" class="actions"></div><p class="small" id="actionMessage">Seleziona un'azione.</p><h3>Diario dello scontro</h3><div class="log" id="battleLog"></div>
 
-<div id="combat" class="hidden">
-
-<div class="panel">
-
-<div class="row" style="justify-content:space-between">
-
-<h2 id="battleTitle">Combattimento</h2>
-
-<span class="badge" id="roundBadge">Turno 1</span>
-
-</div>
-
-<p class="small" id="battleHint"></p>
-
-<div class="battleSideTitle">Avversari</div>
-
-<div id="enemyList" class="battleFormation"></div>
-
-<div class="battleDivider"></div>
-
-<div class="battleSideTitle">La tua squadra</div>
-
-<div id="partyList" class="battleFormation"></div>
-
-<hr>
-
-<h3 id="activeTitle">Turno</h3>
-
-<p class="small" id="activeInfo"></p>
-
-<div id="targetArea" class="target"></div>
-
-<div id="combatActions" class="actions"></div>
-
-<p class="small" id="actionMessage">Seleziona un'azione.</p>
-
-<h3>Diario dello scontro</h3>
-
-<div class="log" id="battleLog"></div>
-
-</div>
-
-</div>
+</div></div>
 
 <div id="afterCombat" class="panel hidden"></div>
 
-</div>
+<div class="panel" id="inventoryPanel"><h2>Inventario</h2><div id="inventory" class="inventory"></div></div>
 
-<!-- SCHERMATA SQUADRA -->
+<div class="row"><button class="btn secondary" onclick="saveGame()">SALVA PARTITA</button><button class="btn secondary" onclick="loadGame()">CARICA PARTITA</button><button class="btn secondary" onclick="backToCreator()">Torna alla creazione</button></div>
 
-<div id="teamView" class="hidden">
-
-<div class="panel">
-
-<h2>La tua squadra</h2>
-
-<p class="small">Gli eroi che combattono al tuo fianco.</p>
-
-<div id="teamCards"></div>
+<p class="note">I progressi vengono salvati in questo browser su questo dispositivo.</p>
 
 </div>
 
-</div>
-
-<!-- SCHERMATA INVENTARIO -->
-
-<div id="inventoryView" class="hidden">
-
-<div class="panel">
-
-<h2>Inventario</h2>
-
-<p class="small">Oggetti, consumabili e tesori raccolti durante il viaggio.</p>
-
-<div id="inventory"></div>
-
-<hr>
-
-<h3>Monete d'oro</h3>
-
-<div id="goldDisplay" class="badge"></div>
-
-</div>
-
-</div>
-
-<!-- SCHERMATA ALTRO E SOTTOSEZIONI -->
-
-<div id="otherView" class="hidden">
-
-<div class="panel">
-
-<h2>Altro</h2>
-
-<div class="menuGrid">
-
-<button class="menuButton" onclick="showMenu('settings')">⚙️ Impostazioni</button>
-
-<button class="menuButton" onclick="showMenu('character')">🛡️ Personaggio</button>
-
-<button class="menuButton" onclick="showMenu('abilities')">✨ Abilità</button>
-
-<button class="menuButton" onclick="showMenu('statistics')">📊 Statistiche</button>
-
-</div>
-
-</div>
+<section id="menuView" class="panel menuPanel hidden" aria-live="polite">
 
 <div id="menuContent"></div>
 
-</div>
+</section>
 
 </section>
 
 </main>
 
-<nav id="bottomNav" class="hidden">
+<nav id="bottomNav" class="bottomNav" aria-label="Navigazione di gioco">
 
-<button class="navButton active" data-tab="mission" onclick="openTab('mission')"><span>📜</span>Missione</button>
+<button class="navBtn" data-tab="squad" onclick="openTab('squad')"><span class="navIcon">♟</span><span>Squadra</span></button>
 
-<button class="navButton" data-tab="team" onclick="openTab('team')"><span>👥</span>Squadra</button>
+<button class="navBtn" data-tab="inventory" onclick="openTab('inventory')"><span class="navIcon">🎒</span><span>Inventario</span></button>
 
-<button class="navButton" data-tab="inventory" onclick="openTab('inventory')"><span>🎒</span>Inventario</button>
+<button class="navBtn" data-tab="mission" onclick="openTab('mission')"><span class="navIcon">📜</span><span>Missione</span></button>
 
-<button class="navButton" data-tab="other" onclick="openTab('other')"><span>☰</span>Altro</button>
+<button class="navBtn" data-tab="more" onclick="openTab('more')"><span class="navIcon">☰</span><span>Altro</span></button>
 
 </nav>
 
@@ -672,393 +336,121 @@ const classes=[
 
 ];
 
-const statNames={
+const statNames={forza:"Forza",agilita:"Agilità",vitalita:"Vitalità",intelletto:"Intelletto",volonta:"Volontà",percezione:"Percezione",carisma:"Carisma"};
 
-forza:"Forza",agilita:"Agilità",vitalita:"Vitalità",
+let selectedRace=races[0],selectedClass=classes[0],gender="male",G=null,battle=null,selectedTarget=0,busy=false;
 
-intelletto:"Intelletto",volonta:"Volontà",
+function musicLabel(){$("musicButton").textContent=$("bgMusic").paused?"♫ Musica OFF · Attiva":"♫ Musica ON · Disattiva"}
 
-percezione:"Percezione",carisma:"Carisma"
+function toggleMusic(){const m=$("bgMusic");if(m.paused){m.volume=.35;m.play().then(musicLabel).catch(()=>$("musicButton").textContent="♫ Tocca per attivare")}else{m.pause();musicLabel()}}
 
-};
+function imageForRace(r){return r[gender]||r.male}
 
-let selectedRace=races[0];
-
-let selectedClass=classes[0];
-
-let gender="male";
-
-let G=null;
-
-let battle=null;
-
-let selectedTarget=0;
-
-let busy=false;
-
-let currentTab="mission";
-
-let currentMenu="";
-
-function musicLabel(){
-
-$("musicButton").textContent=$("bgMusic").paused?"♫ Musica OFF · Attiva":"♫ Musica ON · Disattiva";
-
-}
-
-function toggleMusic(){
-
-const m=$("bgMusic");
-
-if(m.paused){
-
-m.volume=.35;
-
-m.play().then(musicLabel).catch(()=>{$("musicButton").textContent="♫ Tocca per attivare";});
-
-}else{m.pause();musicLabel();}
-
-}
-
-function imageForRace(r){return r[gender]||r.male;}
-
-function statsFor(){
-
-let s={};
-
-for(let k in statNames)s[k]=5+(selectedRace.mod[k]||0)+(selectedClass.mod[k]||0);
-
-return s;
-
-}
+function statsFor(){let s={};for(let k in statNames)s[k]=5+(selectedRace.mod[k]||0)+(selectedClass.mod[k]||0);return s}
 
 function renderCreator(){
 
 $("races").innerHTML=races.map(r=>`<button class="choice ${r.id===selectedRace.id?'selected':''}" data-race="${r.id}">${r.name}</button>`).join("");
 
-document.querySelectorAll("[data-race]").forEach(b=>b.onclick=()=>{
-
-selectedRace=races.find(r=>r.id===b.dataset.race);renderCreator();
-
-});
+document.querySelectorAll("[data-race]").forEach(b=>b.onclick=()=>{selectedRace=races.find(r=>r.id===b.dataset.race);renderCreator()});
 
 $("classes").innerHTML=classes.map(c=>`<button class="choice ${c.id===selectedClass.id?'selected':''}" data-class="${c.id}">${c.name}</button>`).join("");
 
-document.querySelectorAll("[data-class]").forEach(b=>b.onclick=()=>{
+document.querySelectorAll("[data-class]").forEach(b=>b.onclick=()=>{selectedClass=classes.find(c=>c.id===b.dataset.class);renderCreator()});
 
-selectedClass=classes.find(c=>c.id===b.dataset.class);renderCreator();
+document.querySelectorAll("[data-gender]").forEach(b=>{b.classList.toggle("selected",b.dataset.gender===gender);b.onclick=()=>{gender=b.dataset.gender;renderCreator()}});
 
-});
+$("portrait").src=asset(imageForRace(selectedRace));$("heroTitle").textContent=selectedRace.name;
 
-document.querySelectorAll("[data-gender]").forEach(b=>{
-
-b.classList.toggle("selected",b.dataset.gender===gender);
-
-b.onclick=()=>{gender=b.dataset.gender;renderCreator();};
-
-});
-
-$("portrait").src=asset(imageForRace(selectedRace));
-
-$("heroTitle").textContent=selectedRace.name;
-
-$("heroDescription").textContent=selectedRace.description+" Tratto: "+selectedRace.trait+".";
-
-$("raceDescription").textContent=selectedRace.description;
+$("heroDescription").textContent=selectedRace.description+" Tratto: "+selectedRace.trait+".";$("raceDescription").textContent=selectedRace.description;
 
 $("classDescription").textContent=selectedClass.description+" Armatura: "+selectedClass.armor+".";
 
-const s=statsFor();
-
-$("stats").innerHTML=Object.keys(statNames).map(k=>`<div class="stat"><span>${statNames[k]}</span><b>${s[k]}</b></div>`).join("");
+const s=statsFor();$("stats").innerHTML=Object.keys(statNames).map(k=>`<div class="stat"><span>${statNames[k]}</span><b>${s[k]}</b></div>`).join("");
 
 }
 
 function startAdventure(){
 
-let name=$("heroName").value.trim();
+let name=$("heroName").value.trim();if(!name){alert("Scrivi il nome del tuo eroe prima di partire!");return}
 
-if(!name){alert("Scrivi il nome del tuo eroe prima di partire!");return;}
+let s=statsFor(),maxhp=26+s.vitalita*3;
 
-let s=statsFor();
+G={hero:{id:"hero",name,race:selectedRace.name,class:selectedClass.name,gender,portrait:imageForRace(selectedRace),stats:s,level:1,xp:0,hp:maxhp,maxhp,ap:5,maxap:5,armor:selectedClass.id==="warrior"?4:selectedClass.id==="cleric"?3:1,weapon:selectedClass.id==="mage"||selectedClass.id==="druid"?4:6,alive:true,down:0,isHero:true},party:[],inventory:{Pozione:2,Antidoto:1,Benda:1,Purificazione:1},gold:12,chapter:0,companions:{wolf:false,lion:false},battleWon:0,finished:false,statPoints:0};
 
-let maxhp=26+s.vitalita*3;
-
-G={
-
-hero:{id:"hero",name,race:selectedRace.name,class:selectedClass.name,gender,portrait:imageForRace(selectedRace),stats:s,level:1,xp:0,hp:maxhp,maxhp,ap:5,maxap:5,armor:selectedClass.id==="warrior"?4:selectedClass.id==="cleric"?3:1,weapon:selectedClass.id==="mage"||selectedClass.id==="druid"?4:6,alive:true,down:0,isHero:true},
-
-party:[],
-
-inventory:{Pozione:2,Antidoto:1,Benda:1,Purificazione:1},
-
-gold:12,chapter:0,companions:{wolf:false,lion:false},battleWon:0,finished:false,
-
-statPoints:0
-
-};
-
-$("creator").classList.add("hidden");
-
-$("game").classList.remove("hidden");
-
-$("bottomNav").classList.remove("hidden");
-
-showScene("prologue");
-
-openTab("mission");
+$("creator").classList.add("hidden");$("game").classList.remove("hidden");$("bottomNav").classList.add("visible");showScene("prologue");openTab("mission");
 
 }
 
 const scenes={
 
-prologue:{
+prologue:{badge:"PROLOGO",title:"La campana senza eco",text:`<p>Il tuo viaggio conduce a <em>Rovoscuro</em>, un villaggio ai confini della Valle di Velmora. Da tre notti, a mezzanotte, la campana della vecchia torre suona da sola. Ogni volta che risuona, qualcuno scompare.</p><p>Un'anziana donna ti afferra il braccio: «Mio nipote è entrato nella torre tre giorni fa. Non è più tornato. Ti prego, aiutaci».</p><p>Nella locanda incontri due viandanti: <b>Rauk</b>, un guerriero del Popolo Lupo, e <b>Leona</b>, una guerriera del Popolo Leone. Entrambi sembrano conoscere qualcosa della torre.</p>`,choices:[["Chiedi a Rauk di unirsi","wolf"],["Chiedi a Leona di unirsi","lion"],["Parti verso il bosco","forest"]]},
 
-badge:"PROLOGO",title:"La campana senza eco",
+forest:{badge:"CAPITOLO I",title:"L'imboscata nel bosco",text:`<p>Il sentiero si stringe tra alberi contorti. Due orchi armati emergono dal sottobosco, accompagnati da un predone della valle.</p><p><em>«La strada è nostra, viandante. Lascia le tue cose!»</em></p>`,choices:[["Affronta gli aggressori","fight1"]]},
 
-text:`<p>Il tuo viaggio conduce a <em>Rovoscuro</em>, un villaggio ai confini della Valle di Velmora. Da tre notti, a mezzanotte, la campana della vecchia torre suona da sola. Ogni volta che risuona, qualcuno scompare.</p>
+crypt:{badge:"CAPITOLO II",title:"La cripta dimenticata",text:`<p>Una scala di pietra scende sotto la torre. Al centro della cripta, un altare emana luce verdastra. Un orco veterano e due guardiani armati difendono il passaggio.</p>`,choices:[["Entra nella cripta","fight2"]]},
 
-<p>Un'anziana donna ti afferra il braccio: «Mio nipote è entrato nella torre tre giorni fa. Non è più tornato. Ti prego, aiutaci».</p>
+boss:{badge:"CAPITOLO III",title:"Il Custode della Campana",text:`<p>La porta di ferro si apre. Nella sala della campana si erge un cavaliere enorme, avvolto in un'armatura nera. Gli occhi brillano di luce azzurra.</p><p>«Nessuno interromperà il richiamo.»</p>`,choices:[["Affronta il Custode","fight3"]]},
 
-<p>Nella locanda incontri due viandanti: <b>Rauk</b>, un guerriero del Popolo Lupo, e <b>Leona</b>, una guerriera del Popolo Leone. Entrambi sembrano conoscere qualcosa della torre.</p>`,
-
-choices:[["Chiedi a Rauk di unirsi","wolf"],["Chiedi a Leona di unirsi","lion"],["Parti verso il bosco","forest"]]
-
-},
-
-forest:{
-
-badge:"CAPITOLO I",title:"L'imboscata nel bosco",
-
-text:`<p>Il sentiero si stringe tra alberi contorti. Due orchi armati emergono dal sottobosco, accompagnati da un predone della valle.</p><p><em>«La strada è nostra, viandante. Lascia le tue cose!»</em></p>`,
-
-choices:[["Affronta gli aggressori","fight1"]]
-
-},
-
-crypt:{
-
-badge:"CAPITOLO II",title:"La cripta dimenticata",
-
-text:`<p>Una scala di pietra scende sotto la torre. Al centro della cripta, un altare emana luce verdastra. Un orco veterano e due guardiani armati difendono il passaggio.</p>`,
-
-choices:[["Entra nella cripta","fight2"]]
-
-},
-
-boss:{
-
-badge:"CAPITOLO III",title:"Il Custode della Campana",
-
-text:`<p>La porta di ferro si apre. Nella sala della campana si erge un cavaliere enorme, avvolto in un'armatura nera. Gli occhi brillano di luce azzurra.</p><p>«Nessuno interromperà il richiamo.»</p>`,
-
-choices:[["Affronta il Custode","fight3"]]
-
-},
-
-ending:{
-
-badge:"FINE DELLA PROVA",title:"La campana tace",
-
-text:`<p>Con un ultimo clangore, la campana si spezza. Il silenzio torna nella valle. Hai completato la prima avventura di <em>Ombre di Velmora</em>.</p>`,
-
-choices:[["Ricomincia l'avventura","restart"]]
-
-}
+ending:{badge:"FINE DELLA PROVA",title:"La campana tace",text:`<p>Con un ultimo clangore, la campana si spezza. Il silenzio torna nella valle. Hai completato la prima avventura di <em>Ombre di Velmora</em>.</p>`,choices:[["Ricomincia l'avventura","restart"]]}
 
 };
 
-function showScene(key){
-
-$("combat").classList.add("hidden");
-
-$("afterCombat").classList.add("hidden");
-
-let sc=scenes[key];if(!sc)return;
-
-$("chapterBadge").textContent=sc.badge;
-
-$("sceneTitle").textContent=sc.title;
-
-$("sceneText").innerHTML=sc.text;
-
-$("sceneChoices").innerHTML=sc.choices.map(([label,act])=>`<button class="btn" onclick="sceneAction('${act}')">${label}</button>`).join("");
-
-updateHUD();
-
-}
+function showScene(key){$("combat").classList.add("hidden");$("afterCombat").classList.add("hidden");let sc=scenes[key];if(!sc)return;$("chapterBadge").textContent=sc.badge;$("sceneTitle").textContent=sc.title;$("sceneText").innerHTML=sc.text;$("sceneChoices").innerHTML=sc.choices.map(([label,act])=>`<button class="btn" onclick="sceneAction('${act}')">${label}</button>`).join("");updateHUD()}
 
 function sceneAction(act){
 
-if(act==="wolf"){
+if(act==="wolf"){if(!G.companions.wolf){G.companions.wolf=true;G.party.push(makeCompanion("Rauk",36,7,3,4,"uomo_lupo_m_base.png.JPG"))}showScene("prologue");$("sceneText").innerHTML+='<p><em>Rauk abbassa il capo.</em> «Verrò con te.»</p>';return}
 
-if(!G.companions.wolf){G.companions.wolf=true;G.party.push(makeCompanion("Rauk",36,7,3,4,"uomo_lupo_m_base.png.JPG"));}
+if(act==="lion"){if(!G.companions.lion){G.companions.lion=true;G.party.push(makeCompanion("Leona",40,7,4,4,"uomo_leone_f_base.png.JPG"))}showScene("prologue");$("sceneText").innerHTML+='<p><em>Leona stringe l’elsa.</em> «Combatterò al tuo fianco.»</p>';return}
 
-showScene("prologue");$("sceneText").innerHTML+='<p><em>Rauk abbassa il capo.</em> «Verrò con te.»</p>';return;
-
-}
-
-if(act==="lion"){
-
-if(!G.companions.lion){G.companions.lion=true;G.party.push(makeCompanion("Leona",40,7,4,4,"uomo_leone_f_base.png.JPG"));}
-
-showScene("prologue");$("sceneText").innerHTML+='<p><em>Leona stringe l’elsa.</em> «Combatterò al tuo fianco.»</p>';return;
+if(act==="forest"){showScene("forest");return}if(act==="fight1"){startBattle(1);return}if(act==="fight2"){startBattle(2);return}if(act==="fight3"){startBattle(3);return}if(act==="restart"){location.reload()}
 
 }
 
-if(act==="forest"){showScene("forest");return;}
+function makeCompanion(name,hp,str,armor,intel,portrait){return{id:name.toLowerCase(),name,class:"warrior",portrait,level:1,stats:{forza:str,agilita:6,vitalita:5,intelletto:intel,volonta:5,percezione:5,carisma:5},hp,maxhp:hp,ap:5,maxap:5,armor,weapon:6,alive:true,down:0,isHero:false}}
 
-if(act==="fight1"){startBattle(1);return;}
+function aliveParty(){return [G.hero,...G.party].filter(p=>p.alive&&p.hp>0)}
 
-if(act==="fight2"){startBattle(2);return;}
+function isEnemy(u){return !!u.kind}
 
-if(act==="fight3"){startBattle(3);return;}
-
-if(act==="restart"){location.reload();}
-
-}
-
-function makeCompanion(name,hp,str,armor,intel,portrait){
-
-return{id:name.toLowerCase(),name,class:"warrior",portrait,level:1,stats:{forza:str,agilita:6,vitalita:5,intelletto:intel,volonta:5,percezione:5,carisma:5},hp,maxhp:hp,ap:5,maxap:5,armor,weapon:6,alive:true,down:0,isHero:false};
-
-}
-
-function aliveParty(){return [G.hero,...G.party].filter(p=>p.alive&&p.hp>0);}
-
-function isEnemy(u){return !!u.kind;}
-
-function current(){return battle?.order?.[battle.idx];}
+function current(){return battle?.order?.[battle.idx]}
 
 function startBattle(n){
 
-busy=false;
+busy=false;const sets={
 
-const sets={
+1:[{name:"Orco predone",hp:25,atk:6,armor:1,kind:"orc",portrait:"orco_m_base.png.JPG"},{name:"Orco predone",hp:25,atk:6,armor:1,kind:"orc",portrait:"orco_f_base.png.JPG"},{name:"Predone della valle",hp:22,atk:5,armor:2,kind:"bandit",portrait:"modello_umano_maschile.png.JPG"}],
 
-1:[
+2:[{name:"Orco veterano",hp:34,atk:7,armor:3,kind:"orc",portrait:"orco_m_base.png.JPG"},{name:"Guardiano della cripta",hp:32,atk:6,armor:4,kind:"guard",portrait:"orco_f_base.png.JPG"},{name:"Sciamano della cripta",hp:29,atk:7,armor:2,kind:"priest",portrait:"elfo_f_base.png.JPG"}],
 
-{name:"Orco predone",hp:25,atk:6,armor:1,kind:"orc",portrait:"orco_m_base.png.JPG"},
-
-{name:"Orco predone",hp:25,atk:6,armor:1,kind:"orc",portrait:"orco_f_base.png.JPG"},
-
-{name:"Predone della valle",hp:22,atk:5,armor:2,kind:"bandit",portrait:"modello_umano_maschile.png.JPG"}
-
-],
-
-2:[
-
-{name:"Orco veterano",hp:34,atk:7,armor:3,kind:"orc",portrait:"orco_m_base.png.JPG"},
-
-{name:"Guardiano della cripta",hp:32,atk:6,armor:4,kind:"guard",portrait:"orco_f_base.png.JPG"},
-
-{name:"Sciamano della cripta",hp:29,atk:7,armor:2,kind:"priest",portrait:"elfo_f_base.png.JPG"}
-
-],
-
-3:[{name:"Custode della Campana",hp:145,atk:10,armor:5,kind:"boss",portrait:"modello_umano_maschile.png.JPG"}]
-
-};
+3:[{name:"Custode della Campana",hp:145,atk:10,armor:5,kind:"boss",portrait:"modello_umano_maschile.png.JPG"}]};
 
 battle={n,round:1,units:sets[n].map((e,i)=>({...e,id:"e"+i,maxhp:e.hp,alive:true,down:0})),order:[],idx:0,log:[],ended:false,turnPrepared:false};
 
-let allies=[G.hero,...G.party];
-
-allies.forEach(p=>{p.ap=5;if(p.hp<=0&&p.isHero)p.hp=1;});
+let allies=[G.hero,...G.party];allies.forEach(p=>{p.ap=5;if(p.hp<=0&&p.isHero)p.hp=1});
 
 battle.order=[...allies.filter(p=>p.alive&&p.hp>0),...battle.units].sort((a,b)=>(b.stats?.agilita||3)-(a.stats?.agilita||3));
 
-selectedTarget=0;
-
-$("combat").classList.remove("hidden");
-
-$("afterCombat").classList.add("hidden");
+selectedTarget=0;$("combat").classList.remove("hidden");$("afterCombat").classList.add("hidden");
 
 $("battleTitle").textContent=n===1?"Combattimento I · L'imboscata":n===2?"Combattimento II · La cripta":"Boss · Il Custode";
 
 $("battleHint").textContent="Ordine dei turni determinato dall'Agilità. I nemici attaccano dall'alto, la tua squadra combatte dal basso.";
 
-$("battleLog").innerHTML="";
-
-log("Lo scontro ha inizio. L'ordine è stabilito dall'Agilità.");
-
-renderBattle();
-
-advanceToPlayer();
+$("battleLog").innerHTML="";log("Lo scontro ha inizio. L'ordine è stabilito dall'Agilità.");renderBattle();advanceToPlayer();
 
 }
 
-function log(t){
+function log(t){if(!battle)return;battle.log.unshift(t);if(battle.log.length>35)battle.log.pop();$("battleLog").innerHTML=battle.log.map(x=>`<p>${x}</p>`).join("")}
 
-if(!battle)return;
+function unitHTML(u,active){let max=u.maxhp||u.hp,hp=Math.max(0,u.hp),image=asset(u.portrait||""),status=!u.alive?"CADUTO":hp+"/"+max+" HP";return `<div class="battleUnit ${active?'active':''} ${!u.alive?'dead':''}" data-unit-id="${u.id}"><img class="battleFace" src="${image}" alt="${u.name}" onerror="this.style.opacity='.25';this.alt='Ritratto non disponibile'"><div class="battleName">${u.name}</div><div class="battleHP">${status}</div><div class="battleBar"><div style="width:${Math.max(0,hp/max*100)}%"></div></div>${!isEnemy(u)&&u.alive?`<div class="battleAP">AP ${u.ap}/5</div>`:""}${u.status?`<div class="battleAP">${u.status.name}</div>`:""}</div>`}
 
-battle.log.unshift(t);if(battle.log.length>35)battle.log.pop();
+function renderBattle(){if(!battle)return;$("roundBadge").textContent="Turno "+battle.round;$("partyList").innerHTML=[G.hero,...G.party].map(p=>unitHTML(p,current()===p)).join("");$("enemyList").innerHTML=battle.units.map(e=>unitHTML(e,current()===e)).join("");updateHUD()}
 
-$("battleLog").innerHTML=battle.log.map(x=>`<p>${x}</p>`).join("");
+function findUnitElement(u){return Array.from(document.querySelectorAll(".battleUnit")).find(el=>el.dataset.unitId===String(u.id))}
 
-}
-
-function unitHTML(u,active){
-
-let max=u.maxhp||u.hp,hp=Math.max(0,u.hp),image=asset(u.portrait||"");
-
-let status=!u.alive?"CADUTO":hp+"/"+max+" HP";
-
-return `<div class="battleUnit ${active?'active':''} ${!u.alive?'dead':''}" data-unit-id="${u.id}">
-
-<img class="battleFace" src="${image}" alt="${u.name}" onerror="this.style.opacity='.25';this.alt='Ritratto non disponibile'">
-
-<div class="battleName">${u.name}</div><div class="battleHP">${status}</div>
-
-<div class="battleBar"><div style="width:${Math.max(0,hp/max*100)}%"></div></div>
-
-${!isEnemy(u)&&u.alive?`<div class="battleAP">AP ${u.ap}/5</div>`:""}
-
-${u.status?`<div class="battleAP">${u.status.name}</div>`:""}
-
-</div>`;
-
-}
-
-function renderBattle(){
-
-if(!battle)return;
-
-$("roundBadge").textContent="Turno "+battle.round;
-
-$("partyList").innerHTML=[G.hero,...G.party].map(p=>unitHTML(p,current()===p)).join("");
-
-$("enemyList").innerHTML=battle.units.map(e=>unitHTML(e,current()===e)).join("");
-
-updateHUD();
-
-}
-
-function findUnitElement(u){
-
-return Array.from(document.querySelectorAll(".battleUnit")).find(el=>el.dataset.unitId===String(u.id));
-
-}
-
-function animateStrike(attacker,target){
-
-return new Promise(resolve=>{
-
-let a=findUnitElement(attacker),t=findUnitElement(target);
-
-if(!a||!t){resolve();return;}
-
-a.classList.add(isEnemy(attacker)?"dashEnemy":"dashHero");
-
-setTimeout(()=>{t.classList.add("hit");setTimeout(()=>{
-
-a.classList.remove("dashEnemy","dashHero");t.classList.remove("hit");resolve();
-
-},330);},180);
-
-});
-
-}
+function animateStrike(attacker,target){return new Promise(resolve=>{let a=findUnitElement(attacker),t=findUnitElement(target);if(!a||!t){resolve();return}a.classList.add(isEnemy(attacker)?"dashEnemy":"dashHero");setTimeout(()=>{t.classList.add("hit");setTimeout(()=>{a.classList.remove("dashEnemy","dashHero");t.classList.remove("hit");resolve()},330)},180)})}
 
 async function advanceToPlayer(){
 
@@ -1066,635 +458,225 @@ if(!battle||battle.ended||busy)return;
 
 while(battle&&!battle.ended){
 
-if(battle.units.every(e=>!e.alive||e.hp<=0)){winBattle();return;}
+if(battle.units.every(e=>!e.alive||e.hp<=0)){winBattle();return}
 
-if(aliveParty().length===0){loseBattle();return;}
+if(aliveParty().length===0){loseBattle();return}
 
-if(battle.idx>=battle.order.length){
+if(battle.idx>=battle.order.length){battle.idx=0;battle.round++;battle.turnPrepared=false;tickDowned();battle.order=battle.order.filter(u=>u.alive&&u.hp>0);if(!battle.order.length){loseBattle();return}}
 
-battle.idx=0;battle.round++;battle.turnPrepared=false;tickDowned();
+let u=current();if(!u||!u.alive||u.hp<=0){battle.idx++;battle.turnPrepared=false;continue}
 
-battle.order=battle.order.filter(u=>u.alive&&u.hp>0);
+if(isEnemy(u)){busy=true;renderBattle();let targets=aliveParty();if(targets.length){let target=targets.slice().sort((a,b)=>(a.hp/a.maxhp)-(b.hp/b.maxhp))[0];await animateStrike(u,target);enemyTurn(u,target)}battle.idx++;battle.turnPrepared=false;renderBattle();busy=false;continue}
 
-if(!battle.order.length){loseBattle();return;}
+if(!battle.turnPrepared){u.ap=Math.min(5,u.ap+1);applyStartStatus(u);if(!u.alive||u.hp<=0){battle.idx++;battle.turnPrepared=false;continue}battle.turnPrepared=true}
 
-}
+$("activeTitle").textContent="Turno di "+u.name;$("activeInfo").textContent=`HP ${u.hp}/${u.maxhp} · AP ${u.ap}/5 · Agilità ${u.stats.agilita||5}`;$("actionMessage").textContent="Scegli una sola azione. L'attacco normale non consuma AP.";renderTargets();renderActions();renderBattle();return
 
-let u=current();
+}}
 
-if(!u||!u.alive||u.hp<=0){battle.idx++;battle.turnPrepared=false;continue;}
+function renderTargets(){let living=battle.units.filter(e=>e.alive&&e.hp>0);if(!living.length){$("targetArea").innerHTML="";return}if(!living.some(e=>battle.units.indexOf(e)===selectedTarget))selectedTarget=battle.units.indexOf(living[0]);$("targetArea").innerHTML=living.map(e=>`<button class="choice ${selectedTarget===battle.units.indexOf(e)?'selected':''}" onclick="selectTarget(${battle.units.indexOf(e)})">${e.name} · ${e.hp} HP</button>`).join("")}
 
-if(isEnemy(u)){
+function selectTarget(i){if(busy)return;selectedTarget=i;renderTargets()}
 
-busy=true;renderBattle();
+function hasCure(){return ["Antidoto","Benda","Purificazione"].some(k=>Number(G.inventory[k]||0)>0)}
 
-let targets=aliveParty();
+function hasDowned(){return [G.hero,...G.party].some(p=>!p.alive&&p.down>0)}
 
-if(targets.length){
+function canUseMagic(u){return ["Mago","Chierico","Druido","mage","cleric","druid"].includes(u.class)}
 
-let target=targets.slice().sort((a,b)=>(a.hp/a.maxhp)-(b.hp/b.maxhp))[0];
+function renderActions(){let u=current();if(!u||isEnemy(u))return;let mage=canUseMagic(u);$("combatActions").innerHTML=`<button class="btn" onclick="playerAction('attack')">Attacco normale · 0 AP</button><button class="btn" onclick="playerAction('skill')" ${u.ap<2?'disabled':''}>Abilità speciale · 2 AP</button><button class="btn" onclick="playerAction('spell')" ${u.ap<3||!mage?'disabled':''}>Magia · 3 AP</button><button class="btn secondary" onclick="playerAction('potion')" ${G.inventory.Pozione<1?'disabled':''}>Pozione curativa</button><button class="btn secondary" onclick="playerAction('cure')" ${!hasCure()?'disabled':''}>Usa cura</button><button class="btn secondary" onclick="playerAction('rescue')" ${!hasDowned()?'disabled':''}>Soccorri compagno</button><button class="btn danger" onclick="playerAction('flee')">Tenta la fuga</button>`}
 
-await animateStrike(u,target);enemyTurn(u,target);
-
-}
-
-battle.idx++;battle.turnPrepared=false;renderBattle();busy=false;continue;
-
-}
-
-if(!battle.turnPrepared){
-
-u.ap=Math.min(5,u.ap+1);applyStartStatus(u);
-
-if(!u.alive||u.hp<=0){battle.idx++;battle.turnPrepared=false;continue;}
-
-battle.turnPrepared=true;
-
-}
-
-$("activeTitle").textContent="Turno di "+u.name;
-
-$("activeInfo").textContent=`HP ${u.hp}/${u.maxhp} · AP ${u.ap}/5 · Agilità ${u.stats.agilita||5}`;
-
-$("actionMessage").textContent="Scegli una sola azione. L'attacco normale non consuma AP.";
-
-renderTargets();renderActions();renderBattle();return;
-
-}
-
-}
-
-function renderTargets(){
-
-let living=battle.units.filter(e=>e.alive&&e.hp>0);
-
-if(!living.length){$("targetArea").innerHTML="";return;}
-
-if(!living.some(e=>battle.units.indexOf(e)===selectedTarget))selectedTarget=battle.units.indexOf(living[0]);
-
-$("targetArea").innerHTML=living.map(e=>`<button class="choice ${selectedTarget===battle.units.indexOf(e)?'selected':''}" onclick="selectTarget(${battle.units.indexOf(e)})">${e.name} · ${e.hp} HP</button>`).join("");
-
-}
-
-function selectTarget(i){if(busy)return;selectedTarget=i;renderTargets();}
-
-function hasCure(){return ["Antidoto","Benda","Purificazione"].some(k=>Number(G.inventory[k]||0)>0);}
-
-function hasDowned(){return [G.hero,...G.party].some(p=>!p.alive&&p.down>0);}
-
-function canUseMagic(u){return ["Mago","Chierico","Druido","mage","cleric","druid"].includes(u.class);}
-
-function renderActions(){
-
-let u=current();if(!u||isEnemy(u))return;
-
-let mage=canUseMagic(u);
-
-$("combatActions").innerHTML=`
-
-<button class="btn" onclick="playerAction('attack')">Attacco normale · 0 AP</button>
-
-<button class="btn" onclick="playerAction('skill')" ${u.ap<2?'disabled':''}>Abilità speciale · 2 AP</button>
-
-<button class="btn" onclick="playerAction('spell')" ${u.ap<3||!mage?'disabled':''}>Magia · 3 AP</button>
-
-<button class="btn secondary" onclick="playerAction('potion')" ${G.inventory.Pozione<1?'disabled':''}>Pozione curativa</button>
-
-<button class="btn secondary" onclick="playerAction('cure')" ${!hasCure()?'disabled':''}>Usa cura</button>
-
-<button class="btn secondary" onclick="playerAction('rescue')" ${!hasDowned()?'disabled':''}>Soccorri compagno</button>
-
-<button class="btn danger" onclick="playerAction('flee')">Tenta la fuga</button>`;
-
-}
-
-function unlockActions(){busy=false;renderActions();renderBattle();}
+function unlockActions(){busy=false;renderActions();renderBattle()}
 
 async function playerAction(type){
 
-if(busy||!battle||battle.ended)return;
+if(busy||!battle||battle.ended)return;let u=current(),target=battle.units[selectedTarget];if(!u||!u.alive||isEnemy(u))return;
 
-let u=current(),target=battle.units[selectedTarget];
-
-if(!u||!u.alive||isEnemy(u))return;
-
-if(type==="spell"&&!canUseMagic(u)){$("actionMessage").textContent="Questa classe non può utilizzare la magia.";return;}
+if(type==="spell"&&!canUseMagic(u)){$("actionMessage").textContent="Questa classe non può utilizzare la magia.";return}
 
 busy=true;$("combatActions").querySelectorAll("button").forEach(b=>b.disabled=true);
 
 if(["attack","skill","spell"].includes(type)){
 
-if(!target||!target.alive){unlockActions();return;}
+if(!target||!target.alive){unlockActions();return}let cost=type==="skill"?2:type==="spell"?3:0;if(u.ap<cost){unlockActions();return}u.ap-=cost;await animateStrike(u,target);
 
-let cost=type==="skill"?2:type==="spell"?3:0;
-
-if(u.ap<cost){unlockActions();return;}
-
-u.ap-=cost;await animateStrike(u,target);
-
-let die=roll();
-
-let stat=type==="spell"?(u.stats.intelletto||u.stats.volonta||5):(u.stats.forza||5);
-
-let bonus=Math.floor(stat/2),weapon=u.weapon+(type==="skill"?3:type==="spell"?4:0);
-
-let damage=Math.max(1,die+bonus+weapon-target.armor);
-
-if(die===20)damage+=10;
-
-target.hp-=damage;
+let die=roll(),stat=type==="spell"?(u.stats.intelletto||u.stats.volonta||5):(u.stats.forza||5),bonus=Math.floor(stat/2),weapon=u.weapon+(type==="skill"?3:type==="spell"?4:0),damage=Math.max(1,die+bonus+weapon-target.armor);if(die===20)damage+=10;target.hp-=damage;
 
 log(`${u.name}: D20 ${die} → ${type==="spell"?"incantesimo":type==="skill"?"abilità speciale":"attacco"} su ${target.name}, ${damage} danni${die===20?" (CRITICO!)":""}.`);
 
-if(target.hp<=0){target.hp=0;target.alive=false;log(`${target.name} è stato sconfitto.`);}
+if(target.hp<=0){target.hp=0;target.alive=false;log(`${target.name} è stato sconfitto.`)}
 
-}else if(type==="potion"){
+}else if(type==="potion"){if(G.inventory.Pozione<1){unlockActions();return}G.inventory.Pozione--;let oldHP=u.hp;u.hp=Math.min(u.maxhp,u.hp+18);log(`${u.name} usa una pozione e recupera ${u.hp-oldHP} HP.`)}
 
-if(G.inventory.Pozione<1){unlockActions();return;}
+else if(type==="cure"){let k=["Antidoto","Benda","Purificazione"].find(x=>G.inventory[x]>0);if(!k){unlockActions();return}G.inventory[k]--;if(u.status){u.status=null;log(`${u.name} usa ${k}: effetto negativo rimosso.`)}else log(`${u.name} usa ${k}, ma non ha alterazioni da curare.`)}
 
-G.inventory.Pozione--;let oldHP=u.hp;u.hp=Math.min(u.maxhp,u.hp+18);
+else if(type==="rescue"){let p=[G.hero,...G.party].find(p=>!p.alive&&p.down>0);if(!p){unlockActions();return}p.alive=true;p.down=0;p.hp=Math.max(8,Math.floor(p.maxhp*.25));log(`${u.name} soccorre ${p.name}, che torna in piedi con ${p.hp} HP.`)}
 
-log(`${u.name} usa una pozione e recupera ${u.hp-oldHP} HP.`);
+else if(type==="flee"){if(battle.n===3)log("Il Custode blocca ogni via di fuga.");else if(Math.random()<.55){log("La fuga riesce. Lo scontro termina, ma la missione resta incompleta.");battle.ended=true;busy=false;$("combat").classList.add("hidden");showScene(battle.n===1?"forest":"crypt");return}else log("La fuga fallisce!")}
 
-}else if(type==="cure"){
-
-let k=["Antidoto","Benda","Purificazione"].find(x=>G.inventory[x]>0);
-
-if(!k){unlockActions();return;}
-
-G.inventory[k]--;
-
-if(u.status){u.status=null;log(`${u.name} usa ${k}: effetto negativo rimosso.`);}
-
-else{log(`${u.name} usa ${k}, ma non ha alterazioni da curare.`);}
-
-}else if(type==="rescue"){
-
-let p=[G.hero,...G.party].find(p=>!p.alive&&p.down>0);
-
-if(!p){unlockActions();return;}
-
-p.alive=true;p.down=0;p.hp=Math.max(8,Math.floor(p.maxhp*.25));
-
-log(`${u.name} soccorre ${p.name}, che torna in piedi con ${p.hp} HP.`);
-
-}else if(type==="flee"){
-
-if(battle.n===3){log("Il Custode blocca ogni via di fuga.");}
-
-else if(Math.random()<.55){
-
-log("La fuga riesce. Lo scontro termina, ma la missione resta incompleta.");
-
-battle.ended=true;busy=false;$("combat").classList.add("hidden");
-
-showScene(battle.n===1?"forest":"crypt");return;
-
-}else{log("La fuga fallisce!");}
+renderBattle();if(battle.units.every(e=>!e.alive||e.hp<=0)){busy=false;winBattle();return}battle.idx++;battle.turnPrepared=false;busy=false;advanceToPlayer()
 
 }
 
-renderBattle();
-
-if(battle.units.every(e=>!e.alive||e.hp<=0)){busy=false;winBattle();return;}
-
-battle.idx++;battle.turnPrepared=false;busy=false;advanceToPlayer();
-
-}
-
-function roll(){return Math.floor(Math.random()*20)+1;}
+function roll(){return Math.floor(Math.random()*20)+1}
 
 function enemyTurn(e,target){
 
-if(!target||!target.alive)return;
+if(!target||!target.alive)return;let die=roll(),damage=Math.max(1,die+e.atk-target.armor);if(die===20)damage+=5;target.hp-=damage;log(`${e.name} attacca ${target.name}: D20 ${die}, ${damage} danni.`);
 
-let die=roll(),damage=Math.max(1,die+e.atk-target.armor);
+if(e.kind==="priest"&&target.hp>0&&Math.random()<.35){target.status={name:"Avvelenamento",turns:3,damage:3};log(`${target.name} è avvelenato!`)}
 
-if(die===20)damage+=5;
+if(e.kind==="boss"&&target.hp>0&&Math.random()<.3){target.status={name:"Sanguinamento",turns:2,damage:4};log(`${target.name} sanguina!`)}
 
-target.hp-=damage;
-
-log(`${e.name} attacca ${target.name}: D20 ${die}, ${damage} danni.`);
-
-if(e.kind==="priest"&&target.hp>0&&Math.random()<.35){
-
-target.status={name:"Avvelenamento",turns:3,damage:3};log(`${target.name} è avvelenato!`);
+if(target.hp<=0){target.hp=0;if(target.isHero){target.hp=1;log(`${target.name} crolla, ma il destino lo protegge.`)}else{target.alive=false;target.down=3;log(`${target.name} è a terra! Hai 3 turni per soccorrerlo.`)}}
 
 }
 
-if(e.kind==="boss"&&target.hp>0&&Math.random()<.3){
+function applyStartStatus(u){if(!u.status)return;let s=u.status;if(s.damage){u.hp-=s.damage;log(`${u.name} subisce ${s.damage} danni da ${s.name.toLowerCase()}.`)}s.turns--;if(s.turns<=0){log(`L'effetto ${s.name.toLowerCase()} termina su ${u.name}.`);u.status=null}if(u.hp<=0){if(u.isHero){u.hp=1;log(`${u.name} resiste alla morte.`)}else{u.hp=0;u.alive=false;u.down=3;log(`${u.name} cade a terra!`)}}}
 
-target.status={name:"Sanguinamento",turns:2,damage:4};log(`${target.name} sanguina!`);
-
-}
-
-if(target.hp<=0){
-
-target.hp=0;
-
-if(target.isHero){target.hp=1;log(`${target.name} crolla, ma il destino lo protegge.`);}
-
-else{target.alive=false;target.down=3;log(`${target.name} è a terra! Hai 3 turni per soccorrerlo.`);}
-
-}
-
-}
-
-function applyStartStatus(u){
-
-if(!u.status)return;
-
-let s=u.status;
-
-if(s.damage){u.hp-=s.damage;log(`${u.name} subisce ${s.damage} danni da ${s.name.toLowerCase()}.`);}
-
-s.turns--;
-
-if(s.turns<=0){log(`L'effetto ${s.name.toLowerCase()} termina su ${u.name}.`);u.status=null;}
-
-if(u.hp<=0){
-
-if(u.isHero){u.hp=1;log(`${u.name} resiste alla morte.`);}
-
-else{u.hp=0;u.alive=false;u.down=3;log(`${u.name} cade a terra!`);}
-
-}
-
-}
-
-function tickDowned(){
-
-[G.hero,...G.party].forEach(p=>{
-
-if(!p.alive&&p.down>0){p.down--;if(p.down===0)log(`${p.name} non è stato soccorso in tempo: è perduto.`);}
-
-});
-
-}
+function tickDowned(){[G.hero,...G.party].forEach(p=>{if(!p.alive&&p.down>0){p.down--;if(p.down===0)log(`${p.name} non è stato soccorso in tempo: è perduto.`)}})}
 
 function winBattle(){
 
-if(!battle||battle.ended)return;
+if(!battle||battle.ended)return;battle.ended=true;busy=false;G.battleWon++;let n=battle.n,reward=n===1?{xp:35,gold:18}:n===2?{xp:55,gold:28}:{xp:100,gold:60};G.hero.xp+=reward.xp;G.gold+=reward.gold;let levelUp="";
 
-battle.ended=true;busy=false;G.battleWon++;
+if(G.hero.xp>=G.hero.level*60){G.hero.xp-=G.hero.level*60;G.hero.level++;G.hero.maxhp+=8;G.hero.hp=Math.min(G.hero.maxhp,G.hero.hp+8);G.hero.stats.forza++;G.statPoints=(G.statPoints||0)+2;levelUp=` ${G.hero.name} sale al livello ${G.hero.level}! Hai ottenuto 2 punti caratteristica.`}
 
-let n=battle.n;
+if(n===3){G.inventory["Lama dell'Eco Perduto"]=1;G.finished=true}
 
-let reward=n===1?{xp:35,gold:18}:n===2?{xp:55,gold:28}:{xp:100,gold:60};
+$("combat").classList.add("hidden");let box=$("afterCombat");box.classList.remove("hidden");
 
-G.hero.xp+=reward.xp;G.gold+=reward.gold;
+box.innerHTML=`<h2>${n===3?"Vittoria! Il Custode è caduto.":"Vittoria!"}</h2><p>Hai ottenuto ${reward.xp} XP e ${reward.gold} monete d'oro.${levelUp}</p>${n===3?'<p><b>Oggetto unico leggendario ottenuto: Lama dell’Eco Perduto.</b> La campana tace.</p>':''}<button class="btn" onclick="continueAfter(${n})">${n===1?"Prosegui verso la cripta":n===2?"Apri la sala della campana":"Concludi l'avventura"}</button>`;
 
-let levelUp="";
-
-if(G.hero.xp>=G.hero.level*60){
-
-G.hero.xp-=G.hero.level*60;G.hero.level++;
-
-G.hero.maxhp+=8;G.hero.hp=Math.min(G.hero.maxhp,G.hero.hp+8);
-
-G.hero.stats.forza++;G.statPoints+=2;
-
-levelUp=` ${G.hero.name} sale al livello ${G.hero.level}! Hai ottenuto 2 punti caratteristica.`;
+renderBattle();updateHUD()
 
 }
 
-if(n===3){G.inventory["Lama dell'Eco Perduto"]=1;G.finished=true;}
+function continueAfter(n){if(n===1)showScene("crypt");else if(n===2)showScene("boss");else showScene("ending")}
 
-$("combat").classList.add("hidden");
+function loseBattle(){if(!battle||battle.ended)return;battle.ended=true;busy=false;$("combat").classList.add("hidden");let box=$("afterCombat");box.classList.remove("hidden");box.innerHTML=`<h2>Il gruppo è sopraffatto</h2><p>La prova finisce qui, ma puoi riprovare.</p><button class="btn" onclick="restartBattle()">Riprova lo scontro</button>`}
 
-let box=$("afterCombat");box.classList.remove("hidden");
+function restartBattle(){startBattle(battle.n)}
 
-box.innerHTML=`
-
-<h2>${n===3?"Vittoria! Il Custode è caduto.":"Vittoria!"}</h2>
-
-<p>Hai ottenuto ${reward.xp} XP e ${reward.gold} monete d'oro.${levelUp}</p>
-
-${n===3?'<p><b>Oggetto unico leggendario ottenuto: Lama dell’Eco Perduto.</b> La campana tace.</p>':''}
-
-<button class="btn" onclick="continueAfter(${n})">${n===1?"Prosegui verso la cripta":n===2?"Apri la sala della campana":"Concludi l'avventura"}</button>`;
-
-renderBattle();updateHUD();
-
-}
-
-function continueAfter(n){
-
-if(n===1)showScene("crypt");
-
-else if(n===2)showScene("boss");
-
-else showScene("ending");
-
-}
-
-function loseBattle(){
-
-if(!battle||battle.ended)return;
-
-battle.ended=true;busy=false;$("combat").classList.add("hidden");
-
-let box=$("afterCombat");box.classList.remove("hidden");
-
-box.innerHTML=`<h2>Il gruppo è sopraffatto</h2><p>La prova finisce qui, ma puoi riprovare.</p><button class="btn" onclick="restartBattle()">Riprova lo scontro</button>`;
-
-}
-
-function restartBattle(){startBattle(battle.n);}
-
-/* NAVIGAZIONE */
-
-function openTab(tab){
-
-if(!G)return;
-
-currentTab=tab;
-
-$("gameContent").classList.toggle("hidden",tab!=="mission");
-
-$("teamView").classList.toggle("hidden",tab!=="team");
-
-$("inventoryView").classList.toggle("hidden",tab!=="inventory");
-
-$("otherView").classList.toggle("hidden",tab!=="other");
-
-document.querySelectorAll(".navButton").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));
-
-if(tab==="team")renderTeam();
-
-if(tab==="inventory")renderInventory();
-
-if(tab==="other")showMenu(currentMenu||"home");
-
-}
-
-function showMenu(which){
-
-currentMenu=which;
-
-let box=$("menuContent");
-
-if(which==="home"){
-
-box.innerHTML=`<div class="panel"><h2>Le tue opzioni</h2><p class="small">Gestisci il personaggio, consulta le abilità e distribuisci i punti caratteristica.</p></div>`;
-
-return;
-
-}
-
-if(which==="settings"){
-
-box.innerHTML=`
-
-<div class="panel"><h2>Impostazioni</h2>
-
-<div class="menuCard"><h3>Musica</h3><button class="btn secondary" onclick="toggleMusic()">Attiva / Disattiva musica</button></div>
-
-<div class="menuCard"><h3>Salvataggio</h3><p class="small">Salva i tuoi progressi su questo dispositivo.</p>
-
-<div class="row"><button class="btn" onclick="saveGame()">Salva partita</button><button class="btn secondary" onclick="loadGame()">Carica partita</button></div></div>
-
-<div class="menuCard"><h3>Creazione personaggio</h3><button class="btn danger" onclick="backToCreator()">Torna alla creazione</button></div>
-
-</div>`;
-
-return;
-
-}
-
-if(which==="character"){
-
-let h=G.hero;
-
-box.innerHTML=`
-
-<div class="panel"><h2>Personaggio</h2>
-
-<div class="layout">
-
-<div><img class="portrait" style="height:300px;max-height:45vh" src="${asset(h.portrait)}" alt="${h.name}"></div>
-
-<div><h3>${h.name}</h3>
-
-<p class="small">${h.race} · ${h.class}</p>
-
-<span class="badge">Livello ${h.level}</span>
-
-<span class="badge">XP ${h.xp}</span>
-
-<p>HP: <b>${h.hp}/${h.maxhp}</b></p>
-
-<p>Armatura: <b>${h.armor}</b></p>
-
-<p>Arma: <b>${h.weapon}</b></p>
-
-</div></div>
-
-<hr><h3>Caratteristiche</h3>
-
-<div class="stats">${Object.keys(statNames).map(k=>`<div class="stat"><span>${statNames[k]}</span><b>${h.stats[k]}</b></div>`).join("")}</div>
-
-<hr><h3>Equipaggiamento visivo</h3>
-
-<p class="small">Gli spazi per armatura, elmo, guanti, pantaloni, stivali e accessori verranno attivati quando saranno pronti i relativi elementi grafici trasparenti. Per ora il modello base rimane visibile senza sovrapposizioni.</p>
-
-</div>`;
-
-return;
-
-}
-
-if(which==="abilities"){
-
-let c=G.hero.class;
-
-let magic=canUseMagic({class:c});
-
-box.innerHTML=`
-
-<div class="panel"><h2>Abilità</h2>
-
-<div class="menuCard"><h3>Attacco normale</h3><p>Un attacco diretto con l'arma equipaggiata.</p><span class="badge">0 AP</span></div>
-
-<div class="menuCard"><h3>Abilità speciale</h3><p>Un colpo potenziato che infligge danni aggiuntivi.</p><span class="badge">2 AP</span></div>
-
-<div class="menuCard"><h3>Magia</h3><p>${magic?"La tua classe può utilizzare incantesimi per colpire i nemici.":"La tua classe non dispone attualmente di incantesimi."}</p><span class="badge">3 AP</span></div>
-
-<div class="menuCard"><h3>Oggetti e soccorso</h3><p>Puoi usare pozioni, cure e soccorrere gli alleati caduti durante il combattimento.</p></div>
-
-</div>`;
-
-return;
-
-}
-
-if(which==="statistics"){
-
-let h=G.hero;
-
-box.innerHTML=`
-
-<div class="panel"><h2>Statistiche</h2>
-
-<p>Punti caratteristica disponibili: <b style="color:var(--gold)">${G.statPoints}</b></p>
-
-<p class="small">Quando sali di livello ottieni 2 punti da distribuire liberamente.</p>
-
-${Object.keys(statNames).map(k=>`<div class="stat"><span>${statNames[k]}</span><span><b>${h.stats[k]}</b> <button class="btn secondary statAdd" onclick="addStatPoint('${k}')" ${G.statPoints<1?'disabled':''}>+</button></span></div>`).join("")}
-
-</div>`;
-
-}
-
-}
-
-function renderTeam(){
-
-let all=[G.hero,...G.party];
-
-$("teamCards").innerHTML=all.map(p=>`
-
-<div class="menuCard">
-
-<div class="row">
-
-<img src="${asset(p.portrait)}" alt="${p.name}" style="width:75px;height:110px;object-fit:contain;background:#100e0c;border:1px solid #96713b;border-radius:6px">
-
-<div style="flex:1"><h3>${p.name}</h3>
-
-<p class="small">${p.isHero?p.race+" · "+p.class:"Compagno"}</p>
-
-<p>HP ${p.hp}/${p.maxhp}</p>
-
-<div class="bars"><div class="hpbar" style="width:${Math.max(0,p.hp/p.maxhp*100)}%"></div></div>
-
-<span class="badge">${p.alive?"In squadra":"Caduto"}</span>
-
-</div></div></div>`).join("");
-
-}
-
-function renderInventory(){
-
-$("inventory").innerHTML=Object.entries(G.inventory).map(([k,v])=>`<span>${k}: ${v}</span>`).join("");
-
-$("goldDisplay").textContent=G.gold+" monete d'oro";
-
-}
-
-function updateHUD(){
-
-if(!G)return;
-
-$("levelBadge").textContent=`Livello ${G.hero.level} · ${G.hero.xp} XP`;
-
-$("inventory").innerHTML=Object.entries(G.inventory).map(([k,v])=>`<span>${k}: ${v}</span>`).join("")+`<span>Oro: ${G.gold}</span>`;
-
-if(currentTab==="inventory")renderInventory();
-
-if(currentTab==="team")renderTeam();
-
-}
-
-function addStatPoint(key){
-
-if(!G||G.statPoints<1||!(key in G.hero.stats))return;
-
-G.hero.stats[key]++;G.statPoints--;
-
-if(key==="vitalita"){G.hero.maxhp+=3;G.hero.hp+=3;}
-
-showMenu("statistics");updateHUD();
-
-}
-
-/* SALVATAGGIO E CARICAMENTO */
+function updateHUD(){if(!G)return;$("levelBadge").textContent=`Livello ${G.hero.level} · ${G.hero.xp} XP`;$("inventory").innerHTML=Object.entries(G.inventory).map(([k,v])=>`<span>${k}: ${v}</span>`).join("")+`<span>Oro: ${G.gold}</span>`}
 
 function saveGame(){
 
-if(!G){alert("Non c'è una partita da salvare.");return;}
+if(!G){alert("Non c'è una partita da salvare.");return}let battleSave=null;if(battle)battleSave={...battle,order:battle.order.map(u=>u.id)};
 
-let battleSave=null;
-
-if(battle)battleSave={...battle,order:battle.order.map(u=>u.id)};
-
-localStorage.setItem("velmoraDemoSave",JSON.stringify({G,battle:battleSave}));
-
-alert("Partita salvata su questo dispositivo!");
+localStorage.setItem("velmoraDemoSave",JSON.stringify({G,battle:battleSave}));alert("Partita salvata su questo dispositivo!")
 
 }
 
 function loadGame(){
 
-let raw=localStorage.getItem("velmoraDemoSave");
+let raw=localStorage.getItem("velmoraDemoSave");if(!raw){alert("Non è presente un salvataggio.");return}
 
-if(!raw){alert("Non è presente un salvataggio.");return;}
+try{let s=JSON.parse(raw);G=s.G;battle=s.battle;busy=false;if(!G.statPoints)G.statPoints=0;
 
-try{
+$("creator").classList.add("hidden");$("game").classList.remove("hidden");$("bottomNav").classList.add("visible");
 
-let s=JSON.parse(raw);G=s.G;battle=s.battle;busy=false;
+if(battle){let all=[G.hero,...G.party,...battle.units],byId=new Map(all.map(u=>[String(u.id),u]));battle.order=(battle.order||[]).map(id=>byId.get(String(id))).filter(Boolean);
 
-if(typeof G.statPoints!=="number")G.statPoints=0;
+if(!battle.ended){$("combat").classList.remove("hidden");$("afterCombat").classList.add("hidden");$("battleLog").innerHTML="";battle.log.forEach(x=>$("battleLog").innerHTML+=`<p>${x}</p>`);renderBattle();advanceToPlayer()}
 
-$("creator").classList.add("hidden");
+else{$("combat").classList.add("hidden");showScene(G.finished?"ending":G.battleWon===1?"crypt":G.battleWon===2?"boss":"prologue")}}
 
-$("game").classList.remove("hidden");
+else showScene(G.finished?"ending":G.battleWon===0?"prologue":G.battleWon===1?"crypt":G.battleWon===2?"boss":"ending");
 
-$("bottomNav").classList.remove("hidden");
+updateHUD();openTab("mission");alert("Partita caricata!")
 
-if(battle){
-
-let all=[G.hero,...G.party,...battle.units];
-
-let byId=new Map(all.map(u=>[String(u.id),u]));
-
-battle.order=(battle.order||[]).map(id=>byId.get(String(id))).filter(Boolean);
-
-if(!battle.ended){
-
-$("combat").classList.remove("hidden");
-
-$("afterCombat").classList.add("hidden");
-
-$("battleLog").innerHTML="";
-
-battle.log.forEach(x=>$("battleLog").innerHTML+=`<p>${x}</p>`);
-
-renderBattle();openTab("mission");advanceToPlayer();
-
-}else{
-
-$("combat").classList.add("hidden");
-
-showScene(G.finished?"ending":G.battleWon===1?"crypt":G.battleWon===2?"boss":"prologue");
+}catch(e){console.error(e);alert("Salvataggio non leggibile.")}
 
 }
 
-}else{
+function backToCreator(){if(confirm("Tornare alla creazione? La partita resterà salvata solo se la salvi prima.")){location.reload()}}
 
-showScene(G.finished?"ending":G.battleWon===0?"prologue":G.battleWon===1?"crypt":G.battleWon===2?"boss":"ending");
+/* NAVIGAZIONE E PANNELLI SECONDARI: non modifica lo stato del combattimento */
 
-}
+function setActiveTab(tab){document.querySelectorAll(".navBtn").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab))}
 
-updateHUD();alert("Partita caricata!");
+function openTab(tab){
 
-}catch(e){console.error(e);alert("Salvataggio non leggibile.");}
+if(!G)return;setActiveTab(tab);$("menuView").classList.add("hidden");$("gameContent").classList.remove("hidden");
 
-}
+if(tab==="mission"){ $("missionPanel").scrollIntoView({behavior:"smooth",block:"start"});return}
 
-function backToCreator(){
+if(tab==="inventory"){ $("inventoryPanel").scrollIntoView({behavior:"smooth",block:"center"});return}
 
-if(confirm("Tornare alla creazione? La partita resterà salvata solo se la salvi prima.")){
+if(tab==="squad"){showMenu("squad");return}
 
-location.reload();
-
-}
+if(tab==="more"){showMenu("more");return}
 
 }
 
-renderCreator();
+function showMenu(page){
 
-musicLabel();
+$("menuView").classList.remove("hidden");$("gameContent").classList.remove("hidden");
+
+$("menuView").scrollIntoView({behavior:"smooth",block:"start"});
+
+const c=$("menuContent");
+
+if(page==="more"){
+
+c.innerHTML=`<h2>Altro</h2><div class="menuGrid">
+
+<button class="choice menuTile" onclick="showMenu('settings')"><strong>⚙ Impostazioni</strong><small>Musica, salvataggio e partita</small></button>
+
+<button class="choice menuTile" onclick="showMenu('character')"><strong>♙ Personaggio</strong><small>Profilo ed equipaggiamento</small></button>
+
+<button class="choice menuTile" onclick="showMenu('abilities')"><strong>✧ Abilità</strong><small>Competenze della classe</small></button>
+
+<button class="choice menuTile" onclick="showMenu('statistics')"><strong>✚ Statistiche</strong><small>Caratteristiche e punti</small></button>
+
+</div>`;return
+
+}
+
+if(page==="squad"){
+
+let members=[G.hero,...G.party];c.innerHTML=`<h2>La tua squadra</h2><p class="menuHint">Qui puoi controllare i membri del gruppo. La formazione e il combattimento restano attivi anche mentre consulti questo pannello.</p>`+
+
+members.map(p=>`<div class="memberCard"><img src="${asset(p.portrait)}" alt="${p.name}"><div class="memberInfo"><strong>${p.name}</strong><p>${p.isHero?p.race+" · "+p.class:"Compagno · Guerriero"}</p><p>Livello ${p.level||1} · ${p.hp}/${p.maxhp} HP</p><div class="bars"><div class="hpbar" style="width:${Math.max(0,p.hp/p.maxhp*100)}%"></div></div><span class="badge">${p.alive?"In squadra":"Caduto"}</span></div></div>`).join("");return
+
+}
+
+if(page==="settings"){
+
+c.innerHTML=`<button class="btn secondary menuBack" onclick="showMenu('more')">← Indietro</button><h2>Impostazioni</h2><p>Audio</p><button class="btn secondary" onclick="toggleMusic()">♫ Attiva / disattiva musica</button><hr><h3>Partita</h3><div class="row"><button class="btn secondary" onclick="saveGame()">Salva partita</button><button class="btn secondary" onclick="loadGame()">Carica partita</button></div><p class="menuHint">Il salvataggio rimane nella memoria di questo browser e dispositivo.</p><hr><button class="btn danger" onclick="backToCreator()">Torna alla creazione</button>`;return
+
+}
+
+if(page==="character"){
+
+let p=G.hero;c.innerHTML=`<button class="btn secondary menuBack" onclick="showMenu('more')">← Indietro</button><h2>Personaggio</h2><div class="memberCard"><img src="${asset(p.portrait)}" alt="${p.name}"><div class="memberInfo"><strong>${p.name}</strong><p>${p.race} · ${p.class}</p><p>Livello ${p.level} · ${p.hp}/${p.maxhp} HP</p><p>Armatura attuale: ${p.armor} · Arma: ${p.weapon}</p></div></div><h3>Equipaggiamento</h3><p class="menuHint">Gli slot visivi dell'equipaggiamento verranno attivati quando introdurremo gli oggetti indossabili e le relative immagini. Per ora non mostriamo slot vuoti o non funzionanti.</p><h3>Caratteristiche</h3><div class="stats">${Object.entries(p.stats).map(([k,v])=>`<div class="stat"><span>${statNames[k]||k}</span><b>${v}</b></div>`).join("")}</div>`;return
+
+}
+
+if(page==="abilities"){
+
+let p=G.hero,mag=canUseMagic(p);c.innerHTML=`<button class="btn secondary menuBack" onclick="showMenu('more')">← Indietro</button><h2>Abilità</h2><p><b>${p.class}</b> · Le abilità sono consultabili qui; durante il combattimento si usano i pulsanti dedicati.</p><div class="memberCard"><div class="memberInfo"><strong>Attacco normale</strong><p>Nessun costo in AP. Attacco fisico con tiro D20.</p></div></div><div class="memberCard"><div class="memberInfo"><strong>Abilità speciale</strong><p>Costo: 2 AP. Attacco potenziato con danni aggiuntivi.</p></div></div><div class="memberCard"><div class="memberInfo"><strong>${mag?"Magia":"Tecnica di classe"}</strong><p>${mag?"Costo: 3 AP. Disponibile per questa classe.":"Le magie non sono disponibili per questa classe."}</p></div></div><p class="menuHint">Le abilità avanzate e i relativi alberi di sviluppo saranno aggiunti in una fase successiva.</p>`;return
+
+}
+
+if(page==="statistics"){
+
+let p=G.hero;if(!Number.isInteger(G.statPoints))G.statPoints=0;
+
+c.innerHTML=`<button class="btn secondary menuBack" onclick="showMenu('more')">← Indietro</button><h2>Statistiche</h2><p>Punti caratteristica disponibili: <b style="color:#f0d49b">${G.statPoints}</b></p><p class="menuHint">Quando sali di livello ottieni 2 punti da assegnare. Ogni punto aumenta di 1 la caratteristica scelta.</p>`+
+
+Object.entries(p.stats).map(([k,v])=>`<div class="pointRow"><span>${statNames[k]||k}</span><b>${v}</b><button class="btn secondary" onclick="addStatPoint('${k}')" ${G.statPoints<1?"disabled":""}>+</button></div>`).join("")+
+
+`<p class="menuHint">I punti spesi vengono conservati nel salvataggio.</p>`;return
+
+}
+
+}
+
+function addStatPoint(key){if(!G||G.statPoints<1||!(key in G.hero.stats))return;G.hero.stats[key]++;G.statPoints--;if(key==="vitalita"){G.hero.maxhp+=3;G.hero.hp+=3}showMenu("statistics");updateHUD()}
+
+renderCreator();musicLabel();
 
 </script>
 
