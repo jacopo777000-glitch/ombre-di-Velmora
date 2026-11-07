@@ -16,8 +16,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Install image tools
-        run: pip install pillow numpy opencv-python-headless
+      - name: Install background remover
+        run: pip install "rembg[cpu]" pillow numpy
       - name: Remove parchment and crop equipment
         run: python process_equipment_assets.py
       - name: Commit transparent equipment PNGs
