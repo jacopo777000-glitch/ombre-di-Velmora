@@ -75,3 +75,5 @@ for group,files in GROUPS.items():
   print("OK",filename,manifest[filename]["x"],manifest[filename]["y"],manifest[filename]["width"],manifest[filename]["height"])
 (OUT/"manifest.json").write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding="utf-8")
 print("Processed",len(manifest),"transparent cutouts")
+
+# Re-run the equipment asset pipeline with the current transparent-cropping logic.
