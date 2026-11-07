@@ -558,7 +558,7 @@ Object.entries(p.stats).map(([k,v])=>`<div class="pointRow"><span>${statNames[k]
 }
 function setEquipment(slot,value){if(!G||!G.hero)return;if(!G.hero.equipment)G.hero.equipment={hair:"",armor:"",head:""};G.hero.equipment[slot]=value;showMenu("character");if(battle)renderBattle()}
 function addStatPoint(key){if(!G||G.statPoints<1||!(key in G.hero.stats))return;G.hero.stats[key]++;G.statPoints--;if(key==="vitalita"){G.hero.maxhp+=3;G.hero.hp+=3}showMenu("statistics");updateHUD()}
-let equipmentManifest={};fetch('./assets/equip/manifest.json').then(r=>r.ok?r.json():{}).then(m=>{equipmentManifest=m;if(G){if(battle)renderBattle();}}).catch(()=>{});
+let equipmentManifest={};fetch('./assets/equip/manifest.json').then(r=>r.ok?r.json():{}).then(m=>{equipmentManifest=m;if(G){if(battle)renderBattle();if(document.querySelector('#menuContent .characterCard'))showMenu('character');}}).catch(()=>{});
 renderCreator();musicLabel();
 </script>
 </body>
