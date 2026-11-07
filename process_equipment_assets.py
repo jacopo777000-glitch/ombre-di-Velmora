@@ -60,7 +60,7 @@ for group,files in GROUPS.items():
    # All four head accessories are drawn near the top of their parchment sheet.
    roi=(int(w*.20),0,int(w*.82),int(h*.52))
    rw,rh=roi[2]-roi[0],roi[3]-roi[1]
-   crop,alpha,origin=grabcut_crop(rgb,roi,(int(rw*.28),int(rh*.04),int(rw*.72),int(rh*.62)))
+   crop,alpha,origin=grabcut_crop(rgb,roi,(int(rw*.30),int(rh*.08),int(rw*.70),int(rh*.35)))
   mask=Image.fromarray(alpha).filter(ImageFilter.GaussianBlur(0.55))
   bbox=mask.getbbox()
   if not bbox:
