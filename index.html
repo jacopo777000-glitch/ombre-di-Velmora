@@ -441,7 +441,7 @@ if(battle.units.every(e=>!e.alive||e.hp<=0)){winBattle();return}
 if(aliveParty().length===0){loseBattle();return}
 if(battle.idx>=battle.order.length){battle.idx=0;battle.round++;battle.turnPrepared=false;tickDowned();battle.order=battle.order.filter(u=>u.alive&&u.hp>0);if(!battle.order.length){loseBattle();return}}
 let u=current();if(!u||!u.alive||u.hp<=0){battle.idx++;battle.turnPrepared=false;continue}
-if(isEnemy(u)){busy=true;renderBattle();let targets=aliveParty();if(targets.length){let target=targets.slice().sort((a,b)=>(a.hp/a.maxhp)-(b.hp/b.maxhp))[0];let die=roll();showDiceRoll(die,u.name,"Attacco nemico · D20");await animateStrike(u,target);enemyTurn(u,target,die)}battle.idx++;battle.turnPrepared=false;renderBattle();busy=false;continue}
+if(isEnemy(u)){busy=true;renderBattle();let targets=aliveParty();if(targets.length){let target=targets.slice().sort((a,b)=>(a.hp/a.maxhp)-(b.hp/b.maxhp))[0];let die=roll();await showDiceRoll(die,u.name,"Attacco nemico · D20");await animateStrike(u,target);enemyTurn(u,target,die)}battle.idx++;battle.turnPrepared=false;renderBattle();busy=false;continue}
 if(!battle.turnPrepared){u.ap=Math.min(5,u.ap+1);applyStartStatus(u);if(!u.alive||u.hp<=0){battle.idx++;battle.turnPrepared=false;continue}battle.turnPrepared=true}
 $("activeTitle").textContent="Turno di "+u.name;$("activeInfo").textContent=`HP ${u.hp}/${u.maxhp} · AP ${u.ap}/5 · Agilità ${u.stats.agilita||5}`;$("actionMessage").textContent="Scegli una sola azione. L'attacco normale non consuma AP.";renderTargets();renderActions();renderBattle();return
 }}
@@ -457,7 +457,7 @@ if(busy||!battle||battle.ended)return;let u=current(),target=battle.units[select
 if(type==="spell"&&!canUseMagic(u)){$("actionMessage").textContent="Questa classe non può utilizzare la magia.";return}
 busy=true;$("combatActions").querySelectorAll("button").forEach(b=>b.disabled=true);
 if(["attack","skill","spell"].includes(type)){
-if(!target||!target.alive){unlockActions();return}let cost=type==="skill"?2:type==="spell"?3:0;if(u.ap<cost){unlockActions();return}u.ap-=cost;let die=roll();showDiceRoll(die,u.name,"Tiro dell'azione · D20");await animateStrike(u,target);
+if(!target||!target.alive){unlockActions();return}let cost=type==="skill"?2:type==="spell"?3:0;if(u.ap<cost){unlockActions();return}u.ap-=cost;let die=roll();await showDiceRoll(die,u.name,"Tiro dell'azione · D20");await animateStrike(u,target);
 let stat=type==="spell"?(u.stats.intelletto||u.stats.volonta||5):(u.stats.forza||5),bonus=Math.floor(stat/2),weapon=u.weapon+(type==="skill"?3:type==="spell"?4:0),damage=Math.max(1,die+bonus+weapon-target.armor);if(die===20)damage+=10;target.hp-=damage;
 log(`${u.name}: D20 ${die} → ${type==="spell"?"incantesimo":type==="skill"?"abilità speciale":"attacco"} su ${target.name}, ${damage} danni${die===20?" (CRITICO!)":""}.`);
 if(target.hp<=0){target.hp=0;target.alive=false;log(`${target.name} è stato sconfitto.`)}
@@ -467,7 +467,7 @@ else if(type==="rescue"){let p=[G.hero,...G.party].find(p=>!p.alive&&p.down>0);i
 else if(type==="flee"){if(battle.n===3)log("Il Custode blocca ogni via di fuga.");else if(Math.random()<.55){log("La fuga riesce. Lo scontro termina, ma la missione resta incompleta.");battle.ended=true;busy=false;$("combat").classList.add("hidden");showScene(battle.n===1?"forest":"crypt");return}else log("La fuga fallisce!")}
 renderBattle();if(battle.units.every(e=>!e.alive||e.hp<=0)){busy=false;winBattle();return}battle.idx++;battle.turnPrepared=false;busy=false;advanceToPlayer()
 }
-function showDiceRoll(value,who,result){const img=$("diceImage"),whoBox=$("diceWho"),num=$("diceNumber"),res=$("diceResult");if(!num)return;if(whoBox)whoBox.textContent=who||"Il destino si muove…";if(res)res.textContent=result||"Risultato del tiro";if(img){img.classList.remove("diceRolling");void img.offsetWidth;img.classList.add("diceRolling")}num.textContent=String(value);}
+async function showDiceRoll(value,who,result){const img=$("diceImage"),whoBox=$("diceWho"),num=$("diceNumber"),res=$("diceResult");if(!num)return;if(whoBox)whoBox.textContent=who||"Il destino si muove…";if(res)res.textContent="Il dado sta girando…";num.textContent="…";if(img){img.classList.remove("diceRolling");void img.offsetWidth;img.classList.add("diceRolling")}await new Promise(resolve=>setTimeout(resolve,600));num.textContent=String(value);if(res)res.textContent=result||"Risultato del tiro";await new Promise(resolve=>setTimeout(resolve,650));}
 function roll(){return Math.floor(Math.random()*20)+1}
 function enemyTurn(e,target,die){
 if(!target||!target.alive)return;die=die||roll();let damage=Math.max(1,die+e.atk-target.armor);if(die===20)damage+=5;target.hp-=damage;log(`${e.name} attacca ${target.name}: D20 ${die}, ${damage} danni.`);
