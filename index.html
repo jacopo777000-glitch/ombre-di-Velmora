@@ -252,7 +252,7 @@ main{width:min(1900px,99%);margin:10px auto 28px;padding:0 10px 100px}
  .resource,.topAction{font-size:9px;padding:5px 4px}
 }
 
-</style>
+.equipLabel{display:block;color:#e9c98e;font-size:12px;margin:10px 0 3px}\n</style>
 </head>
 <body>
 <audio id="bgMusic" src="./musica_valle.mp3" loop preload="auto"></audio>
@@ -389,7 +389,7 @@ const s=statsFor();$("stats").innerHTML=Object.keys(statNames).map(k=>`<div clas
 function startAdventure(){
 let name=$("heroName").value.trim();if(!name){alert("Scrivi il nome del tuo eroe prima di partire!");return}
 let s=statsFor(),maxhp=26+s.vitalita*3;
-G={hero:{id:"hero",name,race:selectedRace.name,class:selectedClass.name,gender,portrait:imageForRace(selectedRace),stats:s,level:1,xp:0,hp:maxhp,maxhp,ap:5,maxap:5,armor:selectedClass.id==="warrior"?4:selectedClass.id==="cleric"?3:1,weapon:selectedClass.id==="mage"||selectedClass.id==="druid"?4:6,alive:true,down:0,isHero:true},party:[],inventory:{Pozione:2,Antidoto:1,Benda:1,Purificazione:1},gold:12,chapter:0,companions:{wolf:false,lion:false},battleWon:0,finished:false,statPoints:0};
+G={hero:{id:"hero",name,race:selectedRace.name,class:selectedClass.name,gender,portrait:imageForRace(selectedRace),stats:s,level:1,xp:0,hp:maxhp,maxhp,ap:5,maxap:5,armor:selectedClass.id==="warrior"?4:selectedClass.id==="cleric"?3:1,weapon:selectedClass.id==="mage"||selectedClass.id==="druid"?4:6,alive:true,down:0,isHero:true,equipment:{hair:"",armor:"",head:""}},party:[],inventory:{Pozione:2,Antidoto:1,Benda:1,Purificazione:1},gold:12,chapter:0,companions:{wolf:false,lion:false},battleWon:0,finished:false,statPoints:0};
 $("creator").classList.add("hidden");$("game").classList.remove("hidden");$("bottomNav").classList.add("visible");showScene("prologue");openTab("mission");
 }
 const scenes={
@@ -535,7 +535,9 @@ if(page==="settings"){
 c.innerHTML=`<button class="btn secondary menuBack" onclick="showMenu('more')">← Indietro</button><h2>Impostazioni</h2><p>Audio</p><button class="btn secondary" onclick="toggleMusic()">♫ Attiva / disattiva musica</button><hr><h3>Partita</h3><div class="row"><button class="btn secondary" onclick="saveGame()">Salva partita</button><button class="btn secondary" onclick="loadGame()">Carica partita</button></div><p class="menuHint">Il salvataggio rimane nella memoria di questo browser e dispositivo.</p><hr><button class="btn danger" onclick="backToCreator()">Torna alla creazione</button>`;return
 }
 if(page==="character"){
-let p=G.hero;c.innerHTML=`<button class="btn secondary menuBack" onclick="showMenu('more')">← Indietro</button><h2>Personaggio</h2><div class="memberCard"><img src="${asset(p.portrait)}" alt="${p.name}"><div class="memberInfo"><strong>${p.name}</strong><p>${p.race} · ${p.class}</p><p>Livello ${p.level} · ${p.hp}/${p.maxhp} HP</p><p>Armatura attuale: ${p.armor} · Arma: ${p.weapon}</p></div></div><h3>Equipaggiamento</h3><p class="menuHint">Gli slot visivi dell'equipaggiamento verranno attivati quando introdurremo gli oggetti indossabili e le relative immagini. Per ora non mostriamo slot vuoti o non funzionanti.</p><h3>Caratteristiche</h3><div class="stats">${Object.entries(p.stats).map(([k,v])=>`<div class="stat"><span>${statNames[k]||k}</span><b>${v}</b></div>`).join("")}</div>`;return
+let p=G.hero;if(!p.equipment)p.equipment={hair:"",armor:"",head:""};
+const choices=(items,current)=>'<option value="">Nessuno</option>'+items.map(x=>'<option value="'+x+'" '+(current===x?'selected':'')+'>'+x+'</option>').join("");
+c.innerHTML='<button class="btn secondary menuBack" onclick="showMenu(\'more\')">← Indietro</button><h2>Personaggio</h2><div class="memberCard"><img src="'+asset(p.portrait)+'" alt="'+p.name+'"><div class="memberInfo"><strong>'+p.name+'</strong><p>'+p.race+' · '+p.class+'</p><p>Livello '+p.level+' · '+p.hp+'/'+p.maxhp+' HP</p></div></div><h3>Equipaggiamento visivo</h3><label class="equipLabel">Acconciatura</label><select class="input" onchange="setEquipment(\'hair\',this.value)">'+choices(["Capelli coda ciuffi","Capelli coda lunga","Capelli lunghi","Capelli mossi","Capelli rasati lato","Capelli rasta","Capelli spettinati","Capelli trecce"],p.equipment.hair)+'</select><label class="equipLabel">Armatura completa</label><select class="input" onchange="setEquipment(\'armor\',this.value)">'+choices(["Armatura arciere","Armatura druido","Armatura guerriero","Armatura mago"],p.equipment.armor)+'</select><label class="equipLabel">Elmo / cappello</label><select class="input" onchange="setEquipment(\'head\',this.value)">'+choices(["Cappello mago","Cappello punk","Elmo drago","Elmo leone"],p.equipment.head)+'</select><p class="menuHint">Le scelte vengono conservate nel salvataggio. Elmi e cappelli nascondono l’acconciatura.</p><h3>Caratteristiche</h3><div class="stats">'+Object.entries(p.stats).map(([k,v])=>'<div class="stat"><span>'+(statNames[k]||k)+'</span><b>'+v+'</b></div>').join("")+'</div>';return
 }
 if(page==="abilities"){
 let p=G.hero,mag=canUseMagic(p);c.innerHTML=`<button class="btn secondary menuBack" onclick="showMenu('more')">← Indietro</button><h2>Abilità</h2><p><b>${p.class}</b> · Le abilità sono consultabili qui; durante il combattimento si usano i pulsanti dedicati.</p><div class="memberCard"><div class="memberInfo"><strong>Attacco normale</strong><p>Nessun costo in AP. Attacco fisico con tiro D20.</p></div></div><div class="memberCard"><div class="memberInfo"><strong>Abilità speciale</strong><p>Costo: 2 AP. Attacco potenziato con danni aggiuntivi.</p></div></div><div class="memberCard"><div class="memberInfo"><strong>${mag?"Magia":"Tecnica di classe"}</strong><p>${mag?"Costo: 3 AP. Disponibile per questa classe.":"Le magie non sono disponibili per questa classe."}</p></div></div><p class="menuHint">Le abilità avanzate e i relativi alberi di sviluppo saranno aggiunti in una fase successiva.</p>`;return
@@ -547,7 +549,7 @@ Object.entries(p.stats).map(([k,v])=>`<div class="pointRow"><span>${statNames[k]
 `<p class="menuHint">I punti spesi vengono conservati nel salvataggio.</p>`;return
 }
 }
-function addStatPoint(key){if(!G||G.statPoints<1||!(key in G.hero.stats))return;G.hero.stats[key]++;G.statPoints--;if(key==="vitalita"){G.hero.maxhp+=3;G.hero.hp+=3}showMenu("statistics");updateHUD()}
+function setEquipment(slot,value){if(!G||!G.hero)return;if(!G.hero.equipment)G.hero.equipment={hair:"",armor:"",head:""};G.hero.equipment[slot]=value;showMenu("character")}\nfunction addStatPoint(key){if(!G||G.statPoints<1||!(key in G.hero.stats))return;G.hero.stats[key]++;G.statPoints--;if(key==="vitalita"){G.hero.maxhp+=3;G.hero.hp+=3}showMenu("statistics");updateHUD()}
 renderCreator();musicLabel();
 </script>
 </body>
