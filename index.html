@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 
 <html lang="it">
@@ -8,371 +6,223 @@
 
 <meta charset="UTF-8">
 
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta name="theme-color" content="#100d17">
+<meta name="theme-color" content="#100e0c">
 
-<title>Ombre di Velmora</title>
+<title>Ombre di Velmora — La campana senza eco</title>
 
 <style>
 
-:root {
+:root{
 
-  --bg:#100d17;
+--bg:#100e0c;--panel:rgba(29,25,21,.94);--panel2:#29221b;
 
-  --panel:#1c1725;
-
-  --panel2:#282032;
-
-  --gold:#d7ad65;
-
-  --red:#a94450;
-
-  --text:#eee7dc;
-
-  --muted:#aaa0b0;
-
-  --green:#76b58a;
+--gold:#d6b16c;--gold2:#96713b;--text:#e9dfc8;--muted:#b9a98b
 
 }
 
 *{box-sizing:border-box}
 
-body {
+html{min-height:100%;background:var(--bg)}
 
-  margin:0;
+body{
 
-  background:radial-gradient(ellipse at top,#302039 0%,#100d17 65%);
+margin:0;min-height:100vh;color:var(--text);font-family:Georgia,serif;
 
-  color:var(--text);
+background-color:var(--bg);
 
-  font-family:Georgia,serif;
+background-image:linear-gradient(rgba(12,9,7,.62),rgba(12,9,7,.82)),url("./valle_velmora.jpg");
 
-  min-height:100vh;
-
-}
-
-header{text-align:center;padding:22px 12px 12px}
-
-h1{color:var(--gold);font-size:clamp(27px,7vw,42px);margin:4px 0;text-shadow:0 3px 18px #000}
-
-.subtitle{color:var(--muted);font-style:italic;font-size:14px}
-
-main{max-width:760px;margin:auto;padding:12px 14px 45px}
-
-.panel{
-
-  background:linear-gradient(145deg,#251e2e,#191521);
-
-  border:1px solid #59445b;
-
-  border-radius:14px;
-
-  padding:17px;
-
-  margin:12px 0;
-
-  box-shadow:0 8px 25px #0005;
+background-position:center;background-size:cover;background-attachment:fixed
 
 }
 
-h2{color:var(--gold);font-size:23px;margin:3px 0 14px}
+header{text-align:center;padding:20px 12px 15px;background:linear-gradient(rgba(41,32,22,.94),rgba(16,14,12,.85));border-bottom:1px solid var(--gold2)}
 
-h3{color:#e4c58f;margin:12px 0 7px}
+h1{color:var(--gold);letter-spacing:3px;font-size:clamp(21px,5vw,29px);margin:4px 0}
 
-p{line-height:1.55}
+header p{color:var(--muted);font-size:13px;margin:7px 0 0}
 
-small,.muted{color:var(--muted)}
+main{width:min(920px,94%);margin:16px auto 40px}
 
-label{display:block;color:#d7c9b6;margin:12px 0 5px}
+.panel{background:var(--panel);border:1px solid #69502e;border-radius:12px;padding:14px;margin-bottom:14px;box-shadow:0 8px 24px #0008;backdrop-filter:blur(3px)}
 
-select,input,button{font:inherit}
+h2{color:var(--gold);font-size:19px;margin:0 0 12px}
 
-select,input{
+h3{color:#e5c88f;font-size:16px;margin:12px 0 8px}
 
-  width:100%;
+p{line-height:1.5}
 
-  padding:12px;
+.small{font-size:12px;color:var(--muted)}
 
-  border-radius:8px;
+.grid,.classgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
 
-  border:1px solid #66516a;
+.choice,.btn{background:#29221b;border:1px solid #57442b;color:var(--text);border-radius:8px;padding:11px 8px;font:14px Georgia,serif;cursor:pointer}
 
-  background:#17121e;
+.choice.selected{border:2px solid var(--gold);background:#49351e;color:#ffe0a0}
 
-  color:white;
+.btn{background:linear-gradient(#8d682f,#563b1c);border-color:#c49b55;color:#fff0d0;font-weight:bold}
 
-  font-size:16px;
+.btn.secondary{background:#29221b;border-color:#80623a}
 
-}
+.btn.danger{background:#51231f;border-color:#9b5145}
 
-button{
+.btn:disabled{opacity:.38;cursor:not-allowed}
 
-  border:1px solid #a77d48;
+.layout{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
-  background:linear-gradient(#72502f,#49301f);
+.portrait{display:block;width:100%;height:520px;max-height:65vh;aspect-ratio:2/3;object-fit:contain;object-position:center;background:#100e0c;border:2px solid var(--gold2);border-radius:9px}
 
-  color:#fff1d5;
+.preview{text-align:center}
 
-  padding:12px 15px;
+.input{width:100%;padding:12px;border-radius:7px;background:#100e0c;border:1px solid #8a6a3d;color:white;font-size:16px;margin:6px 0 12px}
 
-  border-radius:9px;
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:7px}
 
-  font-weight:bold;
+.stat{background:var(--panel2);padding:9px;border-radius:7px;display:flex;justify-content:space-between;gap:8px;font-size:13px}
 
-  cursor:pointer;
-
-  min-height:45px;
-
-}
-
-button:active{transform:scale(.98)}
-
-button.secondary{background:#30283a;border-color:#66546d}
-
-button.danger{background:#642d37;border-color:#a34e57}
-
-button:disabled{opacity:.4;cursor:not-allowed}
-
-.buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
-
-.buttons button{flex:1}
-
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
-
-.choice{
-
-  background:#211a2a;
-
-  border:1px solid #57455f;
-
-  border-radius:10px;
-
-  padding:12px;
-
-  text-align:center;
-
-  cursor:pointer;
-
-}
-
-.choice.selected{border:2px solid var(--gold);background:#44332c}
-
-.choice strong{display:block;color:#f1d49c;margin:5px 0}
-
-.avatar{font-size:75px;text-align:center;padding:12px}
-
-.avatar-name{text-align:center;color:var(--gold);font-size:19px}
-
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
-
-.stat{background:#17121e;border-radius:8px;padding:9px}
-
-.stat b{display:block;color:var(--gold);font-size:20px}
-
-.bar{
-
-  height:11px;
-
-  background:#100d17;
-
-  border-radius:9px;
-
-  overflow:hidden;
-
-  margin:5px 0 10px;
-
-}
-
-.bar span{display:block;height:100%;background:var(--green);width:100%}
-
-.bar.xp span{background:#b78bd5}
-
-.story{font-size:17px;line-height:1.7;white-space:pre-line}
-
-.choicebtn{display:block;width:100%;text-align:left;margin:8px 0;background:#302438;border-color:#73576e}
-
-.enemy{text-align:center;font-size:65px;padding:4px}
-
-.log{
-
-  background:#120f18;
-
-  border-radius:8px;
-
-  padding:10px;
-
-  max-height:150px;
-
-  overflow:auto;
-
-  font-size:14px;
-
-  line-height:1.5;
-
-  color:#c9bdcc;
-
-}
+.stat b{color:#e8bd72}
 
 .hidden{display:none!important}
 
-hr{border:0;border-top:1px solid #59445b;margin:15px 0}
+.story{font-size:16px;line-height:1.65;color:#e4d6bb}
 
-footer{text-align:center;color:#796e7e;font-size:12px;padding:15px}
+.story em{color:#eac77e}
 
-/* DADO D20 DI VELMORA */
+.actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
 
-.dice-area{
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
 
-  text-align:center;
+.badge{display:inline-block;border:1px solid #80623a;color:#e8c985;border-radius:20px;padding:4px 9px;font-size:11px;margin:2px}
 
-  margin:18px 0;
+.bars{height:7px;background:#090807;border-radius:20px;overflow:hidden;margin:5px 0}
 
-  padding:14px;
+.hpbar{height:100%;background:#a9443b;transition:width .3s}
 
-  background:#17121e;
+.log{background:#100e0c;border:1px solid #493823;border-radius:8px;padding:10px;max-height:190px;overflow:auto;font-size:13px;line-height:1.5}
 
-  border:1px solid #80623a;
+.log p{margin:4px 0}
 
-  border-radius:12px;
+.target{display:flex;gap:7px;flex-wrap:wrap}
 
-}
+.target button{flex:1;min-width:100px}
 
-.dice-title{
+.inventory{display:flex;gap:7px;flex-wrap:wrap}
 
-  color:var(--gold);
+.inventory span{background:#30271d;border:1px solid #6a512f;padding:7px 9px;border-radius:7px;font-size:12px}
 
-  font-size:14px;
+hr{border:0;border-top:1px solid #59442b;margin:14px 0}
 
-  margin-bottom:8px;
+.note{text-align:center;color:#c0ae8b;font-size:11px}
 
-  letter-spacing:1px;
+.musicButton{margin-top:10px;background:#29221b;border:1px solid #80623a;color:#e8c985;border-radius:20px;padding:7px 13px;font:12px Georgia,serif}
 
-}
+.battleSideTitle{display:flex;align-items:center;gap:8px;margin:13px 0 9px;color:#e5c88f;font-size:14px;letter-spacing:1px;text-transform:uppercase}
 
-.dice-stage{
+.battleSideTitle:after{content:"";height:1px;flex:1;background:#59442b}
 
-  position:relative;
+.battleFormation{display:flex;flex-direction:row;flex-wrap:nowrap;gap:9px;align-items:flex-start;overflow-x:auto;overflow-y:hidden;padding:5px 2px 12px;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:#80623a #100e0c}
 
-  width:170px;
+.battleUnit{flex:0 0 105px;width:105px;min-width:0;position:relative;text-align:center;padding:6px 4px 8px;border:1px solid #59442b;border-radius:9px;background:linear-gradient(180deg,#30271e,#191511);transition:border-color .2s,background .2s,opacity .2s}
 
-  height:170px;
+.battleUnit.active{border:2px solid var(--gold);background:linear-gradient(180deg,#594126,#292017);box-shadow:0 0 12px #d6b16c55}
 
-  margin:0 auto;
+.battleUnit.dead{opacity:.35;filter:grayscale(1)}
 
-}
+.battleFace{width:100%;aspect-ratio:1/1;display:block;object-fit:cover;object-position:center 20%;background:#100e0c;border:1px solid #96713b;border-radius:6px}
 
-.dice-image{
+.battleFace.heroBattleFace{aspect-ratio:2/3;object-fit:contain;object-position:center;background:#100e0c}
 
-  width:100%;
+.battleName{font-size:11px;line-height:1.2;color:#f0d49b;font-weight:bold;margin:6px 0 4px;min-height:26px;overflow-wrap:anywhere}
 
-  height:100%;
+.battleHP{font-size:10px;color:#d4c4a5}
 
-  object-fit:contain;
+.battleBar{height:6px;background:#090807;border-radius:10px;overflow:hidden;margin:4px 1px 0}
 
-  filter:drop-shadow(0 5px 12px #000);
+.battleBar div{height:100%;background:#a9443b;transition:width .25s}
 
-  user-select:none;
+.battleAP{font-size:9px;color:#c5a66e;margin-top:4px}
 
-  -webkit-user-drag:none;
+.battleUnit.dashHero{z-index:5;animation:dashUp .38s ease-in-out}
 
-}
+.battleUnit.dashEnemy{z-index:5;animation:dashDown .38s ease-in-out}
 
-.dice-image.rolling{
+.battleUnit.hit{animation:hitFlash .32s ease-in-out}
 
-  animation:diceRoll .95s ease-in-out;
+@keyframes dashUp{0%{transform:translateY(0) scale(1)}45%{transform:translateY(-35px) scale(1.12)}100%{transform:translateY(0) scale(1)}}
 
-}
+@keyframes dashDown{0%{transform:translateY(0) scale(1)}45%{transform:translateY(35px) scale(1.12)}100%{transform:translateY(0) scale(1)}}
 
-.dice-result{
+@keyframes hitFlash{0%,100%{filter:brightness(1);transform:translateX(0)}25%{filter:brightness(2.5);transform:translateX(-5px)}60%{filter:brightness(1.8);transform:translateX(5px)}}
 
-  position:absolute;
+.battleDivider{height:1px;background:linear-gradient(90deg,transparent,#80623a,transparent);margin:15px 0}
 
-  left:50%;
+/* DADO D20 */
 
-  top:48%;
+.dicePanel{
 
-  transform:translate(-50%,-50%);
+text-align:center;padding:12px;margin:12px 0;
 
-  min-width:48px;
+background:linear-gradient(180deg,#29251d,#100e0c);
 
-  padding:5px 9px;
+border:1px solid #96713b;border-radius:12px;
 
-  border-radius:8px;
-
-  background:#160e08dd;
-
-  border:1px solid var(--gold);
-
-  color:#ffe2a0;
-
-  font-size:27px;
-
-  font-weight:bold;
-
-  text-shadow:0 0 8px #ffbd42;
-
-  pointer-events:none;
+box-shadow:0 0 18px #0009
 
 }
 
-.dice-result.critical{
+.diceTitle{color:var(--gold);font-size:14px;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px}
 
-  color:#fff1a8;
+.diceImage{
 
-  text-shadow:0 0 12px #ff9d00;
+width:125px;height:125px;object-fit:contain;display:block;
 
-  box-shadow:0 0 16px #ffbd4266;
-
-}
-
-.dice-result.failure{
-
-  color:#ff7777;
-
-  text-shadow:0 0 12px #e00000;
-
-  border-color:#e04444;
+margin:0 auto;filter:drop-shadow(0 5px 12px #000)
 
 }
 
-.dice-message{
-
-  min-height:22px;
-
-  margin-top:8px;
-
-  color:var(--muted);
-
-  font-size:13px;
-
-}
+.diceImage.rolling{animation:diceRoll .65s ease-in-out}
 
 @keyframes diceRoll{
 
-  0%{transform:rotate(0deg) scale(1)}
+0%{transform:rotate(0deg) scale(1)}
 
-  20%{transform:rotate(150deg) scale(1.12)}
+25%{transform:rotate(100deg) scale(1.15)}
 
-  45%{transform:rotate(330deg) scale(.92)}
+50%{transform:rotate(220deg) scale(.9)}
 
-  70%{transform:rotate(540deg) scale(1.1)}
+75%{transform:rotate(320deg) scale(1.1)}
 
-  100%{transform:rotate(720deg) scale(1)}
+100%{transform:rotate(360deg) scale(1)}
 
 }
 
-@media(max-width:420px){
+.diceWho{color:var(--muted);font-size:13px;margin-top:5px}
 
-  main{padding:8px}
+.diceNumber{color:var(--gold);font-size:38px;font-weight:bold;min-height:45px;text-shadow:0 0 12px #d6b16c66}
 
-  .panel{padding:13px}
+@media(max-width:560px){
 
-  .grid{gap:7px}
+.layout{grid-template-columns:1fr}
 
-  .choice{padding:9px}
+.preview{display:block;text-align:center}
 
-  .dice-stage{width:145px;height:145px}
+.preview .portrait{width:min(100%,300px);height:390px;max-height:65vh;margin:0 auto 12px;object-fit:contain;aspect-ratio:2/3}
+
+.preview h2,.preview p{grid-column:auto}
+
+main{width:94%}
+
+.panel{padding:12px}
+
+.battleFormation{gap:5px}
+
+.battleUnit{flex:0 0 88px;width:88px;padding:5px 3px 7px}
+
+.battleName{font-size:10px;min-height:25px}
+
+.battleHP{font-size:9px}
 
 }
 
@@ -382,1363 +232,1043 @@ footer{text-align:center;color:#796e7e;font-size:12px;padding:15px}
 
 <body>
 
+<audio id="bgMusic" src="./musica_valle.mp3" loop preload="auto"></audio>
+
 <header>
 
 <h1>OMBRE DI VELMORA</h1>
 
-<div class="subtitle">Quando la luce muore, le leggende si risvegliano.</div>
+<p>La campana senza eco · Prototipo giocabile</p>
+
+<button class="musicButton" id="musicButton" onclick="toggleMusic()">♫ Musica OFF · Attiva</button>
 
 </header>
 
 <main>
 
-<section id="creation">
+<section id="creator">
 
- <div class="panel">
+<div class="panel">
 
-  <h2>La nascita di un eroe</h2>
+<h2>01 · Crea il tuo eroe</h2>
 
-  <p>Il regno di Velmora è avvolto dalle tenebre. Antiche creature si risvegliano, i villaggi cadono e una forza sconosciuta corrompe la terra.</p>
+<div class="layout">
 
-  <p>La tua storia comincia qui. Scegli chi vuoi essere.</p>
+<div>
 
- </div>
+<h3>Scegli la razza</h3>
 
- <div class="panel">
+<div class="grid" id="races"></div>
 
-  <h2>1. Razza e genere</h2>
+<p class="small" id="raceDescription"></p>
 
-  <div class="grid" id="races">
+</div>
 
-   <div class="choice selected" data-race="umano" data-gender="uomo"><div>🧔</div><strong>Umano</strong>Uomo</div>
+<div class="preview">
 
-   <div class="choice" data-race="umano" data-gender="donna"><div>👩</div><strong>Umana</strong>Donna</div>
+<img class="portrait" id="portrait" src="./modello_umano_maschile.png.JPG.JPG" alt="Anteprima personaggio">
 
-   <div class="choice" data-race="leone" data-gender="uomo"><div>🦁</div><strong>Leone antropomorfo</strong>Uomo</div>
+<div>
 
-   <div class="choice" data-race="leone" data-gender="donna"><div>🦁</div><strong>Leonessa antropomorfa</strong>Donna</div>
+<h2 id="heroTitle">Umano</h2>
 
-   <div class="choice" data-race="lupo" data-gender="uomo"><div>🐺</div><strong>Lupo antropomorfo</strong>Uomo</div>
+<p class="small" id="heroDescription"></p>
 
-   <div class="choice" data-race="lupo" data-gender="donna"><div>🐺</div><strong>Lupa antropomorfa</strong>Donna</div>
+</div>
 
-   <div class="choice" data-race="orco" data-gender="uomo"><div>👹</div><strong>Orco</strong>Uomo</div>
+</div>
 
-   <div class="choice" data-race="orco" data-gender="donna"><div>👹</div><strong>Orchessa</strong>Donna</div>
+</div>
 
-  </div>
+<hr>
 
- </div>
+<h3>Sesso</h3>
 
- <div class="panel">
+<div class="row">
 
-  <h2>2. Scegli la tua classe</h2>
+<button class="choice selected" data-gender="male">Maschio</button>
 
-  <div class="grid" id="classes">
+<button class="choice" data-gender="female">Femmina</button>
 
-   <div class="choice selected" data-class="guerriero"><div>⚔️</div><strong>Guerriero</strong><small>Resistente, forte e coraggioso.</small></div>
+</div>
 
-   <div class="choice" data-class="ladro"><div>🗡️</div><strong>Ladro</strong><small>Agile, rapido e letale.</small></div>
+</div>
 
-   <div class="choice" data-class="mago"><div>🔮</div><strong>Mago</strong><small>Fragile, ma dotato di grande potere.</small></div>
+<div class="panel">
 
-  </div>
+<h2>02 · Nome dell'eroe</h2>
 
- </div>
+<input id="heroName" class="input" maxlength="24" placeholder="Scrivi il nome del tuo eroe">
 
- <div class="panel">
+</div>
 
-  <h2>3. Personalizza il tuo aspetto</h2>
+<div class="panel">
 
-  <div id="preview" class="avatar">🧔</div>
+<h2>03 · Scegli la classe</h2>
 
-  <div id="previewName" class="avatar-name">Umano</div>
+<div class="classgrid" id="classes"></div>
 
-  <label for="eyes">Colore degli occhi</label>
+<p class="small" id="classDescription"></p>
 
-  <select id="eyes">
+</div>
 
-   <option value="Azzurri">Azzurri</option>
+<div class="panel">
 
-   <option value="Verdi">Verdi</option>
+<h2>04 · Caratteristiche</h2>
 
-   <option value="Marroni">Marroni</option>
+<div class="stats" id="stats"></div>
 
-   <option value="Dorati">Dorati</option>
+<p class="small">Valori iniziali: 5 + modificatore razziale + modificatore di classe.</p>
 
-   <option value="Viola">Viola</option>
+</div>
 
-  </select>
+<button class="btn" style="width:100%;padding:16px;font-size:18px" onclick="startAdventure()">INIZIA IL VIAGGIO</button>
 
-  <label for="hair">Capelli, criniera o pelo</label>
-
-  <select id="hair">
-
-   <option>Lisci e lunghi</option>
-
-   <option>Spettinati</option>
-
-   <option>Raccolti</option>
-
-   <option>Intrecciati</option>
-
-   <option>Corti e selvaggi</option>
-
-  </select>
-
-  <label for="clothes">Abbigliamento</label>
-
-  <select id="clothes">
-
-   <option>Armatura da cavaliere</option>
-
-   <option>Abiti da viandante</option>
-
-   <option>Armatura leggera</option>
-
-   <option>Vesti da mago</option>
-
-   <option>Armatura oscura</option>
-
-  </select>
-
-  <label for="body">Corporatura</label>
-
-  <select id="body">
-
-   <option>Agile</option>
-
-   <option>Slanciata</option>
-
-   <option>Atletica</option>
-
-   <option>Robusta</option>
-
-   <option>Morbida e formosa</option>
-
-  </select>
-
-  <label for="heroName">Nome del personaggio</label>
-
-  <input id="heroName" maxlength="20" placeholder="Scrivi il tuo nome..." value="Aren">
-
-  <div class="buttons">
-
-   <button id="start">ENTRA A VELMORA</button>
-
-  </div>
-
- </div>
+<p class="note">Le tue scelte daranno forma al destino di Velmora.</p>
 
 </section>
 
 <section id="game" class="hidden">
 
- <div class="panel">
+<div class="panel">
 
-  <div class="avatar" id="gameAvatar">🧔</div>
+<div class="row" style="justify-content:space-between">
 
-  <div class="avatar-name" id="gameName"></div>
+<span class="badge" id="chapterBadge">PROLOGO</span>
 
-  <div class="stats">
+<span class="badge" id="levelBadge">Livello 1</span>
 
-   <div class="stat">Livello<b id="level">1</b></div>
+</div>
 
-   <div class="stat">Attacco<b id="attack">5</b></div>
+<h2 id="sceneTitle"></h2>
 
-   <div class="stat">Difesa<b id="defense">3</b></div>
+<div id="sceneText" class="story"></div>
 
-  </div>
+<div id="sceneChoices" class="actions"></div>
 
-  <p>Salute: <b id="hpText"></b></p>
+</div>
 
-  <div class="bar"><span id="hpBar"></span></div>
+<div id="combat" class="hidden">
 
-  <p>Esperienza: <b id="xpText"></b></p>
+<div class="panel">
 
-  <div class="bar xp"><span id="xpBar"></span></div>
+<div class="row" style="justify-content:space-between">
 
-  <p>🧪 Pozioni: <b id="potions"></b> &nbsp; 🪙 Oro: <b id="gold"></b></p>
+<h2 id="battleTitle">Combattimento</h2>
 
- </div>
+<span class="badge" id="roundBadge">Turno 1</span>
 
- <div class="panel">
+</div>
 
-  <h2 id="chapter">Capitolo I - Le porte della notte</h2>
+<p class="small" id="battleHint"></p>
 
-  <div id="story" class="story"></div>
+<!-- DADO VISIBILE NEL COMBATTIMENTO -->
 
-  <div id="choices"></div>
+<div class="dicePanel">
 
- </div>
+<div class="diceTitle">Il destino di Velmora</div>
 
- <div class="panel hidden" id="battle">
+<img id="diceImage" class="diceImage" src="./dado_d20_velmora.PNG" alt="Dado D20">
 
-  <h2>⚔️ Combattimento</h2>
+<div id="diceWho" class="diceWho">In attesa del lancio...</div>
 
-  <div class="enemy" id="enemyIcon">👹</div>
+<div id="diceNumber" class="diceNumber">—</div>
 
-  <h3 id="enemyName" style="text-align:center"></h3>
+</div>
 
-  <p id="enemyHpText" style="text-align:center"></p>
+<div class="battleSideTitle">Avversari</div>
 
-  <div class="bar"><span id="enemyHpBar"></span></div>
+<div id="enemyList" class="battleFormation"></div>
 
-  <!-- DADO D20 -->
+<div class="battleDivider"></div>
 
-  <div class="dice-area">
+<div class="battleSideTitle">La tua squadra</div>
 
-   <div class="dice-title">🎲 DADO DEL DESTINO · D20</div>
+<div id="partyList" class="battleFormation"></div>
 
-   <div class="dice-stage">
+<hr>
 
-    <img
+<h3 id="activeTitle">Turno</h3>
 
-     id="diceImage"
+<p class="small" id="activeInfo"></p>
 
-     class="dice-image"
+<div id="targetArea" class="target"></div>
 
-     src="./dado_d20_velmora.PNG"
+<div id="combatActions" class="actions"></div>
 
-     alt="Dado a venti facce"
+<p class="small" id="actionMessage">Seleziona un'azione.</p>
 
-    >
+<h3>Diario dello scontro</h3>
 
-    <div id="diceResult" class="dice-result">—</div>
+<div class="log" id="battleLog"></div>
 
-   </div>
+</div>
 
-   <div id="diceMessage" class="dice-message">In attesa del lancio...</div>
+</div>
 
-  </div>
+<div id="afterCombat" class="panel hidden"></div>
 
-  <div class="buttons">
+<div class="panel">
 
-   <button id="normal">Attacco</button>
+<h2>Inventario</h2>
 
-   <button id="heavy">Attacco pesante</button>
+<div id="inventory" class="inventory"></div>
 
-  </div>
+</div>
 
-  <div class="buttons">
+<div class="row">
 
-   <button id="potion" class="secondary">Usa pozione</button>
+<button class="btn secondary" onclick="saveGame()">SALVA PARTITA</button>
 
-   <button id="flee" class="danger">Fuggi</button>
+<button class="btn secondary" onclick="loadGame()">CARICA PARTITA</button>
 
-  </div>
+<button class="btn secondary" onclick="backToCreator()">Torna alla creazione</button>
 
-  <hr>
+</div>
 
-  <div class="log" id="battleLog">Il combattimento ha inizio...</div>
-
- </div>
-
- <div class="panel">
-
-  <h3>📜 Diario dell'avventura</h3>
-
-  <div class="log" id="diary">La tua avventura comincia.</div>
-
- </div>
-
- <div class="buttons">
-
-  <button class="secondary" id="save">Salva partita</button>
-
-  <button class="secondary" id="load">Carica partita</button>
-
-  <button class="danger" id="restart">Ricomincia</button>
-
- </div>
+<p class="note">I progressi vengono salvati in questo browser su questo dispositivo.</p>
 
 </section>
-
-<footer>OMBRE DI VELMORA · Un'avventura fantasy originale</footer>
 
 </main>
 
 <script>
 
-(() => {
-
 "use strict";
 
-const $ = id => document.getElementById(id);
+const asset=name=>new URL("./"+name,document.baseURI).href;
 
-let selectedRace="umano";
+const $=id=>document.getElementById(id);
 
-let selectedGender="uomo";
+const races=[
 
-let selectedClass="guerriero";
+{id:"human",name:"Umano",description:"Versatile e adattabile. Gli umani sono presenti in ogni angolo di Velmora.",trait:"Adattabilità",male:"modello_umano_maschile.png.JPG.JPG",female:"modello_umano_femminile.png.JPG.JPG",mod:{percezione:1,carisma:1}},
 
-let player=null;
+{id:"elf",name:"Elfo",description:"Antica stirpe legata alla magia e alla natura. Agili e intelligenti.",trait:"Eredità arcana",male:"elfo_m_base.png.JPG",female:"elfo_f_base.png.JPG",mod:{agilita:1,vitalita:-1,intelletto:1}},
 
-let enemy=null;
+{id:"orc",name:"Orco",description:"Una razza fiera e resistente, dotata di grande forza fisica.",trait:"Sangue indomito",male:"orco_m_base.png.JPG",female:"orco_f_base.png.JPG",mod:{forza:1,vitalita:1,intelletto:-1}},
 
-let inBattle=false;
+{id:"lion",name:"Popolo Leone",description:"Una stirpe fiera e imponente, conosciuta per il coraggio e la forza in battaglia.",trait:"Ruggito intimidatorio",male:"uomo_leone_m_base.png.JPG",female:"uomo_leone_f_base.png.JPG",mod:{forza:1,agilita:-1,carisma:1}},
 
-let currentScene="intro";
+{id:"wolf",name:"Popolo Lupo",description:"Predatori vigili, dotati di sensi affinati e grande agilità.",trait:"Istinto predatorio",male:"uomo_lupo_m_base.png.JPG",female:"uomo_lupo_f_base.png.JPG",mod:{agilita:1,percezione:1,carisma:-1}},
 
-let actionBusy=false;
+{id:"rabbit",name:"Popolo Coniglio",description:"Una stirpe agile e sorprendente, capace di movimenti rapidi e riflessi eccezionali.",trait:"Balzo fulmineo",male:"uomo_coniglio_m_base.png.JPG",female:"uomo_coniglio_f_base.png.JPG",mod:{agilita:1,percezione:1}}
 
-const raceNames={
+];
 
- umano:"Umano",
+const classes=[
 
- leone:"Leone antropomorfo",
+{id:"warrior",name:"Guerriero",description:"Combattente robusto, esperto di armature pesanti e armi da mischia.",mod:{forza:2,vitalita:2},armor:"Pesante"},
 
- lupo:"Lupo antropomorfo",
+{id:"thief",name:"Ladro",description:"Rapido e preciso. Predilige armature leggere, furtività e colpi mirati.",mod:{agilita:2,percezione:2},armor:"Leggera"},
 
- orco:"Orco"
+{id:"mage",name:"Mago",description:"Studioso delle arti arcane. Indossa vesti magiche e domina gli incantesimi.",mod:{intelletto:2,volonta:2},armor:"Vesti magiche"},
+
+{id:"cleric",name:"Chierico",description:"Custode della fede, capace di proteggere e curare gli alleati.",mod:{volonta:2,vitalita:1,intelletto:1},armor:"Sacra e media"},
+
+{id:"druid",name:"Druido",description:"Alleato della natura, unisce magia, resistenza e creature evocate.",mod:{volonta:1,intelletto:1,percezione:2},armor:"Naturale"},
+
+{id:"archer",name:"Arciere",description:"Combattente agile e attento, maestro dell'arco e della distanza.",mod:{agilita:2,percezione:2},armor:"Leggera"}
+
+];
+
+const statNames={forza:"Forza",agilita:"Agilità",vitalita:"Vitalità",intelletto:"Intelletto",volonta:"Volontà",percezione:"Percezione",carisma:"Carisma"};
+
+let selectedRace=races[0],selectedClass=classes[0],gender="male";
+
+let G=null,battle=null,selectedTarget=0,busy=false;
+
+function musicLabel(){
+
+$("musicButton").textContent=$("bgMusic").paused?"♫ Musica OFF · Attiva":"♫ Musica ON · Disattiva";
+
+}
+
+function toggleMusic(){
+
+const m=$("bgMusic");
+
+if(m.paused){m.volume=.35;m.play().then(musicLabel).catch(()=>$("musicButton").textContent="♫ Tocca per attivare");}
+
+else{m.pause();musicLabel();}
+
+}
+
+function imageForRace(r){return r[gender]||r.male;}
+
+function statsFor(){
+
+let s={};
+
+for(let k in statNames)s[k]=5+(selectedRace.mod[k]||0)+(selectedClass.mod[k]||0);
+
+return s;
+
+}
+
+function renderCreator(){
+
+$("races").innerHTML=races.map(r=>`<button class="choice ${r.id===selectedRace.id?'selected':''}" data-race="${r.id}">${r.name}</button>`).join("");
+
+document.querySelectorAll("[data-race]").forEach(b=>b.onclick=()=>{selectedRace=races.find(r=>r.id===b.dataset.race);renderCreator();});
+
+$("classes").innerHTML=classes.map(c=>`<button class="choice ${c.id===selectedClass.id?'selected':''}" data-class="${c.id}">${c.name}</button>`).join("");
+
+document.querySelectorAll("[data-class]").forEach(b=>b.onclick=()=>{selectedClass=classes.find(c=>c.id===b.dataset.class);renderCreator();});
+
+document.querySelectorAll("[data-gender]").forEach(b=>{
+
+b.classList.toggle("selected",b.dataset.gender===gender);
+
+b.onclick=()=>{gender=b.dataset.gender;renderCreator();};
+
+});
+
+$("portrait").src=asset(imageForRace(selectedRace));
+
+$("heroTitle").textContent=selectedRace.name;
+
+$("heroDescription").textContent=selectedRace.description+" Tratto: "+selectedRace.trait+".";
+
+$("raceDescription").textContent=selectedRace.description;
+
+$("classDescription").textContent=selectedClass.description+" Armatura: "+selectedClass.armor+".";
+
+const s=statsFor();
+
+$("stats").innerHTML=Object.keys(statNames).map(k=>`<div class="stat"><span>${statNames[k]}</span><b>${s[k]}</b></div>`).join("");
+
+}
+
+function startAdventure(){
+
+let name=$("heroName").value.trim();
+
+if(!name){alert("Scrivi il nome del tuo eroe prima di partire!");return;}
+
+let s=statsFor(),maxhp=26+s.vitalita*3;
+
+G={
+
+hero:{id:"hero",name,race:selectedRace.name,class:selectedClass.name,gender,portrait:imageForRace(selectedRace),stats:s,level:1,xp:0,hp:maxhp,maxhp,ap:5,maxap:5,armor:selectedClass.id==="warrior"?4:selectedClass.id==="cleric"?3:1,weapon:selectedClass.id==="mage"||selectedClass.id==="druid"?4:6,alive:true,down:0,isHero:true},
+
+party:[],inventory:{Pozione:2,Antidoto:1,Benda:1,Purificazione:1},gold:12,chapter:0,companions:{wolf:false,lion:false},battleWon:0,finished:false
 
 };
 
-const emojis={
+$("creator").classList.add("hidden");
 
- umano:{uomo:"🧔",donna:"👩"},
+$("game").classList.remove("hidden");
 
- leone:{uomo:"🦁",donna:"🦁"},
+showScene("prologue");
 
- lupo:{uomo:"🐺",donna:"🐺"},
-
- orco:{uomo:"👹",donna:"👹"}
-
-};
-
-const classData={
-
- guerriero:{hp:115,atk:9,def:5,description:"Guerriero"},
-
- ladro:{hp:90,atk:11,def:3,description:"Ladro"},
-
- mago:{hp:75,atk:15,def:2,description:"Mago"}
-
-};
+}
 
 const scenes={
 
- intro:{
+prologue:{badge:"PROLOGO",title:"La campana senza eco",text:`<p>Il tuo viaggio conduce a <em>Rovoscuro</em>, un villaggio ai confini della Valle di Velmora. Da tre notti, a mezzanotte, la campana della vecchia torre suona da sola. Ogni volta che risuona, qualcuno scompare.</p><p>Un'anziana donna ti afferra il braccio: «Mio nipote è entrato nella torre tre giorni fa. Non è più tornato. Ti prego, aiutaci».</p><p>Nella locanda incontri due viandanti: <b>Rauk</b>, un guerriero del Popolo Lupo, e <b>Leona</b>, una guerriera del Popolo Leone. Entrambi sembrano conoscere qualcosa della torre.</p>`,choices:[["Chiedi a Rauk di unirsi","wolf"],["Chiedi a Leona di unirsi","lion"],["Parti verso il bosco","forest"]]},
 
-  chapter:"Capitolo I - Le porte della notte",
+forest:{badge:"CAPITOLO I",title:"L'imboscata nel bosco",text:`<p>Il sentiero si stringe tra alberi contorti. Due orchi armati emergono dal sottobosco, accompagnati da un predone della valle.</p><p><em>«La strada è nostra, viandante. Lascia le tue cose!»</em></p>`,choices:[["Affronta gli aggressori","fight1"]]},
 
-  text:"La pioggia cade sulle mura di Velmora. Da settimane i morti camminano nelle foreste e strane luci illuminano le rovine a nord.\n\nQuando raggiungi il villaggio di Brumavia, trovi le porte spalancate e le strade deserte. Un vecchio ferito ti afferra il braccio.\n\n«La cripta... qualcosa si è risvegliato. Non lasciarlo raggiungere la città...»",
+crypt:{badge:"CAPITOLO II",title:"La cripta dimenticata",text:`<p>Una scala di pietra scende sotto la torre. Al centro della cripta, un altare emana luce verdastra. Un orco veterano e due guardiani armati difendono il passaggio.</p>`,choices:[["Entra nella cripta","fight2"]]},
 
-  choices:[
+boss:{badge:"CAPITOLO III",title:"Il Custode della Campana",text:`<p>La porta di ferro si apre. Nella sala della campana si erge un cavaliere enorme, avvolto in un'armatura nera. Gli occhi brillano di luce azzurra.</p><p>«Nessuno interromperà il richiamo.»</p>`,choices:[["Affronta il Custode","fight3"]]},
 
-   ["Aiuta il vecchio e ascolta il suo racconto","old"],
-
-   ["Dirigiti subito verso la cripta","crypt"],
-
-   ["Esplora le case abbandonate","houses"]
-
-  ]
-
- },
-
- old:{
-
-  chapter:"Il racconto del superstite",
-
-  text:"Il vecchio ti racconta di un antico sigillo spezzato. Ti consegna una piccola pozione e indica un sentiero nascosto dietro la locanda. «Là troverai la strada per le rovine».",
-
-  choices:[["Prendi il sentiero verso le rovine","crypt"]],
-
-  reward:{potions:1}
-
- },
-
- houses:{
-
-  chapter:"Le case silenziose",
-
-  text:"Tra le case trovi un baule dimenticato. Dentro ci sono alcune monete e una pozione ancora utilizzabile. Ma un rumore proviene dal vicolo...",
-
-  choices:[
-
-   ["Affronta la creatura nel vicolo","housefight"],
-
-   ["Lascia il villaggio e raggiungi la cripta","crypt"]
-
-  ],
-
-  reward:{gold:12,potions:1}
-
- },
-
- crypt:{
-
-  chapter:"Capitolo II - La cripta dimenticata",
-
-  text:"Il sentiero conduce a un mausoleo coperto di radici. Una porta di pietra è socchiusa. Dall'interno arriva un sussurro: «Il sangue dei vivi aprirà la strada».\n\nUn guardiano scheletrico si alza dal pavimento.",
-
-  choices:[
-
-   ["Preparati a combattere","cryptfight"],
-
-   ["Cerca un passaggio laterale","passage"]
-
-  ]
-
- },
-
- passage:{
-
-  chapter:"Il passaggio segreto",
-
-  text:"Trovi una stretta apertura tra le rocce. Ti permette di evitare il guardiano, ma una trappola ti ferisce mentre attraversi il tunnel.",
-
-  choices:[["Prosegui verso la sala del sigillo","hall"]],
-
-  damage:8
-
- },
-
- hall:{
-
-  chapter:"Capitolo III - Il sigillo spezzato",
-
-  text:"La sala sotterranea è illuminata da fiamme viola. Al centro fluttua un frammento di cristallo nero. Una voce risuona nella tua mente: «Unisciti a me e potrai governare ciò che resta del mondo».",
-
-  choices:[
-
-   ["Distruggi il cristallo","finalfight"],
-
-   ["Tocca il cristallo e ascolta la voce","darkpath"],
-
-   ["Cerca un modo per sigillarlo","sealpath"]
-
-  ]
-
- },
-
- darkpath:{
-
-  chapter:"La tentazione dell'ombra",
-
-  text:"Il cristallo ti mostra visioni di potere e gloria. La tua pelle si raffredda, ma riesci a resistere alla sua influenza. La voce si trasforma in un urlo e una creatura emerge dal pavimento.",
-
-  choices:[["Combatti la creatura","finalfight"]]
-
- },
-
- sealpath:{
-
-  chapter:"Il rituale antico",
-
-  text:"Le iscrizioni sulle pareti descrivono un rituale dimenticato. Devi spezzare la protezione che circonda il cristallo. Un demone custode appare per impedirti di farlo.",
-
-  choices:[["Affronta il custode","finalfight"]]
-
- },
-
- victory:{
-
-  chapter:"Capitolo IV - L'alba di Velmora",
-
-  text:"Con un ultimo colpo, il cristallo si frantuma. Un'onda di luce attraversa le gallerie e le ombre svaniscono.\n\nQuando torni a Brumavia, le campane suonano per la prima volta dopo settimane. Hai salvato Velmora... ma nelle profondità della terra, qualcosa ha ascoltato il tuo nome.\n\nLA TUA LEGGENDA È APPENA COMINCIATA.",
-
-  choices:[["Continua a esplorare Velmora","after"]]
-
- },
-
- after:{
-
-  chapter:"La leggenda continua",
-
-  text:"La pace è tornata, ma i confini del regno nascondono ancora misteri. Questa prima avventura è conclusa. Puoi ricominciare per vivere una nuova storia con un altro eroe.",
-
-  choices:[["Torna alla creazione del personaggio","restart"]]
-
- },
-
- death:{
-
-  chapter:"La fine del viaggio",
-
-  text:"Le tue forze ti abbandonano. Le ombre di Velmora ti avvolgono e la tua leggenda si interrompe qui. Ma ogni eroe può rialzarsi e tentare ancora.",
-
-  choices:[["Ricomincia l'avventura","restart"]]
-
- }
+ending:{badge:"FINE DELLA PROVA",title:"La campana tace",text:`<p>Con un ultimo clangore, la campana si spezza. Il silenzio torna nella valle. Hai completato la prima avventura di <em>Ombre di Velmora</em>.</p>`,choices:[["Ricomincia l'avventura","restart"]]}
 
 };
 
-const enemies={
+function showScene(key){
 
- housefight:{
+$("combat").classList.add("hidden");
 
-  name:"Predone corrotto",
+$("afterCombat").classList.add("hidden");
 
-  icon:"👺",
+let sc=scenes[key];if(!sc)return;
 
-  hp:35,
+$("chapterBadge").textContent=sc.badge;
 
-  atk:8,
+$("sceneTitle").textContent=sc.title;
 
-  xp:22,
+$("sceneText").innerHTML=sc.text;
 
-  gold:8,
+$("sceneChoices").innerHTML=sc.choices.map(([label,act])=>`<button class="btn" onclick="sceneAction('${act}')">${label}</button>`).join("");
 
-  next:"crypt"
+updateHUD();
 
- },
+}
 
- cryptfight:{
+function sceneAction(act){
 
-  name:"Guardiano scheletrico",
+if(act==="wolf"){
 
-  icon:"💀",
+if(!G.companions.wolf){G.companions.wolf=true;G.party.push(makeCompanion("Rauk",36,7,3,4,"uomo_lupo_m_base.png.JPG"));}
 
-  hp:52,
+showScene("prologue");$("sceneText").innerHTML+='<p><em>Rauk abbassa il capo.</em> «Verrò con te.»</p>';return;
 
-  atk:10,
+}
 
-  xp:35,
+if(act==="lion"){
 
-  gold:15,
+if(!G.companions.lion){G.companions.lion=true;G.party.push(makeCompanion("Leona",40,7,4,4,"uomo_leone_f_base.png.JPG"));}
 
-  next:"hall"
+showScene("prologue");$("sceneText").innerHTML+='<p><em>Leona stringe l’elsa.</em> «Combatterò al tuo fianco.»</p>';return;
 
- },
+}
 
- finalfight:{
+if(act==="forest"){showScene("forest");return;}
 
-  name:"Demone del sigillo",
+if(act==="fight1"){startBattle(1);return;}
 
-  icon:"👿",
+if(act==="fight2"){startBattle(2);return;}
 
-  hp:95,
+if(act==="fight3"){startBattle(3);return;}
 
-  atk:14,
+if(act==="restart"){location.reload();}
 
-  xp:75,
+}
 
-  gold:40,
+function makeCompanion(name,hp,str,armor,intel,portrait){
 
-  next:"victory"
+return{id:name.toLowerCase(),name,class:"warrior",portrait,level:1,stats:{forza:str,agilita:6,vitalita:5,intelletto:intel,volonta:5,percezione:5,carisma:5},hp,maxhp:hp,ap:5,maxap:5,armor,weapon:6,alive:true,down:0,isHero:false};
 
- }
+}
+
+function aliveParty(){return [G.hero,...G.party].filter(p=>p.alive&&p.hp>0);}
+
+function isEnemy(u){return !!u.kind;}
+
+function current(){return battle?.order?.[battle.idx];}
+
+/* MOSTRA IL RISULTATO DEL DADO */
+
+function showDiceRoll(value,who){
+
+return new Promise(resolve=>{
+
+const dice=$("diceImage");
+
+$("diceWho").textContent=who;
+
+$("diceNumber").textContent="...";
+
+dice.classList.remove("rolling");
+
+void dice.offsetWidth;
+
+dice.classList.add("rolling");
+
+setTimeout(()=>{
+
+$("diceNumber").textContent=value;
+
+dice.classList.remove("rolling");
+
+resolve();
+
+},650);
+
+});
+
+}
+
+function startBattle(n){
+
+busy=false;
+
+const sets={
+
+1:[
+
+{name:"Orco predone",hp:25,atk:6,armor:1,kind:"orc",portrait:"orco_m_base.png.JPG"},
+
+{name:"Orco predone",hp:25,atk:6,armor:1,kind:"orc",portrait:"orco_f_base.png.JPG"},
+
+{name:"Predone della valle",hp:22,atk:5,armor:2,kind:"bandit",portrait:"modello_umano_maschile.png.JPG.JPG"}
+
+],
+
+2:[
+
+{name:"Orco veterano",hp:34,atk:7,armor:3,kind:"orc",portrait:"orco_m_base.png.JPG"},
+
+{name:"Guardiano della cripta",hp:32,atk:6,armor:4,kind:"guard",portrait:"orco_f_base.png.JPG"},
+
+{name:"Sciamano della cripta",hp:29,atk:7,armor:2,kind:"priest",portrait:"elfo_f_base.png.JPG"}
+
+],
+
+3:[
+
+{name:"Custode della Campana",hp:145,atk:10,armor:5,kind:"boss",portrait:"modello_umano_maschile.png.JPG.JPG"}
+
+]
 
 };
 
-function updatePreview(){
+battle={n,round:1,units:sets[n].map((e,i)=>({...e,id:"e"+i,maxhp:e.hp,alive:true,down:0})),order:[],idx:0,log:[],ended:false,turnPrepared:false};
 
- $("preview").textContent=emojis[selectedRace][selectedGender];
+let allies=[G.hero,...G.party];
 
- $("previewName").textContent=
+allies.forEach(p=>{p.ap=5;if(p.hp<=0&&p.isHero)p.hp=1;});
 
-  raceNames[selectedRace]+" · "+selectedGender;
+battle.order=[...allies.filter(p=>p.alive&&p.hp>0),...battle.units].sort((a,b)=>(b.stats?.agilita||3)-(a.stats?.agilita||3));
+
+selectedTarget=0;
+
+$("combat").classList.remove("hidden");
+
+$("afterCombat").classList.add("hidden");
+
+$("battleTitle").textContent=n===1?"Combattimento I · L'imboscata":n===2?"Combattimento II · La cripta":"Boss · Il Custode";
+
+$("battleHint").textContent="Ordine dei turni determinato dall'Agilità. I nemici attaccano dall'alto, la tua squadra combatte dal basso.";
+
+$("battleLog").innerHTML="";
+
+$("diceWho").textContent="In attesa del lancio...";
+
+$("diceNumber").textContent="—";
+
+log("Lo scontro ha inizio. L'ordine è stabilito dall'Agilità.");
+
+renderBattle();
+
+advanceToPlayer();
 
 }
 
-document.querySelectorAll("#races .choice").forEach(el=>{
+function log(t){
 
- el.addEventListener("click",()=>{
+if(!battle)return;
 
-  document.querySelectorAll("#races .choice")
+battle.log.unshift(t);
 
-   .forEach(x=>x.classList.remove("selected"));
+if(battle.log.length>35)battle.log.pop();
 
-  el.classList.add("selected");
+$("battleLog").innerHTML=battle.log.map(x=>`<p>${x}</p>`).join("");
 
-  selectedRace=el.dataset.race;
+}
 
-  selectedGender=el.dataset.gender;
+function unitHTML(u,active){
 
-  updatePreview();
+let max=u.maxhp||u.hp,hp=Math.max(0,u.hp),image=asset(u.portrait||"");
 
- });
+let status=!u.alive?"CADUTO":hp+"/"+max+" HP";
+
+let heroClass=u.isHero?"heroBattleFace":"";
+
+return `<div class="battleUnit ${active?'active':''} ${!u.alive?'dead':''}" data-unit-id="${u.id}">
+
+<img class="battleFace ${heroClass}" src="${image}" alt="${u.name}" onerror="this.style.opacity='.25';this.alt='Ritratto non disponibile'">
+
+<div class="battleName">${u.name}</div>
+
+<div class="battleHP">${status}</div>
+
+<div class="battleBar"><div style="width:${Math.max(0,hp/max*100)}%"></div></div>
+
+${!isEnemy(u)&&u.alive?`<div class="battleAP">AP ${u.ap}/5</div>`:""}
+
+${u.status?`<div class="battleAP">${u.status.name}</div>`:""}
+
+</div>`;
+
+}
+
+function renderBattle(){
+
+if(!battle)return;
+
+$("roundBadge").textContent="Turno "+battle.round;
+
+$("partyList").innerHTML=[G.hero,...G.party].map(p=>unitHTML(p,current()===p)).join("");
+
+$("enemyList").innerHTML=battle.units.map(e=>unitHTML(e,current()===e)).join("");
+
+updateHUD();
+
+}
+
+function findUnitElement(u){
+
+return Array.from(document.querySelectorAll(".battleUnit")).find(el=>el.dataset.unitId===String(u.id));
+
+}
+
+function animateStrike(attacker,target){
+
+return new Promise(resolve=>{
+
+let a=findUnitElement(attacker),t=findUnitElement(target);
+
+if(!a||!t){resolve();return;}
+
+a.classList.add(isEnemy(attacker)?"dashEnemy":"dashHero");
+
+setTimeout(()=>{
+
+t.classList.add("hit");
+
+setTimeout(()=>{
+
+a.classList.remove("dashEnemy","dashHero");
+
+t.classList.remove("hit");
+
+resolve();
+
+},330);
+
+},180);
 
 });
 
-document.querySelectorAll("#classes .choice").forEach(el=>{
+}
 
- el.addEventListener("click",()=>{
+async function advanceToPlayer(){
 
-  document.querySelectorAll("#classes .choice")
+if(!battle||battle.ended||busy)return;
 
-   .forEach(x=>x.classList.remove("selected"));
+while(battle&&!battle.ended){
 
-  el.classList.add("selected");
+if(battle.units.every(e=>!e.alive||e.hp<=0)){winBattle();return;}
 
-  selectedClass=el.dataset.class;
+if(aliveParty().length===0){loseBattle();return;}
 
- });
+if(battle.idx>=battle.order.length){
+
+battle.idx=0;battle.round++;battle.turnPrepared=false;tickDowned();
+
+battle.order=battle.order.filter(u=>isEnemy(u)?u.alive&&u.hp>0:u.alive&&u.hp>0);
+
+if(!battle.order.length){loseBattle();return;}
+
+}
+
+let u=current();
+
+if(!u||!u.alive||u.hp<=0){battle.idx++;battle.turnPrepared=false;continue;}
+
+if(isEnemy(u)){
+
+busy=true;renderBattle();
+
+let targets=aliveParty();
+
+if(targets.length){
+
+let target=targets.slice().sort((a,b)=>(a.hp/a.maxhp)-(b.hp/b.maxhp))[0];
+
+await animateStrike(u,target);
+
+await enemyTurn(u,target);
+
+}
+
+battle.idx++;battle.turnPrepared=false;renderBattle();busy=false;continue;
+
+}
+
+if(!battle.turnPrepared){
+
+u.ap=Math.min(5,u.ap+1);applyStartStatus(u);
+
+if(!u.alive||u.hp<=0){battle.idx++;battle.turnPrepared=false;continue;}
+
+battle.turnPrepared=true;
+
+}
+
+$("activeTitle").textContent="Turno di "+u.name;
+
+$("activeInfo").textContent=`HP ${u.hp}/${u.maxhp} · AP ${u.ap}/5 · Agilità ${u.stats.agilita||5}`;
+
+$("actionMessage").textContent="Scegli una sola azione. L'attacco normale non consuma AP.";
+
+renderTargets();renderActions();renderBattle();return;
+
+}
+
+}
+
+function renderTargets(){
+
+let living=battle.units.filter(e=>e.alive&&e.hp>0);
+
+if(!living.length){$("targetArea").innerHTML="";return;}
+
+if(!living.some(e=>battle.units.indexOf(e)===selectedTarget))selectedTarget=battle.units.indexOf(living[0]);
+
+$("targetArea").innerHTML=living.map(e=>`<button class="choice ${selectedTarget===battle.units.indexOf(e)?'selected':''}" onclick="selectTarget(${battle.units.indexOf(e)})">${e.name} · ${e.hp} HP</button>`).join("");
+
+}
+
+function selectTarget(i){if(busy)return;selectedTarget=i;renderTargets();}
+
+function hasCure(){return ["Antidoto","Benda","Purificazione"].some(k=>Number(G.inventory[k]||0)>0);}
+
+function hasDowned(){return [G.hero,...G.party].some(p=>!p.alive&&p.down>0);}
+
+function canUseMagic(u){return ["Mago","Chierico","Druido","mage","cleric","druid"].includes(u.class);}
+
+function renderActions(){
+
+let u=current();if(!u||isEnemy(u))return;
+
+let mage=canUseMagic(u);
+
+$("combatActions").innerHTML=`
+
+<button class="btn" onclick="playerAction('attack')">Attacco normale · 0 AP</button>
+
+<button class="btn" onclick="playerAction('skill')" ${u.ap<2?'disabled':''}>Abilità speciale · 2 AP</button>
+
+<button class="btn" onclick="playerAction('spell')" ${u.ap<3||!mage?'disabled':''}>Magia · 3 AP</button>
+
+<button class="btn secondary" onclick="playerAction('potion')" ${G.inventory.Pozione<1?'disabled':''}>Pozione curativa</button>
+
+<button class="btn secondary" onclick="playerAction('cure')" ${!hasCure()?'disabled':''}>Usa cura</button>
+
+<button class="btn secondary" onclick="playerAction('rescue')" ${!hasDowned()?'disabled':''}>Soccorri compagno</button>
+
+<button class="btn danger" onclick="playerAction('flee')">Tenta la fuga</button>`;
+
+}
+
+function unlockActions(){busy=false;renderActions();renderBattle();}
+
+async function playerAction(type){
+
+if(busy||!battle||battle.ended)return;
+
+let u=current(),target=battle.units[selectedTarget];
+
+if(!u||!u.alive||isEnemy(u))return;
+
+if(type==="spell"&&!canUseMagic(u)){$("actionMessage").textContent="Questa classe non può utilizzare la magia.";return;}
+
+busy=true;
+
+$("combatActions").querySelectorAll("button").forEach(b=>b.disabled=true);
+
+if(["attack","skill","spell"].includes(type)){
+
+if(!target||!target.alive){unlockActions();return;}
+
+let cost=type==="skill"?2:type==="spell"?3:0;
+
+if(u.ap<cost){unlockActions();return;}
+
+u.ap-=cost;
+
+await animateStrike(u,target);
+
+let die=roll();
+
+await showDiceRoll(die,"Lancio di "+u.name);
+
+let stat=type==="spell"?(u.stats.intelletto||u.stats.volonta||5):(u.stats.forza||5);
+
+let bonus=Math.floor(stat/2);
+
+let weapon=u.weapon+(type==="skill"?3:type==="spell"?4:0);
+
+let damage=Math.max(1,die+bonus+weapon-target.armor);
+
+if(die===20)damage+=10;
+
+target.hp-=damage;
+
+log(`${u.name}: D20 ${die} → ${type==="spell"?"incantesimo":type==="skill"?"abilità speciale":"attacco"} su ${target.name}, ${damage} danni${die===20?" (CRITICO!)":""}.`);
+
+if(target.hp<=0){target.hp=0;target.alive=false;log(`${target.name} è stato sconfitto.`);}
+
+}else if(type==="potion"){
+
+if(G.inventory.Pozione<1){unlockActions();return;}
+
+G.inventory.Pozione--;
+
+let oldHP=u.hp;u.hp=Math.min(u.maxhp,u.hp+18);
+
+log(`${u.name} usa una pozione e recupera ${u.hp-oldHP} HP.`);
+
+}else if(type==="cure"){
+
+let k=["Antidoto","Benda","Purificazione"].find(x=>G.inventory[x]>0);
+
+if(!k){unlockActions();return;}
+
+G.inventory[k]--;
+
+if(u.status){u.status=null;log(`${u.name} usa ${k}: effetto negativo rimosso.`);}
+
+else{log(`${u.name} usa ${k}, ma non ha alterazioni da curare.`);}
+
+}else if(type==="rescue"){
+
+let p=[G.hero,...G.party].find(p=>!p.alive&&p.down>0);
+
+if(!p){unlockActions();return;}
+
+p.alive=true;p.down=0;p.hp=Math.max(8,Math.floor(p.maxhp*.25));
+
+log(`${u.name} soccorre ${p.name}, che torna in piedi con ${p.hp} HP.`);
+
+}else if(type==="flee"){
+
+if(battle.n===3){log("Il Custode blocca ogni via di fuga.");}
+
+else if(Math.random()<.55){
+
+log("La fuga riesce. Lo scontro termina, ma la missione resta incompleta.");
+
+battle.ended=true;busy=false;$("combat").classList.add("hidden");
+
+showScene(battle.n===1?"forest":"crypt");return;
+
+}else{log("La fuga fallisce!");}
+
+}
+
+renderBattle();
+
+if(battle.units.every(e=>!e.alive||e.hp<=0)){busy=false;winBattle();return;}
+
+battle.idx++;battle.turnPrepared=false;busy=false;advanceToPlayer();
+
+}
+
+function roll(){return Math.floor(Math.random()*20)+1;}
+
+async function enemyTurn(e,target){
+
+if(!target||!target.alive)return;
+
+let die=roll();
+
+await showDiceRoll(die,"Lancio di "+e.name);
+
+let damage=Math.max(1,die+e.atk-target.armor);
+
+if(die===20)damage+=5;
+
+target.hp-=damage;
+
+log(`${e.name} attacca ${target.name}: D20 ${die}, ${damage} danni.`);
+
+if((e.kind==="priest")&&target.hp>0&&Math.random()<.35){
+
+target.status={name:"Avvelenamento",turns:3,damage:3};
+
+log(`${target.name} è avvelenato!`);
+
+}
+
+if(e.kind==="boss"&&target.hp>0&&Math.random()<.3){
+
+target.status={name:"Sanguinamento",turns:2,damage:4};
+
+log(`${target.name} sanguina!`);
+
+}
+
+if(target.hp<=0){
+
+target.hp=0;
+
+if(target.isHero){target.hp=1;log(`${target.name} crolla, ma il destino lo protegge.`);}
+
+else{target.alive=false;target.down=3;log(`${target.name} è a terra! Hai 3 turni per soccorrerlo.`);}
+
+}
+
+}
+
+function applyStartStatus(u){
+
+if(!u.status)return;
+
+let s=u.status;
+
+if(s.damage){u.hp-=s.damage;log(`${u.name} subisce ${s.damage} danni da ${s.name.toLowerCase()}.`);}
+
+s.turns--;
+
+if(s.turns<=0){log(`L'effetto ${s.name.toLowerCase()} termina su ${u.name}.`);u.status=null;}
+
+if(u.hp<=0){
+
+if(u.isHero){u.hp=1;log(`${u.name} resiste alla morte.`);}
+
+else{u.hp=0;u.alive=false;u.down=3;log(`${u.name} cade a terra!`);}
+
+}
+
+}
+
+function tickDowned(){
+
+[G.hero,...G.party].forEach(p=>{
+
+if(!p.alive&&p.down>0){p.down--;if(p.down===0)log(`${p.name} non è stato soccorso in tempo: è perduto.`);}
 
 });
 
-function diary(msg){
-
- $("diary").innerHTML+="<br>• "+escapeHtml(msg);
-
- $("diary").scrollTop=$("diary").scrollHeight;
-
 }
-
-function escapeHtml(s){
-
- return String(s).replace(/[&<>"']/g,c=>({
-
-  "&":"&amp;",
-
-  "<":"&lt;",
-
-  ">":"&gt;",
-
-  '"':"&quot;",
-
-  "'":"&#39;"
-
- }[c]));
-
-}
-
-function startGame(){
-
- const base=classData[selectedClass];
-
- player={
-
-  name:$("heroName").value.trim()||"Aren",
-
-  race:selectedRace,
-
-  gender:selectedGender,
-
-  klass:selectedClass,
-
-  eyes:$("eyes").value,
-
-  hair:$("hair").value,
-
-  clothes:$("clothes").value,
-
-  body:$("body").value,
-
-  hp:base.hp,
-
-  maxHp:base.hp,
-
-  atk:base.atk,
-
-  def:base.def,
-
-  level:1,
-
-  xp:0,
-
-  nextXp:50,
-
-  potions:2,
-
-  gold:10
-
- };
-
- $("creation").classList.add("hidden");
-
- $("game").classList.remove("hidden");
-
- $("gameAvatar").textContent=emojis[player.race][player.gender];
-
- $("gameName").textContent=
-
-  player.name+" · "+raceNames[player.race]+" · "+player.klass;
-
- diary("Sei entrato a Velmora come "+player.name+".");
-
- updateStats();
-
- showScene("intro");
-
-}
-
-function updateStats(){
-
- if(!player)return;
-
- $("level").textContent=player.level;
-
- $("attack").textContent=player.atk;
-
- $("defense").textContent=player.def;
-
- $("hpText").textContent=player.hp+" / "+player.maxHp;
-
- $("hpBar").style.width=
-
-  Math.max(0,player.hp/player.maxHp*100)+"%";
-
- $("xpText").textContent=player.xp+" / "+player.nextXp;
-
- $("xpBar").style.width=
-
-  Math.min(100,player.xp/player.nextXp*100)+"%";
-
- $("potions").textContent=player.potions;
-
- $("gold").textContent=player.gold;
-
-}
-
-function showScene(id){
-
- currentScene=id;
-
- inBattle=false;
-
- actionBusy=false;
-
- $("battle").classList.add("hidden");
-
- const s=scenes[id];
-
- if(!s)return;
-
- if(s.reward){
-
-  player.gold+=(s.reward.gold||0);
-
-  player.potions+=(s.reward.potions||0);
-
-  diary("Hai trovato una ricompensa.");
-
-  s.reward=null;
-
- }
-
- if(s.damage){
-
-  player.hp=Math.max(1,player.hp-s.damage);
-
-  diary("Hai perso "+s.damage+" punti salute.");
-
-  s.damage=0;
-
-  updateStats();
-
- }
-
- $("chapter").textContent=s.chapter;
-
- $("story").textContent=s.text;
-
- $("choices").innerHTML="";
-
- s.choices.forEach(([label,next])=>{
-
-  const b=document.createElement("button");
-
-  b.className="choicebtn";
-
-  b.textContent=label;
-
-  b.addEventListener("click",()=>{
-
-   if(next==="restart"){
-
-    restart();
-
-    return;
-
-   }
-
-   if(enemies[next]){
-
-    startBattle(next);
-
-    return;
-
-   }
-
-   showScene(next);
-
-  });
-
-  $("choices").appendChild(b);
-
- });
-
-}
-
-function startBattle(id){
-
- const data=enemies[id];
-
- enemy={...data,maxHp:data.hp};
-
- inBattle=true;
-
- actionBusy=false;
-
- $("battle").classList.remove("hidden");
-
- $("choices").innerHTML="";
-
- $("story").textContent=
-
-  "La creatura ti sbarra la strada. Non puoi proseguire senza affrontarla.";
-
- $("chapter").textContent="Un nemico ti attacca!";
-
- $("enemyName").textContent=enemy.name;
-
- $("enemyIcon").textContent=enemy.icon;
-
- $("battleLog").textContent="Il combattimento ha inizio...";
-
- $("diceResult").textContent="—";
-
- $("diceResult").className="dice-result";
-
- $("diceMessage").textContent="In attesa del lancio...";
-
- $("diceImage").classList.remove("rolling");
-
- logBattle("Il combattimento contro "+enemy.name+" ha inizio.");
-
- updateEnemy();
-
-}
-
-function logBattle(msg){
-
- $("battleLog").innerHTML+="<br>• "+escapeHtml(msg);
-
- $("battleLog").scrollTop=$("battleLog").scrollHeight;
-
-}
-
-function updateEnemy(){
-
- $("enemyHpText").textContent=
-
-  "Salute: "+enemy.hp+" / "+enemy.maxHp;
-
- $("enemyHpBar").style.width=
-
-  Math.max(0,enemy.hp/enemy.maxHp*100)+"%";
-
-}
-
-/* LANCIO D20 */
-
-function roll(){
-
- return Math.floor(Math.random()*20)+1;
-
-}
-
-function wait(ms){
-
- return new Promise(resolve=>setTimeout(resolve,ms));
-
-}
-
-async function rollAnimated(){
-
- const img=$("diceImage");
-
- const result=$("diceResult");
-
- const message=$("diceMessage");
-
- result.textContent="?";
-
- result.className="dice-result";
-
- message.textContent="Il destino sta decidendo...";
-
- img.classList.remove("rolling");
-
- void img.offsetWidth;
-
- img.classList.add("rolling");
-
- const value=roll();
-
- await wait(1000);
-
- img.classList.remove("rolling");
-
- result.textContent=value;
-
- if(value===20){
-
-  result.classList.add("critical");
-
-  message.textContent="✨ COLPO CRITICO!";
-
- }else if(value===1){
-
-  result.classList.add("failure");
-
-  message.textContent="💀 FALLIMENTO CRITICO!";
-
- }else{
-
-  message.textContent="Il dado ha parlato.";
-
- }
-
- return value;
-
-}
-
-/* ATTACCO DEL GIOCATORE */
-
-async function playerAttack(heavy){
-
- if(!inBattle||!enemy||actionBusy)return;
-
- actionBusy=true;
-
- const dice=await rollAnimated();
-
- let damage=0;
-
- if(dice===1){
-
-  logBattle("Hai mancato il bersaglio! (D20: 1)");
-
- }else{
-
-  damage=
-
-   player.atk+
-
-   (heavy?Math.floor(player.atk*.7):0)+
-
-   Math.floor(Math.random()*5);
-
-  if(dice===20){
-
-   damage*=2;
-
-   logBattle("COLPO CRITICO! D20: 20.");
-
-  }else if(dice>=14){
-
-   logBattle("Colpo preciso! D20: "+dice+".");
-
-  }else{
-
-   logBattle("Hai colpito! D20: "+dice+".");
-
-  }
-
-  enemy.hp=Math.max(0,enemy.hp-damage);
-
-  logBattle("Hai inflitto "+damage+" danni.");
-
- }
-
- updateEnemy();
-
- if(enemy.hp<=0){
-
-  actionBusy=false;
-
-  winBattle();
-
-  return;
-
- }
-
- await enemyTurn();
-
- actionBusy=false;
-
-}
-
-/* TURNO DEL NEMICO */
-
-async function enemyTurn(){
-
- if(!inBattle||!enemy)return;
-
- const dice=await rollAnimated();
-
- if(dice===1){
-
-  logBattle(enemy.name+" manca il colpo! (D20: 1)");
-
-  return;
-
- }
-
- let damage=Math.max(
-
-  1,
-
-  enemy.atk+Math.floor(Math.random()*5)-player.def
-
- );
-
- if(dice===20){
-
-  damage+=8;
-
-  logBattle("COLPO CRITICO del nemico! D20: 20.");
-
- }
-
- player.hp=Math.max(0,player.hp-damage);
-
- logBattle(
-
-  enemy.name+" ti infligge "+damage+
-
-  " danni (D20: "+dice+")."
-
- );
-
- updateStats();
-
- if(player.hp<=0){
-
-  inBattle=false;
-
-  actionBusy=false;
-
-  $("battle").classList.add("hidden");
-
-  showScene("death");
-
- }
-
-}
-
-/* VITTORIA */
 
 function winBattle(){
 
- const defeated=enemy;
+if(!battle||battle.ended)return;
 
- inBattle=false;
+battle.ended=true;busy=false;G.battleWon++;
 
- actionBusy=false;
+let n=battle.n;
 
- player.gold+=defeated.gold;
+let reward=n===1?{xp:35,gold:18}:n===2?{xp:55,gold:28}:{xp:100,gold:60};
 
- gainXp(defeated.xp);
+G.hero.xp+=reward.xp;G.gold+=reward.gold;
 
- diary(
+let levelUp="";
 
-  "Hai sconfitto "+defeated.name+
+if(G.hero.xp>=G.hero.level*60){
 
-  ". Hai ottenuto "+defeated.xp+
+G.hero.xp-=G.hero.level*60;G.hero.level++;G.hero.maxhp+=8;
 
-  " XP e "+defeated.gold+" monete."
+G.hero.hp=Math.min(G.hero.maxhp,G.hero.hp+8);G.hero.stats.forza++;
 
- );
-
- $("battle").classList.add("hidden");
-
- enemy=null;
-
- updateStats();
-
- showScene(defeated.next);
+levelUp=` ${G.hero.name} sale al livello ${G.hero.level}!`;
 
 }
 
-/* ESPERIENZA E LIVELLI */
+if(n===3){G.inventory["Lama dell'Eco Perduto"]=1;G.finished=true;}
 
-function gainXp(amount){
+$("combat").classList.add("hidden");
 
- player.xp+=amount;
+let box=$("afterCombat");box.classList.remove("hidden");
 
- while(player.xp>=player.nextXp){
+box.innerHTML=`
 
-  player.xp-=player.nextXp;
+<h2>${n===3?"Vittoria! Il Custode è caduto.":"Vittoria!"}</h2>
 
-  player.level++;
+<p>Hai ottenuto ${reward.xp} XP e ${reward.gold} monete d'oro.${levelUp}</p>
 
-  player.nextXp=Math.floor(player.nextXp*1.5);
+${n===3?'<p><b>Oggetto unico leggendario ottenuto: Lama dell’Eco Perduto.</b> La campana tace.</p>':''}
 
-  player.maxHp+=12;
+<button class="btn" onclick="continueAfter(${n})">${n===1?"Prosegui verso la cripta":n===2?"Apri la sala della campana":"Concludi l'avventura"}</button>`;
 
-  player.hp=player.maxHp;
-
-  player.atk+=2;
-
-  player.def+=1;
-
-  diary(
-
-   "LIVELLO AUMENTATO! Ora sei al livello "+
-
-   player.level+"."
-
-  );
-
- }
-
- updateStats();
+renderBattle();updateHUD();
 
 }
 
-/* POZIONI */
+function continueAfter(n){
 
-async function usePotion(){
+if(n===1)showScene("crypt");
 
- if(!inBattle||!player||actionBusy)return;
+else if(n===2)showScene("boss");
 
- if(player.potions<=0){
-
-  logBattle("Non hai pozioni.");
-
-  return;
-
- }
-
- if(player.hp===player.maxHp){
-
-  logBattle("La tua salute è già al massimo.");
-
-  return;
-
- }
-
- actionBusy=true;
-
- player.potions--;
-
- const heal=Math.min(40,player.maxHp-player.hp);
-
- player.hp+=heal;
-
- logBattle("Hai recuperato "+heal+" punti salute.");
-
- updateStats();
-
- await enemyTurn();
-
- actionBusy=false;
+else showScene("ending");
 
 }
 
-/* FUGA */
+function loseBattle(){
 
-async function flee(){
+if(!battle||battle.ended)return;
 
- if(!inBattle||actionBusy)return;
+battle.ended=true;busy=false;$("combat").classList.add("hidden");
 
- actionBusy=true;
+let box=$("afterCombat");box.classList.remove("hidden");
 
- if(Math.random()<.55){
-
-  logBattle("Sei riuscito a fuggire!");
-
-  inBattle=false;
-
-  actionBusy=false;
-
-  $("battle").classList.add("hidden");
-
-  showScene("crypt");
-
- }else{
-
-  logBattle("Non sei riuscito a fuggire!");
-
-  await enemyTurn();
-
-  actionBusy=false;
-
- }
-
-/* SALVATAGGIO */
+box.innerHTML=`<h2>Il gruppo è sopraffatto</h2><p>La prova finisce qui, ma puoi riprovare.</p><button class="btn" onclick="restartBattle()">Riprova lo scontro</button>`;
 
 }
 
-function save(){
+function restartBattle(){startBattle(battle.n);}
 
- if(!player){
+function updateHUD(){
 
-  alert("Non c'è una partita da salvare.");
+if(!G)return;
 
-  return;
+$("levelBadge").textContent=`Livello ${G.hero.level} · ${G.hero.xp} XP`;
 
- }
-
- const data={
-
-  player,
-
-  currentScene,
-
-  diary:$("diary").innerHTML
-
- };
-
- localStorage.setItem(
-
-  "velmoraSave",
-
-  JSON.stringify(data)
-
- );
-
- alert("Partita salvata su questo dispositivo!");
+$("inventory").innerHTML=Object.entries(G.inventory).map(([k,v])=>`<span>${k}: ${v}</span>`).join("")+`<span>Oro: ${G.gold}</span>`;
 
 }
 
-function load(){
+function saveGame(){
 
- const raw=localStorage.getItem("velmoraSave");
+if(!G){alert("Non c'è una partita da salvare.");return;}
 
- if(!raw){
+let battleSave=null;
 
-  alert("Non è stato trovato nessun salvataggio.");
+if(battle)battleSave={...battle,order:battle.order.map(u=>u.id)};
 
-  return;
+localStorage.setItem("velmoraDemoSave",JSON.stringify({G,battle:battleSave}));
 
- }
-
- try{
-
-  const data=JSON.parse(raw);
-
-  player=data.player;
-
-  currentScene=data.currentScene;
-
-  enemy=null;
-
-  inBattle=false;
-
-  actionBusy=false;
-
-  $("creation").classList.add("hidden");
-
-  $("game").classList.remove("hidden");
-
-  $("gameAvatar").textContent=
-
-   emojis[player.race][player.gender];
-
-  $("gameName").textContent=
-
-   player.name+" · "+
-
-   raceNames[player.race]+" · "+
-
-   player.klass;
-
-  $("diary").innerHTML=data.diary||"";
-
-  updateStats();
-
-  showScene(currentScene);
-
-  alert("Partita caricata!");
-
- }catch(e){
-
-  alert("Il salvataggio non è valido.");
-
- }
+alert("Partita salvata su questo dispositivo!");
 
 }
 
-/* RICOMINCIA */
+function loadGame(){
 
-function restart(){
+let raw=localStorage.getItem("velmoraDemoSave");
 
- if(!confirm("Vuoi ricominciare? La partita attuale verrà sostituita."))return;
+if(!raw){alert("Non è presente un salvataggio.");return;}
 
- player=null;
+try{
 
- enemy=null;
+let s=JSON.parse(raw);G=s.G;battle=s.battle;busy=false;
 
- inBattle=false;
+$("creator").classList.add("hidden");$("game").classList.remove("hidden");
 
- actionBusy=false;
+if(battle){
 
- $("game").classList.add("hidden");
+let all=[G.hero,...G.party,...battle.units];
 
- $("creation").classList.remove("hidden");
+let byId=new Map(all.map(u=>[String(u.id),u]));
 
- $("diary").textContent="La tua avventura comincia.";
+battle.order=(battle.order||[]).map(id=>byId.get(String(id))).filter(Boolean);
 
- $("battleLog").textContent="Il combattimento ha inizio...";
+if(!battle.ended){
 
- $("diceResult").textContent="—";
+$("combat").classList.remove("hidden");$("afterCombat").classList.add("hidden");
 
- $("diceResult").className="dice-result";
+$("battleLog").innerHTML="";
 
- $("diceMessage").textContent="In attesa del lancio...";
+battle.log.forEach(x=>{$("battleLog").innerHTML+=`<p>${x}</p>`;});
 
- $("diceImage").classList.remove("rolling");
+renderBattle();advanceToPlayer();
+
+}else{
+
+$("combat").classList.add("hidden");
+
+showScene(G.finished?"ending":G.battleWon===1?"crypt":G.battleWon===2?"boss":"prologue");
 
 }
 
-/* COLLEGAMENTO PULSANTI */
+}else{
 
-$("start").addEventListener("click",startGame);
+showScene(G.finished?"ending":G.battleWon===0?"prologue":G.battleWon===1?"crypt":G.battleWon===2?"boss":"ending");
 
-$("normal").addEventListener(
+}
 
- "click",
+updateHUD();alert("Partita caricata!");
 
- ()=>playerAttack(false)
+}catch(e){console.error(e);alert("Salvataggio non leggibile.");}
 
-);
+}
 
-$("heavy").addEventListener(
+function backToCreator(){
 
- "click",
+if(confirm("Tornare alla creazione? La partita resterà salvata solo se la salvi prima.")){location.reload();}
 
- ()=>playerAttack(true)
+}
 
-);
+renderCreator();
 
-$("potion").addEventListener(
-
- "click",
-
- usePotion
-
-);
-
-$("flee").addEventListener(
-
- "click",
-
- flee
-
-);
-
-$("save").addEventListener(
-
- "click",
-
- save
-
-);
-
-$("load").addEventListener(
-
- "click",
-
- load
-
-);
-
-$("restart").addEventListener(
-
- "click",
-
- restart
-
-);
-
-updatePreview();
-
-})();
+musicLabel();
 
 </script>
 
