@@ -35,7 +35,7 @@ for group, files in GROUPS.items():
   # the artwork remain protected by the edge-connected component test.
   candidate=(dist<46).astype(np.uint8)
   count, labels=cv2.connectedComponents(candidate, connectivity=8)
-  edge_ids=set(np.unique(np.concatenate([labels[0,:],labels[-1,:],labels[:,0],labels[:,-1]])).tolist())
+  edge_ids=set(int(v) for v in np.unique(np.concatenate([labels[0,:],labels[-1,:],labels[:,0],labels[:,-1]])) if int(v)>0)
   bgmask=np.isin(labels,list(edge_ids))
   keep=~bgmask
   if group=="hair":
