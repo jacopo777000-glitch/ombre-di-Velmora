@@ -16,19 +16,30 @@ def grabcut_crop(rgb, roi, seed):
     x0,y0,x1,y1=roi
     crop=rgb[y0:y1,x0:x1].copy()
     h,w=crop.shape[:2]
-    mask=np.zeros((h,w),np.uint8)
-    mask[:,:]=cv2.GC_PR_BGD
-    # The whole artwork window is possible foreground; the centre of the object is certain foreground.
-    mask[2:h-2,2:w-2]=cv2.GC_PR_FGD
+    # Estimate parchment from the four corners of the ORIGINAL sheet.
+    corners=np.concatenate([
+        rgb[:max(8,int(rgb.shape[0]*.06)),:max(8,int(rgb.shape[1]*.06))].reshape(-1,3),
+        rgb[:max(8,int(rgb.shape[0]*.06)),-max(8,int(rgb.shape[1]*.06)):].reshape(-1,3),
+        rgb[-max(8,int(rgb.shape[0]*.06)):,:max(8,int(rgb.shape[1]*.06))].reshape(-1,3),
+        rgb[-max(8,int(rgb.shape[0]*.06)):,-max(8,int(rgb.shape[1]*.06)):].reshape(-1,3)
+    ],axis=0)
+    med=np.median(corners,axis=0).astype(np.float32)
+    dist=np.sqrt(((crop.astype(np.float32)-med)**2).sum(axis=2))
+    mask=np.full((h,w),cv2.GC_PR_BGD,np.uint8)
+    # Central artwork is probable foreground; outer frame and parchment-like pixels are definite background.
+    mx,my=int(w*.055),int(h*.035)
+    mask[my:h-my,mx:w-mx]=cv2.GC_PR_FGD
+    mask[dist<24]=cv2.GC_BGD
+    mask[:my,:]=cv2.GC_BGD; mask[h-my:,:]=cv2.GC_BGD
+    mask[:,:mx]=cv2.GC_BGD; mask[:,w-mx:]=cv2.GC_BGD
     sx0,sy0,sx1,sy1=seed
     mask[sy0:sy1,sx0:sx1]=cv2.GC_FGD
     bgd=np.zeros((1,65),np.float64); fgd=np.zeros((1,65),np.float64)
-    cv2.grabCut(crop,mask,None,bgd,fgd,7,cv2.GC_INIT_WITH_MASK)
+    cv2.grabCut(crop,mask,None,bgd,fgd,9,cv2.GC_INIT_WITH_MASK)
     alpha=np.where((mask==cv2.GC_FGD)|(mask==cv2.GC_PR_FGD),255,0).astype(np.uint8)
-    # Remove pale parchment-colored pixels even when enclosed inside the crop.
-    med=np.median(np.concatenate([rgb[:20,:20].reshape(-1,3),rgb[:20,-20:].reshape(-1,3),rgb[-20:,:20].reshape(-1,3),rgb[-20:,-20:].reshape(-1,3)]),axis=0)
-    d=np.sqrt(((crop.astype(np.float32)-med)**2).sum(axis=2))
-    alpha=np.where(d<28,0,alpha).astype(np.uint8)
+    # Suppress only near-identical parchment pixels, preserving pale metal and white details.
+    alpha=np.where(dist<13,0,alpha).astype(np.uint8)
+    alpha=cv2.morphologyEx(alpha,cv2.MORPH_CLOSE,np.ones((3,3),np.uint8))
     alpha=cv2.morphologyEx(alpha,cv2.MORPH_OPEN,np.ones((2,2),np.uint8))
     return crop,alpha,(x0,y0)
 
