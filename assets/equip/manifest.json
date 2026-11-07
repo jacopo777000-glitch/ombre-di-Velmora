@@ -4,80 +4,80 @@
     "group": "hair",
     "canvasWidth": 912,
     "canvasHeight": 962,
-    "x": 342,
-    "y": 0,
-    "width": 570,
-    "height": 329
+    "x": 379,
+    "y": 23,
+    "width": 178,
+    "height": 363
   },
   "Capelli_coda_lunga.jpg": {
     "file": "assets/equip/Capelli_coda_lunga.png",
     "group": "hair",
     "canvasWidth": 912,
     "canvasHeight": 964,
-    "x": 336,
-    "y": 0,
-    "width": 576,
-    "height": 329
+    "x": 403,
+    "y": 20,
+    "width": 158,
+    "height": 367
   },
   "Capelli_lunghi.jpg": {
     "file": "assets/equip/Capelli_lunghi.png",
     "group": "hair",
     "canvasWidth": 912,
     "canvasHeight": 956,
-    "x": 337,
-    "y": 0,
-    "width": 575,
-    "height": 327
+    "x": 379,
+    "y": 32,
+    "width": 190,
+    "height": 215
   },
   "Capelli_mossi.jpg": {
     "file": "assets/equip/Capelli_mossi.png",
     "group": "hair",
     "canvasWidth": 912,
     "canvasHeight": 987,
-    "x": 327,
-    "y": 14,
-    "width": 315,
-    "height": 323
+    "x": 384,
+    "y": 18,
+    "width": 138,
+    "height": 140
   },
   "Capelli_rasati_lato.jpg": {
     "file": "assets/equip/Capelli_rasati_lato.png",
     "group": "hair",
     "canvasWidth": 909,
     "canvasHeight": 975,
-    "x": 340,
-    "y": 22,
-    "width": 289,
-    "height": 294
+    "x": 376,
+    "y": 25,
+    "width": 139,
+    "height": 140
   },
   "Capelli_rasta.jpg": {
     "file": "assets/equip/Capelli_rasta.png",
     "group": "hair",
     "canvasWidth": 912,
     "canvasHeight": 983,
-    "x": 334,
+    "x": 373,
     "y": 17,
-    "width": 306,
-    "height": 319
+    "width": 198,
+    "height": 272
   },
   "Capelli_spettinati.jpg": {
     "file": "assets/equip/Capelli_spettinati.png",
     "group": "hair",
     "canvasWidth": 912,
     "canvasHeight": 983,
-    "x": 336,
-    "y": 37,
-    "width": 319,
-    "height": 299
+    "x": 373,
+    "y": 38,
+    "width": 170,
+    "height": 146
   },
   "Capelli_trecce.jpg": {
     "file": "assets/equip/Capelli_trecce.png",
     "group": "hair",
     "canvasWidth": 912,
     "canvasHeight": 988,
-    "x": 331,
-    "y": 26,
-    "width": 310,
-    "height": 311
+    "x": 392,
+    "y": 27,
+    "width": 129,
+    "height": 142
   },
   "Armatura_arciere.JPG": {
     "file": "assets/equip/Armatura_arciere.png",
@@ -94,19 +94,19 @@
     "group": "armor",
     "canvasWidth": 912,
     "canvasHeight": 1168,
-    "x": 58,
-    "y": 150,
-    "width": 848,
-    "height": 1018
+    "x": 59,
+    "y": 151,
+    "width": 835,
+    "height": 1017
   },
   "Armatura_guerriero.JPG": {
     "file": "assets/equip/Armatura_guerriero.png",
     "group": "armor",
     "canvasWidth": 912,
     "canvasHeight": 1162,
-    "x": 0,
+    "x": 7,
     "y": 0,
-    "width": 912,
+    "width": 905,
     "height": 1162
   },
   "Armatura_mago.JPG": {
@@ -115,19 +115,19 @@
     "canvasWidth": 912,
     "canvasHeight": 1168,
     "x": 224,
-    "y": 148,
+    "y": 151,
     "width": 688,
-    "height": 1020
+    "height": 1017
   },
   "Cappello_mago.JPG": {
     "file": "assets/equip/Cappello_mago.png",
     "group": "headgear",
     "canvasWidth": 912,
     "canvasHeight": 1168,
-    "x": 28,
-    "y": 0,
-    "width": 824,
-    "height": 492
+    "x": 294,
+    "y": 40,
+    "width": 318,
+    "height": 230
   },
   "Cappello_punk.JPG": {
     "file": "assets/equip/Cappello_punk.png",
@@ -137,26 +137,26 @@
     "x": 0,
     "y": 0,
     "width": 912,
-    "height": 492
+    "height": 644
   },
   "Elmo_drago.JPG": {
     "file": "assets/equip/Elmo_drago.png",
     "group": "headgear",
     "canvasWidth": 912,
     "canvasHeight": 1168,
-    "x": 32,
-    "y": 0,
-    "width": 818,
-    "height": 492
+    "x": 381,
+    "y": 24,
+    "width": 207,
+    "height": 319
   },
   "Elmo_leone.JPG": {
     "file": "assets/equip/Elmo_leone.png",
     "group": "headgear",
     "canvasWidth": 912,
     "canvasHeight": 1162,
-    "x": 0,
+    "x": 12,
     "y": 0,
-    "width": 912,
-    "height": 490
+    "width": 900,
+    "height": 641
   }
 }
