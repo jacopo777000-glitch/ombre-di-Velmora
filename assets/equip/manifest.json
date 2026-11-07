@@ -4,159 +4,159 @@
     "group": "hair",
     "canvasWidth": 912,
     "canvasHeight": 962,
-    "x": 405,
-    "y": 77,
-    "width": 153,
-    "height": 125
+    "x": 342,
+    "y": 0,
+    "width": 570,
+    "height": 329
   },
   "Capelli_coda_lunga.jpg": {
     "file": "assets/equip/Capelli_coda_lunga.png",
     "group": "hair",
     "canvasWidth": 912,
     "canvasHeight": 964,
-    "x": 405,
-    "y": 35,
-    "width": 148,
-    "height": 294
+    "x": 336,
+    "y": 0,
+    "width": 576,
+    "height": 329
   },
   "Capelli_lunghi.jpg": {
     "file": "assets/equip/Capelli_lunghi.png",
     "group": "hair",
     "canvasWidth": 912,
     "canvasHeight": 956,
-    "x": 380,
-    "y": 35,
-    "width": 186,
-    "height": 292
+    "x": 337,
+    "y": 0,
+    "width": 575,
+    "height": 327
   },
   "Capelli_mossi.jpg": {
     "file": "assets/equip/Capelli_mossi.png",
     "group": "hair",
     "canvasWidth": 912,
     "canvasHeight": 987,
-    "x": 354,
-    "y": 24,
-    "width": 207,
-    "height": 313
+    "x": 327,
+    "y": 14,
+    "width": 315,
+    "height": 323
   },
   "Capelli_rasati_lato.jpg": {
     "file": "assets/equip/Capelli_rasati_lato.png",
     "group": "hair",
     "canvasWidth": 909,
     "canvasHeight": 975,
-    "x": 404,
-    "y": 72,
-    "width": 104,
-    "height": 61
+    "x": 340,
+    "y": 22,
+    "width": 289,
+    "height": 294
   },
   "Capelli_rasta.jpg": {
     "file": "assets/equip/Capelli_rasta.png",
     "group": "hair",
     "canvasWidth": 912,
     "canvasHeight": 983,
-    "x": 354,
-    "y": 20,
-    "width": 214,
-    "height": 316
+    "x": 334,
+    "y": 17,
+    "width": 306,
+    "height": 319
   },
   "Capelli_spettinati.jpg": {
     "file": "assets/equip/Capelli_spettinati.png",
     "group": "hair",
     "canvasWidth": 912,
     "canvasHeight": 983,
-    "x": 377,
-    "y": 41,
-    "width": 160,
-    "height": 123
+    "x": 336,
+    "y": 37,
+    "width": 319,
+    "height": 299
   },
   "Capelli_trecce.jpg": {
     "file": "assets/equip/Capelli_trecce.png",
     "group": "hair",
     "canvasWidth": 912,
     "canvasHeight": 988,
-    "x": 397,
-    "y": 29,
-    "width": 161,
-    "height": 308
+    "x": 331,
+    "y": 26,
+    "width": 310,
+    "height": 311
   },
   "Armatura_arciere.JPG": {
     "file": "assets/equip/Armatura_arciere.png",
     "group": "armor",
     "canvasWidth": 912,
     "canvasHeight": 1163,
-    "x": 26,
-    "y": 16,
-    "width": 824,
-    "height": 1147
+    "x": 0,
+    "y": 0,
+    "width": 912,
+    "height": 1163
   },
   "Armatura_druido.JPG": {
     "file": "assets/equip/Armatura_druido.png",
     "group": "armor",
     "canvasWidth": 912,
     "canvasHeight": 1168,
-    "x": 105,
-    "y": 195,
-    "width": 728,
-    "height": 940
+    "x": 58,
+    "y": 150,
+    "width": 848,
+    "height": 1018
   },
   "Armatura_guerriero.JPG": {
     "file": "assets/equip/Armatura_guerriero.png",
     "group": "armor",
     "canvasWidth": 912,
     "canvasHeight": 1162,
-    "x": 51,
-    "y": 2,
-    "width": 824,
-    "height": 1160
+    "x": 0,
+    "y": 0,
+    "width": 912,
+    "height": 1162
   },
   "Armatura_mago.JPG": {
     "file": "assets/equip/Armatura_mago.png",
     "group": "armor",
     "canvasWidth": 912,
     "canvasHeight": 1168,
-    "x": 302,
-    "y": 349,
-    "width": 542,
-    "height": 782
+    "x": 224,
+    "y": 148,
+    "width": 688,
+    "height": 1020
   },
   "Cappello_mago.JPG": {
     "file": "assets/equip/Cappello_mago.png",
     "group": "headgear",
     "canvasWidth": 912,
     "canvasHeight": 1168,
-    "x": 142,
-    "y": 81,
-    "width": 604,
-    "height": 411
+    "x": 28,
+    "y": 0,
+    "width": 824,
+    "height": 492
   },
   "Cappello_punk.JPG": {
     "file": "assets/equip/Cappello_punk.png",
     "group": "headgear",
     "canvasWidth": 912,
     "canvasHeight": 1169,
-    "x": 11,
-    "y": 3,
-    "width": 890,
-    "height": 489
+    "x": 0,
+    "y": 0,
+    "width": 912,
+    "height": 492
   },
   "Elmo_drago.JPG": {
     "file": "assets/equip/Elmo_drago.png",
     "group": "headgear",
     "canvasWidth": 912,
     "canvasHeight": 1168,
-    "x": 144,
-    "y": 90,
-    "width": 597,
-    "height": 402
+    "x": 32,
+    "y": 0,
+    "width": 818,
+    "height": 492
   },
   "Elmo_leone.JPG": {
     "file": "assets/equip/Elmo_leone.png",
     "group": "headgear",
     "canvasWidth": 912,
     "canvasHeight": 1162,
-    "x": 50,
-    "y": 6,
-    "width": 817,
-    "height": 484
+    "x": 0,
+    "y": 0,
+    "width": 912,
+    "height": 490
   }
 }
