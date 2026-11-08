@@ -299,6 +299,31 @@ h2{padding-bottom:8px;border-bottom:1px solid rgba(199,165,104,.4);letter-spacin
 .battleUnit.active{border-color:#f4d99c;box-shadow:0 0 18px #e9ca805c,inset 0 0 20px #e9ca8020}
 .rosterPicker{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:8px;margin:12px 0 18px}
 @media(max-width:560px){.rosterPicker{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Migliorie leggibilità selettori e anteprime equipaggiamento */
+select.input{
+ color:#fff!important;
+ color-scheme:dark;
+ background-color:#171b20;
+ border:1px solid #a98a56;
+ padding-right:34px;
+}
+select.input option{color:#fff;background:#171b20}
+select.input:focus{outline:2px solid #f0d49b;outline-offset:1px}
+.unitArt{overflow:hidden!important;isolation:isolate}
+.unitArt img.equipLayer{
+ max-width:100%!important;
+ max-height:100%!important;
+ object-fit:contain!important;
+}
+.characterCard .unitArt{
+ width:72px!important;
+ height:92px!important;
+ min-width:72px;
+ flex:0 0 72px!important;
+}
+.characterCard .unitArt img{max-width:100%;max-height:100%}
+
 </style>
 </head>
 <body>
