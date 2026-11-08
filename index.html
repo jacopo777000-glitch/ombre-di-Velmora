@@ -851,7 +851,7 @@ $("guildPickCount").textContent="Compagni scelti: "+guildChosenCompanions.length
 function toggleGuildCompanion(i){if(guildChosenCompanions.includes(i))guildChosenCompanions=guildChosenCompanions.filter(x=>x!==i);else if(guildChosenCompanions.length<2)guildChosenCompanions.push(i);renderGuildRoster()}
 function beginGuildMission(){
 if(!guildChosenMission||guildChosenCompanions.length!==2)return;
-G.party=guildChosenCompanions.map(i=>{let p=guildRoster[i],u=makeCompanion(p.name,p.hp,p.atk,p.armor,p.intel,p.portrait);u.class=p.class;u.stats.agilita=p.class==="Arciere"?9:6;u.stats.volonta=p.class==="Paladina"||p.class==="Druida"?8:5;return u});
+G.party=guildChosenCompanions.map(i=>{let p=guildRoster[i],u=makeCompanion(p.name,p.hp,p.atk,p.armor,p.intel,p.portrait);u.class=p.class;u.baseArmor=p.armor;u.stats.agilita=p.class==="Arciere"?9:6;u.stats.volonta=p.class==="Paladina"||p.class==="Druida"?8:5;const w=p.class==="Arciere"?"Arco":p.class==="Maga"||p.class==="Druida"?"Bastone":p.class==="Paladina"?"Spada":"Spada";u.equipment={hair:"",armor:"",head:"",weapon:w,physicalBonus:w==="Arco"?3:w==="Spada"?2:0,magicBonus:w==="Bastone"?5:0};return u});
 G.activeGuildMission={...guildChosenMission,seed:Math.random(),step:0,score:0,loot:[],flags:{},events:[]};G.guildMissionRewardPaid=false;guildRouteEvent();updateHUD();
 }
 
