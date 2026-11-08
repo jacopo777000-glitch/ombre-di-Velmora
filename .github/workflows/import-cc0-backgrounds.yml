@@ -20,6 +20,8 @@ jobs:
           curl -fL --retry 3 --retry-delay 2 "https://opengameart.org/sites/default/files/background_43.png" -o review/individual/handpainted-ruins.png
           curl -fL --retry 3 --retry-delay 2 "https://lpc.opengameart.org/sites/default/files/back_cave.png" -o review/individual/cave-cc0.png
           curl -fL --retry 3 --retry-delay 2 "https://opengameart.org/sites/default/files/Background2Final.png" -o review/individual/castle-hill-cc0.png
+      - name: Install image tools
+        run: python -m pip install --quiet Pillow
       - name: Extract and make contact sheet
         run: |
           python - <<'PY'
