@@ -663,6 +663,10 @@ body.battle-mode .actionPanel{margin-bottom:10px}
  .battleDestiny .diceContent strong{font-size:14px!important}
 }
 
+
+/* Battaglia: personaggi più grandi e colonna squadra sempre visibile */
+@media(min-width:681px){body.battle-mode .gameLayout{grid-template-columns:190px minmax(0,1fr);gap:10px}body.battle-mode .leftRail{display:flex!important;position:sticky;top:6px;max-height:calc(100vh - 12px);overflow-y:auto;padding:9px}body.battle-mode .leftRail>.railTitle,body.battle-mode .leftRail>.leftParty{display:block!important}body.battle-mode .leftRail>.leftParty #leftSquad{display:flex;flex-direction:column;gap:2px;overflow:visible}body.battle-mode .leftRail .leftMember{flex:0 0 auto;padding:5px 2px}body.battle-mode .leftRail .leftMember img{width:49px;height:68px}body.battle-mode .leftRail .railBottom{display:none!important}body.battle-mode .battleFormationStage{grid-template-columns:minmax(0,1.28fr) 50px minmax(0,1.28fr)!important}body.battle-mode .battleFormationStage .battleUnit{grid-template-columns:clamp(68px,8vw,108px) minmax(0,1fr)!important}}
+@media(max-width:680px){body.battle-mode .leftRail{display:none!important}body.battle-mode .battleFormationStage .battleUnit{grid-template-columns:clamp(48px,14vw,68px) minmax(0,1fr)!important}}
 </style>
 </head>
 <body>
@@ -876,7 +880,13 @@ async function playerAction(type,abilityId){
 if(busy||!battle||battle.ended)return;let u=current(),target=battle.units[selectedTarget];if(!u||!u.alive||isEnemy(u))return;
 if(type==="spell"&&!canUseMagic(u)){$("actionMessage").textContent="Questa classe non può utilizzare la magia.";return}let chosenAbility=type==="skill"?unlockedAbilities(u).find(a=>a.id===abilityId):null;if(type==="skill"&&!chosenAbility){unlockActions();return}
 busy=true;$("combatActions").querySelectorAll("button").forEach(b=>b.disabled=true);
-if(["attack","skill","spell"].includes(type)){
+if(type==="skill"&&chosenAbility&&chosenAbility.effect){
+ const cost=chosenAbility.cost;if(u.ap<cost){unlockActions();return}u.ap-=cost;
+ if(chosenAbility.effect==="heal"){const allies=[G.hero,...G.party].filter(p=>p.alive&&p.hp<p.maxhp).sort((a,b)=>(a.hp/a.maxhp)-(b.hp/b.maxhp));const recipient=allies[0]||u;const before=recipient.hp;recipient.hp=Math.min(recipient.maxhp,recipient.hp+chosenAbility.healAmount);log(`${u.name} usa ${chosenAbility.name}: ${recipient.name} recupera ${recipient.hp-before} HP.`)}
+ else if(chosenAbility.effect==="guard"){u.guard=Math.max(u.guard||0,chosenAbility.guardAmount);u.guardTurns=2;log(`${u.name} usa ${chosenAbility.name}: difesa aumentata per 2 turni.`)}
+ else if(chosenAbility.effect==="focus"){u.focus=Math.max(u.focus||0,chosenAbility.focusAmount);u.focusUses=1;log(`${u.name} usa ${chosenAbility.name}: il prossimo attacco è potenziato.`)}
+ combatAbilityMenuOpen=false;
+}else if(["attack","skill","spell"].includes(type)){
 if(!target||!target.alive){unlockActions();return}let cost=type==="skill"?(chosenAbility?chosenAbility.cost:2):type==="spell"?3:0;if(u.ap<cost){unlockActions();return}u.ap-=cost;let die=roll();await showDiceRoll(die,u.name,"Tiro dell'azione · D20");await animateStrike(u,target,type);
 let activeSkill=type==="skill"?chosenAbility:null;let stat=(type==="spell"||(activeSkill&&activeSkill.type==="Magica"))?(u.stats.intelletto||u.stats.volonta||5):(u.stats.forza||5),bonus=Math.floor(stat/2),weapon=u.weapon+(type==="skill"?(activeSkill?activeSkill.damageBonus:0):type==="spell"?4:0),damage=Math.max(1,die+bonus+weapon-target.armor);if(die===20)damage+=10;target.hp-=damage;
 log(`${u.name}: D20 ${die} → ${type==="spell"?"incantesimo":type==="skill"?(activeSkill?activeSkill.name:"abilità"):"attacco"} su ${target.name}, ${damage} danni${die===20?" (CRITICO!)":""}.`);
@@ -890,7 +900,7 @@ renderBattle();if(battle.units.every(e=>!e.alive||e.hp<=0)){busy=false;winBattle
 async function showDiceRoll(value,who,result){const img=$("diceImage"),whoBox=$("diceWho"),num=$("diceNumber"),res=$("diceResult");if(!num)return;if(whoBox)whoBox.textContent=who||"Il destino si muove…";if(res)res.textContent="Il dado sta girando…";num.textContent="…";if(img){img.classList.remove("diceRolling");void img.offsetWidth;img.classList.add("diceRolling")}await new Promise(resolve=>setTimeout(resolve,1250));if(img)img.classList.remove("diceRolling");num.textContent=String(value);if(res)res.textContent=result||"Risultato del tiro";await new Promise(resolve=>setTimeout(resolve,1000));}
 function roll(){return Math.floor(Math.random()*20)+1}
 function enemyTurn(e,target,die){
-if(!target||!target.alive)return;die=die||roll();let damage=Math.max(1,die+e.atk-target.armor);if(die===20)damage+=5;target.hp-=damage;log(`${e.name} attacca ${target.name}: D20 ${die}, ${damage} danni.`);
+if(!target||!target.alive)return;die=die||roll();let damage=Math.max(1,die+e.atk-target.armor-(target.guard||0));if(die===20)damage+=5;target.hp-=damage;if(target.guardTurns){target.guardTurns--;if(target.guardTurns<=0){target.guard=0;target.guardTurns=0}}log(`${e.name} attacca ${target.name}: D20 ${die}, ${damage} danni.`);
 if(e.kind==="priest"&&target.hp>0&&Math.random()<.35){target.status={name:"Avvelenamento",turns:3,damage:3};log(`${target.name} è avvelenato!`)}
 if(e.kind==="boss"&&target.hp>0&&Math.random()<.3){target.status={name:"Sanguinamento",turns:2,damage:4};log(`${target.name} sanguina!`)}
 if(target.hp<=0){target.hp=0;if(target.isHero){target.hp=1;log(`${target.name} crolla, ma il destino lo protegge.`)}else{target.alive=false;target.down=3;log(`${target.name} è a terra! Hai 3 turni per soccorrerlo.`)}}
@@ -1090,7 +1100,27 @@ const abilityCatalog=[
 {id:"cleric_2",classKey:"Chierico",name:"Martello consacrato",type:"Sacra",cost:2,damageBonus:5,unlockLevel:1,description:"Un colpo benedetto che respinge le forze oscure."},
 {id:"cleric_3",classKey:"Chierico",name:"Sigillo punitivo",type:"Sacra",cost:3,damageBonus:11,unlockLevel:3,description:"Un sigillo luminoso esplode sotto i piedi del nemico."},
 {id:"cleric_4",classKey:"Chierico",name:"Giudizio divino",type:"Sacra",cost:4,damageBonus:16,unlockLevel:5,description:"La luce divina si abbatte sul bersaglio con forza immensa."}
-];
+,
+{id:"druid_heal",classKey:"Druido",name:"Linfa vitale",type:"Curativa",cost:2,healAmount:18,effect:"heal",unlockLevel:1,description:"La linfa della foresta richiude le ferite di un alleato."},
+{id:"druid_guard",classKey:"Druido",name:"Corteccia protettiva",type:"Difensiva",cost:2,guardAmount:5,effect:"guard",unlockLevel:1,description:"La corteccia spirituale protegge dai prossimi colpi."},
+{id:"druid_focus",classKey:"Druido",name:"Trance naturale",type:"Concentrazione",cost:2,focusAmount:4,effect:"focus",unlockLevel:3,description:"La sintonia con la natura potenzia il prossimo attacco."},
+{id:"cleric_heal",classKey:"Chierico",name:"Cura benedetta",type:"Curativa",cost:2,healAmount:22,effect:"heal",unlockLevel:1,description:"Una luce sacra ristora le ferite dell'alleato più provato."},
+{id:"cleric_guard",classKey:"Chierico",name:"Velo sacro",type:"Difensiva",cost:2,guardAmount:6,effect:"guard",unlockLevel:1,description:"Una barriera divina assorbe parte dei prossimi danni."},
+{id:"cleric_focus",classKey:"Chierico",name:"Preghiera concentrata",type:"Concentrazione",cost:2,focusAmount:5,effect:"focus",unlockLevel:3,description:"La preghiera rafforza il prossimo attacco sacro."},
+{id:"paladin_1",classKey:"Paladino",name:"Fendente consacrato",type:"Sacra",cost:2,damageBonus:7,unlockLevel:1,description:"Un colpo marziale sostenuto dalla luce sacra."},
+{id:"paladin_2",classKey:"Paladino",name:"Scudo del giuramento",type:"Difensiva",cost:2,guardAmount:7,effect:"guard",unlockLevel:1,description:"Il giuramento protegge il paladino."},
+{id:"paladin_heal",classKey:"Paladino",name:"Mano della redenzione",type:"Curativa",cost:2,healAmount:20,effect:"heal",unlockLevel:1,description:"Una benedizione restituisce vigore a un alleato ferito."},
+{id:"paladin_4",classKey:"Paladino",name:"Giudizio del sole",type:"Sacra",cost:3,damageBonus:12,unlockLevel:3,description:"Un'esplosione di luce punisce il nemico."},
+{id:"paladin_5",classKey:"Paladino",name:"Concentrazione del templare",type:"Concentrazione",cost:2,focusAmount:5,effect:"focus",unlockLevel:3,description:"Il paladino concentra la volontà nel prossimo attacco."},
+{id:"paladin_6",classKey:"Paladino",name:"Aura salvifica",type:"Curativa",cost:4,healAmount:34,effect:"heal",unlockLevel:5,description:"Un'aura sacra cura profondamente l'alleato più ferito."},
+{id:"warrior_guard2",classKey:"Guerriero",name:"Muro d'acciaio",type:"Difensiva",cost:2,guardAmount:7,effect:"guard",unlockLevel:3,description:"Una guardia impenetrabile riduce i prossimi danni."},
+{id:"warrior_focus",classKey:"Guerriero",name:"Respiro del veterano",type:"Concentrazione",cost:2,focusAmount:5,effect:"focus",unlockLevel:5,description:"Il prossimo attacco sarà più potente."},
+{id:"mage_guard",classKey:"Mago",name:"Barriera runica",type:"Difensiva",cost:2,guardAmount:5,effect:"guard",unlockLevel:1,description:"Una runa difensiva assorbe parte dei prossimi danni."},
+{id:"mage_focus",classKey:"Mago",name:"Canalizzazione",type:"Concentrazione",cost:2,focusAmount:6,effect:"focus",unlockLevel:3,description:"Il mago concentra il potere per potenziare il prossimo incantesimo."},
+{id:"archer_guard",classKey:"Arciere",name:"Passo evasivo",type:"Difensiva",cost:2,guardAmount:5,effect:"guard",unlockLevel:1,description:"Un movimento rapido riduce i danni ricevuti."},
+{id:"archer_focus",classKey:"Arciere",name:"Mira paziente",type:"Concentrazione",cost:2,focusAmount:6,effect:"focus",unlockLevel:3,description:"L'arciere prende la mira per un colpo più preciso."},
+{id:"thief_guard",classKey:"Ladro",name:"Fumo d'ombra",type:"Difensiva",cost:2,guardAmount:5,effect:"guard",unlockLevel:1,description:"Il ladro si cela nell'ombra e riduce i danni ricevuti."},
+{id:"thief_focus",classKey:"Ladro",name:"Sangue freddo",type:"Concentrazione",cost:2,focusAmount:6,effect:"focus",unlockLevel:3,description:"Il ladro attende l'istante perfetto per colpire."}];
 function classAbilities(p){return abilityCatalog.filter(a=>a.classKey===p.class)}
 function unlockedAbilities(p){return classAbilities(p).filter(a=>(p.level||1)>=a.unlockLevel)}
 let combatAbilityMenuOpen=false;
