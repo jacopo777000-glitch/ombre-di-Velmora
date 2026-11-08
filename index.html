@@ -341,32 +341,53 @@ select.input:focus{outline:2px solid #f0d49b;outline-offset:1px}
 }
 
 
-/* Rifinitura pergamena e ricami dorati: pannelli più trasparenti */
-.panel,.sideCard,.leftRail,.menuPanel,.dicePanel,.actionPanel,#missionPanel{
- position:relative;
- border:1px solid rgba(205,169,105,.78)!important;
- border-style:double!important;
- border-radius:12px 4px 12px 4px!important;
- background:linear-gradient(145deg,rgba(31,39,39,.48),rgba(9,14,16,.56))!important;
- box-shadow:inset 0 0 0 1px rgba(239,211,154,.12),inset 0 0 24px rgba(210,174,108,.07),0 8px 22px rgba(0,0,0,.30)!important;
- backdrop-filter:blur(1.5px);
+/* Cornici ricamate rinforzate e pannelli molto più trasparenti */
+.panel,.sideCard,.leftRail,.menuPanel,.dicePanel,.actionPanel,#missionPanel,
+.memberCard,.battleUnit,.stat,.pointRow,.log{
+ position:relative!important;
+ border:3px double rgba(221,184,111,.94)!important;
+ border-radius:14px 5px 14px 5px!important;
+ background:linear-gradient(145deg,rgba(24,31,32,.25),rgba(7,12,14,.34))!important;
+ box-shadow:inset 0 0 0 1px rgba(255,224,160,.28),inset 0 0 0 5px rgba(198,158,88,.10),inset 0 0 22px rgba(211,174,108,.08),0 7px 18px rgba(0,0,0,.22)!important;
+ backdrop-filter:blur(.5px)!important;
 }
-.panel:after,.sideCard:after,.menuPanel:after,.dicePanel:after,.actionPanel:after,#missionPanel:after{
- content:"✧";
- position:absolute;top:5px;right:10px;
- color:rgba(230,195,126,.78);font-size:14px;line-height:1;
- text-shadow:0 0 7px rgba(214,177,108,.45);
- pointer-events:none;
+.panel:before,.sideCard:before,.leftRail:before,.menuPanel:before,
+.dicePanel:before,.actionPanel:before,#missionPanel:before,
+.memberCard:before,.battleUnit:before,.stat:before,.pointRow:before,.log:before{
+ content:"";position:absolute;inset:4px;border:1px solid rgba(231,198,137,.58);
+ border-radius:9px 3px 9px 3px;pointer-events:none;z-index:0;
+ background:
+  radial-gradient(circle at 0 0,rgba(245,211,145,.55) 0 2px,transparent 3px),
+  radial-gradient(circle at 100% 0,rgba(245,211,145,.55) 0 2px,transparent 3px),
+  radial-gradient(circle at 0 100%,rgba(245,211,145,.55) 0 2px,transparent 3px),
+  radial-gradient(circle at 100% 100%,rgba(245,211,145,.55) 0 2px,transparent 3px);
 }
-.leftRail:after{
- content:"❧";position:absolute;right:7px;bottom:5px;
- color:rgba(220,184,116,.62);font-size:18px;pointer-events:none;
+.panel:after,.sideCard:after,.leftRail:after,.menuPanel:after,
+.dicePanel:after,.actionPanel:after,#missionPanel:after,
+.memberCard:after,.battleUnit:after{
+ content:"❧  ✦  ❧";position:absolute;top:3px;right:9px;
+ color:rgba(239,204,137,.94);font-family:Georgia,serif;font-size:13px;
+ letter-spacing:1px;line-height:1;text-shadow:0 0 5px #8b642b,0 1px 2px #000;
+ pointer-events:none;z-index:2;
 }
-.panel h2,.sideHeading,.battleTopline h2{ text-shadow:0 1px 7px #000,0 0 8px rgba(214,177,108,.18) }
-.battlefield{border:2px double rgba(211,174,108,.88)!important;outline:1px solid rgba(245,220,165,.2);outline-offset:-6px}
-.battleSideTitle:after{background:linear-gradient(90deg,transparent,#c6a064 35%,#e8d19d 50%,#c6a064 65%,transparent)}
-.gameHeader{border-bottom:3px double rgba(204,165,96,.82)!important}
-
+.panel>* ,.sideCard>* ,.leftRail>* ,.menuPanel>* ,.dicePanel>* ,.actionPanel>* ,
+#missionPanel>* ,.memberCard>* ,.battleUnit>* ,.stat>* ,.pointRow>* ,.log>*{
+ position:relative;z-index:1;
+}
+.gameHeader{
+ background:linear-gradient(180deg,rgba(27,22,16,.34),rgba(10,10,9,.30))!important;
+ border-top:3px double rgba(221,184,111,.92)!important;
+ border-bottom:4px double rgba(221,184,111,.92)!important;
+ box-shadow:inset 0 0 0 1px rgba(255,224,160,.22),0 5px 18px #0005!important;
+}
+.battlefield{
+ border:4px double rgba(221,184,111,.96)!important;
+ box-shadow:inset 0 0 0 2px rgba(255,224,160,.42),inset 0 0 55px #0008,0 12px 25px #0009!important;
+}
+.leftRail button,.resource,.topAction,.musicButton,.choice,.btn.secondary{
+ background:linear-gradient(135deg,rgba(57,68,72,.42),rgba(20,29,32,.48))!important;
+ border:2px double rgba(215,179,110,.82)!important;
+}
 </style>
 </head>
 <body>
@@ -544,7 +565,7 @@ const files={"Capelli coda ciuffi":"Capelli_coda_ciuffi.jpg","Capelli coda lunga
 let hair="";
 if(eq.hair&&equipmentManifest[files[eq.hair]]){
 const d=equipmentManifest[files[eq.hair]];
-if(d&&d.sourceWidth&&d.sourceHeight){const x=100*(d.x+25)/d.sourceWidth,y=100*(d.y+55)/1168,w=100*(d.width*1.04)/d.sourceWidth,h=100*(d.height*1.04)/1168;hair='<img class="equipLayer hairLayer" src="'+d.file+'" alt="" style="left:'+x+'%;top:'+y+'%;width:'+w+'%;height:'+h+'%">';}
+if(d&&d.sourceWidth&&d.sourceHeight){const x=100*(d.x+105)/d.sourceWidth,y=100*(d.y+185)/1168,w=100*(d.width*1.12)/d.sourceWidth,h=100*(d.height*1.12)/1168;hair='<img class="equipLayer hairLayer" src="'+d.file+'" alt="" style="left:'+x+'%;top:'+y+'%;width:'+w+'%;height:'+h+'%">';}
 }
 return '<div class="unitArt"><img class="unitBase" src="'+base+'" alt="'+(u.name||'')+'">'+hair+'</div>';
 }
