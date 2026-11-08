@@ -436,6 +436,12 @@ select.input:focus{outline:2px solid #f0d49b;outline-offset:1px}
  box-shadow:inset 0 0 0 1px rgba(222,193,137,.18),0 3px 9px #0008!important;
 }
 
+
+#characterScreen{position:fixed;inset:0;z-index:2500;display:none;background:radial-gradient(ellipse at 25% 40%,rgba(91,67,39,.35),transparent 55%),linear-gradient(135deg,#17120e,#080706 75%);padding:max(10px,env(safe-area-inset-top)) 12px max(10px,env(safe-area-inset-bottom));overflow:hidden}
+#characterScreen.open{display:flex;flex-direction:column}.characterTop{height:54px;flex:0 0 54px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #96713b;padding:0 2px 9px}.characterTop h2{margin:0;color:#f0d49b;font-size:clamp(16px,2.5vw,23px);letter-spacing:1.5px;flex:1;text-align:center}.characterTop button{border:1px solid #80623a;background:linear-gradient(#332719,#17110c);color:#f0d49b;border-radius:8px;min-width:42px;height:38px;font-size:22px}.characterTop .closeCharacter{font-size:25px;min-width:42px}
+.characterBody{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,.82fr);gap:14px;min-height:0;flex:1;padding-top:12px}.characterPortraitPanel{min-width:0;min-height:0;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid #80623a;border-radius:12px;background:radial-gradient(ellipse at 50% 42%,rgba(126,94,52,.24),rgba(12,10,8,.2) 62%,rgba(0,0,0,.42));overflow:hidden}.characterPortraitPanel:before{content:"";position:absolute;inset:8px;border:1px solid rgba(196,155,91,.22);border-radius:8px;pointer-events:none}.characterPortraitPanel .unitArt{width:min(100%,560px);height:calc(100% - 62px);max-height:100%;aspect-ratio:912/1168;flex:0 1 auto;background:transparent;border:0;border-radius:0;overflow:visible}.characterPortraitPanel .unitArt img{object-fit:contain}.characterIdentity{z-index:2;text-align:center;padding:5px 8px 10px;color:#f0d49b}.characterIdentity strong{display:block;font-size:clamp(14px,2vw,20px)}.characterIdentity small{color:#c6b18b}
+.characterChoices{min-width:0;min-height:0;overflow-y:auto;border:1px solid #80623a;border-radius:12px;background:linear-gradient(180deg,rgba(37,29,21,.97),rgba(13,11,9,.98));padding:12px;overscroll-behavior:contain}.characterChoices h3{color:#f0d49b;margin:4px 0 12px;font-size:16px}.characterChoices .equipLabel{margin-top:14px}.characterChoices .input{width:100%;min-height:42px;background:#17120e;color:#f0e0c2;border:1px solid #80623a;border-radius:7px;padding:8px;font:14px Georgia,serif}.characterStatsLine{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0;color:#cbb58f;font-size:11px}.characterStatsLine span{border:1px solid #59442b;background:#17120e;border-radius:5px;padding:5px 7px}
+@media(max-width:560px){#characterScreen{padding-left:7px;padding-right:7px}.characterBody{grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr);gap:7px}.characterPortraitPanel .unitArt{width:100%;height:calc(100% - 58px)}.characterChoices{padding:9px}.characterChoices h3{font-size:14px}.characterTop{gap:7px}.characterTop h2{font-size:15px;letter-spacing:.5px}.characterTop button{min-width:36px;height:36px}.characterTop .closeCharacter{min-width:38px}.characterIdentity strong{font-size:13px}.characterIdentity small{font-size:10px}.characterChoices .input{font-size:12px;padding:6px}.characterStatsLine{font-size:10px}}
 </style>
 </head>
 <body>
@@ -474,7 +480,7 @@ select.input:focus{outline:2px solid #f0d49b;outline-offset:1px}
   <div class="railTitle">AVVENTURA</div>
   <button onclick="openTab('mission')"><span>⚔</span> Avventura</button>
   <button onclick="openTab('inventory')"><span>▣</span> Inventario</button>
-  <button onclick="showMenu('character')"><span>♜</span> Equipaggiamento</button>
+  <button onclick="openCharacterScreen()"><span>♜</span> Equipaggiamento</button>
   <button onclick="showMenu('squad')"><span>♟</span> Personaggi</button>
   <button onclick="showMenu('map')"><span>⌖</span> Mappa</button>
   <button onclick="openTab('mission')"><span>⚑</span> Missioni</button>
@@ -520,7 +526,7 @@ select.input:focus{outline:2px solid #f0d49b;outline-offset:1px}
 <div class="row"><button class="btn secondary" onclick="saveGame()">SALVA PARTITA</button><button class="btn secondary" onclick="loadGame()">CARICA PARTITA</button><button class="btn secondary" onclick="backToCreator()">Torna alla creazione</button></div>
 <p class="note">I progressi vengono salvati in questo browser su questo dispositivo.</p>
 </div>
-<section id="menuView" class="panel menuPanel hidden" aria-live="polite"><div id="menuContent"></div></section>
+<section id="menuView" class="panel menuPanel hidden" aria-live="polite"><div id="menuContent"></div></section><section id="characterScreen" aria-label="Personaggio"><header class="characterTop"><button type="button" aria-label="Personaggio precedente" onclick="changeCharacter(-1)">‹</button><h2>PERSONAGGIO</h2><button type="button" aria-label="Personaggio successivo" onclick="changeCharacter(1)">›</button><button type="button" class="closeCharacter" aria-label="Chiudi" onclick="closeCharacterScreen()">×</button></header><div id="characterScreenBody" class="characterBody"></div></section>
 </div>
 </section>
 </main>
@@ -716,7 +722,7 @@ const c=$("menuContent");
 if(page==="more"){
 c.innerHTML=`<h2>Altro</h2><div class="menuGrid">
 <button class="choice menuTile" onclick="showMenu('settings')"><strong>⚙ Impostazioni</strong><small>Musica, salvataggio e partita</small></button>
-<button class="choice menuTile" onclick="showMenu('character')"><strong>♙ Personaggio</strong><small>Profilo ed equipaggiamento</small></button>
+<button class="choice menuTile" onclick="openCharacterScreen()"><strong>♙ Personaggio</strong><small>Profilo ed equipaggiamento</small></button>
 <button class="choice menuTile" onclick="showMenu('abilities')"><strong>✧ Abilità</strong><small>Competenze della classe</small></button>
 <button class="choice menuTile" onclick="showMenu('statistics')"><strong>✚ Statistiche</strong><small>Caratteristiche e punti</small></button>
 </div>`;return
@@ -752,9 +758,14 @@ Object.entries(p.stats).map(([k,v])=>`<div class="pointRow"><span>${statNames[k]
 `<p class="menuHint">I punti spesi vengono conservati nel salvataggio.</p>`;return
 }
 }
-let selectedEquipmentMember="hero";function setEquipment(slot,value){if(!G)return;const p=selectedEquipmentMember==="hero"?G.hero:G.party.find(x=>x.id===selectedEquipmentMember);if(!p)return;if(!p.equipment)p.equipment={hair:""};if(slot!=="hair")return;p.equipment.hair=value;showMenu("character");if(battle)renderBattle()}
+let selectedEquipmentMember="hero";function characterMembers(){return G?[G.hero,...G.party]:[]}
+function openCharacterScreen(){if(!G)return;const members=characterMembers();if(!members.length)return;if(!members.some(x=>(x.isHero?"hero":String(x.id))===String(selectedEquipmentMember)))selectedEquipmentMember="hero";members.forEach(x=>{if(!x.equipment)x.equipment={hair:""}});$("characterScreen").classList.add("open");renderCharacterScreen()}
+function closeCharacterScreen(){$("characterScreen").classList.remove("open")}
+function changeCharacter(direction){const members=characterMembers();if(!members.length)return;let i=members.findIndex(x=>(x.isHero?"hero":String(x.id))===String(selectedEquipmentMember));i=(i+direction+members.length)%members.length;selectedEquipmentMember=members[i].isHero?"hero":String(members[i].id);renderCharacterScreen()}
+function renderCharacterScreen(){if(!G||!$("characterScreen").classList.contains("open"))return;const p=characterMembers().find(x=>(x.isHero?"hero":String(x.id))===String(selectedEquipmentMember))||G.hero;if(!p.equipment)p.equipment={hair:""};const hairOptions=["Capelli coda ciuffi","Capelli coda lunga","Capelli lunghi","Capelli mossi","Capelli rasati lato","Capelli rasta","Capelli spettinati","Capelli trecce"];const opts=['<option value="">Acconciatura base</option>',...hairOptions.map(x=>'<option value="'+x+'" '+(p.equipment.hair===x?'selected':'')+'>'+x+'</option>')].join("");const stats=p.stats?Object.entries(p.stats).map(([k,v])=>'<span>'+(statNames[k]||k)+': '+v+'</span>').join(""):"";$("characterScreenBody").innerHTML='<div class="characterPortraitPanel">'+equipmentLayers(p)+'<div class="characterIdentity"><strong>'+p.name+'</strong><small>'+(p.isHero?(p.race+" · "+p.class):"Compagno")+' · Livello '+(p.level||1)+'</small></div></div><div class="characterChoices"><h3>Equipaggiamento</h3><div class="menuHint">Le modifiche vengono mostrate subito sul personaggio.</div><label class="equipLabel">Acconciatura</label><select class="input" onchange="setEquipment(\'hair\',this.value)">'+opts+'</select><label class="equipLabel">Statistiche</label><div class="characterStatsLine">'+stats+'</div><div class="menuHint">Usa le frecce in alto per passare da un membro all’altro. Le scelte restano associate al singolo personaggio.</div></div>'}
+function setEquipment(slot,value){if(!G)return;const p=selectedEquipmentMember==="hero"?G.hero:G.party.find(x=>String(x.id)===String(selectedEquipmentMember));if(!p)return;if(!p.equipment)p.equipment={hair:""};if(slot!=="hair")return;p.equipment.hair=value;renderCharacterScreen();if(battle)renderBattle()}
 function addStatPoint(key){if(!G||G.statPoints<1||!(key in G.hero.stats))return;G.hero.stats[key]++;G.statPoints--;if(key==="vitalita"){G.hero.maxhp+=3;G.hero.hp+=3}showMenu("statistics");updateHUD()}
-let equipmentManifest={};fetch('./assets/equip/manifest.json').then(r=>r.ok?r.json():{}).then(m=>{equipmentManifest=m;if(G){if(battle)renderBattle();if(document.querySelector('#menuContent .characterCard'))showMenu('character');}}).catch(()=>{});
+let equipmentManifest={};fetch('./assets/equip/manifest.json').then(r=>r.ok?r.json():{}).then(m=>{equipmentManifest=m;if(G){if(battle)renderBattle();if(document.querySelector('#characterScreen.open'))renderCharacterScreen();}}).catch(()=>{});
 renderCreator();musicLabel();
 </script>
 </body>
