@@ -669,6 +669,11 @@ body.battle-mode .actionPanel{margin-bottom:10px}
 @media(max-width:680px){body.battle-mode .leftRail{display:none!important}body.battle-mode .battleFormationStage .battleUnit{grid-template-columns:clamp(48px,14vw,68px) minmax(0,1fr)!important}}
 
 @media(max-width:680px){body.battle-mode .leftRail{display:block!important;position:static;max-height:none;overflow:visible;margin-bottom:6px;padding:6px}body.battle-mode .leftRail>.railTitle,body.battle-mode .leftRail>button,body.battle-mode .leftRail>.railBottom{display:none!important}body.battle-mode .leftRail>.leftParty{display:block!important;margin:0;padding:0;border:0}body.battle-mode .leftRail .leftParty .sideHeading{margin:0 0 4px;padding:0 2px 4px;font-size:9px}body.battle-mode .leftRail .leftParty #leftSquad{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;overflow:visible}body.battle-mode .leftRail .leftMember{display:flex;flex-direction:column;justify-content:flex-start;gap:3px;min-width:0;padding:4px 2px;border:1px solid #59442b;border-radius:6px;text-align:center}body.battle-mode .leftRail .leftMember img{width:clamp(30px,9vw,42px);height:clamp(42px,12vw,58px);margin:auto}body.battle-mode .leftRail .leftMemberInfo{width:100%}body.battle-mode .leftRail .leftMemberInfo b{font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}body.battle-mode .leftRail .leftMemberInfo small{font-size:8px;margin-top:1px}body.battle-mode .leftRail .leftMiniBar{height:4px;margin-top:3px}}
+
+/* Nascondi i mini-ritratti della squadra nella formazione sopra AVVERSARI.
+   Il contenitore resta nel DOM per non interrompere il rendering del combattimento. */
+.battleFormationStage>.battleTeam.partyTeam{display:none!important}
+
 </style>
 </head>
 <body>
