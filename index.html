@@ -637,6 +637,32 @@ body.battle-mode .actionPanel{margin-bottom:10px}
  body.battle-mode .actionPanel{padding:8px}
 }
 
+
+/* Bersaglio selezionabile direttamente dal ritratto nemico + campo più ampio */
+.actionPanel #targetArea{display:none!important}
+.battleFormationStage{grid-template-columns:minmax(0,1.28fr) 58px minmax(0,1.28fr)!important;gap:7px!important}
+.battleFormationStage .battleUnit{grid-template-columns:clamp(56px,7.2vw,88px) minmax(0,1fr)!important;gap:7px!important;padding:6px!important}
+.battleFormationStage .battleUnit .unitArt{width:100%!important;cursor:default}
+.battleFormationStage .battleUnit .unitArt.enemyTargetImage{cursor:pointer;outline:2px solid transparent;outline-offset:2px;border-radius:5px;transition:outline-color .15s,filter .15s}
+.battleFormationStage .battleUnit .unitArt.enemyTargetImage:active{filter:brightness(1.35)}
+.battleFormationStage .battleUnit.target-selected .unitArt.enemyTargetImage{outline-color:#f0d49b;filter:drop-shadow(0 0 7px #e8bd72aa)}
+.battleDestiny{padding:5px 3px!important}
+.battleDestiny .diceContent img{width:clamp(34px,3.5vw,44px)!important;height:clamp(34px,3.5vw,44px)!important}
+@media(max-width:760px){
+ .battleFormationStage{grid-template-columns:minmax(0,1fr) 44px minmax(0,1fr)!important;gap:4px!important}
+ .battleFormationStage .battleUnit{grid-template-columns:clamp(42px,12vw,58px) minmax(0,1fr)!important;gap:4px!important;padding:3px!important}
+ .battleDestiny{padding:4px 2px!important}
+ .battleDestiny .diceContent img{width:32px!important;height:32px!important}
+ .battleDestiny .diceHeading{font-size:6px!important}
+ .battleDestiny .diceContent strong{font-size:16px!important}
+}
+@media(max-width:390px){
+ .battleFormationStage{grid-template-columns:minmax(0,1fr) 38px minmax(0,1fr)!important;gap:3px!important}
+ .battleFormationStage .battleUnit{grid-template-columns:40px minmax(0,1fr)!important;gap:3px!important}
+ .battleDestiny .diceContent img{width:28px!important;height:28px!important}
+ .battleDestiny .diceContent strong{font-size:14px!important}
+}
+
 </style>
 </head>
 <body>
@@ -816,7 +842,7 @@ if(d&&d.sourceWidth&&d.sourceHeight){const hairShift=u&&u.isHero?145:125;const h
 }
 return '<div class="unitArt"><img class="unitBase" src="'+base+'" alt="'+(u.name||'')+'">'+hair+'</div>';
 }
-function unitHTML(u,active){let max=u.maxhp||u.hp,hp=Math.max(0,u.hp),status=!u.alive?"CADUTO":hp+"/"+max+" HP";return '<div class="battleUnit '+(active?'active':'')+' '+(!u.alive?'dead':'')+'" data-unit-id="'+u.id+'">'+equipmentLayers(u)+'<div class="battleUnitInfo"><div class="battleName">'+u.name+'</div><div class="battleHP">'+status+'</div><div class="battleBar"><div style="width:'+Math.max(0,hp/max*100)+'%"></div></div>'+(!isEnemy(u)&&u.alive?'<div class="battleAP">AP '+u.ap+'/5</div>':'')+(u.status?'<div class="battleAP">'+u.status.name+'</div>':'')+'</div></div>';}
+function unitHTML(u,active){let max=u.maxhp||u.hp,hp=Math.max(0,u.hp),status=!u.alive?"CADUTO":hp+"/"+max+" HP",enemy=isEnemy(u),targetIndex=enemy?battle.units.indexOf(u):-1,selected=enemy&&targetIndex===selectedTarget,art=equipmentLayers(u);if(enemy&&u.alive)art=art.replace('<div class="unitArt">','<div class="unitArt enemyTargetImage" role="button" tabindex="0" aria-label="Seleziona '+u.name+' come bersaglio" onclick="selectTarget('+targetIndex+')" onkeydown="if(event.key===\'Enter\'||event.key===\' \')selectTarget('+targetIndex+')">');return '<div class="battleUnit '+(active?'active':'')+' '+(!u.alive?'dead':'')+' '+(selected?'target-selected':'')+'" data-unit-id="'+u.id+'">'+art+'<div class="battleUnitInfo"><div class="battleName">'+u.name+'</div><div class="battleHP">'+status+'</div><div class="battleBar"><div style="width:'+Math.max(0,hp/max*100)+'%"></div></div>'+(!enemy&&u.alive?'<div class="battleAP">AP '+u.ap+'/5</div>':'')+(u.status?'<div class="battleAP">'+u.status.name+'</div>':'')+'</div></div>';}
 function renderTurnOrder(){
  const box=$("turnOrder");if(!box||!battle)return;
  $("roundSide").textContent=String(battle.round||1).padStart(2,"0");
@@ -838,7 +864,7 @@ if(isEnemy(u)){busy=true;renderBattle();let targets=aliveParty();if(targets.leng
 if(!battle.turnPrepared){u.ap=Math.min(5,u.ap+1);applyStartStatus(u);if(!u.alive||u.hp<=0){battle.idx++;battle.turnPrepared=false;continue}battle.turnPrepared=true}
 $("activeTitle").textContent="Turno di "+u.name;$("activeInfo").textContent=`HP ${u.hp}/${u.maxhp} · AP ${u.ap}/5 · Agilità ${u.stats.agilita||5}`;$("actionMessage").textContent="Scegli una sola azione. L'attacco normale non consuma AP.";renderTargets();renderActions();renderBattle();return
 }}
-function renderTargets(){let living=battle.units.filter(e=>e.alive&&e.hp>0);if(!living.length){$("targetArea").innerHTML="";return}if(!living.some(e=>battle.units.indexOf(e)===selectedTarget))selectedTarget=battle.units.indexOf(living[0]);$("targetArea").innerHTML=living.map(e=>`<button class="choice ${selectedTarget===battle.units.indexOf(e)?'selected':''}" onclick="selectTarget(${battle.units.indexOf(e)})">${e.name} · ${e.hp} HP</button>`).join("")}
+function renderTargets(){let living=battle.units.filter(e=>e.alive&&e.hp>0);if(!living.length){selectedTarget=-1;$("targetArea").innerHTML="";renderBattle();return}if(!living.some(e=>battle.units.indexOf(e)===selectedTarget))selectedTarget=battle.units.indexOf(living[0]);$("targetArea").innerHTML="";renderBattle()}
 function selectTarget(i){if(busy)return;selectedTarget=i;renderTargets()}
 function hasCure(){return ["Antidoto","Benda","Purificazione"].some(k=>Number(G.inventory[k]||0)>0)}
 function hasDowned(){return [G.hero,...G.party].some(p=>!p.alive&&p.down>0)}
