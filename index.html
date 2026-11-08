@@ -1018,7 +1018,7 @@ renderBattle();updateHUD()
 function continueAfter(n){if(n===1)showScene("crypt");else if(n===2)showScene("boss");else showScene("ending")}
 function loseBattle(){if(!battle||battle.ended)return;battle.ended=true;busy=false;$("combat").classList.add("hidden");document.body.classList.remove("battle-mode");let box=$("afterCombat");box.classList.remove("hidden");box.innerHTML=`<h2>Il gruppo è sopraffatto</h2><p>La prova finisce qui, ma puoi riprovare.</p><button class="btn" onclick="restartBattle()">Riprova lo scontro</button>`}
 function restartBattle(){startBattle(battle.n)}
-function updateHUD(){if(!G)return;G.equipmentBag=G.equipmentBag||[];renderLeftSquad();$("levelBadge").textContent=`Livello ${G.hero.level} · ${G.hero.xp} XP`;$("inventory").innerHTML=Object.entries(G.inventory).map(([k,v])=>`<span>${k}: ${v}</span>`).join("")+`<span>Oro: ${G.gold}</span>`;const hp=Math.max(0,G.hero.hp);$("topHP").textContent=hp+"/"+G.hero.maxhp;$("topPotions").textContent=G.inventory.Pozione||0;$("topGold").textContent=G.gold||0;$("sideResources").innerHTML=`Pozioni: <b>${G.inventory.Pozione||0}</b><br>Antidoti: <b>${G.inventory.Antidoto||0}</b><br>Oro: <b>${G.gold||0}</b>`}
+function updateHUD(){if(!G)return;G.equipmentBag=G.equipmentBag||[];renderLeftSquad();$("levelBadge").textContent=`Livello ${G.hero.level} · ${G.hero.xp} XP`;$("inventory").innerHTML=Object.entries(G.inventory).map(([k,v])=>`<span>${k}: ${v}</span>`).join("")+(G.equipmentBag||[]).map(x=>`<span>${x.name} · ${x.rarity}</span>`).join("")+`<span>Oro: ${G.gold}</span>`;const hp=Math.max(0,G.hero.hp);$("topHP").textContent=hp+"/"+G.hero.maxhp;$("topPotions").textContent=G.inventory.Pozione||0;$("topGold").textContent=G.gold||0;$("sideResources").innerHTML=`Pozioni: <b>${G.inventory.Pozione||0}</b><br>Antidoti: <b>${G.inventory.Antidoto||0}</b><br>Oro: <b>${G.gold||0}</b>`}
 function saveGame(){
 if(!G){alert("Non c'è una partita da salvare.");return}let battleSave=null;if(battle)battleSave={...battle,order:battle.order.map(u=>u.id)};
 localStorage.setItem("velmoraDemoSave",JSON.stringify({G,battle:battleSave}));alert("Partita salvata su questo dispositivo!")
@@ -1293,8 +1293,8 @@ if(slot==="head"&&value&&!rules.heads.includes(value))return;
 if(!["hair","armor","weapon","head"].includes(slot))return;
 p.equipment[slot]=value;
 const armorBonus=({Armatura_guerriero:3,Armatura_arciere:2,Armatura_druido:2,Armatura_mago:1})[p.equipment.armor]||0;
-p.armor=(p.baseArmor??p.armor??0)+armorBonus;
-p.equipment.armorBonus=armorBonus;
+const headMeta=lootMeta(p.equipment.head);p.armor=(p.baseArmor??p.armor??0)+armorBonus+(headMeta?headMeta.defense:0);
+p.equipment.armorBonus=armorBonus+(headMeta?headMeta.defense:0);
 const wm=lootMeta(p.equipment.weapon),am=lootMeta(p.equipment.armor),hm=lootMeta(p.equipment.head);
 p.equipment.physicalBonus=wm?wm.physical:(({Spada:2,Ascia:3,Martello:3,Pugnale:1,Arco:3,Bastone:0,Scudo:0})[p.equipment.weapon]||0);
 p.equipment.magicBonus=wm?wm.magic:(p.equipment.weapon==="Bastone"?5:0);
