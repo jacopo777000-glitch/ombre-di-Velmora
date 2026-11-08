@@ -388,6 +388,54 @@ select.input:focus{outline:2px solid #f0d49b;outline-offset:1px}
  background:linear-gradient(135deg,rgba(57,68,72,.42),rgba(20,29,32,.48))!important;
  border:2px double rgba(215,179,110,.82)!important;
 }
+
+/* Cornici dark fantasy: ferro brunito, spine, rune e filigrana antica */
+.panel,.sideCard,.leftRail,.menuPanel,.dicePanel,.actionPanel,#missionPanel,
+.memberCard,.battleUnit,.stat,.pointRow,.log{
+ border:3px double rgba(157,132,91,.96)!important;
+ border-radius:2px 13px 2px 13px!important;
+ background:
+  linear-gradient(135deg,rgba(12,17,19,.22),rgba(5,8,10,.38)),
+  repeating-linear-gradient(135deg,transparent 0 13px,rgba(178,145,91,.035) 14px 15px)!important;
+ box-shadow:inset 0 0 0 1px rgba(225,201,151,.22),
+ inset 0 0 0 5px rgba(105,83,54,.16),
+ inset 0 0 24px rgba(0,0,0,.24),0 8px 22px rgba(0,0,0,.30)!important;
+ backdrop-filter:blur(.35px)!important;
+}
+.panel:before,.sideCard:before,.leftRail:before,.menuPanel:before,
+.dicePanel:before,.actionPanel:before,#missionPanel:before,
+.memberCard:before,.battleUnit:before{
+ content:"";position:absolute;inset:5px;pointer-events:none;z-index:2;
+ border:1px solid rgba(183,151,99,.42);
+ background:
+  linear-gradient(135deg,transparent 0 8px,rgba(183,151,99,.68) 8.5px 9.5px,transparent 10px) top left/24px 24px no-repeat,
+  linear-gradient(225deg,transparent 0 8px,rgba(183,151,99,.68) 8.5px 9.5px,transparent 10px) top right/24px 24px no-repeat,
+  linear-gradient(45deg,transparent 0 8px,rgba(183,151,99,.68) 8.5px 9.5px,transparent 10px) bottom left/24px 24px no-repeat,
+  linear-gradient(315deg,transparent 0 8px,rgba(183,151,99,.68) 8.5px 9.5px,transparent 10px) bottom right/24px 24px no-repeat;
+}
+.panel:after,.sideCard:after,.leftRail:after,.menuPanel:after,
+.dicePanel:after,.actionPanel:after,#missionPanel:after,
+.memberCard:after,.battleUnit:after{
+ content:"ᚱ  ✦  ᚱ";position:absolute;top:4px;right:9px;
+ color:rgba(190,158,105,.92);font-family:Georgia,serif;font-size:11px;
+ letter-spacing:2px;text-shadow:0 1px 3px #000,0 0 7px rgba(120,83,39,.65);
+ pointer-events:none;z-index:3;
+}
+.gameHeader{
+ background:linear-gradient(180deg,rgba(12,15,17,.30),rgba(5,8,10,.24))!important;
+ border-top:4px double rgba(169,139,91,.92)!important;
+ border-bottom:4px double rgba(169,139,91,.92)!important;
+ box-shadow:inset 0 0 0 1px rgba(221,194,141,.16),0 7px 20px #0007!important;
+}
+.battlefield{
+ border:4px double rgba(169,139,91,.96)!important;
+ outline:1px solid rgba(53,43,31,.9);outline-offset:-8px;
+}
+.leftRail button,.resource,.topAction,.musicButton,.choice,.btn.secondary{
+ border:2px solid rgba(153,126,83,.86)!important;
+ box-shadow:inset 0 0 0 1px rgba(222,193,137,.18),0 3px 9px #0008!important;
+}
+
 </style>
 </head>
 <body>
@@ -565,7 +613,7 @@ const files={"Capelli coda ciuffi":"Capelli_coda_ciuffi.jpg","Capelli coda lunga
 let hair="";
 if(eq.hair&&equipmentManifest[files[eq.hair]]){
 const d=equipmentManifest[files[eq.hair]];
-if(d&&d.sourceWidth&&d.sourceHeight){const x=100*(d.x+105)/d.sourceWidth,y=100*(d.y+185)/1168,w=100*(d.width*1.12)/d.sourceWidth,h=100*(d.height*1.12)/1168;hair='<img class="equipLayer hairLayer" src="'+d.file+'" alt="" style="left:'+x+'%;top:'+y+'%;width:'+w+'%;height:'+h+'%">';}
+if(d&&d.sourceWidth&&d.sourceHeight){const x=100*(d.x+105)/d.sourceWidth,y=100*(d.y+5)/1168,w=100*(d.width*1.12)/d.sourceWidth,h=100*(d.height*1.12)/1168;hair='<img class="equipLayer hairLayer" src="'+d.file+'" alt="" style="left:'+x+'%;top:'+y+'%;width:'+w+'%;height:'+h+'%">';}
 }
 return '<div class="unitArt"><img class="unitBase" src="'+base+'" alt="'+(u.name||'')+'">'+hair+'</div>';
 }
