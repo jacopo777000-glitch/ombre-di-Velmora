@@ -324,6 +324,22 @@ select.input:focus{outline:2px solid #f0d49b;outline-offset:1px}
 }
 .characterCard .unitArt img{max-width:100%;max-height:100%}
 
+
+/* Interfacce più leggere: lascia respirare gli artwork di sfondo */
+:root{--panel:rgba(20,25,27,.66);--panel2:rgba(35,43,44,.62)}
+.panel,.sideCard,.leftRail,.menuPanel{
+ background:linear-gradient(145deg,rgba(35,45,47,.68),rgba(9,15,18,.72))!important;
+ backdrop-filter:blur(2px);
+ box-shadow:inset 0 0 0 1px rgba(220,195,139,.08),0 8px 22px rgba(0,0,0,.38)!important;
+}
+.memberCard,.stat,.pointRow,.log,.inventory span{
+ background:linear-gradient(145deg,rgba(48,58,58,.58),rgba(13,19,21,.64))!important;
+}
+.gameHeader{background:linear-gradient(180deg,rgba(35,27,19,.76),rgba(13,11,9,.70))!important}
+.leftRail button,.resource,.topAction,.musicButton,.choice,.btn.secondary{
+ background:linear-gradient(135deg,rgba(57,68,72,.72),rgba(20,29,32,.76))!important;
+}
+
 </style>
 </head>
 <body>
@@ -498,7 +514,7 @@ function log(t){if(!battle)return;battle.log.unshift(t);if(battle.log.length>35)
 function equipmentLayers(u){
 const eq=u&&u.equipment||{},base=asset(u.portrait||"");
 const files={hair:{"Capelli coda ciuffi":"Capelli_coda_ciuffi.jpg","Capelli coda lunga":"Capelli_coda_lunga.jpg","Capelli lunghi":"Capelli_lunghi.jpg","Capelli mossi":"Capelli_mossi.jpg","Capelli rasati lato":"Capelli_rasati_lato.jpg","Capelli rasta":"Capelli_rasta.jpg","Capelli spettinati":"Capelli_spettinati.jpg","Capelli trecce":"Capelli_trecce.jpg"},armor:{"Armatura arciere":"Armatura_arciere.JPG","Armatura druido":"Armatura_druido.JPG","Armatura guerriero":"Armatura_guerriero.JPG","Armatura mago":"Armatura_mago.JPG"},head:{"Cappello mago":"Cappello_mago.JPG","Cappello punk":"Cappello_punk.JPG","Elmo drago":"Elmo_drago.JPG","Elmo leone":"Elmo_leone.JPG"}};
-const layer=(slot,cls)=>{if(!eq[slot]||(slot==="hair"&&eq.head))return "";const d=equipmentManifest[files[slot][eq[slot]]];if(!d||!d.sourceWidth||!d.sourceHeight)return "";const sw=d.sourceWidth,sh=d.sourceHeight;const x=100*d.x/sw,y=100*d.y/sh,w=100*d.width/sw,h=100*d.height/sh;return '<img class="equipLayer '+cls+'" src="'+d.file+'" alt="" style="left:'+x+'%;top:'+y+'%;width:'+w+'%;height:'+h+'%">'};
+const layer=(slot,cls)=>{if(!eq[slot]||(slot==="hair"&&eq.head))return "";const d=equipmentManifest[files[slot][eq[slot]]];if(!d||!d.sourceWidth||!d.sourceHeight)return "";const sw=d.sourceWidth,sh=1168;let x=100*d.x/sw,y=100*d.y/sh,w=100*d.width/sw,h=100*d.height/sh,scale=1;if(slot==="armor"){scale=.58;x=50-(w*scale/2);y=8;w=100*0.62;h=82;}else if(slot==="hair"){scale=.82;x=50-(w*scale/2);y=Math.max(1,y-1);}return '<img class="equipLayer '+cls+'" src="'+d.file+'" alt="" style="left:'+x+'%;top:'+y+'%;width:'+w+'%;height:'+h+'%;transform:scale('+scale+');transform-origin:center center">'};
 return '<div class="unitArt"><img class="unitBase" src="'+base+'" alt="'+(u.name||'')+'">'+layer("armor","armorLayer")+layer("hair","hairLayer")+layer("head","headLayer")+'</div>';
 }
 function unitHTML(u,active){let max=u.maxhp||u.hp,hp=Math.max(0,u.hp),status=!u.alive?"CADUTO":hp+"/"+max+" HP";return '<div class="battleUnit '+(active?'active':'')+' '+(!u.alive?'dead':'')+'" data-unit-id="'+u.id+'">'+equipmentLayers(u)+'<div class="battleName">'+u.name+'</div><div class="battleHP">'+status+'</div><div class="battleBar"><div style="width:'+Math.max(0,hp/max*100)+'%"></div></div>'+(!isEnemy(u)&&u.alive?'<div class="battleAP">AP '+u.ap+'/5</div>':'')+(u.status?'<div class="battleAP">'+u.status.name+'</div>':'')+'</div>';}
