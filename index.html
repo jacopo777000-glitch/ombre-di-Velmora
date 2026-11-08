@@ -622,7 +622,7 @@ body.battle-mode .leftRail{display:none!important}
 body.battle-mode #missionPanel,body.battle-mode .battleExtras,body.battle-mode #inventoryPanel,body.battle-mode .centerColumn>.row,body.battle-mode .centerColumn>.note,body.battle-mode #menuView{display:none!important}
 body.battle-mode .centerColumn{width:100%;min-width:0}
 body.battle-mode #combat{width:100%;display:block!important}
-body.battle-mode .battlefield{margin:4px 0 8px;padding:clamp(8px,1.5vw,18px);min-height:clamp(300px,58vh,650px);display:flex;align-items:center}
+body.battle-mode .battlefield{margin:4px 0 8px;padding:clamp(8px,1.5vw,18px);min-height:clamp(300px,58vh,650px);align-items:center}
 body.battle-mode .battleFormationStage{width:100%}
 body.battle-mode .battleUnit{flex-basis:clamp(90px,13vw,165px);width:clamp(90px,13vw,165px);max-width:22%}
 body.battle-mode .battleFace{height:clamp(135px,25vh,270px);max-height:270px}
@@ -893,7 +893,7 @@ try{let s=JSON.parse(raw);G=s.G;battle=s.battle;busy=false;if(!G.statPoints)G.st
 $("creator").classList.add("hidden");$("game").classList.remove("hidden");$("bottomNav").classList.add("visible");
 if(battle){let all=[G.hero,...G.party,...battle.units],byId=new Map(all.map(u=>[String(u.id),u]));battle.order=(battle.order||[]).map(id=>byId.get(String(id))).filter(Boolean);
 if(!battle.ended){document.body.classList.add("battle-mode");$("combat").classList.remove("hidden");$("afterCombat").classList.add("hidden");$("battleLog").innerHTML="";battle.log.forEach(x=>$("battleLog").innerHTML+=`<p>${x}</p>`);renderBattle();advanceToPlayer()}
-else{$("combat").classList.add("hidden");showScene(G.finished?"ending":G.battleWon===1?"crypt":G.battleWon===2?"boss":"prologue")}}
+else{document.body.classList.remove("battle-mode");$("combat").classList.add("hidden");showScene(G.finished?"ending":G.battleWon===1?"crypt":G.battleWon===2?"boss":"prologue")}}
 else showScene(G.finished?"ending":G.battleWon===0?"prologue":G.battleWon===1?"crypt":G.battleWon===2?"boss":"ending");
 updateHUD();openTab("mission");alert("Partita caricata!")
 }catch(e){console.error(e);alert("Salvataggio non leggibile.")}
