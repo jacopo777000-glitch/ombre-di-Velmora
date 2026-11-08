@@ -854,20 +854,25 @@ G.activeGuildMission={...guildChosenMission,seed:Math.random(),step:0,score:0,lo
 }
 
 function guildRouteEvent(){
- const m=G.activeGuildMission;if(!m)return;$("combat").classList.add("hidden");$("afterCombat").classList.add("hidden");document.body.classList.remove("battle-mode");
- const pools=[
- [{title:"Il sentiero delle lanterne",text:"Tra gli alberi trovate una lanterna ancora accesa. Le impronte intorno sono fresche.",c:[["Segui le impronte","track"],["Spegni la lanterna e aggira la zona","sneak"],["Cerca superstiti","help"]]},
- {title:"Un ponte malridotto",text:"Il ponte scricchiola sopra un torrente gonfio.",c:[["Attraversa con cautela","cross"],["Cerca un guado","ford"],["Rinforza il ponte","repair"]]},
- {title:"Il mercante ferito",text:"Un mercante ferito siede accanto al carro rovesciato.",c:[["Curalo e ascolta","heal"],["Tratta per informazioni","trade"],["Prosegui","ignore"]]}],
- [{title:"Voci nella nebbia",text:"Una voce chiama il vostro nome dalla nebbia.",c:[["Avvicinati","voice"],["Segui il fumo","smoke"],["Avanza in silenzio","quiet"]]},
- {title:"Il bivio dei corvi",text:"Corvi neri si alzano da due sentieri.",c:[["Esplora le rovine","ruins"],["Raggiungi la fattoria","farm"],["Segui il consiglio del compagno","companion"]]},
- {title:"Un’offerta sospetta",text:"Uno sconosciuto propone una mappa in cambio di oro.",c:[["Accetta la mappa","map"],["Interrogalo","question"],["Seguilo di nascosto","follow"]]}],
- [{title:"Il luogo dell’incarico",text:"Il vento si ferma. Davanti a voi qualcosa si muove nell’ombra.",c:[["Entra con le armi","fight"],["Cerca un ingresso secondario","sneakFinal"],["Tenta di parlare","talk"]]},
- {title:"L’ultima traccia",text:"Trovate un oggetto appartenuto alla persona scomparsa.",c:[["Segui la scia","blood"],["Cerca tracce magiche","magic"],["Prepara una trappola","trap"]]}]
+ const m=G.activeGuildMission;if(!m)return;
+ $("combat").classList.add("hidden");$("afterCombat").classList.add("hidden");document.body.classList.remove("battle-mode");
+ const stages=[
+ [["La partenza dalla Gilda","Il capogilda vi richiama: una voce dell’ultimo minuto potrebbe cambiare il lavoro.",[["Chiedi dettagli","question"],["Parti subito","ignore"],["Controlla le provviste","repair"]]],["Un committente nervoso","Il mandante vi raggiunge: ha dimenticato un particolare importante.",[["Ascolta la storia","help"],["Chiedi più oro","trade"],["Non perdere tempo","ignore"]]]],
+ [["La strada dei vecchi cippi","Pietre consumate segnano due percorsi, uno breve e pericoloso.",[["Prendi la scorciatoia","cross"],["Segui la strada battuta","ford"],["Cerca impronte","track"]]],["Il carro rovesciato","Un carro blocca il sentiero. Dal cassone arriva un rumore.",[["Esaminalo","blood"],["Aggiralo","sneak"],["Cerca feriti","heal"]]]],
+ [["Voci tra gli alberi","Qualcuno vi segue da quando avete lasciato la strada.",[["Tendi un’imboscata","trap"],["Nasconditi e osserva","quiet"],["Parla agli inseguitori","talk"]]],["Il viandante bendato","Un ferito offre informazioni in cambio di aiuto.",[["Curalo","heal"],["Interrogalo","question"],["Pagalo per le notizie","trade"]]]],
+ [["Il rifugio abbandonato","Un rifugio conserva il fuoco acceso e una mappa incompleta.",[["Studia la mappa","map"],["Cerca provviste","smoke"],["Esplora in silenzio","sneak"]]],["Il guado delle pietre nere","L’acqua è alta e qualcosa luccica sul fondo.",[["Attraversa","cross"],["Cerca un passaggio sicuro","ford"],["Recupera l’oggetto","magic"]]]],
+ [["Il villaggio senza insegne","Gli abitanti chiudono porte e finestre al vostro arrivo.",[["Parla al capo","talk"],["Cerca qualcuno","farm"],["Esamina le case di nascosto","sneak"]]],["La pattuglia in marcia","Una pattuglia armata avanza lungo la strada.",[["Mostra il sigillo","question"],["Evitala","quiet"],["Combatti","fight"]]]],
+ [["La pista si divide","Le tracce conducono verso una rovina e una gola stretta.",[["Esplora la rovina","ruins"],["Entra nella gola","track"],["Chiedi al compagno","companion"]]],["Il segno sul tronco","Un simbolo coincide con quello trovato durante il viaggio.",[["Studia il simbolo","magic"],["Segui i segni","track"],["Cambia percorso","sneak"]]]],
+ [["La notte al campo","Un rumore sveglia il gruppo: una sagoma è vicino alle vostre borse.",[["Circondala","trap"],["Seguila di nascosto","sneak"],["Affrontala","fight"]]],["Una richiesta d’aiuto","Un grido arriva da un sentiero laterale.",[["Corri in soccorso","help"],["Avvicinati con cautela","quiet"],["Ignora il richiamo","ignore"]]]],
+ [["La soglia nascosta","L’ingresso è sorvegliato, ma una parete mostra segni di cedimento.",[["Entra dall’ingresso","fight"],["Usa il passaggio laterale","sneakFinal"],["Cerca un accesso segreto","ruins"]]],["Il custode del passaggio","Una figura vi sbarra la strada e pretende di sapere perché siete lì.",[["Spiega la missione","talk"],["Ingannalo","question"],["Forza il passaggio","fight"]]]],
+ [["La verità dell’incarico","Le prove non coincidono con la versione ricevuta alla Gilda.",[["Mostra le prove","map"],["Proteggi gli innocenti","help"],["Continua senza fermarti","ignore"]]],["Il prezzo della scelta","Un alleato offre una soluzione in cambio di parte della ricompensa.",[["Accetta","trade"],["Rifiuta","question"],["Fingi di accettare","follow"]]]],
+ [["Lo scontro decisivo","Davanti a voi si trova ciò che cercavate, ma non siete soli.",[["Affronta il nemico","fight"],["Colpisci di sorpresa","sneakFinal"],["Tratta un’ultima volta","talk"]]],["L’ultima occasione","Potete rischiare tutto o mettere in salvo il gruppo.",[["Rischia per il bottino","blood"],["Prepara una trappola","trap"],["Metti al sicuro il gruppo","ford"]]]]
  ];
- const pool=pools[Math.min(m.step,2)],ev=pool[Math.floor(Math.random()*pool.length)];m.currentEvent=ev;m.events.push(ev.title);
- $("chapterBadge").textContent="INCARICO · TAPPA "+(m.step+1);$("sceneTitle").textContent=ev.title;$("sceneText").innerHTML='<p>'+ev.text+'</p><p><em>'+G.party.map(p=>p.name).join(" e ")+' attendono la tua decisione.</em></p>';
- $("sceneChoices").innerHTML=ev.c.map(c=>'<button class="btn questCard" onclick="guildChoosePath(\''+c[1]+'\')">'+c[0]+'</button>').join("");
+ const pool=stages[Math.min(m.step,9)],used=m.usedEventTitles||[],available=pool.filter(e=>!used.includes(e[0])),ev=(available.length?available:pool)[Math.floor(Math.random()*(available.length||pool.length))];
+ m.usedEventTitles=used;m.usedEventTitles.push(ev[0]);m.events.push(ev[0]);m.currentEvent=ev;
+ $("chapterBadge").textContent="INCARICO · TAPPA "+(m.step+1)+" DI 10";$("sceneTitle").textContent=ev[0];
+ $("sceneText").innerHTML='<p><small>'+m.title+'</small></p><p>'+ev[1]+'</p><p><em>'+G.party.map(p=>p.name).join(" e ")+' attendono la tua decisione.</em></p>';
+ $("sceneChoices").innerHTML=ev[2].map(c=>'<button class="btn questCard" onclick="guildChoosePath('+JSON.stringify(c[1])+')">'+c[0]+'</button>').join("");
 }
 function guildChoosePath(path){
  const m=G.activeGuildMission;if(!m)return;
@@ -888,11 +893,11 @@ function guildChoosePath(path){
  $("sceneChoices").innerHTML=o[2]?'<button class="btn" onclick="guildStartEncounter('+o[0]+')">Affronta le conseguenze</button>':'<button class="btn" onclick="guildNextStep()">Continua il viaggio</button>';
 }
 function guildStartEncounter(level){startBattle(level)}
-function guildAfterBattle(){const m=G.activeGuildMission;if(!m)return;$("afterCombat").classList.add("hidden");m.step++;if(m.step>=3)guildFinishMission();else guildRouteEvent()}
-function guildNextStep(){const m=G.activeGuildMission;if(!m)return;m.step++;if(m.step>=3)guildFinishMission();else guildRouteEvent()}
+function guildAfterBattle(){const m=G.activeGuildMission;if(!m)return;$("afterCombat").classList.add("hidden");m.step++;if(m.step>=10)guildFinishMission();else guildRouteEvent()}
+function guildNextStep(){const m=G.activeGuildMission;if(!m)return;m.step++;if(m.step>=10)guildFinishMission();else guildRouteEvent()}
 function guildFinishMission(){
  const m=G.activeGuildMission;if(!m)return;const reward=m.gold+Math.max(0,Math.min(20,m.score*2));G.gold+=reward;G.hero.xp+=35+m.score*4;G.sideQuestReputation=(G.sideQuestReputation||0)+1;
- const end=m.score>=7?"La squadra torna con prove preziose e una storia che verrà raccontata a lungo.":m.score>=4?"L’incarico è completato, ma gli imprevisti hanno lasciato il segno.":"Rientrate stanchi, ma avete portato a termine il lavoro.";
+ const end=m.score>=22?"La squadra torna con prove preziose e una storia che verrà raccontata a lungo.":m.score>=12?"L’incarico è completato, ma gli imprevisti hanno lasciato il segno.":"Rientrate stanchi, ma avete portato a termine il lavoro.";
  $("chapterBadge").textContent="INCARICO CONCLUSO";$("sceneTitle").textContent="Ritorno alla Gilda";$("sceneText").innerHTML='<p>'+end+'</p><p>Ricompensa: <b>'+reward+' monete d’oro</b> e '+(35+m.score*4)+' XP. Eventi: '+m.events.join(" → ")+'.</p>';
  $("sceneChoices").innerHTML='<button class="btn" onclick="guildReturnBoard()">Rientra nella sala della Gilda</button>';G.activeGuildMission=null;updateHUD();
 }
