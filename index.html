@@ -513,9 +513,13 @@ $("battleLog").innerHTML="";$("diceWho").textContent="In attesa del lancio…";$
 function log(t){if(!battle)return;battle.log.unshift(t);if(battle.log.length>35)battle.log.pop();$("battleLog").innerHTML=battle.log.map(x=>`<p>${x}</p>`).join("")}
 function equipmentLayers(u){
 const eq=u&&u.equipment||{},base=asset(u.portrait||"");
-const files={hair:{"Capelli coda ciuffi":"Capelli_coda_ciuffi.jpg","Capelli coda lunga":"Capelli_coda_lunga.jpg","Capelli lunghi":"Capelli_lunghi.jpg","Capelli mossi":"Capelli_mossi.jpg","Capelli rasati lato":"Capelli_rasati_lato.jpg","Capelli rasta":"Capelli_rasta.jpg","Capelli spettinati":"Capelli_spettinati.jpg","Capelli trecce":"Capelli_trecce.jpg"},armor:{"Armatura arciere":"Armatura_arciere.JPG","Armatura druido":"Armatura_druido.JPG","Armatura guerriero":"Armatura_guerriero.JPG","Armatura mago":"Armatura_mago.JPG"},head:{"Cappello mago":"Cappello_mago.JPG","Cappello punk":"Cappello_punk.JPG","Elmo drago":"Elmo_drago.JPG","Elmo leone":"Elmo_leone.JPG"}};
-const layer=(slot,cls)=>{if(!eq[slot]||(slot==="hair"&&eq.head))return "";const d=equipmentManifest[files[slot][eq[slot]]];if(!d||!d.sourceWidth||!d.sourceHeight)return "";const sw=d.sourceWidth,sh=1168;let x=100*d.x/sw,y=100*d.y/sh,w=100*d.width/sw,h=100*d.height/sh,scale=1;if(slot==="armor"){scale=.58;x=50-(w*scale/2);y=8;w=100*0.62;h=82;}else if(slot==="hair"){scale=.82;x=50-(w*scale/2);y=Math.max(1,y-1);}return '<img class="equipLayer '+cls+'" src="'+d.file+'" alt="" style="left:'+x+'%;top:'+y+'%;width:'+w+'%;height:'+h+'%;transform:scale('+scale+');transform-origin:center center">'};
-return '<div class="unitArt"><img class="unitBase" src="'+base+'" alt="'+(u.name||'')+'">'+layer("armor","armorLayer")+layer("hair","hairLayer")+layer("head","headLayer")+'</div>';
+const files={"Capelli coda ciuffi":"Capelli_coda_ciuffi.jpg","Capelli coda lunga":"Capelli_coda_lunga.jpg","Capelli lunghi":"Capelli_lunghi.jpg","Capelli mossi":"Capelli_mossi.jpg","Capelli rasati lato":"Capelli_rasati_lato.jpg","Capelli rasta":"Capelli_rasta.jpg","Capelli spettinati":"Capelli_spettinati.jpg","Capelli trecce":"Capelli_trecce.jpg"};
+let hair="";
+if(eq.hair&&equipmentManifest[files[eq.hair]]){
+const d=equipmentManifest[files[eq.hair]];
+if(d&&d.sourceWidth&&d.sourceHeight){const x=100*d.x/d.sourceWidth,y=Math.max(1,100*d.y/1168-1),w=100*d.width/d.sourceWidth,h=100*d.height/1168;hair='<img class="equipLayer hairLayer" src="'+d.file+'" alt="" style="left:'+(50-w*.82/2)+'%;top:'+y+'%;width:'+w+'%;height:'+h+'%;transform:scale(.82);transform-origin:center center">';}
+}
+return '<div class="unitArt"><img class="unitBase" src="'+base+'" alt="'+(u.name||'')+'">'+hair+'</div>';
 }
 function unitHTML(u,active){let max=u.maxhp||u.hp,hp=Math.max(0,u.hp),status=!u.alive?"CADUTO":hp+"/"+max+" HP";return '<div class="battleUnit '+(active?'active':'')+' '+(!u.alive?'dead':'')+'" data-unit-id="'+u.id+'">'+equipmentLayers(u)+'<div class="battleName">'+u.name+'</div><div class="battleHP">'+status+'</div><div class="battleBar"><div style="width:'+Math.max(0,hp/max*100)+'%"></div></div>'+(!isEnemy(u)&&u.alive?'<div class="battleAP">AP '+u.ap+'/5</div>':'')+(u.status?'<div class="battleAP">'+u.status.name+'</div>':'')+'</div>';}
 function renderTurnOrder(){
@@ -629,7 +633,7 @@ if(page==="settings"){
 c.innerHTML=`<button class="btn secondary menuBack" onclick="showMenu('more')">← Indietro</button><h2>Impostazioni</h2><p>Audio</p><button class="btn secondary" onclick="toggleMusic()">♫ Attiva / disattiva musica</button><hr><h3>Partita</h3><div class="row"><button class="btn secondary" onclick="saveGame()">Salva partita</button><button class="btn secondary" onclick="loadGame()">Carica partita</button></div><p class="menuHint">Il salvataggio rimane nella memoria di questo browser e dispositivo.</p><hr><button class="btn danger" onclick="backToCreator()">Torna alla creazione</button>`;return
 }
 if(page==="character"){
-const members=[G.hero,...G.party];members.forEach(x=>{if(!x.equipment)x.equipment={hair:"",armor:"",head:""}});
+const members=[G.hero,...G.party];members.forEach(x=>{if(!x.equipment)x.equipment={hair:""}});
 let p=members.find(x=>(x.isHero?"hero":x.id)===selectedEquipmentMember)||G.hero;
 const choices=(items,current)=>'<option value="">Nessuno</option>'+items.map(x=>'<option value="'+x+'" '+(current===x?'selected':'')+'>'+x+'</option>').join("");
 c.innerHTML='<button class="btn secondary menuBack" onclick="showMenu(\'more\')">← Indietro</button>'+
@@ -639,9 +643,7 @@ members.map(x=>'<option value="'+(x.isHero?"hero":x.id)+'" '+(x===p?'selected':'
 '</select><h3>Equipaggiamento di '+p.name+'</h3><div class="memberCard characterCard">'+equipmentLayers(p)+
 '<div class="memberInfo"><strong>'+p.name+'</strong><p>'+(p.isHero?p.race+" · "+p.class:"Compagno · Guerriero")+'</p><p>Livello '+p.level+' · '+p.hp+'/'+p.maxhp+' HP</p></div></div>'+
 '<h3>Equipaggiamento visivo</h3><label class="equipLabel">Acconciatura</label><select class="input" onchange="setEquipment(\'hair\',this.value)">'+choices(["Capelli coda ciuffi","Capelli coda lunga","Capelli lunghi","Capelli mossi","Capelli rasati lato","Capelli rasta","Capelli spettinati","Capelli trecce"],p.equipment.hair)+'</select>'+
-'<label class="equipLabel">Armatura completa</label><select class="input" onchange="setEquipment(\'armor\',this.value)">'+choices(["Armatura arciere","Armatura druido","Armatura guerriero","Armatura mago"],p.equipment.armor)+'</select>'+
-'<label class="equipLabel">Elmo / cappello</label><select class="input" onchange="setEquipment(\'head\',this.value)">'+choices(["Cappello mago","Cappello punk","Elmo drago","Elmo leone"],p.equipment.head)+'</select>'+
-'<p class="menuHint">Ogni membro conserva il proprio equipaggiamento nel salvataggio. Elmi e cappelli nascondono i capelli.</p><h3>Caratteristiche</h3>'+
+'<p class="menuHint">Le acconciature vengono salvate separatamente per ogni membro della squadra.</p>'+
 (p.isHero?'<div class="stats">'+Object.entries(p.stats).map(([k,v])=>'<div class="stat"><span>'+(statNames[k]||k)+'</span><b>'+v+'</b></div>').join("")+'</div>':'<p class="menuHint">Le statistiche del compagno sono consultabili nella scheda Squadra.</p>');return
 }
 if(page==="abilities"){
@@ -654,7 +656,7 @@ Object.entries(p.stats).map(([k,v])=>`<div class="pointRow"><span>${statNames[k]
 `<p class="menuHint">I punti spesi vengono conservati nel salvataggio.</p>`;return
 }
 }
-let selectedEquipmentMember="hero";function setEquipment(slot,value){if(!G)return;const p=selectedEquipmentMember==="hero"?G.hero:G.party.find(x=>x.id===selectedEquipmentMember);if(!p)return;if(!p.equipment)p.equipment={hair:"",armor:"",head:""};p.equipment[slot]=value;showMenu("character");if(battle)renderBattle()}
+let selectedEquipmentMember="hero";function setEquipment(slot,value){if(!G)return;const p=selectedEquipmentMember==="hero"?G.hero:G.party.find(x=>x.id===selectedEquipmentMember);if(!p)return;if(!p.equipment)p.equipment={hair:""};if(slot!=="hair")return;p.equipment.hair=value;showMenu("character");if(battle)renderBattle()}
 function addStatPoint(key){if(!G||G.statPoints<1||!(key in G.hero.stats))return;G.hero.stats[key]++;G.statPoints--;if(key==="vitalita"){G.hero.maxhp+=3;G.hero.hp+=3}showMenu("statistics");updateHUD()}
 let equipmentManifest={};fetch('./assets/equip/manifest.json').then(r=>r.ok?r.json():{}).then(m=>{equipmentManifest=m;if(G){if(battle)renderBattle();if(document.querySelector('#menuContent .characterCard'))showMenu('character');}}).catch(()=>{});
 renderCreator();musicLabel();
