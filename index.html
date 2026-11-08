@@ -613,7 +613,7 @@ const files={"Capelli coda ciuffi":"Capelli_coda_ciuffi.jpg","Capelli coda lunga
 let hair="";
 if(eq.hair&&equipmentManifest[files[eq.hair]]){
 const d=equipmentManifest[files[eq.hair]];
-if(d&&d.sourceWidth&&d.sourceHeight){const hairShift=u&&u.isHero?145:120;const x=100*(d.x+hairShift)/d.sourceWidth,y=100*(d.y+5)/1168,w=100*(d.width*1.12)/d.sourceWidth,h=100*(d.height*1.12)/1168;hair='<img class="equipLayer hairLayer" src="'+d.file+'" alt="" style="left:'+x+'%;top:'+y+'%;width:'+w+'%;height:'+h+'%">';}
+if(d&&d.sourceWidth&&d.sourceHeight){const hairShift=u&&u.isHero?145:125;const hairDown=u&&u.isHero?8:5;const x=100*(d.x+hairShift)/d.sourceWidth,y=100*(d.y+hairDown)/1168,w=100*(d.width*1.12)/d.sourceWidth,h=100*(d.height*1.12)/1168;hair='<img class="equipLayer hairLayer" src="'+d.file+'" alt="" style="left:'+x+'%;top:'+y+'%;width:'+w+'%;height:'+h+'%">';}
 }
 return '<div class="unitArt"><img class="unitBase" src="'+base+'" alt="'+(u.name||'')+'">'+hair+'</div>';
 }
