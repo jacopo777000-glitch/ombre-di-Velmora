@@ -1,0 +1,119 @@
+name: Install licensed battle backgrounds
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/install-battle-backgrounds.yml
+
+permissions:
+  contents: write
+
+jobs:
+  install-backgrounds:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install image tools
+        run: python -m pip install --quiet Pillow
+      - name: Download source artwork
+        run: |
+          mkdir -p assets/battle
+          curl -fL --retry 3 --retry-delay 2 "https://opengameart.org/sites/default/files/Forestpath1.png" -o /tmp/Forestpath1.png
+          curl -fL --retry 3 --retry-delay 2 "https://opengameart.org/sites/default/files/Library.png" -o /tmp/Library.png
+          curl -fL --retry 3 --retry-delay 2 "https://opengameart.org/sites/default/files/background_43.png" -o /tmp/background_43.png
+          curl -fL --retry 3 --retry-delay 2 "https://opengameart.org/sites/default/files/background_free_valley_pack.zip" -o /tmp/valley.zip
+      - name: Prepare optimized WebP backgrounds
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile
+          from PIL import Image, ImageOps
+          out=Path("assets/battle")
+          with ZipFile("/tmp/valley.zip") as z:
+              member=next((n for n in z.namelist() if n.endswith("Background_Layered.png")),None)
+              if not member:
+                  raise SystemExit("Background_Layered.png not found in LudicArts pack")
+              z.extract(member,"/tmp/velmora-valley")
+              valley=Path("/tmp/velmora-valley")/member
+          sources=[
+              ("valle_battaglia.webp",valley,(0.50,0.61)),
+              ("foresta_imboscata.webp",Path("/tmp/Forestpath1.png"),(0.50,0.60)),
+              ("cripta_antica.webp",Path("/tmp/Library.png"),(0.50,0.58)),
+              ("sala_custode.webp",Path("/tmp/background_43.png"),(0.50,0.50)),
+          ]
+          for name,src,center in sources:
+              im=Image.open(src).convert("RGB")
+              im=ImageOps.fit(im,(1920,1080),method=Image.Resampling.LANCZOS,centering=center)
+              dest=out/name
+              im.save(dest,"WEBP",quality=90,method=6)
+              print(f"{dest}: {dest.stat().st_size} bytes")
+          PY
+      - name: Connect backgrounds to scenes and record credits
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p=Path("index.html")
+          s=p.read_text(encoding="utf-8")
+          replacements={
+            '#combat[data-battle-scene="forest"] .battlefield{background-image:url("./assets/battle/foresta_velata.svg")}':
+            '#combat[data-battle-scene="forest"] .battlefield{background-image:url("./assets/battle/foresta_imboscata.webp")}',
+            '#combat[data-battle-scene="crypt"] .battlefield{background-image:url("./assets/battle/cripta_antica.svg")}':
+            '#combat[data-battle-scene="crypt"] .battlefield{background-image:url("./assets/battle/cripta_antica.webp")}',
+            '#combat[data-battle-scene="bell"] .battlefield{background-image:url("./assets/battle/sala_della_campana.svg")}':
+            '#combat[data-battle-scene="bell"] .battlefield{background-image:url("./assets/battle/sala_custode.webp")}',
+          }
+          for old,new in replacements.items():
+              if old not in s:
+                  raise SystemExit("Expected battle background selector not found: "+old)
+              s=s.replace(old,new,1)
+          old_css='#missionPanel{background:linear-gradient(135deg,rgba(38,30,21,.97),rgba(15,12,9,.98));border-color:#80613a}'
+          new_css='''#missionPanel{position:relative;isolation:isolate;overflow:hidden;background:linear-gradient(135deg,rgba(38,30,21,.93),rgba(15,12,9,.96));border-color:#80613a}
+          #missionPanel:before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.18;background:url("./assets/battle/valle_battaglia.webp") center/cover no-repeat;filter:saturate(.75)}
+          #missionPanel[data-scene="forest"]:before{background-image:url("./assets/battle/foresta_imboscata.webp")}
+          #missionPanel[data-scene="crypt"]:before{background-image:url("./assets/battle/cripta_antica.webp")}
+          #missionPanel[data-scene="boss"]:before{background-image:url("./assets/battle/sala_custode.webp")}
+          #missionPanel[data-scene="ending"]:before{background-image:url("./assets/battle/valle_battaglia.webp")}
+          #missionPanel>*{position:relative;z-index:1}'''
+          if old_css not in s:
+              raise SystemExit("Mission panel style anchor not found")
+          s=s.replace(old_css,new_css,1)
+          old_fn='function showScene(key){$("combat").classList.add("hidden");$("afterCombat").classList.add("hidden");let sc=scenes[key];if(!sc)return;'
+          new_fn='function showScene(key){$("combat").classList.add("hidden");$("afterCombat").classList.add("hidden");let sc=scenes[key];if(!sc)return;$("missionPanel").dataset.scene=key;'
+          if old_fn not in s:
+              raise SystemExit("showScene anchor not found")
+          s=s.replace(old_fn,new_fn,1)
+          p.write_text(s,encoding="utf-8")
+          PY
+          cat > assets/battle/CREDITS.md <<'EOF'
+          # Battle background credits
+
+          The following existing, non-AI artwork is included in Ombre di Velmora. The WebP files in this folder are cropped/resized to 1920×1080 and converted from the original files for browser performance.
+
+          - foresta_imboscata.webp and cripta_antica.webp — Heindal_Wesnoth, from Fantasyart Background on OpenGameArt. Used under Creative Commons Attribution-ShareAlike 3.0. The original collection also lists GPL 3.0; this project uses the CC BY-SA 3.0 option. Source: https://opengameart.org/content/fantasyart-background
+            - Required attribution: Heindal_Wesnoth.
+            - License: https://creativecommons.org/licenses/by-sa/3.0/
+          - valle_battaglia.webp — LudicArts, Free Valley Background, used under Creative Commons Attribution 4.0. Source: https://opengameart.org/content/free-valley-background
+            - Required attribution: LudicArts.
+            - License: https://creativecommons.org/licenses/by/4.0/
+          - sala_custode.webp — Kutejnikov, Background with ruins, released under CC0 1.0. Source: https://opengameart.org/content/background-with-ruins
+            - CC0: https://creativecommons.org/publicdomain/zero/1.0/
+
+          The source artwork remains credited to its respective authors. Changes made here: crop/resize to 1920×1080 and WebP conversion.
+          EOF
+      - name: Commit and push backgrounds
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html assets/battle/*.webp assets/battle/CREDITS.md
+          git diff --cached --quiet && exit 0
+          git commit -m "Add licensed painterly battle backgrounds"
+          git pull --rebase origin main
+          git push
