@@ -669,6 +669,69 @@ body.battle-mode .actionPanel{margin-bottom:10px}
 @media(max-width:680px){body.battle-mode .leftRail{display:none!important}body.battle-mode .battleFormationStage .battleUnit{grid-template-columns:clamp(48px,14vw,68px) minmax(0,1fr)!important}}
 
 @media(max-width:680px){body.battle-mode .leftRail{display:block!important;position:static;max-height:none;overflow:visible;margin-bottom:6px;padding:6px}body.battle-mode .leftRail>.railTitle,body.battle-mode .leftRail>button,body.battle-mode .leftRail>.railBottom{display:none!important}body.battle-mode .leftRail>.leftParty{display:block!important;margin:0;padding:0;border:0}body.battle-mode .leftRail .leftParty .sideHeading{margin:0 0 4px;padding:0 2px 4px;font-size:9px}body.battle-mode .leftRail .leftParty #leftSquad{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;overflow:visible}body.battle-mode .leftRail .leftMember{display:flex;flex-direction:column;justify-content:flex-start;gap:3px;min-width:0;padding:4px 2px;border:1px solid #59442b;border-radius:6px;text-align:center}body.battle-mode .leftRail .leftMember img{width:clamp(30px,9vw,42px);height:clamp(42px,12vw,58px);margin:auto}body.battle-mode .leftRail .leftMemberInfo{width:100%}body.battle-mode .leftRail .leftMemberInfo b{font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}body.battle-mode .leftRail .leftMemberInfo small{font-size:8px;margin-top:1px}body.battle-mode .leftRail .leftMiniBar{height:4px;margin-top:3px}}
+
+/* === VELMORA: disposizione ispirata al riferimento fornito === */
+@media (min-width:680px){
+  body.battle-mode main{width:100%;max-width:1600px;margin:8px auto 18px;padding:0 6px 24px}
+  body.battle-mode .gameLayout{grid-template-columns:136px minmax(0,1fr);gap:7px;align-items:start}
+  body.battle-mode .leftRail{position:sticky;top:6px;padding:7px;border-radius:7px;gap:5px}
+  body.battle-mode .leftRail button{padding:8px 6px;font-size:11px;gap:6px}
+  body.battle-mode .leftRail .railTitle{font-size:9px}
+  body.battle-mode .leftParty{margin-top:5px;padding-top:5px}
+  body.battle-mode .leftParty #leftSquad{display:flex;flex-direction:column;gap:0;overflow:visible}
+  body.battle-mode .leftParty .leftMember{display:flex;flex:0 0 auto;width:100%;padding:5px 2px;gap:5px}
+  body.battle-mode .leftParty .leftMember img{width:42px;height:57px;margin:0}
+  body.battle-mode .leftParty .leftMemberInfo{width:auto;min-width:0}
+  body.battle-mode .railBottom{display:flex;flex-direction:column;gap:4px}
+  body.battle-mode .railBottom button{width:100%;justify-content:center;font-size:10px;padding:7px}
+  body.battle-mode .centerColumn{position:relative;display:grid;grid-template-columns:minmax(0,1fr) 142px;grid-auto-flow:row;gap:7px;align-items:start;min-width:0}
+  body.battle-mode .centerColumn>#missionPanel,
+  body.battle-mode .centerColumn>#inventoryPanel,
+  body.battle-mode .centerColumn>.row,
+  body.battle-mode .centerColumn>.note,
+  body.battle-mode .centerColumn>#afterCombat{grid-column:1/-1}
+  body.battle-mode #combat:not(.hidden){display:contents}
+  body.battle-mode #combat>.battleTopline,
+  body.battle-mode #combat>#battleHint,
+  body.battle-mode #combat>.battlefield,
+  body.battle-mode #combat>.actionPanel{grid-column:1;min-width:0}
+  body.battle-mode #combat>.battleTopline{grid-row:1}
+  body.battle-mode #combat>#battleHint{grid-row:2}
+  body.battle-mode #combat>.battlefield{grid-row:3}
+  body.battle-mode #combat>.actionPanel{grid-row:4}
+  body.battle-mode .battleExtras{grid-column:2;grid-row:1/5;display:flex;flex-direction:column;gap:7px;margin:0;min-width:0}
+  body.battle-mode .battleExtras .sideCard{padding:7px;border-radius:7px}
+  body.battle-mode .battleExtras .turnOrder{display:flex;flex-direction:column;max-height:235px;overflow:auto}
+  body.battle-mode .battleExtras .battleDiary .log{max-height:430px;overflow:auto;font-size:10px}
+  body.battle-mode .battleExtras .quickInventory{display:block}
+  body.battle-mode .battlefield{display:grid;grid-template-columns:minmax(0,1fr);gap:5px;min-height:0;padding:9px 8px;margin:0}
+  body.battle-mode .battlefield .enemyTeam{grid-row:1}
+  body.battle-mode .battlefield .battleDestiny{grid-row:2}
+  body.battle-mode .battlefield .partyTeam{grid-row:3}
+  body.battle-mode .battlefield .battleSideTitle{text-align:center;margin:4px 0 6px}
+  body.battle-mode .enemyFormation{justify-content:center;overflow:visible;flex-wrap:wrap;gap:7px}
+  body.battle-mode .enemyFormation .battleUnit{flex:0 1 155px;width:155px;max-width:48%}
+  body.battle-mode .enemyFormation .battleFace{height:clamp(145px,22vw,235px);max-height:235px}
+  body.battle-mode .partyFormation{justify-content:center;overflow:visible;flex-wrap:nowrap;gap:6px;padding:4px 0}
+  body.battle-mode .partyFormation .battleUnit{flex:1 1 0;width:auto;max-width:33.333%;min-width:0;padding:5px 3px}
+  body.battle-mode .partyFormation .battleFace{height:clamp(105px,15vw,155px);max-height:155px}
+  body.battle-mode .battleDestiny{max-width:100%;margin:2px auto 4px;padding:7px 10px;border:1px solid #80613a;border-radius:7px;background:linear-gradient(120deg,#20190f,#0c0a08);width:100%}
+  body.battle-mode .battleDestiny .diceHeading{justify-content:center}
+  body.battle-mode .battleDestiny .diceContent img{width:76px;height:76px}
+  body.battle-mode .actionPanel{padding:8px;margin:0}
+  body.battle-mode .actionPanel .actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+  body.battle-mode .actionPanel .btn{min-height:46px}
+  body.battle-mode .gameHeader{padding:6px 9px;gap:7px}
+}
+@media (max-width:679px){
+  body.battle-mode .centerColumn{display:block}
+  body.battle-mode #combat:not(.hidden){display:block}
+  body.battle-mode .battleExtras{display:grid;grid-template-columns:1fr;margin-top:8px}
+  body.battle-mode .battleExtras .quickInventory{display:block}
+  body.battle-mode .battlefield{display:block}
+  body.battle-mode .battleDestiny{max-width:100%}
+}
+
 </style>
 </head>
 <body>
