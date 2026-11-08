@@ -812,8 +812,49 @@ let name=$("heroName").value.trim();if(!name){alert("Scrivi il nome del tuo eroe
 let s=statsFor(),maxhp=26+s.vitalita*3;
 G={hero:{id:"hero",name,race:selectedRace.name,class:selectedClass.name,gender,portrait:imageForRace(selectedRace),stats:s,level:1,xp:0,hp:maxhp,maxhp,ap:5,maxap:5,armor:selectedClass.id==="warrior"?4:selectedClass.id==="cleric"?3:1,weapon:selectedClass.id==="mage"||selectedClass.id==="druid"?4:6,alive:true,down:0,isHero:true,equipment:{hair:"",armor:"",head:""}},party:[],inventory:{Pozione:2,Antidoto:1,Benda:1,Purificazione:1},gold:12,chapter:0,companions:{wolf:false,lion:false},battleWon:0,finished:false,statPoints:0};
 ensureSideQuestState();
-$("creator").classList.add("hidden");$("game").classList.remove("hidden");$("bottomNav").classList.add("visible");showScene("prologue");openTab("mission");
+$("creator").classList.add("hidden");$("game").classList.remove("hidden");$("bottomNav").classList.add("visible");showGuildIntro();openTab("mission");
 }
+
+const guildMissions=[
+{id:"wolves",title:"Tracce tra i pini",type:"Caccia",difficulty:"Facile",gold:22,battle:1,desc:"Tre predoni hanno assalito i boscaioli. Segui le tracce e libera il sentiero."},
+{id:"caravan",title:"La carovana scomparsa",type:"Ricerca",difficulty:"Media",gold:35,battle:2,desc:"Una carovana non è mai arrivata a Rovoscuro. Recupera il registro e scopri cosa è accaduto."},
+{id:"crypt",title:"Voci dalla cripta",type:"Esplorazione",difficulty:"Media",gold:38,battle:2,desc:"Luce verdastra filtra dalle rovine. Qualcosa si muove sotto le pietre."},
+{id:"beast",title:"La bestia del guado",type:"Taglia",difficulty:"Media",gold:32,battle:1,desc:"Una creatura assale chi attraversa il guado. La Gilda paga per fermarla."},
+{id:"relic",title:"Il sigillo dimenticato",type:"Recupero",difficulty:"Difficile",gold:55,battle:3,desc:"Un antico sigillo è custodito nella torre in rovina. La ricompensa è alta, così come il rischio."}
+];
+const guildRoster=[
+{name:"Rauk",class:"Guerriero",portrait:"uomo_lupo_m_base.png.JPG",hp:36,atk:7,armor:4,intel:4,role:"Difensore"},
+{name:"Leona",class:"Paladina",portrait:"uomo_leone_f_base.png.JPG",hp:40,atk:7,armor:4,intel:6,role:"Difesa e cure"},
+{name:"Mira",class:"Maga",portrait:"elfo_f_base.png.JPG",hp:27,atk:8,armor:1,intel:9,role:"Magia"},
+{name:"Kael",class:"Arciere",portrait:"modello_umano_maschile.png.JPG.JPG",hp:31,atk:7,armor:2,intel:5,role:"Attacchi precisi"},
+{name:"Neris",class:"Druida",portrait:"elfo_m_base.png.JPG",hp:33,atk:6,armor:2,intel:8,role:"Natura e supporto"}
+];
+let guildChosenMission=null,guildChosenCompanions=[];
+function showGuildIntro(){
+$("combat").classList.add("hidden");$("afterCombat").classList.add("hidden");$("chapterBadge").textContent="GILDA DEGLI AVVENTURIERI";$("sceneTitle").textContent="Un nuovo giorno a Rovoscuro";
+$("sceneText").innerHTML='<p>La luce filtra dalle imposte della piccola stanza sopra la locanda. Ti svegli al rintocco della campana della Gilda: un altro giorno, un’altra occasione per guadagnare qualche moneta.</p><p>Sei un membro della Gilda degli Avventurieri. La tua borsa è quasi vuota e sulla bacheca ti aspettano nuovi incarichi.</p><p><em>«In piedi, avventuriero. Oggi il lavoro non manca»</em>, borbotta l’oste dal corridoio.</p>';$("sceneChoices").innerHTML='<button class="btn" onclick="showGuildMissions()">Alzati e consulta la bacheca</button>';updateHUD();
+}
+function showGuildMissions(){
+$("chapterBadge").textContent="INCARICHI DISPONIBILI";$("sceneTitle").textContent="La bacheca della Gilda";$("sceneText").innerHTML='<p>Cinque pergamene sono fissate alla grande bacheca di quercia. Scegli con attenzione: ogni incarico offre una ricompensa diversa e nasconde i propri rischi.</p>';
+$("sceneChoices").innerHTML=guildMissions.map(m=>'<button class="btn questCard" onclick="chooseGuildMission(\''+m.id+'\')"><b>'+m.title+'</b><br><small>'+m.type+' · '+m.difficulty+' · Ricompensa '+m.gold+' monete</small><p>'+m.desc+'</p></button>').join("");
+}
+function chooseGuildMission(id){
+guildChosenMission=guildMissions.find(m=>m.id===id);guildChosenCompanions=[];$("chapterBadge").textContent="FORMAZIONE DEL GRUPPO";$("sceneTitle").textContent="Scegli due compagni";
+$("sceneText").innerHTML='<p>Per l’incarico <b>'+guildChosenMission.title+'</b> puoi reclutare due avventurieri dalla sala comune.</p><p id="guildPickCount">Compagni scelti: 0/2</p>';renderGuildRoster();
+}
+function renderGuildRoster(){
+$("sceneChoices").innerHTML=guildRoster.map((p,i)=>'<button class="btn questCard '+(guildChosenCompanions.includes(i)?'selected':'')+'" onclick="toggleGuildCompanion('+i+')"><img src="'+asset(p.portrait)+'" style="width:54px;height:68px;object-fit:contain;float:left;margin-right:10px" alt=""><b>'+p.name+' · '+p.class+'</b><br><small>'+p.role+' · '+p.hp+' HP</small><p>'+(guildChosenCompanions.includes(i)?'✓ Selezionato':'Tocca per selezionare')+'</p></button>').join("")+'<button class="btn" '+(guildChosenCompanions.length!==2?'disabled':'')+' onclick="beginGuildMission()">Conferma il gruppo e parti</button><button class="btn secondary" onclick="showGuildMissions()">← Torna alla bacheca</button>';
+$("guildPickCount").textContent="Compagni scelti: "+guildChosenCompanions.length+"/2";
+}
+function toggleGuildCompanion(i){if(guildChosenCompanions.includes(i))guildChosenCompanions=guildChosenCompanions.filter(x=>x!==i);else if(guildChosenCompanions.length<2)guildChosenCompanions.push(i);renderGuildRoster()}
+function beginGuildMission(){
+if(!guildChosenMission||guildChosenCompanions.length!==2)return;
+G.party=guildChosenCompanions.map(i=>{let p=guildRoster[i],u=makeCompanion(p.name,p.hp,p.atk,p.armor,p.intel,p.portrait);u.class=p.class;u.stats.agilita=p.class==="Arciere"?9:6;u.stats.volonta=p.class==="Paladina"||p.class==="Druida"?8:5;return u});
+G.activeGuildMission={...guildChosenMission};G.guildMissionRewardPaid=false;$("chapterBadge").textContent="INCARICO ACCETTATO";$("sceneTitle").textContent=guildChosenMission.title;
+$("sceneText").innerHTML='<p>'+guildChosenMission.desc+'</p><p>La Gilda registra il tuo incarico. '+G.hero.name+' partirà con '+G.party[0].name+' e '+G.party[1].name+'. La ricompensa sarà consegnata al ritorno.</p><p><em>Le porte della Gilda si aprono sulla strada. È ora di mettersi in marcia.</em></p>';
+$("sceneChoices").innerHTML='<button class="btn" onclick="startBattle('+guildChosenMission.battle+')">Parti per la missione</button>';updateHUD();
+}
+
 const scenes={
 prologue:{badge:"PROLOGO",title:"La campana senza eco",text:`<p>Il tuo viaggio conduce a <em>Rovoscuro</em>, un villaggio ai confini della Valle di Velmora. Da tre notti, a mezzanotte, la campana della vecchia torre suona da sola. Ogni volta che risuona, qualcuno scompare.</p><p>Un'anziana donna ti afferra il braccio: «Mio nipote è entrato nella torre tre giorni fa. Non è più tornato. Ti prego, aiutaci».</p><p>Nella locanda incontri due viandanti: <b>Rauk</b>, un guerriero del Popolo Lupo, e <b>Leona</b>, una guerriera del Popolo Leone. Entrambi sembrano conoscere qualcosa della torre.</p>`,choices:[["Chiedi a Rauk di unirsi","wolf"],["Chiedi a Leona di unirsi","lion"],["Parti verso il bosco","forest"]]},
 forest:{badge:"CAPITOLO I",title:"L'imboscata nel bosco",text:`<p>Il sentiero si stringe tra alberi contorti. Due orchi armati emergono dal sottobosco, accompagnati da un predone della valle.</p><p><em>«La strada è nostra, viandante. Lascia le tue cose!»</em></p>`,choices:[["Affronta gli aggressori","fight1"]]},
