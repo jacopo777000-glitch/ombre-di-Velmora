@@ -850,10 +850,53 @@ function toggleGuildCompanion(i){if(guildChosenCompanions.includes(i))guildChose
 function beginGuildMission(){
 if(!guildChosenMission||guildChosenCompanions.length!==2)return;
 G.party=guildChosenCompanions.map(i=>{let p=guildRoster[i],u=makeCompanion(p.name,p.hp,p.atk,p.armor,p.intel,p.portrait);u.class=p.class;u.stats.agilita=p.class==="Arciere"?9:6;u.stats.volonta=p.class==="Paladina"||p.class==="Druida"?8:5;return u});
-G.activeGuildMission={...guildChosenMission};G.guildMissionRewardPaid=false;$("chapterBadge").textContent="INCARICO ACCETTATO";$("sceneTitle").textContent=guildChosenMission.title;
-$("sceneText").innerHTML='<p>'+guildChosenMission.desc+'</p><p>La Gilda registra il tuo incarico. '+G.hero.name+' partirà con '+G.party[0].name+' e '+G.party[1].name+'. La ricompensa sarà consegnata al ritorno.</p><p><em>Le porte della Gilda si aprono sulla strada. È ora di mettersi in marcia.</em></p>';
-$("sceneChoices").innerHTML='<button class="btn" onclick="startBattle('+guildChosenMission.battle+')">Parti per la missione</button>';updateHUD();
+G.activeGuildMission={...guildChosenMission,seed:Math.random(),step:0,score:0,loot:[],flags:{},events:[]};G.guildMissionRewardPaid=false;guildRouteEvent();updateHUD();
 }
+
+function guildRouteEvent(){
+ const m=G.activeGuildMission;if(!m)return;$("combat").classList.add("hidden");$("afterCombat").classList.add("hidden");document.body.classList.remove("battle-mode");
+ const pools=[
+ [{title:"Il sentiero delle lanterne",text:"Tra gli alberi trovate una lanterna ancora accesa. Le impronte intorno sono fresche.",c:[["Segui le impronte","track"],["Spegni la lanterna e aggira la zona","sneak"],["Cerca superstiti","help"]]},
+ {title:"Un ponte malridotto",text:"Il ponte scricchiola sopra un torrente gonfio.",c:[["Attraversa con cautela","cross"],["Cerca un guado","ford"],["Rinforza il ponte","repair"]]},
+ {title:"Il mercante ferito",text:"Un mercante ferito siede accanto al carro rovesciato.",c:[["Curalo e ascolta","heal"],["Tratta per informazioni","trade"],["Prosegui","ignore"]]}],
+ [{title:"Voci nella nebbia",text:"Una voce chiama il vostro nome dalla nebbia.",c:[["Avvicinati","voice"],["Segui il fumo","smoke"],["Avanza in silenzio","quiet"]]},
+ {title:"Il bivio dei corvi",text:"Corvi neri si alzano da due sentieri.",c:[["Esplora le rovine","ruins"],["Raggiungi la fattoria","farm"],["Segui il consiglio del compagno","companion"]]},
+ {title:"Un’offerta sospetta",text:"Uno sconosciuto propone una mappa in cambio di oro.",c:[["Accetta la mappa","map"],["Interrogalo","question"],["Seguilo di nascosto","follow"]]}],
+ [{title:"Il luogo dell’incarico",text:"Il vento si ferma. Davanti a voi qualcosa si muove nell’ombra.",c:[["Entra con le armi","fight"],["Cerca un ingresso secondario","sneakFinal"],["Tenta di parlare","talk"]]},
+ {title:"L’ultima traccia",text:"Trovate un oggetto appartenuto alla persona scomparsa.",c:[["Segui la scia","blood"],["Cerca tracce magiche","magic"],["Prepara una trappola","trap"]]}]
+ ];
+ const pool=pools[Math.min(m.step,2)],ev=pool[Math.floor(Math.random()*pool.length)];m.currentEvent=ev;m.events.push(ev.title);
+ $("chapterBadge").textContent="INCARICO · TAPPA "+(m.step+1);$("sceneTitle").textContent=ev.title;$("sceneText").innerHTML='<p>'+ev.text+'</p><p><em>'+G.party.map(p=>p.name).join(" e ")+' attendono la tua decisione.</em></p>';
+ $("sceneChoices").innerHTML=ev.c.map(c=>'<button class="btn questCard" onclick="guildChoosePath(\''+c[1]+'\')">'+c[0]+'</button>').join("");
+}
+function guildChoosePath(path){
+ const m=G.activeGuildMission;if(!m)return;
+ const o={
+ track:[2,"Le impronte conducono a un accampamento nascosto.",true],sneak:[2,"Aggirate il pericolo e trovate una borsa abbandonata.",false],help:[3,"Un superstite vi consegna un indizio prezioso.",false],
+ cross:[1,"Il ponte regge, ma il rumore attira presenze ostili.",true],ford:[2,"Il guado è sicuro, ma perdete tempo.",false],repair:[3,"Un viandante vi ricompensa per aver riparato il ponte.",false],
+ heal:[3,"Il mercante vi rivela una pista e vi offre una pozione.",false],trade:[2,"Il mercante vende un’informazione utile.",false],ignore:[1,"Proseguite senza fermarvi.",true],
+ voice:[1,"La voce si rivela un richiamo: scatta un agguato.",true],smoke:[3,"Il fumo vi conduce a un rifugio con provviste.",false],quiet:[2,"Una pattuglia vi sorprende nel silenzio.",true],
+ ruins:[3,"Nelle rovine trovate un antico amuleto.",false],farm:[2,"I contadini vi indicano una pista sicura.",false],companion:[1,"Il compagno nota un’imboscata.",true],
+ map:[3,"La mappa è autentica, ma conduce a una zona sorvegliata.",true],question:[2,"Lo sconosciuto confessa parte della verità.",false],follow:[3,"Lo seguite fino a un deposito di contrabbandieri.",true],
+ fight:[3,"Entrate direttamente nel covo.",true],sneakFinal:[2,"L’ingresso laterale vi porta alle spalle dei nemici.",true],talk:[1,"La creatura esita e ascolta le vostre parole.",false],
+ blood:[3,"La pista termina in un’imboscata.",true],magic:[2,"Le tracce magiche rivelano una presenza nascosta.",true],trap:[3,"La trappola è pronta, ma qualcosa vi ha scoperti.",true]
+ }[path]||[1,"Proseguite con cautela.",false];
+ m.score+=o[0];m.flags[path]=true;m.lastPath=path;
+ if(["help","repair","smoke","ruins","farm","magic"].includes(path)){G.inventory.Pozione=(G.inventory.Pozione||0)+1;m.loot.push("Pozione")}
+ if(path==="heal")G.party.forEach(p=>p.hp=Math.min(p.maxhp,p.hp+5));
+ $("sceneText").innerHTML='<p>'+o[1]+'</p><p>'+(o[2]?"Un pericolo vi sbarra la strada.":"La scelta apre una nuova possibilità.")+'</p>';
+ $("sceneChoices").innerHTML=o[2]?'<button class="btn" onclick="guildStartEncounter('+o[0]+')">Affronta le conseguenze</button>':'<button class="btn" onclick="guildNextStep()">Continua il viaggio</button>';
+}
+function guildStartEncounter(level){startBattle(level)}
+function guildAfterBattle(){const m=G.activeGuildMission;if(!m)return;$("afterCombat").classList.add("hidden");m.step++;if(m.step>=3)guildFinishMission();else guildRouteEvent()}
+function guildNextStep(){const m=G.activeGuildMission;if(!m)return;m.step++;if(m.step>=3)guildFinishMission();else guildRouteEvent()}
+function guildFinishMission(){
+ const m=G.activeGuildMission;if(!m)return;const reward=m.gold+Math.max(0,Math.min(20,m.score*2));G.gold+=reward;G.hero.xp+=35+m.score*4;G.sideQuestReputation=(G.sideQuestReputation||0)+1;
+ const end=m.score>=7?"La squadra torna con prove preziose e una storia che verrà raccontata a lungo.":m.score>=4?"L’incarico è completato, ma gli imprevisti hanno lasciato il segno.":"Rientrate stanchi, ma avete portato a termine il lavoro.";
+ $("chapterBadge").textContent="INCARICO CONCLUSO";$("sceneTitle").textContent="Ritorno alla Gilda";$("sceneText").innerHTML='<p>'+end+'</p><p>Ricompensa: <b>'+reward+' monete d’oro</b> e '+(35+m.score*4)+' XP. Eventi: '+m.events.join(" → ")+'.</p>';
+ $("sceneChoices").innerHTML='<button class="btn" onclick="guildReturnBoard()">Rientra nella sala della Gilda</button>';G.activeGuildMission=null;updateHUD();
+}
+function guildReturnBoard(){G.party=[];showGuildMissions();updateHUD()}
 
 const scenes={
 prologue:{badge:"PROLOGO",title:"La campana senza eco",text:`<p>Il tuo viaggio conduce a <em>Rovoscuro</em>, un villaggio ai confini della Valle di Velmora. Da tre notti, a mezzanotte, la campana della vecchia torre suona da sola. Ogni volta che risuona, qualcuno scompare.</p><p>Un'anziana donna ti afferra il braccio: «Mio nipote è entrato nella torre tre giorni fa. Non è più tornato. Ti prego, aiutaci».</p><p>Nella locanda incontri due viandanti: <b>Rauk</b>, un guerriero del Popolo Lupo, e <b>Leona</b>, una guerriera del Popolo Leone. Entrambi sembrano conoscere qualcosa della torre.</p>`,choices:[["Chiedi a Rauk di unirsi","wolf"],["Chiedi a Leona di unirsi","lion"],["Parti verso il bosco","forest"]]},
@@ -958,7 +1001,7 @@ if(target.hp<=0){target.hp=0;if(target.isHero){target.hp=1;log(`${target.name} c
 function applyStartStatus(u){if(!u.status)return;let s=u.status;if(s.damage){u.hp-=s.damage;log(`${u.name} subisce ${s.damage} danni da ${s.name.toLowerCase()}.`)}s.turns--;if(s.turns<=0){log(`L'effetto ${s.name.toLowerCase()} termina su ${u.name}.`);u.status=null}if(u.hp<=0){if(u.isHero){u.hp=1;log(`${u.name} resiste alla morte.`)}else{u.hp=0;u.alive=false;u.down=3;log(`${u.name} cade a terra!`)}}}
 function tickDowned(){[G.hero,...G.party].forEach(p=>{if(!p.alive&&p.down>0){p.down--;if(p.down===0)log(`${p.name} non è stato soccorso in tempo: è perduto.`)}})}
 function winBattle(){
-if(!battle||battle.ended)return;battle.ended=true;busy=false;G.battleWon++;let n=battle.n,reward=n===1?{xp:35,gold:18}:n===2?{xp:55,gold:28}:{xp:100,gold:60};G.hero.xp+=reward.xp;G.gold+=reward.gold;let levelUp="";
+if(!battle||battle.ended)return;battle.ended=true;busy=false;G.battleWon++;let n=battle.n;if(G.activeGuildMission){$("combat").classList.add("hidden");document.body.classList.remove("battle-mode");G.hero.xp+=n===1?18:n===2?28:40;G.activeGuildMission.battles=(G.activeGuildMission.battles||0)+1;let box=$("afterCombat");box.classList.remove("hidden");box.innerHTML='<h2>Vittoria!</h2><p>Lo scontro è terminato. Il gruppo riprende fiato: le decisioni prese finora hanno cambiato il corso dell’incarico.</p><button class="btn" onclick="guildAfterBattle()">Prosegui</button>';updateHUD();return}let reward=n===1?{xp:35,gold:18}:n===2?{xp:55,gold:28}:{xp:100,gold:60};G.hero.xp+=reward.xp;G.gold+=reward.gold;let levelUp="";
 if(G.hero.xp>=G.hero.level*60){G.hero.xp-=G.hero.level*60;G.hero.level++;G.hero.maxhp+=8;G.hero.hp=Math.min(G.hero.maxhp,G.hero.hp+8);G.hero.stats.forza++;G.statPoints=(G.statPoints||0)+2;levelUp=` ${G.hero.name} sale al livello ${G.hero.level}! Hai ottenuto 2 punti caratteristica.`}
 if(n===3){G.inventory["Lama dell'Eco Perduto"]=1;G.finished=true}
 $("combat").classList.add("hidden");document.body.classList.remove("battle-mode");let box=$("afterCombat");box.classList.remove("hidden");
