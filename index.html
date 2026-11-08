@@ -459,6 +459,88 @@ select.input:focus{outline:2px solid #f0d49b;outline-offset:1px}
 .abilityCard button{width:100%;margin-top:6px;border:1px solid #a17b49;border-radius:6px;padding:8px;background:linear-gradient(#574027,#302116);color:#f5dfb6;font:13px Georgia,serif}
 .abilityCard button:disabled{opacity:.45}
 @media(max-width:560px){#abilitiesScreen{padding-left:7px;padding-right:7px}.abilitiesBody{grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);gap:7px}.abilitiesEquipped,.abilitiesLibrary{padding:8px}.abilitiesEquipped h3,.abilitiesLibrary h3{font-size:13px}.abilitySlot{padding:7px;min-height:65px;gap:5px}.abilitySlot strong{font-size:11px}.abilitySlot small{font-size:10px}.abilityCard{padding:8px}.abilityCard strong{font-size:12px}.abilityCard p{font-size:11px}.abilityCard button{font-size:11px;padding:7px}}
+
+/* VELMORA RESPONSIVE LEFT RAIL + CENTER BATTLE LAYOUT
+   Desktop: navigazione a sinistra, campo di battaglia al centro,
+   ordine dei turni e diario nella colonna destra.
+   iPhone: rail verticale compatta a sinistra, campo centrale leggibile,
+   pannelli di supporto sotto il combattimento. */
+@media (min-width:761px){
+  main{width:min(1900px,99%);padding:0 10px 36px}
+  .gameLayout{display:grid;grid-template-columns:168px minmax(0,1fr);gap:12px;align-items:start}
+  .leftRail{grid-column:1;grid-row:1;position:sticky;top:8px;max-height:calc(100vh - 16px);overflow-y:auto;overscroll-behavior:contain}
+  .centerColumn{grid-column:2;grid-row:1;display:grid;grid-template-columns:minmax(0,1.75fr) minmax(230px,.72fr);gap:10px;align-items:start;min-width:0;width:100%}
+  .centerColumn>#missionPanel{grid-column:1/-1}
+  .centerColumn>#combat{grid-column:1;min-width:0}
+  .centerColumn>.battleExtras{grid-column:2;display:flex;flex-direction:column;gap:10px;align-self:stretch;margin:0;min-width:0}
+  .centerColumn>#afterCombat,.centerColumn>#inventoryPanel,.centerColumn>.row,.centerColumn>.note{grid-column:1/-1}
+  .battleExtras .sideCard{min-width:0}
+  .battleExtras .quickInventory{display:none}
+  .battleExtras .turnOrder{display:flex;flex-direction:column;max-height:340px}
+  .battleExtras .battleDiary .log{max-height:480px;overflow:auto}
+  .battlefield{min-height:410px}
+  .battleFormation{justify-content:center;overflow-x:auto}
+  .battleUnit{flex:0 1 145px;width:145px;max-width:24%}
+  .battleFace{height:clamp(140px,16vw,215px);max-height:215px}
+  .menuPanel{grid-column:2;grid-row:2}
+}
+@media (max-width:760px){
+  main{width:100%;margin:7px auto 18px;padding:0 6px 96px}
+  .gameLayout{display:grid;grid-template-columns:58px minmax(0,1fr);gap:6px;align-items:start}
+  .leftRail{grid-column:1;grid-row:1;position:sticky;top:5px;display:flex;flex-direction:column;gap:4px;width:58px;max-height:calc(100vh - 10px);overflow-y:auto;overflow-x:hidden;padding:4px;overscroll-behavior:contain}
+  .railTitle{font-size:7px;letter-spacing:.5px;text-align:center;padding:4px 0 6px;line-height:1.1}
+  .leftRail button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:45px;padding:4px 1px;text-align:center;font-size:7px;line-height:1.12;overflow-wrap:anywhere}
+  .leftRail button span{width:auto;font-size:15px;line-height:1.1}
+  .leftParty{margin-top:4px;padding-top:5px}
+  .leftParty .sideHeading{font-size:6px;letter-spacing:.3px;text-align:center;line-height:1.2}
+  .leftParty #leftSquad{display:flex;flex-direction:column;gap:3px;overflow:visible}
+  .leftMember{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 1px;text-align:center}
+  .leftMember img{width:38px;height:48px}
+  .leftMemberInfo{width:100%}
+  .leftMemberInfo b{font-size:7px;line-height:1.1}
+  .leftMemberInfo small{display:none}
+  .leftMiniBar{height:4px;margin-top:3px}
+  .railBottom{display:flex;flex-direction:column;gap:3px;margin-top:4px;padding-top:5px}
+  .railBottom button{min-height:36px;padding:3px 1px;font-size:6.5px;line-height:1.1;text-align:center}
+  .centerColumn{grid-column:2;grid-row:1;display:block;min-width:0;width:100%}
+  .centerColumn>#missionPanel,.centerColumn>#combat,.centerColumn>.battleExtras,.centerColumn>#afterCombat,.centerColumn>#inventoryPanel{width:100%;min-width:0}
+  .centerColumn>.battleExtras{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:6px;margin:8px 0 12px}
+  .battleExtras>section:first-child{grid-column:1}
+  .battleExtras .battleDiary{grid-column:2}
+  .battleExtras .quickInventory{display:none}
+  .battleExtras .turnOrder{display:grid;grid-template-columns:1fr;max-height:190px;overflow:auto}
+  .battleExtras .battleDiary .log{max-height:190px;overflow:auto}
+  .menuPanel{grid-column:2;grid-row:2;width:100%;min-width:0}
+  .battleTopline h2{font-size:16px}
+  .battlefield{min-height:330px;padding:8px 5px}
+  .battleFormation{justify-content:flex-start;gap:5px;overflow-x:auto;padding:7px 2px 10px}
+  .battleUnit{flex:0 0 100px;width:100px;max-width:none;padding:5px 4px}
+  .battleFace{height:132px;max-height:132px}
+  .battleName{font-size:9px;min-height:23px}
+  .battleHP,.battleAP{font-size:8px}
+  .dicePanel{max-width:100%;padding:8px 7px;margin:7px auto}
+  .diceContent{gap:6px}
+  .diceContent img{width:58px;height:58px}
+  .diceContent div{min-width:0}
+  .diceContent strong{font-size:23px}
+  .actionPanel{padding:8px}
+  .actionPanel .actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
+  .actionPanel .btn{font-size:10px;padding:7px 4px;min-height:39px}
+  .activeTurn{align-items:flex-start;flex-direction:column;gap:2px}
+  .activeTurn .small{text-align:left;margin:0}
+  .bottomNav{display:none!important}
+}
+@media (max-width:390px){
+  .gameLayout{grid-template-columns:54px minmax(0,1fr);gap:5px}
+  .leftRail{width:54px;padding:3px}
+  .leftRail button{font-size:6.5px;min-height:42px}
+  .leftRail button span{font-size:14px}
+  .leftMember img{width:34px;height:44px}
+  .battleUnit{flex-basis:94px;width:94px}
+  .battleFace{height:124px}
+  .resource,.topAction{font-size:9px;padding:5px 4px}
+}
+
 </style>
 </head>
 <body>
