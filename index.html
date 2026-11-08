@@ -614,6 +614,29 @@ select.input:focus{outline:2px solid #f0d49b;outline-offset:1px}
  .battleFormationStage .battleHP,.battleFormationStage .battleAP{font-size:6.5px}
  .battleDestiny .diceContent img{width:37px;height:37px}
 }
+
+/* Modalità battaglia: libera lo spazio della storia per il campo di combattimento */
+body.battle-mode main{width:min(1900px,100%);margin:6px auto 12px;padding:0 8px 18px}
+body.battle-mode .gameLayout{grid-template-columns:minmax(0,1fr);gap:0}
+body.battle-mode .leftRail{display:none!important}
+body.battle-mode #missionPanel,body.battle-mode .battleExtras,body.battle-mode #inventoryPanel,body.battle-mode .centerColumn>.row,body.battle-mode .centerColumn>.note,body.battle-mode #menuView{display:none!important}
+body.battle-mode .centerColumn{width:100%;min-width:0}
+body.battle-mode #combat{width:100%;display:block!important}
+body.battle-mode .battlefield{margin:4px 0 8px;padding:clamp(8px,1.5vw,18px);min-height:clamp(300px,58vh,650px);display:flex;align-items:center}
+body.battle-mode .battleFormationStage{width:100%}
+body.battle-mode .battleUnit{flex-basis:clamp(90px,13vw,165px);width:clamp(90px,13vw,165px);max-width:22%}
+body.battle-mode .battleFace{height:clamp(135px,25vh,270px);max-height:270px}
+body.battle-mode .dicePanel{margin:8px auto;}
+body.battle-mode .actionPanel{margin-bottom:10px}
+@media(max-width:680px){
+ body.battle-mode main{width:100%;margin:4px auto 8px;padding:0 5px 12px}
+ body.battle-mode .battleTopline{padding:5px 3px}
+ body.battle-mode .battlefield{min-height:0;padding:7px 4px;margin:4px 0 7px}
+ body.battle-mode .battleUnit{flex:0 0 clamp(76px,24vw,112px);width:clamp(76px,24vw,112px);max-width:none}
+ body.battle-mode .battleFace{height:clamp(112px,25vh,180px);max-height:180px}
+ body.battle-mode .actionPanel{padding:8px}
+}
+
 </style>
 </head>
 <body>
@@ -770,7 +793,7 @@ function aliveParty(){return [G.hero,...G.party].filter(p=>p.alive&&p.hp>0)}
 function isEnemy(u){return !!u.kind}
 function current(){return battle?.order?.[battle.idx]}
 function startBattle(n){
-busy=false;const sets={
+busy=false;document.body.classList.add("battle-mode");const sets={
 1:[{name:"Orco predone",hp:25,atk:6,armor:1,kind:"orc",portrait:"orco_m_base.png.JPG"},{name:"Orco predone",hp:25,atk:6,armor:1,kind:"orc",portrait:"orco_f_base.png.JPG"},{name:"Predone della valle",hp:22,atk:5,armor:2,kind:"bandit",portrait:"modello_umano_maschile.png.JPG.JPG"}],
 2:[{name:"Orco veterano",hp:34,atk:7,armor:3,kind:"orc",portrait:"orco_m_base.png.JPG"},{name:"Guardiano della cripta",hp:32,atk:6,armor:4,kind:"guard",portrait:"orco_f_base.png.JPG"},{name:"Sciamano della cripta",hp:29,atk:7,armor:2,kind:"priest",portrait:"elfo_f_base.png.JPG"}],
 3:[{name:"Custode della Campana",hp:145,atk:10,armor:5,kind:"boss",portrait:"modello_umano_maschile.png.JPG.JPG"}]};
@@ -852,12 +875,12 @@ function winBattle(){
 if(!battle||battle.ended)return;battle.ended=true;busy=false;G.battleWon++;let n=battle.n,reward=n===1?{xp:35,gold:18}:n===2?{xp:55,gold:28}:{xp:100,gold:60};G.hero.xp+=reward.xp;G.gold+=reward.gold;let levelUp="";
 if(G.hero.xp>=G.hero.level*60){G.hero.xp-=G.hero.level*60;G.hero.level++;G.hero.maxhp+=8;G.hero.hp=Math.min(G.hero.maxhp,G.hero.hp+8);G.hero.stats.forza++;G.statPoints=(G.statPoints||0)+2;levelUp=` ${G.hero.name} sale al livello ${G.hero.level}! Hai ottenuto 2 punti caratteristica.`}
 if(n===3){G.inventory["Lama dell'Eco Perduto"]=1;G.finished=true}
-$("combat").classList.add("hidden");let box=$("afterCombat");box.classList.remove("hidden");
+$("combat").classList.add("hidden");document.body.classList.remove("battle-mode");let box=$("afterCombat");box.classList.remove("hidden");
 box.innerHTML=`<h2>${n===3?"Vittoria! Il Custode è caduto.":"Vittoria!"}</h2><p>Hai ottenuto ${reward.xp} XP e ${reward.gold} monete d'oro.${levelUp}</p>${n===3?'<p><b>Oggetto unico leggendario ottenuto: Lama dell’Eco Perduto.</b> La campana tace.</p>':''}<button class="btn" onclick="continueAfter(${n})">${n===1?"Prosegui verso la cripta":n===2?"Apri la sala della campana":"Concludi l'avventura"}</button>`;
 renderBattle();updateHUD()
 }
 function continueAfter(n){if(n===1)showScene("crypt");else if(n===2)showScene("boss");else showScene("ending")}
-function loseBattle(){if(!battle||battle.ended)return;battle.ended=true;busy=false;$("combat").classList.add("hidden");let box=$("afterCombat");box.classList.remove("hidden");box.innerHTML=`<h2>Il gruppo è sopraffatto</h2><p>La prova finisce qui, ma puoi riprovare.</p><button class="btn" onclick="restartBattle()">Riprova lo scontro</button>`}
+function loseBattle(){if(!battle||battle.ended)return;battle.ended=true;busy=false;$("combat").classList.add("hidden");document.body.classList.remove("battle-mode");let box=$("afterCombat");box.classList.remove("hidden");box.innerHTML=`<h2>Il gruppo è sopraffatto</h2><p>La prova finisce qui, ma puoi riprovare.</p><button class="btn" onclick="restartBattle()">Riprova lo scontro</button>`}
 function restartBattle(){startBattle(battle.n)}
 function updateHUD(){if(!G)return;renderLeftSquad();$("levelBadge").textContent=`Livello ${G.hero.level} · ${G.hero.xp} XP`;$("inventory").innerHTML=Object.entries(G.inventory).map(([k,v])=>`<span>${k}: ${v}</span>`).join("")+`<span>Oro: ${G.gold}</span>`;const hp=Math.max(0,G.hero.hp);$("topHP").textContent=hp+"/"+G.hero.maxhp;$("topPotions").textContent=G.inventory.Pozione||0;$("topGold").textContent=G.gold||0;$("sideResources").innerHTML=`Pozioni: <b>${G.inventory.Pozione||0}</b><br>Antidoti: <b>${G.inventory.Antidoto||0}</b><br>Oro: <b>${G.gold||0}</b>`}
 function saveGame(){
@@ -869,7 +892,7 @@ let raw=localStorage.getItem("velmoraDemoSave");if(!raw){alert("Non è presente 
 try{let s=JSON.parse(raw);G=s.G;battle=s.battle;busy=false;if(!G.statPoints)G.statPoints=0;ensureSideQuestState();
 $("creator").classList.add("hidden");$("game").classList.remove("hidden");$("bottomNav").classList.add("visible");
 if(battle){let all=[G.hero,...G.party,...battle.units],byId=new Map(all.map(u=>[String(u.id),u]));battle.order=(battle.order||[]).map(id=>byId.get(String(id))).filter(Boolean);
-if(!battle.ended){$("combat").classList.remove("hidden");$("afterCombat").classList.add("hidden");$("battleLog").innerHTML="";battle.log.forEach(x=>$("battleLog").innerHTML+=`<p>${x}</p>`);renderBattle();advanceToPlayer()}
+if(!battle.ended){document.body.classList.add("battle-mode");$("combat").classList.remove("hidden");$("afterCombat").classList.add("hidden");$("battleLog").innerHTML="";battle.log.forEach(x=>$("battleLog").innerHTML+=`<p>${x}</p>`);renderBattle();advanceToPlayer()}
 else{$("combat").classList.add("hidden");showScene(G.finished?"ending":G.battleWon===1?"crypt":G.battleWon===2?"boss":"prologue")}}
 else showScene(G.finished?"ending":G.battleWon===0?"prologue":G.battleWon===1?"crypt":G.battleWon===2?"boss":"ending");
 updateHUD();openTab("mission");alert("Partita caricata!")
