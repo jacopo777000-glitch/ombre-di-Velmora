@@ -541,6 +541,32 @@ select.input:focus{outline:2px solid #f0d49b;outline-offset:1px}
   .resource,.topAction{font-size:9px;padding:5px 4px}
 }
 
+
+/* Schede missioni secondarie */
+.questReputation,.questProgress,.questRoll{padding:9px 11px;margin:9px 0;border:1px solid #80623a;border-radius:8px;background:rgba(16,13,10,.72);color:#e5d3ad;font-size:12px}
+.questReputation b,.questRoll b{color:#f0d49b}
+.questCard{display:block;width:100%;text-align:left;padding:13px;margin:9px 0;border:1px solid #80623a;border-radius:9px;background:linear-gradient(145deg,rgba(45,35,24,.92),rgba(14,12,10,.94));color:#e9dfc8;font-family:Georgia,serif;cursor:pointer}
+.questCard:disabled{opacity:.55;cursor:not-allowed}
+.questCardTop{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.questCardTop b{color:#f0d49b;font-size:15px}
+.questCard small,.questDetailHead small{display:block;color:#b9a98b;margin-top:5px;font-size:11px}
+.questCard p{margin:8px 0 0;font-size:12px;line-height:1.45}
+.questStatus{font-style:normal;font-size:10px;padding:4px 7px;border-radius:20px;border:1px solid #80623a;white-space:nowrap;color:#e5d3ad}
+.questStatus.completed{color:#b8df9d;border-color:#5e8750}
+.questStatus.active{color:#f3d18c;border-color:#a27a3c}
+.questLock{display:block;margin-top:7px;color:#d19b83;font-size:10px}
+.questDetailHead{padding:10px 12px;margin:10px 0;background:linear-gradient(120deg,rgba(64,47,29,.72),rgba(12,11,9,.8));border-left:3px solid #b28a4e}
+.questDetailHead span{font-size:9px;letter-spacing:2px;color:#c49b55}
+.questDetailHead h2{margin:5px 0;border:0;padding:0}
+.questSuccessText{padding:10px;border-left:3px solid #8ea96b;background:rgba(49,66,36,.24);font-size:12px}
+.questOutcome{padding:12px;margin:10px 0;border:1px solid #6f8751;background:rgba(37,55,31,.25);border-radius:8px}
+.questOutcome b{color:#c4e1a8}
+.questOutcome p,.questHistoryLine{font-size:12px;line-height:1.45}
+.questActions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.questActions .btn{flex:1 1 180px}
+.questHistory{margin-top:12px;color:#b9a98b}
+.questHistoryLine{border-top:1px solid #51402a;padding:7px 0;margin:0}
+
 </style>
 </head>
 <body>
@@ -582,7 +608,7 @@ select.input:focus{outline:2px solid #f0d49b;outline-offset:1px}
   <button onclick="openCharacterScreen()"><span>♙</span> Personaggio</button>
   <button onclick="showMenu('squad')"><span>♟</span> Personaggi</button>
   <button onclick="showMenu('map')"><span>⌖</span> Mappa</button>
-  <button onclick="openTab('mission')"><span>⚑</span> Missioni</button>
+  <button onclick="showMenu('quests')"><span>⚑</span> Missioni</button>
   <button onclick="openAbilitiesScreen()"><span>✧</span> Abilità</button>
   <button onclick="showMenu('settings')"><span>⚙</span> Impostazioni</button>
   <section class="leftParty"><div class="sideHeading"><span>LA TUA SQUADRA</span></div><div id="leftSquad"><p class="sideEmpty">La squadra apparirà qui.</p></div></section>
@@ -679,6 +705,7 @@ function startAdventure(){
 let name=$("heroName").value.trim();if(!name){alert("Scrivi il nome del tuo eroe prima di partire!");return}
 let s=statsFor(),maxhp=26+s.vitalita*3;
 G={hero:{id:"hero",name,race:selectedRace.name,class:selectedClass.name,gender,portrait:imageForRace(selectedRace),stats:s,level:1,xp:0,hp:maxhp,maxhp,ap:5,maxap:5,armor:selectedClass.id==="warrior"?4:selectedClass.id==="cleric"?3:1,weapon:selectedClass.id==="mage"||selectedClass.id==="druid"?4:6,alive:true,down:0,isHero:true,equipment:{hair:"",armor:"",head:""}},party:[],inventory:{Pozione:2,Antidoto:1,Benda:1,Purificazione:1},gold:12,chapter:0,companions:{wolf:false,lion:false},battleWon:0,finished:false,statPoints:0};
+ensureSideQuestState();
 $("creator").classList.add("hidden");$("game").classList.remove("hidden");$("bottomNav").classList.add("visible");showScene("prologue");openTab("mission");
 }
 const scenes={
@@ -794,7 +821,7 @@ localStorage.setItem("velmoraDemoSave",JSON.stringify({G,battle:battleSave}));al
 }
 function loadGame(){
 let raw=localStorage.getItem("velmoraDemoSave");if(!raw){alert("Non è presente un salvataggio.");return}
-try{let s=JSON.parse(raw);G=s.G;battle=s.battle;busy=false;if(!G.statPoints)G.statPoints=0;
+try{let s=JSON.parse(raw);G=s.G;battle=s.battle;busy=false;if(!G.statPoints)G.statPoints=0;ensureSideQuestState();
 $("creator").classList.add("hidden");$("game").classList.remove("hidden");$("bottomNav").classList.add("visible");
 if(battle){let all=[G.hero,...G.party,...battle.units],byId=new Map(all.map(u=>[String(u.id),u]));battle.order=(battle.order||[]).map(id=>byId.get(String(id))).filter(Boolean);
 if(!battle.ended){$("combat").classList.remove("hidden");$("afterCombat").classList.add("hidden");$("battleLog").innerHTML="";battle.log.forEach(x=>$("battleLog").innerHTML+=`<p>${x}</p>`);renderBattle();advanceToPlayer()}
@@ -814,16 +841,103 @@ if(tab==="inventory"){ $("inventoryPanel").scrollIntoView({behavior:"smooth",blo
 if(tab==="squad"){showMenu("squad");return}
 if(tab==="more"){showMenu("more");return}
 }
+
+/* ===== MISSIONI SECONDARIE MODULARI =====
+   Incarichi facoltativi e indipendenti dalla trama principale.
+   Stato, scelte, tentativi e ricompense vivono in G.sideQuests. */
+const sideQuestCatalog = [
+ {id:"lume_bruma",title:"Il lume di Brumacava",type:"Mistero ed esplorazione",location:"Cava abbandonata di Brumacava",minBattleWon:0,summary:"Una luce azzurra compare ogni notte tra le vecchie gallerie. I minatori giurano di sentire una voce sotto la pietra.",intro:"La locandiera ti parla di una cava chiusa da anni. Una luce fredda filtra da una fessura e, nelle notti senza luna, qualcuno sente pronunciare il proprio nome. Nessuno vuole più avvicinarsi.",checkAction:"investigate",checkLabel:"Esamina le incisioni e segui il bagliore",checkStat:"percezione",difficulty:13,successText:"Individui tre rune consumate e capisci che la luce proviene da un cristallo imprigionato in un sigillo antico. Il meccanismo può essere chiuso oppure sfruttato."},
+ {id:"morso_ponte",title:"Il morso al ponte vecchio",type:"Caccia",location:"Ponte di Selvariva",minBattleWon:1,summary:"Un predatore ferisce il bestiame e blocca il passaggio. La gente offre una ricompensa, ma le tracce raccontano una storia diversa.",intro:"Un pastore mostra ferite profonde sul fianco di una capra. Le impronte conducono al ponte vecchio, dove una creatura affamata si nasconde tra le travi. Il pastore promette una ricompensa, ma ti chiede di capire prima perché la bestia si avvicini al villaggio.",checkAction:"hunt",checkLabel:"Segui le tracce senza farti sorprendere",checkStat:"percezione",difficulty:14,successText:"Raggiungi la tana e trovi la creatura ferita da una vecchia trappola. Ora puoi abbatterla per sicurezza oppure liberarla e allontanarla dal ponte."},
+ {id:"conto_mugnaio",title:"Il conto del mugnaio",type:"Persone e fazioni",location:"Mulino di Rovoscuro",minBattleWon:1,summary:"Un mugnaio accusa una piccola compagnia di avergli sottratto farina e denaro. Le versioni non coincidono.",intro:"Davanti al mulino trovi il vecchio Odran che discute con tre viandanti. Il mugnaio sostiene di essere stato derubato; i viandanti affermano che il pagamento era già stato concordato. Nessuno vuole cedere e la disputa sta dividendo il villaggio.",checkAction:"negotiate",checkLabel:"Ascolta entrambe le parti e ricostruisci l'accordo",checkStat:"carisma",difficulty:13,successText:"Confrontando le date sui registri scopri che il pagamento è stato riscosso da un intermediario. Il mugnaio e i viandanti attendono la tua decisione su come chiudere la disputa."}
+];
+function ensureSideQuestState(){
+ if(!G)return;
+ if(!G.sideQuests||typeof G.sideQuests!=="object")G.sideQuests={};
+ sideQuestCatalog.forEach(q=>{if(!G.sideQuests[q.id])G.sideQuests[q.id]={status:"available",stage:0,attempts:0,outcome:null,history:[],reward:null,lastRoll:null}});
+ if(!Number.isFinite(G.sideQuestReputation))G.sideQuestReputation=0;
+}
+function sideQuestUnlocked(q){return !!G&&((G.battleWon||0)>=(q.minBattleWon||0))}
+function sideQuestStatus(q,st){
+ if(st.status==="completed")return "Completata";
+ if(st.status==="active")return "In corso";
+ return sideQuestUnlocked(q)?"Disponibile":"Bloccata";
+}
+function renderSideQuestList(){
+ ensureSideQuestState();
+ const c=$("menuContent");
+ c.innerHTML='<button class="btn secondary menuBack" onclick="showMenu(\'more\')">← Indietro</button><h2>Missioni secondarie</h2><p class="menuHint">Incarichi facoltativi di Velmora. Non modificano il prologo né la futura trama principale. Le decisioni e gli esiti vengono conservati nel salvataggio.</p><div class="questReputation">Reputazione locale: <b>'+G.sideQuestReputation+'</b></div>'+
+ sideQuestCatalog.map(q=>{const st=G.sideQuests[q.id],unlocked=sideQuestUnlocked(q),status=sideQuestStatus(q,st);return '<button class="questCard" onclick="renderSideQuest(\''+q.id+'\')" '+(!unlocked&&st.status!=="completed"?'disabled':'')+'><span class="questCardTop"><b>'+q.title+'</b><em class="questStatus '+st.status+'">'+status+'</em></span><small>'+q.type+' · '+q.location+'</small><p>'+q.summary+'</p>'+(!unlocked?'<span class="questLock">Si sblocca dopo il primo scontro.</span>':'')+'</button>'}).join("");
+}
+function renderSideQuest(id){
+ ensureSideQuestState();
+ const q=sideQuestCatalog.find(x=>x.id===id);if(!q)return renderSideQuestList();
+ const st=G.sideQuests[id],c=$("menuContent");
+ let actions="";
+ if(st.status==="available"&&sideQuestUnlocked(q))actions='<button class="btn" onclick="sideQuestAction(\''+id+'\',\'accept\')">Accetta incarico</button>';
+ if(st.status==="active"&&st.stage===1)actions='<button class="btn" onclick="sideQuestAction(\''+id+'\',\''+q.checkAction+'\')">'+q.checkLabel+'</button>';
+ if(st.status==="active"&&st.stage===2){
+  if(id==="lume_bruma")actions='<button class="btn" onclick="sideQuestAction(\''+id+'\',\'seal\')">Richiudi il sigillo</button><button class="btn secondary" onclick="sideQuestAction(\''+id+'\',\'take\')">Prendi il cristallo</button>';
+  if(id==="morso_ponte")actions='<button class="btn" onclick="sideQuestAction(\''+id+'\',\'spare\')">Libera la creatura e guidala lontano</button><button class="btn secondary" onclick="sideQuestAction(\''+id+'\',\'slay\')">Abbatti la bestia</button>';
+  if(id==="conto_mugnaio")actions='<button class="btn" onclick="sideQuestAction(\''+id+'\',\'forgive\')">Trova un accordo e perdona il debito</button><button class="btn secondary" onclick="sideQuestAction(\''+id+'\',\'expose\')">Denuncia l’intermediario</button>';
+ }
+ const roll=st.lastRoll?'<div class="questRoll">D20: <b>'+st.lastRoll.roll+'</b> · bonus '+(st.lastRoll.bonus>=0?'+':'')+st.lastRoll.bonus+' · totale <b>'+st.lastRoll.total+'</b> — '+(st.lastRoll.success?'Prova riuscita':'Prova non riuscita')+'</div>':'';
+ const history=(st.history||[]).map(x=>'<p class="questHistoryLine">'+x+'</p>').join("");
+ const outcome=st.status==="completed"?'<div class="questOutcome"><b>Esito: '+st.outcome+'</b><p>'+st.outcomeText+'</p><p>Ricompensa: '+(st.reward?.gold||0)+' monete'+(st.reward?.items?.length?' · '+st.reward.items.map(x=>x.qty+' '+x.name).join(', '):'')+'</p></div>':'';
+ c.innerHTML='<button class="btn secondary menuBack" onclick="renderSideQuestList()">← Tutte le missioni</button><div class="questDetailHead"><span>'+q.type.toUpperCase()+'</span><h2>'+q.title+'</h2><small>'+q.location+'</small></div><p>'+q.intro+'</p><div class="questProgress"><b>Stato:</b> '+sideQuestStatus(q,st)+' · <b>Tentativi:</b> '+st.attempts+'</div>'+roll+(st.stage===2&&st.status==="active"?'<p class="questSuccessText">'+q.successText+'</p>':'')+outcome+'<div class="questActions">'+actions+'</div><div class="questHistory">'+history+'</div>';
+}
+function persistGameQuietly(){
+ if(!G)return;
+ const battleSave=battle?{...battle,order:(battle.order||[]).map(u=>u.id)}:null;
+ localStorage.setItem("velmoraDemoSave",JSON.stringify({G,battle:battleSave}));
+}
+function sideQuestCheck(q,st){
+ const stat=Number(G.hero.stats?.[q.checkStat]||5),roll=1+Math.floor(Math.random()*20),bonus=Math.floor((stat-5)/2),total=roll+bonus,success=total>=q.difficulty;
+ st.attempts=(st.attempts||0)+1;st.lastRoll={roll,bonus,total,success};
+ st.history=st.history||[];
+ st.history.unshift(success?"La prova è riuscita.":"La prova non è riuscita; puoi riprovare.");
+ if(success){st.stage=2;st.history.unshift(q.successText)}
+ else st.history.unshift("Il D20 non basta. La situazione resta aperta e puoi tentare ancora.");
+ persistGameQuietly();renderSideQuest(q.id);
+}
+function completeSideQuest(id,outcome,outcomeText,reward){
+ const q=sideQuestCatalog.find(x=>x.id===id),st=G.sideQuests[id];if(!q||st.status==="completed")return;
+ st.status="completed";st.stage=3;st.outcome=outcome;st.outcomeText=outcomeText;st.reward=reward;st.completedAt=new Date().toISOString();
+ G.gold=(G.gold||0)+(reward.gold||0);
+ (reward.items||[]).forEach(it=>G.inventory[it.name]=(G.inventory[it.name]||0)+it.qty);
+ G.sideQuestReputation=(G.sideQuestReputation||0)+(reward.reputation||0);
+ st.history=st.history||[];st.history.unshift("Incarico completato: "+outcome+".");
+ if(battle&&!battle.ended)log("Missione secondaria completata: "+q.title+".");
+ updateHUD();persistGameQuietly();renderSideQuest(id);
+}
+function sideQuestAction(id,action){
+ if(!G)return;ensureSideQuestState();
+ const q=sideQuestCatalog.find(x=>x.id===id),st=G.sideQuests[id];if(!q||!st)return;
+ if(action==="accept"&&st.status==="available"&&sideQuestUnlocked(q)){
+  st.status="active";st.stage=1;st.history.unshift("Hai accettato l'incarico.");persistGameQuietly();renderSideQuest(id);return;
+ }
+ if(st.status!=="active")return;
+ if(action===q.checkAction&&st.stage===1){sideQuestCheck(q,st);return}
+ if(st.stage!==2)return;
+ if(id==="lume_bruma"&&action==="seal")completeSideQuest(id,"Il sigillo preservato","Hai richiuso il cristallo senza spezzare il sigillo. La cava torna silenziosa e i minatori potranno riaprire il passaggio.",{gold:16,items:[{name:"Pozione",qty:1}],reputation:1});
+ if(id==="lume_bruma"&&action==="take")completeSideQuest(id,"Il cristallo sottratto","Hai portato via il cristallo. Il suo bagliore si spegne, ma nelle gallerie resta un freddo innaturale.",{gold:24,items:[{name:"Antidoto",qty:1}],reputation:-1});
+ if(id==="morso_ponte"&&action==="spare")completeSideQuest(id,"La bestia risparmiata","Hai liberato la creatura dalla trappola e l'hai guidata lontano dal ponte. Il pastore non è convinto, ma la gente del luogo ricorderà il gesto.",{gold:18,items:[{name:"Benda",qty:1}],reputation:1});
+ if(id==="morso_ponte"&&action==="slay")completeSideQuest(id,"Il ponte liberato","La bestia non farà più del male al bestiame. Il pastore paga la ricompensa promessa.",{gold:28,items:[{name:"Antidoto",qty:1}],reputation:0});
+ if(id==="conto_mugnaio"&&action==="forgive")completeSideQuest(id,"L'accordo ritrovato","Hai convinto Odran e i viandanti a dividere la perdita e a ricominciare da capo. Il mulino riaprirà per tutti.",{gold:20,items:[{name:"Pozione",qty:1}],reputation:2});
+ if(id==="conto_mugnaio"&&action==="expose")completeSideQuest(id,"L'intermediario smascherato","Hai portato i registri alle guardie. L'intermediario dovrà rispondere del denaro sottratto.",{gold:30,items:[{name:"Purificazione",qty:1}],reputation:1});
+}
+
 function showMenu(page){
 $("menuView").classList.remove("hidden");$("gameContent").classList.remove("hidden");
 $("menuView").scrollIntoView({behavior:"smooth",block:"start"});
 const c=$("menuContent");
+if(page==="quests"){renderSideQuestList();return}
 if(page==="more"){
 c.innerHTML=`<h2>Altro</h2><div class="menuGrid">
 <button class="choice menuTile" onclick="showMenu('settings')"><strong>⚙ Impostazioni</strong><small>Musica, salvataggio e partita</small></button>
 <button class="choice menuTile" onclick="openCharacterScreen()"><strong>♙ Personaggio</strong><small>Profilo ed equipaggiamento</small></button>
 <button class="choice menuTile" onclick="openAbilitiesScreen()"><strong>✧ Abilità</strong><small>Competenze della classe</small></button>
 <button class="choice menuTile" onclick="showMenu('statistics')"><strong>✚ Statistiche</strong><small>Caratteristiche e punti</small></button>
+<button class="choice menuTile" onclick="showMenu('quests')"><strong>⚑ Missioni secondarie</strong><small>Incarichi, misteri e cacce</small></button>
 </div>`;return
 }
 if(page==="squad"){
