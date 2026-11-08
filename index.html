@@ -570,6 +570,50 @@ select.input:focus{outline:2px solid #f0d49b;outline-offset:1px}
 #combat.hidden + .battleExtras{display:none!important}
 
 .combatAbilityPicker{position:relative;width:100%}.abilityToggle{width:100%;display:flex;justify-content:space-between;align-items:center}.combatAbilityMenu{display:none;margin-top:6px;padding:7px;border:1px solid #80623a;border-radius:9px;background:rgba(18,14,10,.98);max-height:260px;overflow:auto}.combatAbilityMenu.open{display:block}.abilityChoice{width:100%;display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:left;padding:9px;margin:3px 0;background:#292016;border:1px solid #57442b;border-radius:7px;color:#ead9b8;font:13px Georgia,serif}.abilityChoice span{display:flex;flex-direction:column;gap:4px}.abilityChoice small{font-size:11px;color:#b9a98b}.abilityChoice em{white-space:nowrap;color:#e4c17e;font-style:normal}.abilityChoice:disabled{opacity:.4}.abilityLocked{opacity:.62}.abilityLock{font-size:12px;color:#d6b16c;border-top:1px solid #59442b;padding-top:7px;margin-top:8px}
+
+/* BATTAGLIA COMPATTA: squadre ai lati, D20 al centro, comandi sotto */
+.battleFormationStage{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(108px,.62fr) minmax(0,1fr);align-items:stretch;gap:9px;min-height:0!important;padding:10px!important}
+.battleTeam{min-width:0;display:flex;flex-direction:column;gap:5px}
+.battleTeam .battleSideTitle{text-align:center;font-size:10px;letter-spacing:1.2px;margin:2px 0 5px}
+.battleFormationStage .battleFormation{display:flex!important;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:6px;padding:0!important;overflow:visible!important;min-width:0}
+.battleFormationStage .battleUnit{display:grid;grid-template-columns:clamp(42px,6vw,68px) minmax(0,1fr);align-items:center;gap:6px;flex:0 0 auto!important;width:100%!important;max-width:none!important;min-width:0;padding:5px!important;text-align:left}
+.battleFormationStage .battleUnit .unitArt{width:100%!important;height:auto!important;aspect-ratio:912/1168;min-width:0}
+.battleUnitInfo{min-width:0;overflow-wrap:anywhere}
+.battleFormationStage .battleName{font-size:clamp(8px,1vw,11px);line-height:1.15;min-height:0;margin-bottom:4px}
+.battleFormationStage .battleHP,.battleFormationStage .battleAP{font-size:9px;line-height:1.2}
+.battleFormationStage .battleBar{height:5px;margin:4px 0}
+.battleDestiny{align-self:center;min-width:0;padding:7px 5px;border:1px solid #a17b45;border-radius:9px;background:linear-gradient(145deg,rgba(46,35,23,.94),rgba(15,12,9,.94));box-shadow:0 0 18px #0009,inset 0 0 18px #d6b16c12}
+.battleDestiny .diceHeading{justify-content:center;gap:6px;letter-spacing:1px;font-size:9px;padding-bottom:5px}
+.battleDestiny .diceContent{flex-direction:column;gap:3px;padding:5px 0 0;text-align:center}
+.battleDestiny .diceContent img{width:clamp(42px,5vw,58px);height:clamp(42px,5vw,58px)}
+.battleDestiny .diceContent div{min-width:0;width:100%}
+.battleDestiny .diceContent div div{font-size:8px;line-height:1.2;overflow-wrap:anywhere}
+.battleDestiny .diceContent strong{font-size:22px}
+.battleDestiny .diceContent small{display:block;font-size:8px;line-height:1.2;overflow-wrap:anywhere}
+.battlefield .battleDivider{display:none}
+@media(max-width:760px){
+ .battleFormationStage{grid-template-columns:minmax(0,1fr) 66px minmax(0,1fr);gap:5px;padding:6px!important}
+ .battleTeam .battleSideTitle{font-size:8px;letter-spacing:.5px}
+ .battleFormationStage .battleFormation{gap:5px}
+ .battleFormationStage .battleUnit{grid-template-columns:35px minmax(0,1fr);gap:4px;padding:3px!important;border-radius:5px}
+ .battleFormationStage .battleUnit .unitArt{width:35px!important}
+ .battleFormationStage .battleName{font-size:8px;line-height:1.05;overflow-wrap:anywhere}
+ .battleFormationStage .battleHP,.battleFormationStage .battleAP{font-size:7px}
+ .battleFormationStage .battleBar{height:4px;margin:3px 0}
+ .battleDestiny{padding:5px 3px}
+ .battleDestiny .diceHeading{font-size:7px;letter-spacing:.3px;gap:3px}
+ .battleDestiny .diceContent img{width:42px;height:42px}
+ .battleDestiny .diceContent strong{font-size:19px}
+ .battleDestiny .diceContent div div,.battleDestiny .diceContent small{font-size:7px}
+}
+@media(max-width:390px){
+ .battleFormationStage{grid-template-columns:minmax(0,1fr) 58px minmax(0,1fr);gap:3px;padding:5px!important}
+ .battleFormationStage .battleUnit{grid-template-columns:29px minmax(0,1fr);gap:3px;padding:2px!important}
+ .battleFormationStage .battleUnit .unitArt{width:29px!important}
+ .battleFormationStage .battleName{font-size:7px}
+ .battleFormationStage .battleHP,.battleFormationStage .battleAP{font-size:6.5px}
+ .battleDestiny .diceContent img{width:37px;height:37px}
+}
 </style>
 </head>
 <body>
@@ -625,16 +669,13 @@ select.input:focus{outline:2px solid #f0d49b;outline-offset:1px}
 <div id="combat" class="hidden">
   <div class="battleTopline"><div><span class="eyebrow">SCONTRO IN CORSO</span><h2 id="battleTitle">Combattimento</h2></div><span class="badge" id="roundBadge">Turno 1</span></div>
   <p class="small" id="battleHint"></p>
-  <div class="battlefield panel">
-    <div class="battleSideTitle">Avversari</div>
-    <div id="enemyList" class="battleFormation enemyFormation"></div>
-    <div class="battleDivider"></div>
-    <div class="battleSideTitle">La tua squadra</div>
-    <div id="partyList" class="battleFormation partyFormation"></div>
-  </div>
-  <div class="dicePanel">
-    <div class="diceHeading"><span>IL DESTINO DI VELMORA</span><small>TIRO D20</small></div>
-    <div class="diceContent"><img id="diceImage" src="./dado_d20_velmora.PNG" alt="Dado del destino D20"><div><div id="diceWho">In attesa del lancio…</div><strong id="diceNumber">—</strong><small id="diceResult">Il dado deciderà l'esito dell'azione</small></div></div>
+  <div class="battlefield panel battleFormationStage">
+    <div class="battleTeam enemyTeam"><div class="battleSideTitle">AVVERSARI</div><div id="enemyList" class="battleFormation enemyFormation"></div></div>
+    <div class="battleDestiny">
+      <div class="diceHeading"><span>DESTINO</span><small>D20</small></div>
+      <div class="diceContent"><img id="diceImage" src="./dado_d20_velmora.PNG" alt="Dado del destino D20"><div><div id="diceWho">In attesa del lancio…</div><strong id="diceNumber">—</strong><small id="diceResult">Il dado deciderà l'esito dell'azione</small></div></div>
+    </div>
+    <div class="battleTeam partyTeam"><div class="battleSideTitle">LA TUA SQUADRA</div><div id="partyList" class="battleFormation partyFormation"></div></div>
   </div>
   <div class="actionPanel panel">
     <div class="activeTurn"><div><span class="eyebrow">È IL TUO TURNO</span><h3 id="activeTitle">Turno</h3></div><p class="small" id="activeInfo"></p></div>
@@ -752,7 +793,7 @@ if(d&&d.sourceWidth&&d.sourceHeight){const hairShift=u&&u.isHero?145:125;const h
 }
 return '<div class="unitArt"><img class="unitBase" src="'+base+'" alt="'+(u.name||'')+'">'+hair+'</div>';
 }
-function unitHTML(u,active){let max=u.maxhp||u.hp,hp=Math.max(0,u.hp),status=!u.alive?"CADUTO":hp+"/"+max+" HP";return '<div class="battleUnit '+(active?'active':'')+' '+(!u.alive?'dead':'')+'" data-unit-id="'+u.id+'">'+equipmentLayers(u)+'<div class="battleName">'+u.name+'</div><div class="battleHP">'+status+'</div><div class="battleBar"><div style="width:'+Math.max(0,hp/max*100)+'%"></div></div>'+(!isEnemy(u)&&u.alive?'<div class="battleAP">AP '+u.ap+'/5</div>':'')+(u.status?'<div class="battleAP">'+u.status.name+'</div>':'')+'</div>';}
+function unitHTML(u,active){let max=u.maxhp||u.hp,hp=Math.max(0,u.hp),status=!u.alive?"CADUTO":hp+"/"+max+" HP";return '<div class="battleUnit '+(active?'active':'')+' '+(!u.alive?'dead':'')+'" data-unit-id="'+u.id+'">'+equipmentLayers(u)+'<div class="battleUnitInfo"><div class="battleName">'+u.name+'</div><div class="battleHP">'+status+'</div><div class="battleBar"><div style="width:'+Math.max(0,hp/max*100)+'%"></div></div>'+(!isEnemy(u)&&u.alive?'<div class="battleAP">AP '+u.ap+'/5</div>':'')+(u.status?'<div class="battleAP">'+u.status.name+'</div>':'')+'</div></div>';}
 function renderTurnOrder(){
  const box=$("turnOrder");if(!box||!battle)return;
  $("roundSide").textContent=String(battle.round||1).padStart(2,"0");
