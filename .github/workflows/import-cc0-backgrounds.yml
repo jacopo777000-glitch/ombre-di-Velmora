@@ -1,4 +1,4 @@
-name: Prepare CC0 battle background review
+name: Prepare hand-painted battle background review
 
 on:
   push:
@@ -13,13 +13,14 @@ jobs:
   prepare-review:
     runs-on: ubuntu-latest
     steps:
-      - name: Download CC0 painted-style background collection
+      - name: Download hand-painted and painterly source assets
         run: |
-          mkdir -p review/pack review/individual
-          curl -fL --retry 3 --retry-delay 2 "https://opengameart.org/sites/default/files/40-game-backgrounds-1-painted-style.zip" -o /tmp/painted-pack.zip
+          mkdir -p review/individual
+          curl -fL --retry 3 --retry-delay 2 "https://opengameart.org/sites/default/files/Heindals%20Collection.zip" -o /tmp/heindals.zip
+          curl -fL --retry 3 --retry-delay 2 "https://opengameart.org/sites/default/files/fantasy_backgrounds.zip" -o /tmp/fantasy-forest.zip
+          curl -fL --retry 3 --retry-delay 2 "https://opengameart.org/sites/default/files/background_free_valley_pack.zip" -o /tmp/valley.zip
+          curl -fL --retry 3 --retry-delay 2 "https://opengameart.org/sites/default/files/meadow.jpg" -o review/individual/meadow-watercolor.jpg
           curl -fL --retry 3 --retry-delay 2 "https://opengameart.org/sites/default/files/background_43.png" -o review/individual/handpainted-ruins.png
-          curl -fL --retry 3 --retry-delay 2 "https://lpc.opengameart.org/sites/default/files/back_cave.png" -o review/individual/cave-cc0.png
-          curl -fL --retry 3 --retry-delay 2 "https://opengameart.org/sites/default/files/Background2Final.png" -o review/individual/castle-hill-cc0.png
       - name: Install image tools
         run: python -m pip install --quiet Pillow
       - name: Extract and make contact sheet
@@ -28,43 +29,61 @@ jobs:
           from pathlib import Path
           from zipfile import ZipFile
           from PIL import Image, ImageOps, ImageDraw
-          import shutil, json
-          out=Path("review/pack")
-          with ZipFile("/tmp/painted-pack.zip") as z:
-              z.extractall(out)
+          import json, shutil
+          root=Path("review")
+          archives=[
+              ("heindals", "/tmp/heindals.zip"),
+              ("fantasy-forest", "/tmp/fantasy-forest.zip"),
+              ("valley", "/tmp/valley.zip"),
+          ]
+          for folder, archive in archives:
+              target=root/folder
+              target.mkdir(parents=True,exist_ok=True)
+              with ZipFile(archive) as z:
+                  z.extractall(target)
+              shutil.copy2(archive,root/(folder+"-source.zip"))
           files=[]
-          for p in out.rglob("*"):
+          for p in root.rglob("*"):
               if p.is_file() and p.suffix.lower() in {".png",".jpg",".jpeg",".webp"}:
                   try:
                       im=Image.open(p)
-                      files.append((p, im.size))
+                      if im.width>100 and im.height>100:
+                          files.append((p,im.size))
                   except Exception:
                       pass
           files.sort(key=lambda x:str(x[0]).lower())
           if not files:
-              raise SystemExit("No images found in source archive")
+              raise SystemExit("No usable images found")
           cols=4; cw=360; ch=250
           rows=(len(files)+cols-1)//cols
-          sheet=Image.new("RGB",(cols*cw,rows*ch),(24,22,20))
+          sheet=Image.new("RGB",(cols*cw,rows*ch),(35,32,28))
           draw=ImageDraw.Draw(sheet)
           listing=[]
           for i,(p,size) in enumerate(files):
-              im=Image.open(p).convert("RGB")
-              thumb=ImageOps.fit(im,(cw-12,200))
+              im=Image.open(p).convert("RGBA")
+              bg=Image.new("RGBA",im.size,(80,76,68,255))
+              bg.alpha_composite(im)
+              thumb=ImageOps.fit(bg.convert("RGB"),(cw-12,200))
               x=(i%cols)*cw+6; y=(i//cols)*ch+6
               sheet.paste(thumb,(x,y))
-              label=f"{p.name} | {size[0]}x{size[1]}"
-              draw.text((x,y+204),label[:54],fill=(240,224,190))
+              label=f"{p.relative_to(root)} | {size[0]}x{size[1]}"
+              draw.text((x,y+204),label[:54],fill=(245,230,205))
               listing.append({"file":str(p),"width":size[0],"height":size[1]})
-          sheet.save("review/contact-sheet.jpg",quality=88)
-          Path("review/file-list.json").write_text(json.dumps(listing,indent=2))
-          shutil.copy2("/tmp/painted-pack.zip","review/40-game-backgrounds-1-painted-style.zip")
+          sheet.save(root/"contact-sheet.jpg",quality=90)
+          (root/"file-list.json").write_text(json.dumps(listing,indent=2))
+          (root/"SOURCES.txt").write_text(
+              "Heindals Collection — OpenGameArt: CC-BY-SA 3.0 (or GPL 3.0); credit Heindal_Wesnoth.\n"
+              "Fantasy Forest Backdrops — OpenGameArt: CC-BY-SA 4.0; credit Brett Post Script.\n"
+              "Free Valley Background — OpenGameArt: CC-BY 4.0; credit LudicArts.\n"
+              "Meadow background — OpenGameArt: CC0; author bart.\n"
+              "Background with ruins — OpenGameArt: CC0; author Kutejnikov.\n"
+          )
           print(f"Found {len(files)} images")
           for item in listing: print(item)
           PY
       - name: Upload review bundle
         uses: actions/upload-artifact@v4
         with:
-          name: cc0-background-review
+          name: hand-painted-background-review
           path: review/
           retention-days: 7
