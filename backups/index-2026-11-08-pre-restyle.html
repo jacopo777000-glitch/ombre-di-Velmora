@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#100e0c">
+<title>Ombre di Velmora — La campana senza eco</title>
+<style>
+:root{--bg:#100e0c;--panel:rgba(29,25,21,.96);--panel2:#29221b;--gold:#d6b16c;--gold2:#96713b;--text:#e9dfc8;--muted:#b9a98b}
+*{box-sizing:border-box}
+html{min-height:100%;background:var(--bg);scroll-behavior:smooth}
+body{margin:0;min-height:100vh;color:var(--text);font-family:Georgia,serif;background-color:var(--bg);background-image:linear-gradient(rgba(12,9,7,.62),rgba(12,9,7,.82)),url("./valle_velmora.jpg");background-position:center;background-size:cover;background-attachment:fixed}
+header{text-align:center;padding:20px 12px 15px;background:linear-gradient(rgba(41,32,22,.94),rgba(16,14,12,.85));border-bottom:1px solid var(--gold2)}
+h1{color:var(--gold);letter-spacing:3px;font-size:clamp(21px,5vw,29px);margin:4px 0}
+header p{color:var(--muted);font-size:13px;margin:7px 0 0}
+main{width:min(920px,94%);margin:16px auto 40px;padding-bottom:25px}
+.panel{background:var(--panel);border:1px solid #69502e;border-radius:12px;padding:14px;margin-bottom:14px;box-shadow:0 8px 24px #0008;backdrop-filter:blur(3px)}
+h2{color:var(--gold);font-size:19px;margin:0 0 12px}
+h3{color:#e5c88f;font-size:16px;margin:12px 0 8px}
+p{line-height:1.5}
+.small{font-size:12px;color:var(--muted)}
+.grid,.classgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.choice,.btn{background:#29221b;border:1px solid #57442b;color:var(--text);border-radius:8px;padding:11px 8px;font:14px Georgia,serif;cursor:pointer}
+.choice.selected{border:2px solid var(--gold);background:#49351e;color:#ffe0a0}
+.btn{background:linear-gradient(#8d682f,#563b1c);border-color:#c49b55;color:#fff0d0;font-weight:bold}
+.btn.secondary{background:#29221b;border-color:#80623a}
+.btn.danger{background:#51231f;border-color:#9b5145}
+.btn:disabled{opacity:.38;cursor:not-allowed}
+.layout{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.portrait{display:block;width:100%;height:520px;max-height:65vh;aspect-ratio:2/3;object-fit:contain;object-position:center;background:#100e0c;border:2px solid var(--gold2);border-radius:9px}
+.preview{text-align:center}
+.input{width:100%;padding:12px;border-radius:7px;background:#100e0c;border:1px solid #8a6a3d;color:white;font-size:16px;margin:6px 0 12px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.stat{background:var(--panel2);padding:9px;border-radius:7px;display:flex;justify-content:space-between;gap:8px;font-size:13px}
+.stat b{color:#e8bd72}
+.hidden{display:none!important}
+.story{font-size:16px;line-height:1.65;color:#e4d6bb}
+.story em{color:#eac77e}
+.actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:10px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.badge{display:inline-block;border:1px solid #80623a;color:#e8c985;border-radius:20px;padding:4px 9px;font-size:11px;margin:2px}
+.bars{height:7px;background:#090807;border-radius:20px;overflow:hidden;margin:5px 0}
+.hpbar{height:100%;background:#a9443b;transition:width .3s}
+.log{background:#100e0c;border:1px solid #493823;border-radius:8px;padding:10px;max-height:190px;overflow:auto;font-size:13px;line-height:1.5}
+.log p{margin:4px 0}
+.target{display:flex;gap:7px;flex-wrap:wrap}
+.target button{flex:1;min-width:100px}
+.inventory{display:flex;gap:7px;flex-wrap:wrap}
+.inventory span{background:#30271d;border:1px solid #6a512f;padding:7px 9px;border-radius:7px;font-size:12px}
+hr{border:0;border-top:1px solid #59442b;margin:14px 0}
+.note{text-align:center;color:#c0ae8b;font-size:11px}
+.musicButton{margin-top:10px;background:#29221b;border:1px solid #80623a;color:#e8c985;border-radius:20px;padding:7px 13px;font:12px Georgia,serif}
+.battleSideTitle{display:flex;align-items:center;gap:8px;margin:13px 0 9px;color:#e5c88f;font-size:14px;letter-spacing:1px;text-transform:uppercase}
+.battleSideTitle:after{content:"";height:1px;flex:1;background:#59442b}
+.battleFormation{display:flex;flex-direction:row;flex-wrap:nowrap;gap:9px;align-items:flex-start;overflow-x:auto;overflow-y:hidden;padding:5px 2px 12px;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:#80623a #100e0c}
+.battleUnit{flex:0 0 105px;width:105px;min-width:0;position:relative;text-align:center;padding:6px 4px 8px;border:1px solid #59442b;border-radius:9px;background:linear-gradient(180deg,#30271e,#191511);transition:border-color .2s,background .2s,opacity .2s}
+.battleUnit.active{border:2px solid var(--gold);background:linear-gradient(180deg,#594126,#292017);box-shadow:0 0 12px #d6b16c55}
+.battleUnit.dead{opacity:.35;filter:grayscale(1)}
+/* Tutti i ritratti di battaglia mostrano il corpo intero, senza ritaglio */
+.battleFace{width:100%;aspect-ratio:2/3;height:auto;max-height:150px;display:block;object-fit:contain;object-position:center;background:#100e0c;border:1px solid #96713b;border-radius:6px}
+.battleName{font-size:11px;line-height:1.2;color:#f0d49b;font-weight:bold;margin:6px 0 4px;min-height:26px;overflow-wrap:anywhere}
+.battleHP{font-size:10px;color:#d4c4a5}
+.battleBar{height:6px;background:#090807;border-radius:10px;overflow:hidden;margin:4px 1px 0}
+.battleBar div{height:100%;background:#a9443b;transition:width .25s}
+.battleAP{font-size:9px;color:#c5a66e;margin-top:4px}
+.battleUnit.dashHero{z-index:5;animation:dashUp .48s cubic-bezier(.2,.8,.25,1)}
+.battleUnit.dashEnemy{z-index:5;animation:dashDown .48s cubic-bezier(.2,.8,.25,1)}
+.battleUnit.dashSkill{z-index:6;animation:dashSkill .62s cubic-bezier(.15,.85,.2,1)}
+.battleUnit.castMagic{z-index:6;animation:castMagic .7s ease-in-out}
+.battleUnit.hit{animation:hitFlash .42s ease-in-out}
+.battleUnit.impactSlash{z-index:6;animation:impactSlash .48s ease-out}
+.battleUnit.magicHit{z-index:6;animation:magicHit .62s ease-out}
+@keyframes dashUp{0%{transform:translateY(0) scale(1)}38%{transform:translateY(-43px) scale(1.16)}72%{transform:translateY(-12px) scale(1.06)}100%{transform:translateY(0) scale(1)}}
+@keyframes dashDown{0%{transform:translateY(0) scale(1)}38%{transform:translateY(43px) scale(1.16)}72%{transform:translateY(12px) scale(1.06)}100%{transform:translateY(0) scale(1)}}
+@keyframes dashSkill{0%{transform:translate(0,0) scale(1);filter:brightness(1)}35%{transform:translateY(-52px) scale(1.22);filter:brightness(1.7)}65%{transform:translateY(-18px) scale(1.12);filter:brightness(1.35)}100%{transform:translate(0,0) scale(1);filter:brightness(1)}}
+@keyframes castMagic{0%,100%{transform:scale(1);filter:drop-shadow(0 0 0 #8bdcff)}35%,65%{transform:scale(1.12);filter:drop-shadow(0 0 18px #69cfff) brightness(1.7)}}
+@keyframes hitFlash{0%,100%{filter:brightness(1);transform:translateX(0)}20%{filter:brightness(3);transform:translateX(-7px)}45%{filter:brightness(1.8);transform:translateX(7px)}70%{filter:brightness(2.3);transform:translateX(-3px)}}
+@keyframes impactSlash{0%{filter:brightness(1)}25%{filter:brightness(3) sepia(1) saturate(3)}100%{filter:brightness(1)}}
+@keyframes magicHit{0%{filter:brightness(1) drop-shadow(0 0 0 #69cfff);transform:scale(1)}35%{filter:brightness(2.4) drop-shadow(0 0 16px #69cfff);transform:scale(1.12)}100%{filter:brightness(1) drop-shadow(0 0 0 #69cfff);transform:scale(1)}}
+.battleDivider{height:1px;background:linear-gradient(90deg,transparent,#80623a,transparent);margin:15px 0}
+.bottomNav{position:fixed;z-index:1000;left:0;right:0;bottom:0;display:none;grid-template-columns:repeat(4,1fr);gap:4px;padding:7px 7px calc(7px + env(safe-area-inset-bottom));background:rgba(17,14,11,.97);border-top:1px solid #96713b;box-shadow:0 -5px 20px #0009;backdrop-filter:blur(10px)}
+.bottomNav.visible{display:grid}
+.navBtn{border:1px solid transparent;border-radius:8px;background:transparent;color:#cdbb98;padding:7px 2px 5px;font:11px Georgia,serif;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0}
+.navBtn .navIcon{font-size:19px;line-height:1.1}
+.navBtn.active{color:#ffe0a0;background:#49351e;border-color:#96713b}
+.menuPanel{min-height:220px}
+.menuGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.menuTile{min-height:58px;text-align:left}
+.menuTile strong{display:block;color:#f0d49b;margin-bottom:4px}
+.menuTile small{color:#c0ae8b}
+.memberCard{display:flex;gap:10px;align-items:center;background:#211b15;border:1px solid #59442b;border-radius:9px;padding:9px;margin:8px 0}
+.memberCard img{width:66px;height:96px;object-fit:contain;background:#100e0c;border:1px solid #80623a;border-radius:6px}
+.memberInfo{flex:1;min-width:0}
+.memberInfo p{font-size:12px;margin:4px 0;color:#cdbb98}
+.pointRow{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;background:#29221b;border-radius:7px;padding:8px;margin:6px 0;font-size:13px}
+.pointRow button{padding:5px 11px}
+.menuBack{margin-bottom:10px}
+.menuHint{font-size:12px;color:#b9a98b;line-height:1.5}
+@media(max-width:560px){
+.layout{grid-template-columns:1fr}.preview{display:block;text-align:center}
+.preview .portrait{width:min(100%,300px);height:390px;max-height:65vh;margin:0 auto 12px;object-fit:contain;aspect-ratio:2/3}
+.preview h2,.preview p{grid-column:auto}main{width:94%;padding-bottom:100px}.panel{padding:12px}
+.battleFormation{gap:5px}.battleUnit{flex:0 0 88px;width:88px;padding:5px 3px 7px}
+.battleFace{max-height:132px}.battleName{font-size:10px;min-height:25px}.battleHP{font-size:9px}
+}
+
+/* ===== NUOVA INTERFACCIA: VELMORA BATTLE COMMAND ===== */
+:root{--goldBright:#f0d49b;--ink:#090807;--panelEdge:rgba(191,151,83,.62);--wine:#4a211d}
+body{background-image:linear-gradient(rgba(7,6,5,.72),rgba(7,6,5,.88)),url("./valle_velmora.jpg");background-attachment:fixed}
+.gameHeader{position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;padding:10px clamp(12px,2vw,28px);background:linear-gradient(180deg,rgba(35,27,19,.98),rgba(13,11,9,.97));border-bottom:1px solid #b28a4e;box-shadow:0 5px 22px #000b}
+.brandBlock h1{font-size:clamp(17px,2.2vw,25px);letter-spacing:2.5px;margin:0}.brandBlock p{font-size:10px;letter-spacing:1.6px;text-transform:uppercase;margin:3px 0 0;color:#bba477}
+.topResources{display:flex;align-items:center;justify-content:flex-end;gap:7px;flex-wrap:wrap}.resource,.topAction{border:1px solid #76582f;background:linear-gradient(#292117,#15110d);border-radius:6px;padding:7px 10px;color:#e8d3a9;font-size:12px;white-space:nowrap}.resource b{color:#e0b86e;margin-right:4px}.topAction{font:12px Georgia,serif;cursor:pointer}.musicButton{margin:0;padding:6px 10px;white-space:nowrap}
+main{width:min(1600px,98%);margin:12px auto 30px;padding-bottom:35px}
+.gameLayout{display:grid;grid-template-columns:150px minmax(0,1fr);gap:12px;align-items:start}
+.leftRail{background:linear-gradient(180deg,rgba(32,26,20,.97),rgba(12,10,8,.98));border:1px solid var(--panelEdge);border-radius:10px;box-shadow:0 8px 22px #0009;padding:9px;min-width:0}
+.leftRail{position:sticky;top:10px;display:flex;flex-direction:column;gap:6px}.railTitle,.eyebrow{font-size:9px;letter-spacing:1.8px;color:#c29b5e;font-weight:bold}.railTitle{padding:5px 7px 9px;border-bottom:1px solid #59442b;margin-bottom:4px}.leftRail button{display:flex;align-items:center;gap:9px;text-align:left;background:linear-gradient(90deg,#292117,#19140f);border:1px solid #51402a;color:#e3d1ae;border-radius:6px;padding:10px 8px;font:12px Georgia,serif;cursor:pointer}.leftRail button span{width:17px;text-align:center;color:#e0b86e;font-size:15px}.leftRail button:active,.leftRail button:hover{border-color:#d0a65d;background:#40301d}.railBottom{border-top:1px solid #51402a;margin-top:8px;padding-top:8px;display:grid;gap:6px}
+.centerColumn{min-width:0}.centerColumn>.panel{margin-bottom:12px}.sideCard{background:linear-gradient(180deg,rgba(38,31,23,.98),rgba(17,14,11,.98));border:1px solid #614a2e;border-radius:8px;padding:10px;min-width:0}.sideHeading{display:flex;justify-content:space-between;gap:8px;align-items:center;color:#e3c48b;font-size:10px;letter-spacing:1.4px;font-weight:bold;padding-bottom:8px;border-bottom:1px solid #59442b;margin-bottom:8px}.sideHeading span+span{color:#9d7b49}.turnOrder{display:flex;flex-direction:column;gap:6px;max-height:390px;overflow:auto}.turnEntry{display:flex;align-items:center;gap:7px;padding:6px;background:#17120e;border:1px solid #473723;border-radius:6px;min-width:0}.turnEntry.active{border-color:#e0b86e;background:#3a2a19;box-shadow:inset 0 0 12px #d6b16c22}.turnEntry.dead{opacity:.35;filter:grayscale(1)}.turnPortrait{width:31px;height:42px;object-fit:contain;background:#090807;border:1px solid #80623a;border-radius:4px;flex:none}.turnText{min-width:0;flex:1}.turnText b{display:block;font-size:10px;color:#f0d49b;overflow-wrap:anywhere}.turnText small{display:block;font-size:9px;color:#b9a98b;margin-top:3px}.turnNumber{font-size:10px;color:#c49b55}.battleDiary .log{max-height:300px;font-size:11px;padding:8px}.battleDiary .log p{padding:4px 0;border-bottom:1px solid #34291d;margin:0}.sideEmpty{color:#8f8067;font-size:11px;line-height:1.5}.sideResources{font-size:12px;line-height:1.9;color:#d6c29e}
+#missionPanel{background:linear-gradient(135deg,rgba(38,30,21,.97),rgba(15,12,9,.98));border-color:#80613a}#missionPanel h2{font-size:20px}#combat{min-width:0}.battleTopline{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:7px 4px 9px}.battleTopline h2{margin:3px 0 0;font-size:21px}.battleTopline .badge{font-size:11px;padding:7px 12px;background:#251b12}.battlefield{margin:8px 0 10px;padding:12px;background:radial-gradient(ellipse at center,#302519 0%,#19140f 62%,#100d0a 100%);border:1px solid #927044;box-shadow:inset 0 0 35px #000a,0 7px 20px #0008}.battleSideTitle{font-size:11px;letter-spacing:2px;color:#e6c88f;margin:7px 0 8px}.battleFormation{justify-content:center;gap:clamp(6px,1vw,13px);padding:8px 3px 12px}.battleUnit{flex:0 1 126px;width:126px;max-width:18%;padding:7px 6px 8px;background:linear-gradient(180deg,#34291d,#15110d);border-color:#705633;box-shadow:0 4px 12px #0008}.battleUnit.active{border:2px solid #f0d49b;box-shadow:0 0 18px #d6b16c66,0 4px 12px #0009}.battleFace{height:clamp(105px,15vw,178px);max-height:178px;aspect-ratio:2/3;background:radial-gradient(ellipse,#30271d,#090807);border-color:#9b7846}.battleName{font-size:12px;min-height:28px}.battleHP{font-size:10px}.battleBar{height:7px}.battleAP{font-size:10px}.battleDivider{margin:8px 0 10px;background:linear-gradient(90deg,transparent,#9d7845,transparent)}
+.dicePanel{margin:9px auto 12px;max-width:480px;padding:9px 14px;background:linear-gradient(115deg,rgba(46,35,23,.98),rgba(15,12,9,.98));border:1px solid #a17b45;border-radius:9px;box-shadow:0 0 22px #000a,inset 0 0 20px #d6b16c12}.diceHeading{display:flex;justify-content:space-between;align-items:center;color:#e9c98e;font-size:10px;letter-spacing:2px;border-bottom:1px solid #59442b;padding-bottom:6px}.diceHeading small{font-size:9px;color:#a88a5b}.diceContent{display:flex;align-items:center;justify-content:center;gap:13px;padding:5px 0 0}.diceContent img{width:66px;height:66px;object-fit:contain;filter:drop-shadow(0 4px 6px #000b)}.diceContent div{min-width:130px}.diceContent div div{font-size:10px;color:#bca780}.diceContent strong{display:block;font-size:27px;line-height:1.15;color:#f4d79f;text-shadow:0 0 12px #d6b16c66}.diceContent small{font-size:9px;color:#a99470}.diceRolling{animation:diceSpin 1.2s cubic-bezier(.35,.05,.25,1) both}@keyframes diceSpin{0%{transform:rotate(0) scale(1)}35%{transform:rotate(270deg) scale(1.18)}70%{transform:rotate(540deg) scale(1.12)}100%{transform:rotate(720deg) scale(1)}}
+.actionPanel{padding:12px;background:linear-gradient(145deg,rgba(37,29,21,.98),rgba(15,12,9,.98));border-color:#80613a}.activeTurn{display:flex;justify-content:space-between;align-items:center;gap:8px}.activeTurn h3{margin:3px 0 7px}.activeTurn .small{text-align:right}.actionPanel .actions{grid-template-columns:repeat(3,minmax(0,1fr));margin:8px 0}.actionPanel .btn{min-height:42px;padding:9px 6px;font-size:12px}.actionPanel .target{margin:8px 0}.actionPanel .target button{font-size:11px;padding:8px}.actionPanel #actionMessage{margin:7px 0 0}
+#inventoryPanel{background:linear-gradient(145deg,rgba(36,29,21,.98),rgba(15,12,9,.98))}.menuPanel{grid-column:2 / 3}
+
+.leftParty{margin-top:9px;padding-top:8px;border-top:1px solid #59442b}.leftParty .sideHeading{font-size:9px;margin-bottom:6px}.leftMember{display:flex;gap:7px;align-items:center;padding:6px 4px;border-bottom:1px solid #34291d;min-width:0}.leftMember img{width:43px;height:61px;object-fit:contain;background:#090807;border:1px solid #80623a;border-radius:5px;flex:none}.leftMemberInfo{min-width:0;flex:1}.leftMemberInfo b{display:block;color:#f0d49b;font-size:10px;overflow-wrap:anywhere}.leftMemberInfo small{display:block;color:#b9a98b;font-size:9px;margin-top:3px}.leftMiniBar{height:5px;background:#090807;border-radius:8px;overflow:hidden;margin-top:4px}.leftMiniBar i{display:block;height:100%;background:#a9443b}.battleExtras{display:grid;grid-template-columns:minmax(180px,.85fr) minmax(0,1.5fr);gap:10px;margin:10px 0 14px}.battleExtras .sideCard{background:linear-gradient(180deg,rgba(32,26,20,.97),rgba(12,10,8,.98));border:1px solid var(--panelEdge);border-radius:9px;padding:10px;min-width:0}.battleExtras .quickInventory{grid-column:1/-1}.battleExtras .turnOrder{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));max-height:210px}.battleExtras .battleDiary .log{max-height:210px}
+
+@media(max-width:900px){.gameLayout{grid-template-columns:132px minmax(0,1fr);gap:8px}.leftRail{padding:8px}.leftRail button{font-size:11px;padding:9px 6px}.battleUnit{flex-basis:105px}.battleFace{height:130px}}
+@media(max-width:680px){
+ .gameHeader{flex-wrap:wrap;padding:9px 10px;gap:7px}.brandBlock{flex:1}.brandBlock h1{font-size:18px}.topResources{order:3;width:100%;justify-content:space-between;gap:4px}.resource,.topAction{padding:6px 7px;font-size:10px}.musicButton{font-size:10px;padding:6px 8px}
+ main{width:100%;margin:8px auto 20px;padding:0 8px 100px}.gameLayout{display:grid;grid-template-columns:1fr;gap:8px}.leftRail{position:static;width:100%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;padding:7px;order:0}.railTitle{grid-column:1/-1;padding:3px 5px 6px;margin:0}.leftRail button{justify-content:center;flex-direction:column;gap:3px;text-align:center;padding:7px 3px;font-size:9px;min-height:49px}.leftRail button span{font-size:16px}.leftParty{grid-column:1/-1}.leftParty #leftSquad{display:flex;gap:6px;overflow-x:auto}.leftMember{flex:0 0 145px}.railBottom{grid-column:1/-1;display:flex;margin:2px 0 0;padding-top:6px}.railBottom button{flex:1;min-height:34px;flex-direction:row;font-size:10px}.centerColumn{width:100%;order:1}.battleExtras{grid-template-columns:1fr 1fr}.battleDiary{grid-column:1/-1}.battleDiary .log{max-height:180px}.turnOrder{max-height:210px}.menuPanel{grid-column:1;width:100%}.battleExtras{grid-template-columns:1fr}.battleExtras .battleDiary,.battleExtras .quickInventory{grid-column:1}.battleExtras .turnOrder{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .panel{padding:10px}.battleTopline h2{font-size:17px}.battlefield{padding:8px 5px}.battleFormation{justify-content:flex-start;gap:6px;overflow-x:auto}.battleUnit{flex:0 0 88px;width:88px;max-width:none;padding:5px 4px}.battleFace{height:116px;max-height:116px}.battleName{font-size:10px;min-height:25px}.battleHP{font-size:9px}.battleAP{font-size:9px}.dicePanel{max-width:100%;padding:8px 10px}.diceContent img{width:58px;height:58px}.actionPanel .actions{grid-template-columns:repeat(2,minmax(0,1fr))}.activeTurn{align-items:flex-start}.activeTurn .small{font-size:10px}.bottomNav{display:none!important}
+}
+@media(max-width:370px){.leftRail{grid-template-columns:repeat(4,minmax(0,1fr))}.leftRail button{font-size:8px}.battleUnit{flex-basis:80px;width:80px}.battleFace{height:105px}.topAction{padding:5px}.resource{padding:5px}}
+
+
+/* ===== DISPOSIZIONE DEFINITIVA: UNA SOLA COLONNA LATERALE ===== */
+.gameLayout{display:grid;grid-template-columns:154px minmax(0,1fr);gap:12px;align-items:start}
+.leftRail{grid-column:1;grid-row:1;position:sticky;top:10px}
+.centerColumn{grid-column:2;grid-row:1;min-width:0;width:100%}
+.rightRail{grid-column:2;grid-row:2;position:static;width:100%;display:grid;grid-template-columns:minmax(180px,1fr) minmax(260px,2fr) minmax(150px,1fr);align-items:start;gap:10px}
+.menuPanel{grid-column:2;grid-row:3}
+.battlefield{width:100%;padding:15px 12px}
+.battleFormation{justify-content:center;gap:clamp(8px,1.5vw,18px);overflow-x:auto}
+.battleUnit{flex:0 1 150px;width:150px;max-width:22%;padding:8px 7px 9px}
+.battleFace{height:clamp(145px,19vw,220px);max-height:220px}
+.dicePanel{max-width:560px;width:100%;padding:12px 18px}
+.diceContent img{width:90px;height:90px}
+.actionPanel{width:100%}
+@media(max-width:900px){
+ .gameLayout{grid-template-columns:128px minmax(0,1fr);gap:8px}
+ .leftRail,.rightRail{padding:7px}
+ .leftRail button{font-size:10px;padding:8px 5px;gap:6px}
+ .rightRail{grid-template-columns:minmax(150px,1fr) minmax(210px,1.6fr)}
+ .quickInventory{grid-column:1/-1}
+ .battleUnit{flex-basis:120px;max-width:27%}
+ .battleFace{height:165px}
+}
+@media(max-width:680px){
+ main{width:100%;padding:0 6px 100px}
+ .gameLayout{display:grid;grid-template-columns:66px minmax(0,1fr);gap:6px;align-items:start}
+ .leftRail{grid-column:1;grid-row:1;position:sticky;top:5px;display:flex;flex-direction:column;gap:5px;padding:5px}
+ .railTitle{font-size:7px;letter-spacing:.7px;padding:4px 1px;text-align:center}
+ .leftRail button{display:flex;flex-direction:column;justify-content:center;gap:3px;text-align:center;min-height:48px;padding:5px 1px;font-size:8px;line-height:1.1}
+ .leftRail button span{font-size:16px;width:auto}
+ .railBottom{display:flex;flex-direction:column;gap:4px;margin-top:4px;padding-top:5px}
+ .railBottom button{font-size:7px;min-height:38px;flex-direction:column}
+ .centerColumn{grid-column:2;grid-row:1;min-width:0;width:100%}
+ .rightRail{grid-column:2;grid-row:2;position:static;width:100%;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:6px;padding:7px}
+ .battleDiary{grid-column:1/-1}
+ .quickInventory{grid-column:1/-1}
+ .menuPanel{grid-column:2;grid-row:3;width:100%}
+ .battleTopline h2{font-size:15px}
+ .battlefield{padding:7px 4px}
+ .battleFormation{justify-content:flex-start;gap:5px;padding:6px 2px 10px}
+ .battleUnit{flex:0 0 112px;width:112px;max-width:none;padding:5px 4px}
+ .battleFace{height:145px;max-height:145px}
+ .battleName{font-size:10px;min-height:24px}
+ .battleHP{font-size:9px}
+ .dicePanel{padding:8px 7px;margin:7px auto}
+ .diceContent{gap:6px}
+ .diceContent img{width:64px;height:64px}
+ .diceContent div{min-width:0}
+ .diceContent strong{font-size:24px}
+ .actionPanel{padding:8px}
+ .actionPanel .actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
+ .actionPanel .btn{font-size:10px;padding:7px 4px;min-height:39px}
+ .activeTurn{align-items:flex-start;flex-direction:column;gap:2px}
+ .activeTurn .small{text-align:left;margin:0}
+ .turnOrder{max-height:190px}
+ .battleDiary .log{max-height:190px}
+ .bottomNav{display:none!important}
+}
+@media(max-width:390px){
+ .gameLayout{grid-template-columns:58px minmax(0,1fr);gap:5px}
+ .leftRail{padding:4px}
+ .leftRail button{font-size:7px;min-height:44px}
+ .leftRail button span{font-size:14px}
+ .battleUnit{flex-basis:100px;width:100px}
+ .battleFace{height:132px}
+ .resource,.topAction{font-size:9px;padding:5px 5px}
+}
+
+/* ===== DISPOSIZIONE FINALE: SIDEBAR SINISTRA + COMBATTIMENTO CENTRALE ===== */
+main{width:min(1900px,99%);margin:10px auto 28px;padding:0 10px 100px}
+.gameLayout{display:grid;grid-template-columns:164px minmax(0,1fr);gap:12px;align-items:start}
+.leftRail{grid-column:1;grid-row:1;position:sticky;top:8px;max-height:calc(100vh - 16px);overflow-y:auto}
+.centerColumn{grid-column:2;grid-row:1;min-width:0;width:100%}
+.menuPanel{grid-column:2;grid-row:2;width:100%}
+.rightRail{display:none!important}
+.battlefield{width:100%;padding:16px 14px}
+.battleFormation{justify-content:center;gap:clamp(8px,1.4vw,18px);overflow-x:auto}
+.battleUnit{flex:0 1 158px;width:158px;max-width:23%;padding:8px 7px 9px}
+.battleFace{height:clamp(145px,17vw,230px);max-height:230px}
+.battleName{font-size:12px;min-height:28px}
+.battleHP{font-size:10px}
+.battleExtras{grid-template-columns:minmax(220px,.8fr) minmax(0,2fr);gap:12px;margin-top:12px}
+.battleExtras .quickInventory{display:none}
+.battleExtras .turnOrder{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));max-height:240px}
+.battleExtras .battleDiary .log{max-height:240px}
+.dicePanel{max-width:520px}
+@media(max-width:760px){
+ .gameHeader{flex-wrap:wrap;padding:8px 9px;gap:6px}
+ .brandBlock{flex:1}
+ .brandBlock h1{font-size:17px}
+ .topResources{width:100%;justify-content:space-between;gap:4px;order:3}
+ .resource,.topAction{font-size:10px;padding:6px 6px}
+ .musicButton{font-size:10px;padding:6px 8px}
+ main{width:100%;margin:7px auto 18px;padding:0 7px 100px}
+ .gameLayout{grid-template-columns:minmax(0,1fr);gap:8px}
+ .leftRail{grid-column:1;grid-row:1;position:static;max-height:none;overflow:visible;width:100%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;padding:7px}
+ .railTitle{grid-column:1/-1;padding:3px 5px 6px;margin:0}
+ .leftRail button{display:flex;justify-content:center;flex-direction:column;gap:3px;text-align:center;padding:7px 3px;font-size:9px;line-height:1.1;min-height:46px}
+ .leftRail button span{font-size:16px;width:auto}
+ .leftParty{grid-column:1/-1;margin-top:4px;padding-top:6px}
+ .leftParty #leftSquad{display:flex;gap:6px;overflow-x:auto}
+ .leftMember{flex:0 0 142px}
+ .railBottom{grid-column:1/-1;display:flex;gap:6px;margin:2px 0 0;padding-top:6px}
+ .railBottom button{flex:1;min-height:34px;flex-direction:row;font-size:10px}
+ .centerColumn{grid-column:1;grid-row:2;width:100%;order:0}
+ .menuPanel{grid-column:1;grid-row:3;width:100%}
+ .battleTopline h2{font-size:17px}
+ .battlefield{padding:9px 6px}
+ .battleFormation{justify-content:flex-start;gap:6px;padding:7px 2px 10px;overflow-x:auto}
+ .battleUnit{flex:0 0 112px;width:112px;max-width:none;padding:5px 4px}
+ .battleFace{height:145px;max-height:145px}
+ .battleName{font-size:10px;min-height:24px}
+ .battleHP,.battleAP{font-size:9px}
+ .dicePanel{max-width:100%;padding:8px 10px}
+ .diceContent img{width:60px;height:60px}
+ .actionPanel .actions{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .battleExtras{grid-template-columns:1fr;gap:8px}
+ .battleExtras .turnOrder{grid-template-columns:repeat(2,minmax(0,1fr));max-height:190px}
+ .battleExtras .battleDiary{grid-column:1}
+ .battleExtras .battleDiary .log{max-height:190px}
+ .bottomNav{display:none!important}
+}
+@media(max-width:390px){
+ .leftRail{grid-template-columns:repeat(4,minmax(0,1fr));padding:5px;gap:4px}
+ .leftRail button{font-size:8px;min-height:43px;padding:5px 2px}
+ .battleUnit{flex-basis:102px;width:102px}
+ .battleFace{height:132px}
+ .resource,.topAction{font-size:9px;padding:5px 4px}
+}
+
+.equipLabel{display:block;color:#e9c98e;font-size:12px;margin:10px 0 3px}\n.unitArt{position:relative;display:block;width:100%;aspect-ratio:912/1168;overflow:hidden;background:#17120d;border:1px solid #80623a;border-radius:6px;flex:0 0 auto}.unitArt img{position:absolute;display:block;object-fit:contain;pointer-events:none}.unitBase{inset:0;width:100%;height:100%;z-index:1}.equipLayer{z-index:2}.armorLayer{z-index:2}.hairLayer{z-index:3}.headLayer{z-index:4}.characterCard .unitArt{width:72px;flex:0 0 72px}.battleUnit .unitArt{width:100%;height:auto;aspect-ratio:912/1168}.equipLabel{display:block;color:#e9c98e;font-size:12px;margin:10px 0 3px}
+
+/* Velmora battle presentation — painterly illustrated scenes */
+.gameLayout{grid-template-columns:168px minmax(0,1fr);gap:14px}
+.leftRail{border-color:#8c6b3c;background:linear-gradient(180deg,rgba(39,30,21,.98),rgba(10,9,8,.98));box-shadow:0 12px 30px #000b,inset 0 0 22px #d6b16c0d}
+.leftRail button{min-height:39px;transition:background .2s,border-color .2s,transform .2s}
+.leftRail button:hover{transform:translateX(2px)}
+.battlefield{position:relative;isolation:isolate;min-height:410px;overflow:hidden;background-color:#17130f;background-size:cover;background-position:center 54%;background-repeat:no-repeat;border:1px solid #b28b50;box-shadow:inset 0 0 90px #070605cc,inset 0 -35px 65px #080605aa,0 12px 28px #000b}
+.battlefield:before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background:linear-gradient(180deg,rgba(8,7,6,.12) 0%,rgba(8,7,6,.05) 42%,rgba(8,7,6,.62) 100%),radial-gradient(ellipse at 50% 52%,transparent 20%,rgba(7,6,5,.42) 100%)}
+.battlefield>*{position:relative;z-index:1}
+#combat[data-battle-scene="forest"] .battlefield{background-image:url("./assets/battle/foresta_velata.svg")}
+#combat[data-battle-scene="crypt"] .battlefield{background-image:url("./assets/battle/cripta_antica.svg")}
+#combat[data-battle-scene="bell"] .battlefield{background-image:url("./assets/battle/sala_della_campana.svg")}
+.battleSideTitle{color:#f4d9a4;text-shadow:0 2px 5px #080604;font-size:12px;letter-spacing:2.2px}
+.battleFormation{align-items:flex-end;padding-top:12px;padding-bottom:14px}
+.battleUnit{background:linear-gradient(180deg,rgba(43,33,23,.82),rgba(12,10,8,.88));backdrop-filter:blur(3px);border-color:#a17b49;box-shadow:0 8px 18px #0009,inset 0 0 12px #e6c88f0c}
+.battleUnit.active{background:linear-gradient(180deg,rgba(92,65,34,.94),rgba(28,20,13,.94));box-shadow:0 0 22px #f0d49b66,0 8px 18px #000b}
+.battleFace{background:radial-gradient(ellipse,rgba(72,55,35,.62),rgba(7,6,5,.45));border-color:#c19a5b}
+.dicePanel,.actionPanel{box-shadow:0 10px 26px #0009,inset 0 0 24px #d6b16c0b}
+@media(max-width:900px){.gameLayout{grid-template-columns:132px minmax(0,1fr);gap:8px}.battlefield{min-height:360px}}
+@media(max-width:700px){.gameLayout{grid-template-columns:1fr}.battlefield{min-height:330px;background-position:center}.battleFormation{align-items:flex-end}.battleUnit{backdrop-filter:none}}
+
+
+:root{--panel:rgba(19,25,27,.94);--panel2:rgba(39,47,48,.9);--gold:#e5c987;--gold2:#91764d;--text:#eee4ce;--muted:#c4b99f}
+body{background-color:#101416;background-image:linear-gradient(180deg,rgba(8,13,16,.38),rgba(8,10,12,.78)),url("./valle_velmora.jpg")}
+.panel,.sideCard,.leftRail,.menuPanel{border:1px solid rgba(190,158,102,.68);border-radius:3px 15px 3px 15px;background:linear-gradient(145deg,rgba(38,47,48,.95),rgba(14,19,21,.97));box-shadow:inset 0 0 0 2px rgba(9,12,13,.8),inset 0 0 26px rgba(169,145,99,.1),0 12px 28px #000a}
+h1,h2,h3,.battleSideTitle{font-family:Georgia,serif;text-shadow:0 2px 10px #000}
+h2{padding-bottom:8px;border-bottom:1px solid rgba(199,165,104,.4);letter-spacing:.7px}
+.choice,.btn,.leftRail button,.resource,.topAction,.musicButton{border-radius:3px 10px 3px 10px;background:linear-gradient(135deg,#394448,#1b2529 60%,#11191c);border:1px solid #8d754d;box-shadow:inset 0 1px #ffffff12,0 3px 8px #0008;color:#f0e3c7}
+.btn{background:linear-gradient(135deg,#80643a,#493923 60%,#25231f);border-color:#c2a36a}.btn.secondary{background:linear-gradient(135deg,#465357,#222d30);border-color:#8e9b91}
+.choice.selected{background:linear-gradient(135deg,#685332,#30291e);border:1px solid #f0d49b;box-shadow:0 0 15px #d5b36a44}
+.memberCard,.battleUnit,.stat,.pointRow,.log,.inventory span{border-radius:3px 12px 3px 12px;background:linear-gradient(145deg,rgba(54,62,61,.88),rgba(20,25,26,.94));border:1px solid rgba(170,145,101,.58);box-shadow:inset 0 0 15px #d9c18a0a,0 5px 12px #0006}
+.memberCard img,.battleFace,.portrait{background:radial-gradient(ellipse,#394344,#111719);border:1px solid #b49a68;border-radius:2px 12px 2px 12px}
+.input{background:#131b1e;border:1px solid #9a8256;border-radius:3px 10px 3px 10px}
+.battlefield{border:2px solid #b49a68;border-radius:3px 18px 3px 18px;box-shadow:inset 0 0 0 4px #111719,inset 0 0 55px #000b,0 15px 35px #000c}
+.battleUnit{backdrop-filter:blur(5px);background:linear-gradient(160deg,rgba(35,47,49,.76),rgba(10,16,18,.9))}
+.battleUnit.active{border-color:#f4d99c;box-shadow:0 0 18px #e9ca805c,inset 0 0 20px #e9ca8020}
+.rosterPicker{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:8px;margin:12px 0 18px}
+@media(max-width:560px){.rosterPicker{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Migliorie leggibilità selettori e anteprime equipaggiamento */
+select.input{
+ color:#fff!important;
+ color-scheme:dark;
+ background-color:#171b20;
+ border:1px solid #a98a56;
+ padding-right:34px;
+}
+select.input option{color:#fff;background:#171b20}
+select.input:focus{outline:2px solid #f0d49b;outline-offset:1px}
+.unitArt{overflow:hidden!important;isolation:isolate}
+.unitArt img.equipLayer{
+ max-width:100%!important;
+ max-height:100%!important;
+ object-fit:contain!important;
+}
+.characterCard .unitArt{
+ width:72px!important;
+ height:92px!important;
+ min-width:72px;
+ flex:0 0 72px!important;
+}
+.characterCard .unitArt img{max-width:100%;max-height:100%}
+
+
+/* Interfacce più leggere: lascia respirare gli artwork di sfondo */
+:root{--panel:rgba(20,25,27,.66);--panel2:rgba(35,43,44,.62)}
+.panel,.sideCard,.leftRail,.menuPanel{
+ background:linear-gradient(145deg,rgba(35,45,47,.68),rgba(9,15,18,.72))!important;
+ backdrop-filter:blur(2px);
+ box-shadow:inset 0 0 0 1px rgba(220,195,139,.08),0 8px 22px rgba(0,0,0,.38)!important;
+}
+.memberCard,.stat,.pointRow,.log,.inventory span{
+ background:linear-gradient(145deg,rgba(48,58,58,.58),rgba(13,19,21,.64))!important;
+}
+.gameHeader{background:linear-gradient(180deg,rgba(35,27,19,.76),rgba(13,11,9,.70))!important}
+.leftRail button,.resource,.topAction,.musicButton,.choice,.btn.secondary{
+ background:linear-gradient(135deg,rgba(57,68,72,.72),rgba(20,29,32,.76))!important;
+}
+
+
+/* Cornici ricamate rinforzate e pannelli molto più trasparenti */
+.panel,.sideCard,.leftRail,.menuPanel,.dicePanel,.actionPanel,#missionPanel,
+.memberCard,.battleUnit,.stat,.pointRow,.log{
+ position:relative!important;
+ border:3px double rgba(221,184,111,.94)!important;
+ border-radius:14px 5px 14px 5px!important;
+ background:linear-gradient(145deg,rgba(24,31,32,.25),rgba(7,12,14,.34))!important;
+ box-shadow:inset 0 0 0 1px rgba(255,224,160,.28),inset 0 0 0 5px rgba(198,158,88,.10),inset 0 0 22px rgba(211,174,108,.08),0 7px 18px rgba(0,0,0,.22)!important;
+ backdrop-filter:blur(.5px)!important;
+}
+.panel:before,.sideCard:before,.leftRail:before,.menuPanel:before,
+.dicePanel:before,.actionPanel:before,#missionPanel:before,
+.memberCard:before,.battleUnit:before,.stat:before,.pointRow:before,.log:before{
+ content:"";position:absolute;inset:4px;border:1px solid rgba(231,198,137,.58);
+ border-radius:9px 3px 9px 3px;pointer-events:none;z-index:0;
+ background:
+  radial-gradient(circle at 0 0,rgba(245,211,145,.55) 0 2px,transparent 3px),
+  radial-gradient(circle at 100% 0,rgba(245,211,145,.55) 0 2px,transparent 3px),
+  radial-gradient(circle at 0 100%,rgba(245,211,145,.55) 0 2px,transparent 3px),
+  radial-gradient(circle at 100% 100%,rgba(245,211,145,.55) 0 2px,transparent 3px);
+}
+.panel:after,.sideCard:after,.leftRail:after,.menuPanel:after,
+.dicePanel:after,.actionPanel:after,#missionPanel:after,
+.memberCard:after,.battleUnit:after{
+ content:"❧  ✦  ❧";position:absolute;top:3px;right:9px;
+ color:rgba(239,204,137,.94);font-family:Georgia,serif;font-size:13px;
+ letter-spacing:1px;line-height:1;text-shadow:0 0 5px #8b642b,0 1px 2px #000;
+ pointer-events:none;z-index:2;
+}
+.panel>* ,.sideCard>* ,.leftRail>* ,.menuPanel>* ,.dicePanel>* ,.actionPanel>* ,
+#missionPanel>* ,.memberCard>* ,.battleUnit>* ,.stat>* ,.pointRow>* ,.log>*{
+ position:relative;z-index:1;
+}
+.gameHeader{
+ background:linear-gradient(180deg,rgba(27,22,16,.34),rgba(10,10,9,.30))!important;
+ border-top:3px double rgba(221,184,111,.92)!important;
+ border-bottom:4px double rgba(221,184,111,.92)!important;
+ box-shadow:inset 0 0 0 1px rgba(255,224,160,.22),0 5px 18px #0005!important;
+}
+.battlefield{
+ border:4px double rgba(221,184,111,.96)!important;
+ box-shadow:inset 0 0 0 2px rgba(255,224,160,.42),inset 0 0 55px #0008,0 12px 25px #0009!important;
+}
+.leftRail button,.resource,.topAction,.musicButton,.choice,.btn.secondary{
+ background:linear-gradient(135deg,rgba(57,68,72,.42),rgba(20,29,32,.48))!important;
+ border:2px double rgba(215,179,110,.82)!important;
+}
+
+/* Cornici dark fantasy: ferro brunito, spine, rune e filigrana antica */
+.panel,.sideCard,.leftRail,.menuPanel,.dicePanel,.actionPanel,#missionPanel,
+.memberCard,.battleUnit,.stat,.pointRow,.log{
+ border:3px double rgba(157,132,91,.96)!important;
+ border-radius:2px 13px 2px 13px!important;
+ background:
+  linear-gradient(135deg,rgba(12,17,19,.22),rgba(5,8,10,.38)),
+  repeating-linear-gradient(135deg,transparent 0 13px,rgba(178,145,91,.035) 14px 15px)!important;
+ box-shadow:inset 0 0 0 1px rgba(225,201,151,.22),
+ inset 0 0 0 5px rgba(105,83,54,.16),
+ inset 0 0 24px rgba(0,0,0,.24),0 8px 22px rgba(0,0,0,.30)!important;
+ backdrop-filter:blur(.35px)!important;
+}
+.panel:before,.sideCard:before,.leftRail:before,.menuPanel:before,
+.dicePanel:before,.actionPanel:before,#missionPanel:before,
+.memberCard:before,.battleUnit:before{
+ content:"";position:absolute;inset:5px;pointer-events:none;z-index:2;
+ border:1px solid rgba(183,151,99,.42);
+ background:
+  linear-gradient(135deg,transparent 0 8px,rgba(183,151,99,.68) 8.5px 9.5px,transparent 10px) top left/24px 24px no-repeat,
+  linear-gradient(225deg,transparent 0 8px,rgba(183,151,99,.68) 8.5px 9.5px,transparent 10px) top right/24px 24px no-repeat,
+  linear-gradient(45deg,transparent 0 8px,rgba(183,151,99,.68) 8.5px 9.5px,transparent 10px) bottom left/24px 24px no-repeat,
+  linear-gradient(315deg,transparent 0 8px,rgba(183,151,99,.68) 8.5px 9.5px,transparent 10px) bottom right/24px 24px no-repeat;
+}
+.panel:after,.sideCard:after,.leftRail:after,.menuPanel:after,
+.dicePanel:after,.actionPanel:after,#missionPanel:after,
+.memberCard:after,.battleUnit:after{
+ content:"ᚱ  ✦  ᚱ";position:absolute;top:4px;right:9px;
+ color:rgba(190,158,105,.92);font-family:Georgia,serif;font-size:11px;
+ letter-spacing:2px;text-shadow:0 1px 3px #000,0 0 7px rgba(120,83,39,.65);
+ pointer-events:none;z-index:3;
+}
+.gameHeader{
+ background:linear-gradient(180deg,rgba(12,15,17,.30),rgba(5,8,10,.24))!important;
+ border-top:4px double rgba(169,139,91,.92)!important;
+ border-bottom:4px double rgba(169,139,91,.92)!important;
+ box-shadow:inset 0 0 0 1px rgba(221,194,141,.16),0 7px 20px #0007!important;
+}
+.battlefield{
+ border:4px double rgba(169,139,91,.96)!important;
+ outline:1px solid rgba(53,43,31,.9);outline-offset:-8px;
+}
+.leftRail button,.resource,.topAction,.musicButton,.choice,.btn.secondary{
+ border:2px solid rgba(153,126,83,.86)!important;
+ box-shadow:inset 0 0 0 1px rgba(222,193,137,.18),0 3px 9px #0008!important;
+}
+
+
+#characterScreen{position:fixed;inset:0;z-index:2500;display:none;background:radial-gradient(ellipse at 25% 40%,rgba(91,67,39,.35),transparent 55%),linear-gradient(135deg,#17120e,#080706 75%);padding:max(10px,env(safe-area-inset-top)) 12px max(10px,env(safe-area-inset-bottom));overflow:hidden}
+#characterScreen.open{display:flex;flex-direction:column}.characterTop{height:54px;flex:0 0 54px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #96713b;padding:0 2px 9px}.characterTop h2{margin:0;color:#f0d49b;font-size:clamp(16px,2.5vw,23px);letter-spacing:1.5px;flex:1;text-align:center}.characterTop button{border:1px solid #80623a;background:linear-gradient(#332719,#17110c);color:#f0d49b;border-radius:8px;min-width:42px;height:38px;font-size:22px}.characterTop .closeCharacter{font-size:25px;min-width:42px}
+.characterBody{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,.82fr);gap:14px;min-height:0;flex:1;padding-top:12px}.characterPortraitPanel{min-width:0;min-height:0;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;border:1px solid #80623a;border-radius:12px;background:radial-gradient(ellipse at 50% 42%,rgba(126,94,52,.24),rgba(12,10,8,.2) 62%,rgba(0,0,0,.42));overflow:hidden}.characterPortraitPanel:before{content:"";position:absolute;inset:8px;border:1px solid rgba(196,155,91,.22);border-radius:8px;pointer-events:none}.characterPortraitPanel .unitArt{width:min(100%,560px);height:calc(100% - 62px);max-height:100%;aspect-ratio:912/1168;flex:0 1 auto;background:transparent;border:0;border-radius:0;overflow:visible}.characterPortraitPanel .unitArt img{object-fit:contain}.characterIdentity{z-index:2;text-align:center;padding:5px 8px 10px;color:#f0d49b}.characterIdentity strong{display:block;font-size:clamp(14px,2vw,20px)}.characterIdentity small{color:#c6b18b}
+.characterChoices{min-width:0;min-height:0;overflow-y:auto;border:1px solid #80623a;border-radius:12px;background:linear-gradient(180deg,rgba(37,29,21,.97),rgba(13,11,9,.98));padding:12px;overscroll-behavior:contain}.characterChoices h3{color:#f0d49b;margin:4px 0 12px;font-size:16px}.characterChoices .equipLabel{margin-top:14px}.characterChoices .input{width:100%;min-height:42px;background:#17120e;color:#f0e0c2;border:1px solid #80623a;border-radius:7px;padding:8px;font:14px Georgia,serif}.characterStatsLine{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0;color:#cbb58f;font-size:11px}.characterStatsLine span{border:1px solid #59442b;background:#17120e;border-radius:5px;padding:5px 7px}
+@media(max-width:560px){#characterScreen{padding-left:7px;padding-right:7px}.characterBody{grid-template-columns:minmax(0,.88fr) minmax(0,1.12fr);gap:7px}.characterPortraitPanel .unitArt{width:100%;height:calc(100% - 58px)}.characterChoices{padding:9px}.characterChoices h3{font-size:14px}.characterTop{gap:7px}.characterTop h2{font-size:15px;letter-spacing:.5px}.characterTop button{min-width:36px;height:36px}.characterTop .closeCharacter{min-width:38px}.characterIdentity strong{font-size:13px}.characterIdentity small{font-size:10px}.characterChoices .input{font-size:12px;padding:6px}.characterStatsLine{font-size:10px}}
+
+#abilitiesScreen{position:fixed;inset:0;z-index:2501;display:none;background:radial-gradient(ellipse at 75% 35%,rgba(91,67,39,.3),transparent 55%),linear-gradient(135deg,#17120e,#080706 75%);padding:max(10px,env(safe-area-inset-top)) 12px max(10px,env(safe-area-inset-bottom));overflow:hidden}
+#abilitiesScreen.open{display:flex;flex-direction:column}
+.abilitiesBody{display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,1fr);gap:14px;min-height:0;flex:1;padding-top:12px}
+.abilitiesEquipped,.abilitiesLibrary{min-width:0;min-height:0;overflow-y:auto;border:1px solid #80623a;border-radius:12px;background:linear-gradient(180deg,rgba(37,29,21,.97),rgba(13,11,9,.98));padding:12px;overscroll-behavior:contain}
+.abilitiesEquipped{background:radial-gradient(ellipse at 50% 35%,rgba(126,94,52,.18),rgba(13,11,9,.96) 75%);display:flex;flex-direction:column}
+.abilitiesEquipped h3,.abilitiesLibrary h3{color:#f0d49b;margin:4px 0 12px;font-size:16px}
+.abilitySlot{min-height:74px;border:1px dashed #76582f;border-radius:8px;margin:7px 0;padding:10px;display:flex;align-items:center;gap:9px;color:#aa9879;background:#100d0a}
+.abilitySlot.filled{border-style:solid;border-color:#9a7541;background:linear-gradient(110deg,#302316,#17110c);color:#f0dfc1}
+.abilitySlot .slotNum{font-size:11px;color:#c29a5c;width:20px;flex:0 0 20px}
+.abilitySlot .slotContent{flex:1;min-width:0}.abilitySlot strong{display:block;color:#f0d49b;font-size:13px}.abilitySlot small{display:block;color:#bba987;font-size:11px;margin-top:3px;line-height:1.35}
+.abilityRemove{border:1px solid #76582f;background:#211810;color:#d9bd8b;border-radius:6px;padding:5px 8px}
+.abilityCard{border:1px solid #59442b;border-radius:8px;padding:10px;margin:8px 0;background:linear-gradient(120deg,#292016,#15110d);color:#e8d9bd}
+.abilityCard strong{display:block;color:#f0d49b;font-size:14px}.abilityCard p{font-size:12px;line-height:1.45;color:#c5b18d;margin:6px 0}.abilityMeta{display:flex;gap:6px;flex-wrap:wrap;margin:5px 0}.abilityMeta span{font-size:10px;color:#d7bd8b;border:1px solid #59442b;border-radius:4px;padding:3px 5px}
+.abilityCard button{width:100%;margin-top:6px;border:1px solid #a17b49;border-radius:6px;padding:8px;background:linear-gradient(#574027,#302116);color:#f5dfb6;font:13px Georgia,serif}
+.abilityCard button:disabled{opacity:.45}
+@media(max-width:560px){#abilitiesScreen{padding-left:7px;padding-right:7px}.abilitiesBody{grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);gap:7px}.abilitiesEquipped,.abilitiesLibrary{padding:8px}.abilitiesEquipped h3,.abilitiesLibrary h3{font-size:13px}.abilitySlot{padding:7px;min-height:65px;gap:5px}.abilitySlot strong{font-size:11px}.abilitySlot small{font-size:10px}.abilityCard{padding:8px}.abilityCard strong{font-size:12px}.abilityCard p{font-size:11px}.abilityCard button{font-size:11px;padding:7px}}
+
+/* VELMORA RESPONSIVE LEFT RAIL + CENTER BATTLE LAYOUT
+   Desktop: navigazione a sinistra, campo di battaglia al centro,
+   ordine dei turni e diario nella colonna destra.
+   iPhone: rail verticale compatta a sinistra, campo centrale leggibile,
+   pannelli di supporto sotto il combattimento. */
+@media (min-width:761px){
+  main{width:min(1900px,99%);padding:0 10px 36px}
+  .gameLayout{display:grid;grid-template-columns:168px minmax(0,1fr);gap:12px;align-items:start}
+  .leftRail{grid-column:1;grid-row:1;position:sticky;top:8px;max-height:calc(100vh - 16px);overflow-y:auto;overscroll-behavior:contain}
+  .centerColumn{grid-column:2;grid-row:1;display:grid;grid-template-columns:minmax(0,1.75fr) minmax(230px,.72fr);gap:10px;align-items:start;min-width:0;width:100%}
+  .centerColumn>#missionPanel{grid-column:1/-1}
+  .centerColumn>#combat{grid-column:1;min-width:0}
+  .centerColumn>.battleExtras{grid-column:2;display:flex;flex-direction:column;gap:10px;align-self:stretch;margin:0;min-width:0}
+  .centerColumn>#afterCombat,.centerColumn>#inventoryPanel,.centerColumn>.row,.centerColumn>.note{grid-column:1/-1}
+  .battleExtras .sideCard{min-width:0}
+  .battleExtras .quickInventory{display:none}
+  .battleExtras .turnOrder{display:flex;flex-direction:column;max-height:340px}
+  .battleExtras .battleDiary .log{max-height:480px;overflow:auto}
+  .battlefield{min-height:410px}
+  .battleFormation{justify-content:center;overflow-x:auto}
+  .battleUnit{flex:0 1 145px;width:145px;max-width:24%}
+  .battleFace{height:clamp(140px,16vw,215px);max-height:215px}
+  .menuPanel{grid-column:2;grid-row:2}
+}
+@media (max-width:760px){
+  main{width:100%;margin:7px auto 18px;padding:0 6px 96px}
+  .gameLayout{display:grid;grid-template-columns:58px minmax(0,1fr);gap:6px;align-items:start}
+  .leftRail{grid-column:1;grid-row:1;position:sticky;top:5px;display:flex;flex-direction:column;gap:4px;width:58px;max-height:calc(100vh - 10px);overflow-y:auto;overflow-x:hidden;padding:4px;overscroll-behavior:contain}
+  .railTitle{font-size:7px;letter-spacing:.5px;text-align:center;padding:4px 0 6px;line-height:1.1}
+  .leftRail button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:45px;padding:4px 1px;text-align:center;font-size:7px;line-height:1.12;overflow-wrap:anywhere}
+  .leftRail button span{width:auto;font-size:15px;line-height:1.1}
+  .leftParty{margin-top:4px;padding-top:5px}
+  .leftParty .sideHeading{font-size:6px;letter-spacing:.3px;text-align:center;line-height:1.2}
+  .leftParty #leftSquad{display:flex;flex-direction:column;gap:3px;overflow:visible}
+  .leftMember{display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 1px;text-align:center}
+  .leftMember img{width:38px;height:48px}
+  .leftMemberInfo{width:100%}
+  .leftMemberInfo b{font-size:7px;line-height:1.1}
+  .leftMemberInfo small{display:none}
+  .leftMiniBar{height:4px;margin-top:3px}
+  .railBottom{display:flex;flex-direction:column;gap:3px;margin-top:4px;padding-top:5px}
+  .railBottom button{min-height:36px;padding:3px 1px;font-size:6.5px;line-height:1.1;text-align:center}
+  .centerColumn{grid-column:2;grid-row:1;display:block;min-width:0;width:100%}
+  .centerColumn>#missionPanel,.centerColumn>#combat,.centerColumn>.battleExtras,.centerColumn>#afterCombat,.centerColumn>#inventoryPanel{width:100%;min-width:0}
+  .centerColumn>.battleExtras{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:6px;margin:8px 0 12px}
+  .battleExtras>section:first-child{grid-column:1}
+  .battleExtras .battleDiary{grid-column:2}
+  .battleExtras .quickInventory{display:none}
+  .battleExtras .turnOrder{display:grid;grid-template-columns:1fr;max-height:190px;overflow:auto}
+  .battleExtras .battleDiary .log{max-height:190px;overflow:auto}
+  .menuPanel{grid-column:2;grid-row:2;width:100%;min-width:0}
+  .battleTopline h2{font-size:16px}
+  .battlefield{min-height:330px;padding:8px 5px}
+  .battleFormation{justify-content:flex-start;gap:5px;overflow-x:auto;padding:7px 2px 10px}
+  .battleUnit{flex:0 0 100px;width:100px;max-width:none;padding:5px 4px}
+  .battleFace{height:132px;max-height:132px}
+  .battleName{font-size:9px;min-height:23px}
+  .battleHP,.battleAP{font-size:8px}
+  .dicePanel{max-width:100%;padding:8px 7px;margin:7px auto}
+  .diceContent{gap:6px}
+  .diceContent img{width:58px;height:58px}
+  .diceContent div{min-width:0}
+  .diceContent strong{font-size:23px}
+  .actionPanel{padding:8px}
+  .actionPanel .actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
+  .actionPanel .btn{font-size:10px;padding:7px 4px;min-height:39px}
+  .activeTurn{align-items:flex-start;flex-direction:column;gap:2px}
+  .activeTurn .small{text-align:left;margin:0}
+  .bottomNav{display:none!important}
+}
+@media (max-width:390px){
+  .gameLayout{grid-template-columns:54px minmax(0,1fr);gap:5px}
+  .leftRail{width:54px;padding:3px}
+  .leftRail button{font-size:6.5px;min-height:42px}
+  .leftRail button span{font-size:14px}
+  .leftMember img{width:34px;height:44px}
+  .battleUnit{flex-basis:94px;width:94px}
+  .battleFace{height:124px}
+  .resource,.topAction{font-size:9px;padding:5px 4px}
+}
+
+
+/* Schede missioni secondarie */
+.questReputation,.questProgress,.questRoll{padding:9px 11px;margin:9px 0;border:1px solid #80623a;border-radius:8px;background:rgba(16,13,10,.72);color:#e5d3ad;font-size:12px}
+.questReputation b,.questRoll b{color:#f0d49b}
+.questCard{display:block;width:100%;text-align:left;padding:13px;margin:9px 0;border:1px solid #80623a;border-radius:9px;background:linear-gradient(145deg,rgba(45,35,24,.92),rgba(14,12,10,.94));color:#e9dfc8;font-family:Georgia,serif;cursor:pointer}
+.questCard:disabled{opacity:.55;cursor:not-allowed}
+.questCardTop{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.questCardTop b{color:#f0d49b;font-size:15px}
+.questCard small,.questDetailHead small{display:block;color:#b9a98b;margin-top:5px;font-size:11px}
+.questCard p{margin:8px 0 0;font-size:12px;line-height:1.45}
+.questStatus{font-style:normal;font-size:10px;padding:4px 7px;border-radius:20px;border:1px solid #80623a;white-space:nowrap;color:#e5d3ad}
+.questStatus.completed{color:#b8df9d;border-color:#5e8750}
+.questStatus.active{color:#f3d18c;border-color:#a27a3c}
+.questLock{display:block;margin-top:7px;color:#d19b83;font-size:10px}
+.questDetailHead{padding:10px 12px;margin:10px 0;background:linear-gradient(120deg,rgba(64,47,29,.72),rgba(12,11,9,.8));border-left:3px solid #b28a4e}
+.questDetailHead span{font-size:9px;letter-spacing:2px;color:#c49b55}
+.questDetailHead h2{margin:5px 0;border:0;padding:0}
+.questSuccessText{padding:10px;border-left:3px solid #8ea96b;background:rgba(49,66,36,.24);font-size:12px}
+.questOutcome{padding:12px;margin:10px 0;border:1px solid #6f8751;background:rgba(37,55,31,.25);border-radius:8px}
+.questOutcome b{color:#c4e1a8}
+.questOutcome p,.questHistoryLine{font-size:12px;line-height:1.45}
+.questActions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.questActions .btn{flex:1 1 180px}
+.questHistory{margin-top:12px;color:#b9a98b}
+.questHistoryLine{border-top:1px solid #51402a;padding:7px 0;margin:0}
+
+#combat.hidden + .battleExtras{display:none!important}
+
+.combatAbilityPicker{position:relative;width:100%}.abilityToggle{width:100%;display:flex;justify-content:space-between;align-items:center}.combatAbilityMenu{display:none;margin-top:6px;padding:7px;border:1px solid #80623a;border-radius:9px;background:rgba(18,14,10,.98);max-height:260px;overflow:auto}.combatAbilityMenu.open{display:block}.abilityChoice{width:100%;display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:left;padding:9px;margin:3px 0;background:#292016;border:1px solid #57442b;border-radius:7px;color:#ead9b8;font:13px Georgia,serif}.abilityChoice span{display:flex;flex-direction:column;gap:4px}.abilityChoice small{font-size:11px;color:#b9a98b}.abilityChoice em{white-space:nowrap;color:#e4c17e;font-style:normal}.abilityChoice:disabled{opacity:.4}.abilityLocked{opacity:.62}.abilityLock{font-size:12px;color:#d6b16c;border-top:1px solid #59442b;padding-top:7px;margin-top:8px}
+
+/* BATTAGLIA COMPATTA: squadre ai lati, D20 al centro, comandi sotto */
+.battleFormationStage{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(108px,.62fr) minmax(0,1fr);align-items:stretch;gap:9px;min-height:0!important;padding:10px!important}
+.battleTeam{min-width:0;display:flex;flex-direction:column;gap:5px}
+.battleTeam .battleSideTitle{text-align:center;font-size:10px;letter-spacing:1.2px;margin:2px 0 5px}
+.battleFormationStage .battleFormation{display:flex!important;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:6px;padding:0!important;overflow:visible!important;min-width:0}
+.battleFormationStage .battleUnit{display:grid;grid-template-columns:clamp(42px,6vw,68px) minmax(0,1fr);align-items:center;gap:6px;flex:0 0 auto!important;width:100%!important;max-width:none!important;min-width:0;padding:5px!important;text-align:left}
+.battleFormationStage .battleUnit .unitArt{width:100%!important;height:auto!important;aspect-ratio:912/1168;min-width:0}
+.battleUnitInfo{min-width:0;overflow-wrap:anywhere}
+.battleFormationStage .battleName{font-size:clamp(8px,1vw,11px);line-height:1.15;min-height:0;margin-bottom:4px}
+.battleFormationStage .battleHP,.battleFormationStage .battleAP{font-size:9px;line-height:1.2}
+.battleFormationStage .battleBar{height:5px;margin:4px 0}
+.battleDestiny{align-self:center;min-width:0;padding:7px 5px;border:1px solid #a17b45;border-radius:9px;background:linear-gradient(145deg,rgba(46,35,23,.94),rgba(15,12,9,.94));box-shadow:0 0 18px #0009,inset 0 0 18px #d6b16c12}
+.battleDestiny .diceHeading{justify-content:center;gap:6px;letter-spacing:1px;font-size:9px;padding-bottom:5px}
+.battleDestiny .diceContent{flex-direction:column;gap:3px;padding:5px 0 0;text-align:center}
+.battleDestiny .diceContent img{width:clamp(42px,5vw,58px);height:clamp(42px,5vw,58px)}
+.battleDestiny .diceContent div{min-width:0;width:100%}
+.battleDestiny .diceContent div div{font-size:8px;line-height:1.2;overflow-wrap:anywhere}
+.battleDestiny .diceContent strong{font-size:22px}
+.battleDestiny .diceContent small{display:block;font-size:8px;line-height:1.2;overflow-wrap:anywhere}
+.battlefield .battleDivider{display:none}
+@media(max-width:760px){
+ .battleFormationStage{grid-template-columns:minmax(0,1fr) 66px minmax(0,1fr);gap:5px;padding:6px!important}
+ .battleTeam .battleSideTitle{font-size:8px;letter-spacing:.5px}
+ .battleFormationStage .battleFormation{gap:5px}
+ .battleFormationStage .battleUnit{grid-template-columns:35px minmax(0,1fr);gap:4px;padding:3px!important;border-radius:5px}
+ .battleFormationStage .battleUnit .unitArt{width:35px!important}
+ .battleFormationStage .battleName{font-size:8px;line-height:1.05;overflow-wrap:anywhere}
+ .battleFormationStage .battleHP,.battleFormationStage .battleAP{font-size:7px}
+ .battleFormationStage .battleBar{height:4px;margin:3px 0}
+ .battleDestiny{padding:5px 3px}
+ .battleDestiny .diceHeading{font-size:7px;letter-spacing:.3px;gap:3px}
+ .battleDestiny .diceContent img{width:42px;height:42px}
+ .battleDestiny .diceContent strong{font-size:19px}
+ .battleDestiny .diceContent div div,.battleDestiny .diceContent small{font-size:7px}
+}
+@media(max-width:390px){
+ .battleFormationStage{grid-template-columns:minmax(0,1fr) 58px minmax(0,1fr);gap:3px;padding:5px!important}
+ .battleFormationStage .battleUnit{grid-template-columns:29px minmax(0,1fr);gap:3px;padding:2px!important}
+ .battleFormationStage .battleUnit .unitArt{width:29px!important}
+ .battleFormationStage .battleName{font-size:7px}
+ .battleFormationStage .battleHP,.battleFormationStage .battleAP{font-size:6.5px}
+ .battleDestiny .diceContent img{width:37px;height:37px}
+}
+
+/* Modalità battaglia: libera lo spazio della storia per il campo di combattimento */
+body.battle-mode main{width:min(1900px,100%);margin:6px auto 12px;padding:0 8px 18px}
+body.battle-mode .gameLayout{grid-template-columns:minmax(0,1fr);gap:0}
+body.battle-mode .leftRail{display:none!important}
+body.battle-mode #missionPanel,body.battle-mode .battleExtras,body.battle-mode #inventoryPanel,body.battle-mode .centerColumn>.row,body.battle-mode .centerColumn>.note,body.battle-mode #menuView{display:none!important}
+body.battle-mode .centerColumn{width:100%;min-width:0}
+body.battle-mode #combat{width:100%;display:block!important}
+body.battle-mode .battlefield{margin:4px 0 8px;padding:clamp(8px,1.5vw,18px);min-height:clamp(300px,58vh,650px);align-items:center}
+body.battle-mode .battleFormationStage{width:100%}
+body.battle-mode .battleUnit{flex-basis:clamp(90px,13vw,165px);width:clamp(90px,13vw,165px);max-width:22%}
+body.battle-mode .battleFace{height:clamp(135px,25vh,270px);max-height:270px}
+body.battle-mode .dicePanel{margin:8px auto;}
+body.battle-mode .actionPanel{margin-bottom:10px}
+@media(max-width:680px){
+ body.battle-mode main{width:100%;margin:4px auto 8px;padding:0 5px 12px}
+ body.battle-mode .battleTopline{padding:5px 3px}
+ body.battle-mode .battlefield{min-height:0;padding:7px 4px;margin:4px 0 7px}
+ body.battle-mode .battleUnit{flex:0 0 clamp(76px,24vw,112px);width:clamp(76px,24vw,112px);max-width:none}
+ body.battle-mode .battleFace{height:clamp(112px,25vh,180px);max-height:180px}
+ body.battle-mode .actionPanel{padding:8px}
+}
+
+
+/* Bersaglio selezionabile direttamente dal ritratto nemico + campo più ampio */
+.actionPanel #targetArea{display:none!important}
+.battleFormationStage{grid-template-columns:minmax(0,1.28fr) 58px minmax(0,1.28fr)!important;gap:7px!important}
+.battleFormationStage .battleUnit{grid-template-columns:clamp(56px,7.2vw,88px) minmax(0,1fr)!important;gap:7px!important;padding:6px!important}
+.battleFormationStage .battleUnit .unitArt{width:100%!important;cursor:default}
+.battleFormationStage .battleUnit .unitArt.enemyTargetImage{cursor:pointer;outline:2px solid transparent;outline-offset:2px;border-radius:5px;transition:outline-color .15s,filter .15s}
+.battleFormationStage .battleUnit .unitArt.enemyTargetImage:active{filter:brightness(1.35)}
+.battleFormationStage .battleUnit.target-selected .unitArt.enemyTargetImage{outline-color:#f0d49b;filter:drop-shadow(0 0 7px #e8bd72aa)}
+.battleDestiny{padding:5px 3px!important}
+.battleDestiny .diceContent img{width:clamp(34px,3.5vw,44px)!important;height:clamp(34px,3.5vw,44px)!important}
+@media(max-width:760px){
+ .battleFormationStage{grid-template-columns:minmax(0,1fr) 44px minmax(0,1fr)!important;gap:4px!important}
+ .battleFormationStage .battleUnit{grid-template-columns:clamp(42px,12vw,58px) minmax(0,1fr)!important;gap:4px!important;padding:3px!important}
+ .battleDestiny{padding:4px 2px!important}
+ .battleDestiny .diceContent img{width:32px!important;height:32px!important}
+ .battleDestiny .diceHeading{font-size:6px!important}
+ .battleDestiny .diceContent strong{font-size:16px!important}
+}
+@media(max-width:390px){
+ .battleFormationStage{grid-template-columns:minmax(0,1fr) 38px minmax(0,1fr)!important;gap:3px!important}
+ .battleFormationStage .battleUnit{grid-template-columns:40px minmax(0,1fr)!important;gap:3px!important}
+ .battleDestiny .diceContent img{width:28px!important;height:28px!important}
+ .battleDestiny .diceContent strong{font-size:14px!important}
+}
+
+
+/* Battaglia: personaggi più grandi e colonna squadra sempre visibile */
+@media(min-width:681px){body.battle-mode .gameLayout{grid-template-columns:190px minmax(0,1fr);gap:10px}body.battle-mode .leftRail{display:flex!important;position:sticky;top:6px;max-height:calc(100vh - 12px);overflow-y:auto;padding:9px}body.battle-mode .leftRail>.railTitle,body.battle-mode .leftRail>.leftParty{display:block!important}body.battle-mode .leftRail>.leftParty #leftSquad{display:flex;flex-direction:column;gap:2px;overflow:visible}body.battle-mode .leftRail .leftMember{flex:0 0 auto;padding:5px 2px}body.battle-mode .leftRail .leftMember img{width:49px;height:68px}body.battle-mode .leftRail .railBottom{display:none!important}body.battle-mode .battleFormationStage{grid-template-columns:minmax(0,1.28fr) 50px minmax(0,1.28fr)!important}body.battle-mode .battleFormationStage .battleUnit{grid-template-columns:clamp(68px,8vw,108px) minmax(0,1fr)!important}}
+@media(max-width:680px){body.battle-mode .leftRail{display:none!important}body.battle-mode .battleFormationStage .battleUnit{grid-template-columns:clamp(48px,14vw,68px) minmax(0,1fr)!important}}
+
+@media(max-width:680px){body.battle-mode .leftRail{display:block!important;position:static;max-height:none;overflow:visible;margin-bottom:6px;padding:6px}body.battle-mode .leftRail>.railTitle,body.battle-mode .leftRail>button,body.battle-mode .leftRail>.railBottom{display:none!important}body.battle-mode .leftRail>.leftParty{display:block!important;margin:0;padding:0;border:0}body.battle-mode .leftRail .leftParty .sideHeading{margin:0 0 4px;padding:0 2px 4px;font-size:9px}body.battle-mode .leftRail .leftParty #leftSquad{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;overflow:visible}body.battle-mode .leftRail .leftMember{display:flex;flex-direction:column;justify-content:flex-start;gap:3px;min-width:0;padding:4px 2px;border:1px solid #59442b;border-radius:6px;text-align:center}body.battle-mode .leftRail .leftMember img{width:clamp(30px,9vw,42px);height:clamp(42px,12vw,58px);margin:auto}body.battle-mode .leftRail .leftMemberInfo{width:100%}body.battle-mode .leftRail .leftMemberInfo b{font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}body.battle-mode .leftRail .leftMemberInfo small{font-size:8px;margin-top:1px}body.battle-mode .leftRail .leftMiniBar{height:4px;margin-top:3px}}
+</style>
+</head>
+<body>
+<audio id="bgMusic" src="./musica_valle.mp3" loop preload="auto"></audio>
+<header class="gameHeader">
+  <div class="brandBlock"><h1>OMBRE DI VELMORA</h1><p>La campana senza eco</p></div>
+  <div id="topResources" class="topResources">
+    <span class="resource"><b>♥</b> <span id="topHP">—</span></span>
+    <span class="resource"><b>✚</b> <span id="topPotions">0</span></span>
+    <span class="resource"><b>◆</b> <span id="topGold">0</span></span>
+    <button class="topAction" onclick="saveGame()">Salva</button>
+    <button class="topAction" onclick="showMenu('more')">Menu</button>
+  </div>
+  <button class="musicButton" id="musicButton" onclick="toggleMusic()">♫ Musica OFF · Attiva</button>
+</header>
+<main>
+<section id="creator">
+<div class="panel">
+<h2>01 · Crea il tuo eroe</h2>
+<div class="layout">
+<div><h3>Scegli la razza</h3><div class="grid" id="races"></div><p class="small" id="raceDescription"></p></div>
+<div class="preview"><img class="portrait" id="portrait" src="./modello_umano_maschile.png.JPG.JPG" alt="Anteprima personaggio"><div><h2 id="heroTitle">Umano</h2><p class="small" id="heroDescription"></p></div></div>
+</div>
+<hr><h3>Sesso</h3><div class="row"><button class="choice selected" data-gender="male">Maschio</button><button class="choice" data-gender="female">Femmina</button></div>
+</div>
+<div class="panel"><h2>02 · Nome dell'eroe</h2><input id="heroName" class="input" maxlength="24" placeholder="Scrivi il nome del tuo eroe"></div>
+<div class="panel"><h2>03 · Scegli la classe</h2><div class="classgrid" id="classes"></div><p class="small" id="classDescription"></p></div>
+<div class="panel"><h2>04 · Caratteristiche</h2><div class="stats" id="stats"></div><p class="small">Valori iniziali: 5 + modificatore razziale + modificatore di classe.</p></div>
+<button class="btn" style="width:100%;padding:16px;font-size:18px" onclick="startAdventure()">INIZIA IL VIAGGIO</button>
+<p class="note">Le tue scelte daranno forma al destino di Velmora.</p>
+</section>
+
+<section id="game" class="hidden">
+<div id="gameContent" class="gameLayout">
+<aside class="leftRail">
+  <div class="railTitle">AVVENTURA</div>
+  <button onclick="openTab('mission')"><span>⚔</span> Avventura</button>
+  <button onclick="openTab('inventory')"><span>▣</span> Inventario</button>
+  <button onclick="openCharacterScreen()"><span>♙</span> Personaggio</button>
+  <button onclick="showMenu('squad')"><span>♟</span> Personaggi</button>
+  <button onclick="showMenu('map')"><span>⌖</span> Mappa</button>
+  <button onclick="showMenu('quests')"><span>⚑</span> Missioni</button>
+  <button onclick="openAbilitiesScreen()"><span>✧</span> Abilità</button>
+  <button onclick="showMenu('settings')"><span>⚙</span> Impostazioni</button>
+  <section class="leftParty"><div class="sideHeading"><span>LA TUA SQUADRA</span></div><div id="leftSquad"><p class="sideEmpty">La squadra apparirà qui.</p></div></section>
+  <div class="railBottom"><button onclick="saveGame()">⇩ Salva partita</button><button onclick="loadGame()">⇧ Carica partita</button></div>
+</aside>
+<div class="centerColumn">
+<div class="panel" id="missionPanel">
+<div class="row" style="justify-content:space-between"><span class="badge" id="chapterBadge">PROLOGO</span><span class="badge" id="levelBadge">Livello 1</span></div>
+<h2 id="sceneTitle"></h2><div id="sceneText" class="story"></div><div id="sceneChoices" class="actions"></div>
+</div>
+<div id="combat" class="hidden">
+  <div class="battleTopline"><div><span class="eyebrow">SCONTRO IN CORSO</span><h2 id="battleTitle">Combattimento</h2></div><span class="badge" id="roundBadge">Turno 1</span></div>
+  <p class="small" id="battleHint"></p>
+  <div class="battlefield panel battleFormationStage">
+    <div class="battleTeam enemyTeam"><div class="battleSideTitle">AVVERSARI</div><div id="enemyList" class="battleFormation enemyFormation"></div></div>
+    <div class="battleDestiny">
+      <div class="diceHeading"><span>DESTINO</span><small>D20</small></div>
+      <div class="diceContent"><img id="diceImage" src="./dado_d20_velmora.PNG" alt="Dado del destino D20"><div><div id="diceWho">In attesa del lancio…</div><strong id="diceNumber">—</strong><small id="diceResult">Il dado deciderà l'esito dell'azione</small></div></div>
+    </div>
+    <div class="battleTeam partyTeam"><div class="battleSideTitle">LA TUA SQUADRA</div><div id="partyList" class="battleFormation partyFormation"></div></div>
+  </div>
+  <div class="actionPanel panel">
+    <div class="activeTurn"><div><span class="eyebrow">È IL TUO TURNO</span><h3 id="activeTitle">Turno</h3></div><p class="small" id="activeInfo"></p></div>
+    <div id="targetArea" class="target"></div>
+    <div class="battleSideTitle">Scegli un'azione</div>
+    <div id="combatActions" class="actions"></div>
+    <p class="small" id="actionMessage">Seleziona un'azione.</p>
+  </div>
+</div>
+<div class="battleExtras">
+  <section class="sideCard"><div class="sideHeading"><span>ORDINE DEI TURNI</span><span id="roundSide">01</span></div><div id="turnOrder" class="turnOrder"><p class="sideEmpty">L'ordine apparirà durante il combattimento.</p></div></section>
+  <section class="sideCard battleDiary"><div class="sideHeading"><span>REGISTRO BATTAGLIA</span><span>⌁</span></div><div id="battleLog" class="log"><p class="sideEmpty">In attesa dello scontro…</p></div></section>
+  <section class="sideCard quickInventory"><div class="sideHeading"><span>RISORSE</span><span>◇</span></div><div id="sideResources" class="sideResources">Pozioni: 0<br>Oro: 0</div></section>
+</div>
+<div id="afterCombat" class="panel hidden"></div>
+<div class="panel" id="inventoryPanel"><h2>Inventario</h2><div id="inventory" class="inventory"></div></div>
+<div class="row"><button class="btn secondary" onclick="saveGame()">SALVA PARTITA</button><button class="btn secondary" onclick="loadGame()">CARICA PARTITA</button><button class="btn secondary" onclick="backToCreator()">Torna alla creazione</button></div>
+<p class="note">I progressi vengono salvati in questo browser su questo dispositivo.</p>
+</div>
+<section id="menuView" class="panel menuPanel hidden" aria-live="polite"><div id="menuContent"></div></section><section id="characterScreen" aria-label="Personaggio"><header class="characterTop"><button type="button" aria-label="Personaggio precedente" onclick="changeCharacter(-1)">‹</button><h2>PERSONAGGIO</h2><button type="button" aria-label="Personaggio successivo" onclick="changeCharacter(1)">›</button><button type="button" class="closeCharacter" aria-label="Chiudi" onclick="closeCharacterScreen()">×</button></header><div id="characterScreenBody" class="characterBody"></div></section><section id="abilitiesScreen" aria-label="Abilità"><header class="characterTop"><button type="button" aria-label="Personaggio precedente" onclick="changeAbilityMember(-1)">‹</button><h2>ABILITÀ</h2><button type="button" aria-label="Personaggio successivo" onclick="changeAbilityMember(1)">›</button><button type="button" class="closeCharacter" aria-label="Chiudi" onclick="closeAbilitiesScreen()">×</button></header><div id="abilitiesScreenBody" class="abilitiesBody"></div></section>
+</div>
+</section>
+</main>
+
+<nav id="bottomNav" class="bottomNav" aria-label="Navigazione di gioco">
+<button class="navBtn" data-tab="squad" onclick="openTab('squad')"><span class="navIcon">♟</span><span>Squadra</span></button>
+<button class="navBtn" data-tab="inventory" onclick="openTab('inventory')"><span class="navIcon">🎒</span><span>Inventario</span></button>
+<button class="navBtn" data-tab="mission" onclick="openTab('mission')"><span class="navIcon">📜</span><span>Missione</span></button>
+<button class="navBtn" data-tab="more" onclick="openTab('more')"><span class="navIcon">☰</span><span>Altro</span></button>
+</nav>
+
+<script>
+"use strict";
+const asset=name=>new URL("./"+name,document.baseURI).href;
+const $=id=>document.getElementById(id);
+const races=[
+{id:"human",name:"Umano",description:"Versatile e adattabile. Gli umani sono presenti in ogni angolo di Velmora.",trait:"Adattabilità",male:"modello_umano_maschile.png.JPG.JPG",female:"modello_umano_femminile.png.JPG.JPG",mod:{percezione:1,carisma:1}},
+{id:"elf",name:"Elfo",description:"Antica stirpe legata alla magia e alla natura. Agili e intelligenti.",trait:"Eredità arcana",male:"elfo_m_base.png.JPG",female:"elfo_f_base.png.JPG",mod:{agilita:1,vitalita:-1,intelletto:1}},
+{id:"orc",name:"Orco",description:"Una razza fiera e resistente, dotata di grande forza fisica.",trait:"Sangue indomito",male:"orco_m_base.png.JPG",female:"orco_f_base.png.JPG",mod:{forza:1,vitalita:1,intelletto:-1}},
+{id:"lion",name:"Popolo Leone",description:"Una stirpe fiera e imponente, conosciuta per il coraggio e la forza in battaglia.",trait:"Ruggito intimidatorio",male:"uomo_leone_m_base.png.JPG",female:"uomo_leone_f_base.png.JPG",mod:{forza:1,agilita:-1,carisma:1}},
+{id:"wolf",name:"Popolo Lupo",description:"Predatori vigili, dotati di sensi affinati e grande agilità.",trait:"Istinto predatorio",male:"uomo_lupo_m_base.png.JPG",female:"uomo_lupo_f_base.png.JPG",mod:{agilita:1,percezione:1,carisma:-1}},
+{id:"rabbit",name:"Popolo Coniglio",description:"Una stirpe agile e sorprendente, capace di movimenti rapidi e riflessi eccezionali.",trait:"Balzo fulmineo",male:"uomo_coniglio_m_base.png.JPG",female:"uomo_coniglio_f_base.png.JPG",mod:{agilita:1,percezione:1}}
+];
+const classes=[
+{id:"warrior",name:"Guerriero",description:"Combattente robusto, esperto di armature pesanti e armi da mischia.",mod:{forza:2,vitalita:2},armor:"Pesante"},
+{id:"thief",name:"Ladro",description:"Rapido e preciso. Predilige armature leggere, furtività e colpi mirati.",mod:{agilita:2,percezione:2},armor:"Leggera"},
+{id:"mage",name:"Mago",description:"Studioso delle arti arcane. Indossa vesti magiche e domina gli incantesimi.",mod:{intelletto:2,volonta:2},armor:"Vesti magiche"},
+{id:"cleric",name:"Chierico",description:"Custode della fede, capace di proteggere e curare gli alleati.",mod:{volonta:2,vitalita:1,intelletto:1},armor:"Sacra e media"},
+{id:"druid",name:"Druido",description:"Alleato della natura, unisce magia, resistenza e creature evocate.",mod:{volonta:1,intelletto:1,percezione:2},armor:"Naturale"},
+{id:"archer",name:"Arciere",description:"Combattente agile e attento, maestro dell'arco e della distanza.",mod:{agilita:2,percezione:2},armor:"Leggera"},
+{id:"paladin",name:"Paladino",description:"Difensore consacrato: combatte in prima linea, protegge e cura gli alleati.",mod:{forza:1,vitalita:2,volonta:1},armor:"Pesante e sacra"}
+];
+const statNames={forza:"Forza",agilita:"Agilità",vitalita:"Vitalità",intelletto:"Intelletto",volonta:"Volontà",percezione:"Percezione",carisma:"Carisma"};
+let selectedRace=races[0],selectedClass=classes[0],gender="male",G=null,battle=null,selectedTarget=0,busy=false;
+
+function musicLabel(){$("musicButton").textContent=$("bgMusic").paused?"♫ Musica OFF · Attiva":"♫ Musica ON · Disattiva"}
+function toggleMusic(){const m=$("bgMusic");if(m.paused){m.volume=.35;m.play().then(musicLabel).catch(()=>$("musicButton").textContent="♫ Tocca per attivare")}else{m.pause();musicLabel()}}
+function imageForRace(r){return r[gender]||r.male}
+function statsFor(){let s={};for(let k in statNames)s[k]=5+(selectedRace.mod[k]||0)+(selectedClass.mod[k]||0);return s}
+function renderCreator(){
+$("races").innerHTML=races.map(r=>`<button class="choice ${r.id===selectedRace.id?'selected':''}" data-race="${r.id}">${r.name}</button>`).join("");
+document.querySelectorAll("[data-race]").forEach(b=>b.onclick=()=>{selectedRace=races.find(r=>r.id===b.dataset.race);renderCreator()});
+$("classes").innerHTML=classes.map(c=>`<button class="choice ${c.id===selectedClass.id?'selected':''}" data-class="${c.id}">${c.name}</button>`).join("");
+document.querySelectorAll("[data-class]").forEach(b=>b.onclick=()=>{selectedClass=classes.find(c=>c.id===b.dataset.class);renderCreator()});
+document.querySelectorAll("[data-gender]").forEach(b=>{b.classList.toggle("selected",b.dataset.gender===gender);b.onclick=()=>{gender=b.dataset.gender;renderCreator()}});
+$("portrait").src=asset(imageForRace(selectedRace));$("heroTitle").textContent=selectedRace.name;
+$("heroDescription").textContent=selectedRace.description+" Tratto: "+selectedRace.trait+".";$("raceDescription").textContent=selectedRace.description;
+$("classDescription").textContent=selectedClass.description+" Armatura: "+selectedClass.armor+".";
+const s=statsFor();$("stats").innerHTML=Object.keys(statNames).map(k=>`<div class="stat"><span>${statNames[k]}</span><b>${s[k]}</b></div>`).join("");
+}
+function startAdventure(){
+let name=$("heroName").value.trim();if(!name){alert("Scrivi il nome del tuo eroe prima di partire!");return}
+let s=statsFor(),maxhp=26+s.vitalita*3;
+G={hero:{id:"hero",name,race:selectedRace.name,class:selectedClass.name,gender,portrait:imageForRace(selectedRace),stats:s,level:1,xp:0,hp:maxhp,maxhp,ap:5,maxap:5,armor:selectedClass.id==="warrior"?4:selectedClass.id==="cleric"?3:1,weapon:selectedClass.id==="mage"||selectedClass.id==="druid"?4:6,alive:true,down:0,isHero:true,equipment:{hair:"",armor:"",head:""}},party:[],inventory:{Pozione:2,Antidoto:1,Benda:1,Purificazione:1},gold:12,chapter:0,companions:{wolf:false,lion:false},battleWon:0,finished:false,statPoints:0};
+ensureSideQuestState();
+$("creator").classList.add("hidden");$("game").classList.remove("hidden");$("bottomNav").classList.add("visible");showScene("prologue");openTab("mission");
+}
+const scenes={
+prologue:{badge:"PROLOGO",title:"La campana senza eco",text:`<p>Il tuo viaggio conduce a <em>Rovoscuro</em>, un villaggio ai confini della Valle di Velmora. Da tre notti, a mezzanotte, la campana della vecchia torre suona da sola. Ogni volta che risuona, qualcuno scompare.</p><p>Un'anziana donna ti afferra il braccio: «Mio nipote è entrato nella torre tre giorni fa. Non è più tornato. Ti prego, aiutaci».</p><p>Nella locanda incontri due viandanti: <b>Rauk</b>, un guerriero del Popolo Lupo, e <b>Leona</b>, una guerriera del Popolo Leone. Entrambi sembrano conoscere qualcosa della torre.</p>`,choices:[["Chiedi a Rauk di unirsi","wolf"],["Chiedi a Leona di unirsi","lion"],["Parti verso il bosco","forest"]]},
+forest:{badge:"CAPITOLO I",title:"L'imboscata nel bosco",text:`<p>Il sentiero si stringe tra alberi contorti. Due orchi armati emergono dal sottobosco, accompagnati da un predone della valle.</p><p><em>«La strada è nostra, viandante. Lascia le tue cose!»</em></p>`,choices:[["Affronta gli aggressori","fight1"]]},
+crypt:{badge:"CAPITOLO II",title:"La cripta dimenticata",text:`<p>Una scala di pietra scende sotto la torre. Al centro della cripta, un altare emana luce verdastra. Un orco veterano e due guardiani armati difendono il passaggio.</p>`,choices:[["Entra nella cripta","fight2"]]},
+boss:{badge:"CAPITOLO III",title:"Il Custode della Campana",text:`<p>La porta di ferro si apre. Nella sala della campana si erge un cavaliere enorme, avvolto in un'armatura nera. Gli occhi brillano di luce azzurra.</p><p>«Nessuno interromperà il richiamo.»</p>`,choices:[["Affronta il Custode","fight3"]]},
+ending:{badge:"FINE DELLA PROVA",title:"La campana tace",text:`<p>Con un ultimo clangore, la campana si spezza. Il silenzio torna nella valle. Hai completato la prima avventura di <em>Ombre di Velmora</em>.</p>`,choices:[["Ricomincia l'avventura","restart"]]}
+};
+function showScene(key){$("combat").classList.add("hidden");$("afterCombat").classList.add("hidden");let sc=scenes[key];if(!sc)return;$("chapterBadge").textContent=sc.badge;$("sceneTitle").textContent=sc.title;$("sceneText").innerHTML=sc.text;$("sceneChoices").innerHTML=sc.choices.map(([label,act])=>`<button class="btn" onclick="sceneAction('${act}')">${label}</button>`).join("");updateHUD()}
+function sceneAction(act){
+if(act==="wolf"){if(!G.companions.wolf){G.companions.wolf=true;G.party.push(makeCompanion("Rauk",36,7,3,4,"uomo_lupo_m_base.png.JPG"))}showScene("prologue");$("sceneText").innerHTML+='<p><em>Rauk abbassa il capo.</em> «Verrò con te.»</p>';return}
+if(act==="lion"){if(!G.companions.lion){G.companions.lion=true;G.party.push(makeCompanion("Leona",40,7,4,4,"uomo_leone_f_base.png.JPG"))}showScene("prologue");$("sceneText").innerHTML+='<p><em>Leona stringe l’elsa.</em> «Combatterò al tuo fianco.»</p>';return}
+if(act==="forest"){showScene("forest");return}if(act==="fight1"){startBattle(1);return}if(act==="fight2"){startBattle(2);return}if(act==="fight3"){startBattle(3);return}if(act==="restart"){location.reload()}
+}
+function makeCompanion(name,hp,str,armor,intel,portrait){return{id:name.toLowerCase(),name,class:"warrior",portrait,equipment:{hair:"",armor:"",head:""},level:1,stats:{forza:str,agilita:6,vitalita:5,intelletto:intel,volonta:5,percezione:5,carisma:5},hp,maxhp:hp,ap:5,maxap:5,armor,weapon:6,alive:true,down:0,isHero:false}}
+function aliveParty(){return [G.hero,...G.party].filter(p=>p.alive&&p.hp>0)}
+function isEnemy(u){return !!u.kind}
+function current(){return battle?.order?.[battle.idx]}
+function startBattle(n){
+busy=false;document.body.classList.add("battle-mode");const sets={
+1:[{name:"Orco predone",hp:25,atk:6,armor:1,kind:"orc",portrait:"orco_m_base.png.JPG"},{name:"Orco predone",hp:25,atk:6,armor:1,kind:"orc",portrait:"orco_f_base.png.JPG"},{name:"Predone della valle",hp:22,atk:5,armor:2,kind:"bandit",portrait:"modello_umano_maschile.png.JPG.JPG"}],
+2:[{name:"Orco veterano",hp:34,atk:7,armor:3,kind:"orc",portrait:"orco_m_base.png.JPG"},{name:"Guardiano della cripta",hp:32,atk:6,armor:4,kind:"guard",portrait:"orco_f_base.png.JPG"},{name:"Sciamano della cripta",hp:29,atk:7,armor:2,kind:"priest",portrait:"elfo_f_base.png.JPG"}],
+3:[{name:"Custode della Campana",hp:145,atk:10,armor:5,kind:"boss",portrait:"modello_umano_maschile.png.JPG.JPG"}]};
+battle={n,round:1,units:sets[n].map((e,i)=>({...e,id:"e"+i,maxhp:e.hp,alive:true,down:0})),order:[],idx:0,log:[],ended:false,turnPrepared:false};
+let allies=[G.hero,...G.party];allies.forEach(p=>{p.ap=5;if(p.hp<=0&&p.isHero)p.hp=1});
+battle.order=[...allies.filter(p=>p.alive&&p.hp>0),...battle.units].sort((a,b)=>(b.stats?.agilita||3)-(a.stats?.agilita||3));
+selectedTarget=0;$("combat").classList.remove("hidden");$("afterCombat").classList.add("hidden");
+$("battleTitle").textContent=n===1?"Combattimento I · L'imboscata":n===2?"Combattimento II · La cripta":"Boss · Il Custode";
+$("battleHint").textContent="Ordine dei turni determinato dall'Agilità. I nemici attaccano dall'alto, la tua squadra combatte dal basso.";
+$("battleLog").innerHTML="";$("diceWho").textContent="In attesa del lancio…";$("diceNumber").textContent="—";$("diceResult").textContent="Il dado deciderà l'esito dell'azione";log("Lo scontro ha inizio. L'ordine è stabilito dall'Agilità.");renderBattle();advanceToPlayer();
+}
+function log(t){if(!battle)return;battle.log.unshift(t);if(battle.log.length>35)battle.log.pop();$("battleLog").innerHTML=battle.log.map(x=>`<p>${x}</p>`).join("")}
+function equipmentLayers(u){
+const eq=u&&u.equipment||{},base=asset(u.portrait||"");
+const files={"Capelli coda ciuffi":"Capelli_coda_ciuffi.jpg","Capelli coda lunga":"Capelli_coda_lunga.jpg","Capelli lunghi":"Capelli_lunghi.jpg","Capelli mossi":"Capelli_mossi.jpg","Capelli rasati lato":"Capelli_rasati_lato.jpg","Capelli rasta":"Capelli_rasta.jpg","Capelli spettinati":"Capelli_spettinati.jpg","Capelli trecce":"Capelli_trecce.jpg"};
+let hair="";
+if(eq.hair&&equipmentManifest[files[eq.hair]]){
+const d=equipmentManifest[files[eq.hair]];
+if(d&&d.sourceWidth&&d.sourceHeight){const hairShift=u&&u.isHero?145:125;const hairDown=u&&u.isHero?8:5;const x=100*(d.x+hairShift)/d.sourceWidth,y=100*(d.y+hairDown)/1168,w=100*(d.width*1.12)/d.sourceWidth,h=100*(d.height*1.12)/1168;hair='<img class="equipLayer hairLayer" src="'+d.file+'" alt="" style="left:'+x+'%;top:'+y+'%;width:'+w+'%;height:'+h+'%">';}
+}
+return '<div class="unitArt"><img class="unitBase" src="'+base+'" alt="'+(u.name||'')+'">'+hair+'</div>';
+}
+function unitHTML(u,active){let max=u.maxhp||u.hp,hp=Math.max(0,u.hp),status=!u.alive?"CADUTO":hp+"/"+max+" HP",enemy=isEnemy(u),targetIndex=enemy?battle.units.indexOf(u):-1,selected=enemy&&targetIndex===selectedTarget,art=equipmentLayers(u);if(enemy&&u.alive)art=art.replace('<div class="unitArt">','<div class="unitArt enemyTargetImage" role="button" tabindex="0" aria-label="Seleziona '+u.name+' come bersaglio" onclick="selectTarget('+targetIndex+')" onkeydown="if(event.key===\'Enter\'||event.key===\' \')selectTarget('+targetIndex+')">');return '<div class="battleUnit '+(active?'active':'')+' '+(!u.alive?'dead':'')+' '+(selected?'target-selected':'')+'" data-unit-id="'+u.id+'">'+art+'<div class="battleUnitInfo"><div class="battleName">'+u.name+'</div><div class="battleHP">'+status+'</div><div class="battleBar"><div style="width:'+Math.max(0,hp/max*100)+'%"></div></div>'+(!enemy&&u.alive?'<div class="battleAP">AP '+u.ap+'/5</div>':'')+(u.status?'<div class="battleAP">'+u.status.name+'</div>':'')+'</div></div>';}
+function renderTurnOrder(){
+ const box=$("turnOrder");if(!box||!battle)return;
+ $("roundSide").textContent=String(battle.round||1).padStart(2,"0");
+ const order=battle.order||[];
+ box.innerHTML=order.map((u,i)=>{const dead=!u.alive||u.hp<=0,active=current()===u;return `<div class="turnEntry ${active?"active":""} ${dead?"dead":""}"><span class="turnNumber">${String(i+1).padStart(2,"0")}</span><img class="turnPortrait" src="${asset(u.portrait||"")}" alt="" onerror="this.style.opacity='.2'"><div class="turnText"><b>${u.name}</b><small>${dead?"Caduto":(isEnemy(u)?"Nemico":"Alleato")+" · "+Math.max(0,u.hp)+" HP"}</small></div></div>`}).join("");
+}
+function renderLeftSquad(){const box=$("leftSquad");if(!box||!G)return;const members=[G.hero,...G.party];box.innerHTML=members.map(p=>`<div class="leftMember"><img src="${asset(p.portrait||"")}" alt="${p.name}" onerror="this.style.opacity='.25'"><div class="leftMemberInfo"><b>${p.name}</b><small>Liv. ${p.level||1} · ${Math.max(0,p.hp)}/${p.maxhp} HP</small><div class="leftMiniBar"><i style="width:${Math.max(0,p.hp/p.maxhp*100)}%"></i></div></div></div>`).join("")}
+function renderBattle(){if(!battle)return;$("combat").dataset.battleScene=battle.n===1?"forest":battle.n===2?"crypt":"bell";$("roundBadge").textContent="Turno "+battle.round;$("partyList").innerHTML=[G.hero,...G.party].map(p=>unitHTML(p,current()===p)).join("");$("enemyList").innerHTML=battle.units.map(e=>unitHTML(e,current()===e)).join("");renderTurnOrder();renderLeftSquad();updateHUD()}
+function findUnitElement(u){return Array.from(document.querySelectorAll(".battleUnit")).find(el=>el.dataset.unitId===String(u.id))}
+function animateStrike(attacker,target,kind="attack"){return new Promise(resolve=>{let a=findUnitElement(attacker),t=findUnitElement(target);if(!a||!t){resolve();return}let attackClass=kind==="spell"?"castMagic":kind==="skill"?"dashSkill":isEnemy(attacker)?"dashEnemy":"dashHero";a.classList.remove("dashEnemy","dashHero","dashSkill","castMagic");void a.offsetWidth;a.classList.add(attackClass);let impactDelay=kind==="spell"?330:kind==="skill"?260:210;let total=kind==="spell"?720:kind==="skill"?650:520;setTimeout(()=>{t.classList.add(kind==="spell"?"magicHit":"hit");if(kind!=="spell")t.classList.add("impactSlash")},impactDelay);setTimeout(()=>{a.classList.remove("dashEnemy","dashHero","dashSkill","castMagic");t.classList.remove("hit","impactSlash","magicHit");resolve()},total)})}
+async function advanceToPlayer(){
+if(!battle||battle.ended||busy)return;
+while(battle&&!battle.ended){
+if(battle.units.every(e=>!e.alive||e.hp<=0)){winBattle();return}
+if(aliveParty().length===0){loseBattle();return}
+if(battle.idx>=battle.order.length){battle.idx=0;battle.round++;battle.turnPrepared=false;tickDowned();battle.order=battle.order.filter(u=>u.alive&&u.hp>0);if(!battle.order.length){loseBattle();return}}
+let u=current();if(!u||!u.alive||u.hp<=0){battle.idx++;battle.turnPrepared=false;continue}
+if(isEnemy(u)){busy=true;renderBattle();let targets=aliveParty();if(targets.length){let target=targets.slice().sort((a,b)=>(a.hp/a.maxhp)-(b.hp/b.maxhp))[0];let die=roll();await showDiceRoll(die,u.name,"Attacco nemico · D20");await animateStrike(u,target,"attack");enemyTurn(u,target,die)}battle.idx++;battle.turnPrepared=false;renderBattle();busy=false;continue}
+if(!battle.turnPrepared){u.ap=Math.min(5,u.ap+1);applyStartStatus(u);if(!u.alive||u.hp<=0){battle.idx++;battle.turnPrepared=false;continue}battle.turnPrepared=true}
+$("activeTitle").textContent="Turno di "+u.name;$("activeInfo").textContent=`HP ${u.hp}/${u.maxhp} · AP ${u.ap}/5 · Agilità ${u.stats.agilita||5}`;$("actionMessage").textContent="Scegli una sola azione. L'attacco normale non consuma AP.";renderTargets();renderActions();renderBattle();return
+}}
+function renderTargets(){let living=battle.units.filter(e=>e.alive&&e.hp>0);if(!living.length){selectedTarget=-1;$("targetArea").innerHTML="";renderBattle();return}if(!living.some(e=>battle.units.indexOf(e)===selectedTarget))selectedTarget=battle.units.indexOf(living[0]);$("targetArea").innerHTML="";renderBattle()}
+function selectTarget(i){if(busy)return;selectedTarget=i;renderTargets()}
+function hasCure(){return ["Antidoto","Benda","Purificazione"].some(k=>Number(G.inventory[k]||0)>0)}
+function hasDowned(){return [G.hero,...G.party].some(p=>!p.alive&&p.down>0)}
+function canUseMagic(u){return ["Mago","Chierico","Druido","mage","cleric","druid"].includes(u.class)}
+function toggleCombatAbilityMenu(){combatAbilityMenuOpen=!combatAbilityMenuOpen;renderActions()}
+function renderActions(){let u=current();if(!u||isEnemy(u))return;let list=unlockedAbilities(u);let menu=list.length?list.map(a=>'<button class="abilityChoice" onclick="playerAction(\'skill\',\''+a.id+'\')" '+(u.ap<a.cost?'disabled':'')+'><span><b>'+a.name+'</b><small>'+a.description+'</small></span><em>'+a.cost+' AP</em></button>').join(""):'<p class="small">Nessuna abilità disponibile.</p>';$("combatActions").innerHTML='<button class="btn" onclick="playerAction(\'attack\')">Attacco normale · 0 AP</button><div class="combatAbilityPicker"><button class="btn abilityToggle" onclick="toggleCombatAbilityMenu()">Abilità <span>'+(combatAbilityMenuOpen?'▴':'▾')+'</span></button><div class="combatAbilityMenu '+(combatAbilityMenuOpen?'open':'')+'">'+menu+'</div></div><button class="btn secondary" onclick="playerAction(\'potion\')" '+(G.inventory.Pozione<1?'disabled':'')+'>Pozione curativa</button><button class="btn secondary" onclick="playerAction(\'cure\')" '+(!hasCure()?'disabled':'')+'>Usa cura</button><button class="btn secondary" onclick="playerAction(\'rescue\')" '+(!hasDowned()?'disabled':'')+'>Soccorri compagno</button><button class="btn danger" onclick="playerAction(\'flee\')">Tenta la fuga</button>'}
+function unlockActions(){busy=false;renderActions();renderBattle()}
+async function playerAction(type,abilityId){
+if(busy||!battle||battle.ended)return;let u=current(),target=battle.units[selectedTarget];if(!u||!u.alive||isEnemy(u))return;
+if(type==="spell"&&!canUseMagic(u)){$("actionMessage").textContent="Questa classe non può utilizzare la magia.";return}let chosenAbility=type==="skill"?unlockedAbilities(u).find(a=>a.id===abilityId):null;if(type==="skill"&&!chosenAbility){unlockActions();return}
+busy=true;$("combatActions").querySelectorAll("button").forEach(b=>b.disabled=true);
+if(type==="skill"&&chosenAbility&&chosenAbility.effect){
+ const cost=chosenAbility.cost;if(u.ap<cost){unlockActions();return}u.ap-=cost;
+ if(chosenAbility.effect==="heal"){const allies=[G.hero,...G.party].filter(p=>p.alive&&p.hp<p.maxhp).sort((a,b)=>(a.hp/a.maxhp)-(b.hp/b.maxhp));const recipient=allies[0]||u;const before=recipient.hp;recipient.hp=Math.min(recipient.maxhp,recipient.hp+chosenAbility.healAmount);log(`${u.name} usa ${chosenAbility.name}: ${recipient.name} recupera ${recipient.hp-before} HP.`)}
+ else if(chosenAbility.effect==="guard"){u.guard=Math.max(u.guard||0,chosenAbility.guardAmount);u.guardTurns=2;log(`${u.name} usa ${chosenAbility.name}: difesa aumentata per 2 turni.`)}
+ else if(chosenAbility.effect==="focus"){u.focus=Math.max(u.focus||0,chosenAbility.focusAmount);u.focusUses=1;log(`${u.name} usa ${chosenAbility.name}: il prossimo attacco è potenziato.`)}
+ combatAbilityMenuOpen=false;
+}else if(["attack","skill","spell"].includes(type)){
+if(!target||!target.alive){unlockActions();return}let cost=type==="skill"?(chosenAbility?chosenAbility.cost:2):type==="spell"?3:0;if(u.ap<cost){unlockActions();return}u.ap-=cost;let die=roll();await showDiceRoll(die,u.name,"Tiro dell'azione · D20");await animateStrike(u,target,type);
+let activeSkill=type==="skill"?chosenAbility:null;let stat=(type==="spell"||(activeSkill&&activeSkill.type==="Magica"))?(u.stats.intelletto||u.stats.volonta||5):(u.stats.forza||5),bonus=Math.floor(stat/2),weapon=u.weapon+(type==="skill"?(activeSkill?activeSkill.damageBonus||0:0):type==="spell"?4:0),damage=Math.max(1,die+bonus+weapon+(u.focus||0)-target.armor);if(die===20)damage+=10;target.hp-=damage;if(u.focusUses){u.focus=0;u.focusUses=0;log(`${u.name} consuma la concentrazione nel colpo.`)}
+log(`${u.name}: D20 ${die} → ${type==="spell"?"incantesimo":type==="skill"?(activeSkill?activeSkill.name:"abilità"):"attacco"} su ${target.name}, ${damage} danni${die===20?" (CRITICO!)":""}.`);
+if(target.hp<=0){target.hp=0;target.alive=false;log(`${target.name} è stato sconfitto.`)}
+}else if(type==="potion"){if(G.inventory.Pozione<1){unlockActions();return}G.inventory.Pozione--;let oldHP=u.hp;u.hp=Math.min(u.maxhp,u.hp+18);log(`${u.name} usa una pozione e recupera ${u.hp-oldHP} HP.`)}
+else if(type==="cure"){let k=["Antidoto","Benda","Purificazione"].find(x=>G.inventory[x]>0);if(!k){unlockActions();return}G.inventory[k]--;if(u.status){u.status=null;log(`${u.name} usa ${k}: effetto negativo rimosso.`)}else log(`${u.name} usa ${k}, ma non ha alterazioni da curare.`)}
+else if(type==="rescue"){let p=[G.hero,...G.party].find(p=>!p.alive&&p.down>0);if(!p){unlockActions();return}p.alive=true;p.down=0;p.hp=Math.max(8,Math.floor(p.maxhp*.25));log(`${u.name} soccorre ${p.name}, che torna in piedi con ${p.hp} HP.`)}
+else if(type==="flee"){if(battle.n===3)log("Il Custode blocca ogni via di fuga.");else if(Math.random()<.55){log("La fuga riesce. Lo scontro termina, ma la missione resta incompleta.");battle.ended=true;busy=false;$("combat").classList.add("hidden");showScene(battle.n===1?"forest":"crypt");return}else log("La fuga fallisce!")}
+renderBattle();if(battle.units.every(e=>!e.alive||e.hp<=0)){busy=false;winBattle();return}battle.idx++;battle.turnPrepared=false;busy=false;advanceToPlayer()
+}
+async function showDiceRoll(value,who,result){const img=$("diceImage"),whoBox=$("diceWho"),num=$("diceNumber"),res=$("diceResult");if(!num)return;if(whoBox)whoBox.textContent=who||"Il destino si muove…";if(res)res.textContent="Il dado sta girando…";num.textContent="…";if(img){img.classList.remove("diceRolling");void img.offsetWidth;img.classList.add("diceRolling")}await new Promise(resolve=>setTimeout(resolve,1250));if(img)img.classList.remove("diceRolling");num.textContent=String(value);if(res)res.textContent=result||"Risultato del tiro";await new Promise(resolve=>setTimeout(resolve,1000));}
+function roll(){return Math.floor(Math.random()*20)+1}
+function enemyTurn(e,target,die){
+if(!target||!target.alive)return;die=die||roll();let damage=Math.max(1,die+e.atk-target.armor-(target.guard||0));if(die===20)damage+=5;target.hp-=damage;if(target.guardTurns){target.guardTurns--;if(target.guardTurns<=0){target.guard=0;target.guardTurns=0}}log(`${e.name} attacca ${target.name}: D20 ${die}, ${damage} danni.`);
+if(e.kind==="priest"&&target.hp>0&&Math.random()<.35){target.status={name:"Avvelenamento",turns:3,damage:3};log(`${target.name} è avvelenato!`)}
+if(e.kind==="boss"&&target.hp>0&&Math.random()<.3){target.status={name:"Sanguinamento",turns:2,damage:4};log(`${target.name} sanguina!`)}
+if(target.hp<=0){target.hp=0;if(target.isHero){target.hp=1;log(`${target.name} crolla, ma il destino lo protegge.`)}else{target.alive=false;target.down=3;log(`${target.name} è a terra! Hai 3 turni per soccorrerlo.`)}}
+}
+function applyStartStatus(u){if(!u.status)return;let s=u.status;if(s.damage){u.hp-=s.damage;log(`${u.name} subisce ${s.damage} danni da ${s.name.toLowerCase()}.`)}s.turns--;if(s.turns<=0){log(`L'effetto ${s.name.toLowerCase()} termina su ${u.name}.`);u.status=null}if(u.hp<=0){if(u.isHero){u.hp=1;log(`${u.name} resiste alla morte.`)}else{u.hp=0;u.alive=false;u.down=3;log(`${u.name} cade a terra!`)}}}
+function tickDowned(){[G.hero,...G.party].forEach(p=>{if(!p.alive&&p.down>0){p.down--;if(p.down===0)log(`${p.name} non è stato soccorso in tempo: è perduto.`)}})}
+function winBattle(){
+if(!battle||battle.ended)return;battle.ended=true;busy=false;G.battleWon++;let n=battle.n,reward=n===1?{xp:35,gold:18}:n===2?{xp:55,gold:28}:{xp:100,gold:60};G.hero.xp+=reward.xp;G.gold+=reward.gold;let levelUp="";
+if(G.hero.xp>=G.hero.level*60){G.hero.xp-=G.hero.level*60;G.hero.level++;G.hero.maxhp+=8;G.hero.hp=Math.min(G.hero.maxhp,G.hero.hp+8);G.hero.stats.forza++;G.statPoints=(G.statPoints||0)+2;levelUp=` ${G.hero.name} sale al livello ${G.hero.level}! Hai ottenuto 2 punti caratteristica.`}
+if(n===3){G.inventory["Lama dell'Eco Perduto"]=1;G.finished=true}
+$("combat").classList.add("hidden");document.body.classList.remove("battle-mode");let box=$("afterCombat");box.classList.remove("hidden");
+box.innerHTML=`<h2>${n===3?"Vittoria! Il Custode è caduto.":"Vittoria!"}</h2><p>Hai ottenuto ${reward.xp} XP e ${reward.gold} monete d'oro.${levelUp}</p>${n===3?'<p><b>Oggetto unico leggendario ottenuto: Lama dell’Eco Perduto.</b> La campana tace.</p>':''}<button class="btn" onclick="continueAfter(${n})">${n===1?"Prosegui verso la cripta":n===2?"Apri la sala della campana":"Concludi l'avventura"}</button>`;
+renderBattle();updateHUD()
+}
+function continueAfter(n){if(n===1)showScene("crypt");else if(n===2)showScene("boss");else showScene("ending")}
+function loseBattle(){if(!battle||battle.ended)return;battle.ended=true;busy=false;$("combat").classList.add("hidden");document.body.classList.remove("battle-mode");let box=$("afterCombat");box.classList.remove("hidden");box.innerHTML=`<h2>Il gruppo è sopraffatto</h2><p>La prova finisce qui, ma puoi riprovare.</p><button class="btn" onclick="restartBattle()">Riprova lo scontro</button>`}
+function restartBattle(){startBattle(battle.n)}
+function updateHUD(){if(!G)return;renderLeftSquad();$("levelBadge").textContent=`Livello ${G.hero.level} · ${G.hero.xp} XP`;$("inventory").innerHTML=Object.entries(G.inventory).map(([k,v])=>`<span>${k}: ${v}</span>`).join("")+`<span>Oro: ${G.gold}</span>`;const hp=Math.max(0,G.hero.hp);$("topHP").textContent=hp+"/"+G.hero.maxhp;$("topPotions").textContent=G.inventory.Pozione||0;$("topGold").textContent=G.gold||0;$("sideResources").innerHTML=`Pozioni: <b>${G.inventory.Pozione||0}</b><br>Antidoti: <b>${G.inventory.Antidoto||0}</b><br>Oro: <b>${G.gold||0}</b>`}
+function saveGame(){
+if(!G){alert("Non c'è una partita da salvare.");return}let battleSave=null;if(battle)battleSave={...battle,order:battle.order.map(u=>u.id)};
+localStorage.setItem("velmoraDemoSave",JSON.stringify({G,battle:battleSave}));alert("Partita salvata su questo dispositivo!")
+}
+function loadGame(){
+let raw=localStorage.getItem("velmoraDemoSave");if(!raw){alert("Non è presente un salvataggio.");return}
+try{let s=JSON.parse(raw);G=s.G;battle=s.battle;busy=false;if(!G.statPoints)G.statPoints=0;ensureSideQuestState();
+$("creator").classList.add("hidden");$("game").classList.remove("hidden");$("bottomNav").classList.add("visible");
+if(battle){let all=[G.hero,...G.party,...battle.units],byId=new Map(all.map(u=>[String(u.id),u]));battle.order=(battle.order||[]).map(id=>byId.get(String(id))).filter(Boolean);
+if(!battle.ended){document.body.classList.add("battle-mode");$("combat").classList.remove("hidden");$("afterCombat").classList.add("hidden");$("battleLog").innerHTML="";battle.log.forEach(x=>$("battleLog").innerHTML+=`<p>${x}</p>`);renderBattle();advanceToPlayer()}
+else{document.body.classList.remove("battle-mode");$("combat").classList.add("hidden");showScene(G.finished?"ending":G.battleWon===1?"crypt":G.battleWon===2?"boss":"prologue")}}
+else showScene(G.finished?"ending":G.battleWon===0?"prologue":G.battleWon===1?"crypt":G.battleWon===2?"boss":"ending");
+updateHUD();openTab("mission");alert("Partita caricata!")
+}catch(e){console.error(e);alert("Salvataggio non leggibile.")}
+}
+function backToCreator(){if(confirm("Tornare alla creazione? La partita resterà salvata solo se la salvi prima.")){location.reload()}}
+
+/* NAVIGAZIONE E PANNELLI SECONDARI: non modifica lo stato del combattimento */
+function setActiveTab(tab){document.querySelectorAll(".navBtn").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab))}
+function openTab(tab){
+if(!G)return;setActiveTab(tab);$("menuView").classList.add("hidden");$("gameContent").classList.remove("hidden");
+if(tab==="mission"){ $("missionPanel").scrollIntoView({behavior:"smooth",block:"start"});return}
+if(tab==="inventory"){ $("inventoryPanel").scrollIntoView({behavior:"smooth",block:"center"});return}
+if(tab==="squad"){showMenu("squad");return}
+if(tab==="more"){showMenu("more");return}
+}
+
+/* ===== MISSIONI SECONDARIE MODULARI =====
+   Incarichi facoltativi e indipendenti dalla trama principale.
+   Stato, scelte, tentativi e ricompense vivono in G.sideQuests. */
+const sideQuestCatalog = [
+ {id:"lume_bruma",title:"Il lume di Brumacava",type:"Mistero ed esplorazione",location:"Cava abbandonata di Brumacava",minBattleWon:0,summary:"Una luce azzurra compare ogni notte tra le vecchie gallerie. I minatori giurano di sentire una voce sotto la pietra.",intro:"La locandiera ti parla di una cava chiusa da anni. Una luce fredda filtra da una fessura e, nelle notti senza luna, qualcuno sente pronunciare il proprio nome. Nessuno vuole più avvicinarsi.",checkAction:"investigate",checkLabel:"Esamina le incisioni e segui il bagliore",checkStat:"percezione",difficulty:13,successText:"Individui tre rune consumate e capisci che la luce proviene da un cristallo imprigionato in un sigillo antico. Il meccanismo può essere chiuso oppure sfruttato."},
+ {id:"morso_ponte",title:"Il morso al ponte vecchio",type:"Caccia",location:"Ponte di Selvariva",minBattleWon:1,summary:"Un predatore ferisce il bestiame e blocca il passaggio. La gente offre una ricompensa, ma le tracce raccontano una storia diversa.",intro:"Un pastore mostra ferite profonde sul fianco di una capra. Le impronte conducono al ponte vecchio, dove una creatura affamata si nasconde tra le travi. Il pastore promette una ricompensa, ma ti chiede di capire prima perché la bestia si avvicini al villaggio.",checkAction:"hunt",checkLabel:"Segui le tracce senza farti sorprendere",checkStat:"percezione",difficulty:14,successText:"Raggiungi la tana e trovi la creatura ferita da una vecchia trappola. Ora puoi abbatterla per sicurezza oppure liberarla e allontanarla dal ponte."},
+ {id:"conto_mugnaio",title:"Il conto del mugnaio",type:"Persone e fazioni",location:"Mulino di Rovoscuro",minBattleWon:1,summary:"Un mugnaio accusa una piccola compagnia di avergli sottratto farina e denaro. Le versioni non coincidono.",intro:"Davanti al mulino trovi il vecchio Odran che discute con tre viandanti. Il mugnaio sostiene di essere stato derubato; i viandanti affermano che il pagamento era già stato concordato. Nessuno vuole cedere e la disputa sta dividendo il villaggio.",checkAction:"negotiate",checkLabel:"Ascolta entrambe le parti e ricostruisci l'accordo",checkStat:"carisma",difficulty:13,successText:"Confrontando le date sui registri scopri che il pagamento è stato riscosso da un intermediario. Il mugnaio e i viandanti attendono la tua decisione su come chiudere la disputa."}
+];
+function ensureSideQuestState(){
+ if(!G)return;
+ if(!G.sideQuests||typeof G.sideQuests!=="object")G.sideQuests={};
+ sideQuestCatalog.forEach(q=>{if(!G.sideQuests[q.id])G.sideQuests[q.id]={status:"available",stage:0,attempts:0,outcome:null,history:[],reward:null,lastRoll:null}});
+ if(!Number.isFinite(G.sideQuestReputation))G.sideQuestReputation=0;
+}
+function sideQuestUnlocked(q){return !!G&&((G.battleWon||0)>=(q.minBattleWon||0))}
+function sideQuestStatus(q,st){
+ if(st.status==="completed")return "Completata";
+ if(st.status==="active")return "In corso";
+ return sideQuestUnlocked(q)?"Disponibile":"Bloccata";
+}
+function renderSideQuestList(){
+ ensureSideQuestState();
+ const c=$("menuContent");
+ c.innerHTML='<button class="btn secondary menuBack" onclick="showMenu(\'more\')">← Indietro</button><h2>Missioni secondarie</h2><p class="menuHint">Incarichi facoltativi di Velmora. Non modificano il prologo né la futura trama principale. Le decisioni e gli esiti vengono conservati nel salvataggio.</p><div class="questReputation">Reputazione locale: <b>'+G.sideQuestReputation+'</b></div>'+
+ sideQuestCatalog.map(q=>{const st=G.sideQuests[q.id],unlocked=sideQuestUnlocked(q),status=sideQuestStatus(q,st);return '<button class="questCard" onclick="renderSideQuest(\''+q.id+'\')" '+(!unlocked&&st.status!=="completed"?'disabled':'')+'><span class="questCardTop"><b>'+q.title+'</b><em class="questStatus '+st.status+'">'+status+'</em></span><small>'+q.type+' · '+q.location+'</small><p>'+q.summary+'</p>'+(!unlocked?'<span class="questLock">Si sblocca dopo il primo scontro.</span>':'')+'</button>'}).join("");
+}
+function renderSideQuest(id){
+ ensureSideQuestState();
+ const q=sideQuestCatalog.find(x=>x.id===id);if(!q)return renderSideQuestList();
+ const st=G.sideQuests[id],c=$("menuContent");
+ let actions="";
+ if(st.status==="available"&&sideQuestUnlocked(q))actions='<button class="btn" onclick="sideQuestAction(\''+id+'\',\'accept\')">Accetta incarico</button>';
+ if(st.status==="active"&&st.stage===1)actions='<button class="btn" onclick="sideQuestAction(\''+id+'\',\''+q.checkAction+'\')">'+q.checkLabel+'</button>';
+ if(st.status==="active"&&st.stage===2){
+  if(id==="lume_bruma")actions='<button class="btn" onclick="sideQuestAction(\''+id+'\',\'seal\')">Richiudi il sigillo</button><button class="btn secondary" onclick="sideQuestAction(\''+id+'\',\'take\')">Prendi il cristallo</button>';
+  if(id==="morso_ponte")actions='<button class="btn" onclick="sideQuestAction(\''+id+'\',\'spare\')">Libera la creatura e guidala lontano</button><button class="btn secondary" onclick="sideQuestAction(\''+id+'\',\'slay\')">Abbatti la bestia</button>';
+  if(id==="conto_mugnaio")actions='<button class="btn" onclick="sideQuestAction(\''+id+'\',\'forgive\')">Trova un accordo e perdona il debito</button><button class="btn secondary" onclick="sideQuestAction(\''+id+'\',\'expose\')">Denuncia l’intermediario</button>';
+ }
+ const roll=st.lastRoll?'<div class="questRoll">D20: <b>'+st.lastRoll.roll+'</b> · bonus '+(st.lastRoll.bonus>=0?'+':'')+st.lastRoll.bonus+' · totale <b>'+st.lastRoll.total+'</b> — '+(st.lastRoll.success?'Prova riuscita':'Prova non riuscita')+'</div>':'';
+ const history=(st.history||[]).map(x=>'<p class="questHistoryLine">'+x+'</p>').join("");
+ const outcome=st.status==="completed"?'<div class="questOutcome"><b>Esito: '+st.outcome+'</b><p>'+st.outcomeText+'</p><p>Ricompensa: '+(st.reward?.gold||0)+' monete'+(st.reward?.items?.length?' · '+st.reward.items.map(x=>x.qty+' '+x.name).join(', '):'')+'</p></div>':'';
+ c.innerHTML='<button class="btn secondary menuBack" onclick="renderSideQuestList()">← Tutte le missioni</button><div class="questDetailHead"><span>'+q.type.toUpperCase()+'</span><h2>'+q.title+'</h2><small>'+q.location+'</small></div><p>'+q.intro+'</p><div class="questProgress"><b>Stato:</b> '+sideQuestStatus(q,st)+' · <b>Tentativi:</b> '+st.attempts+'</div>'+roll+(st.stage===2&&st.status==="active"?'<p class="questSuccessText">'+q.successText+'</p>':'')+outcome+'<div class="questActions">'+actions+'</div><div class="questHistory">'+history+'</div>';
+}
+function persistGameQuietly(){
+ if(!G)return;
+ const battleSave=battle?{...battle,order:(battle.order||[]).map(u=>u.id)}:null;
+ localStorage.setItem("velmoraDemoSave",JSON.stringify({G,battle:battleSave}));
+}
+function sideQuestCheck(q,st){
+ const stat=Number(G.hero.stats?.[q.checkStat]||5),roll=1+Math.floor(Math.random()*20),bonus=Math.floor((stat-5)/2),total=roll+bonus,success=total>=q.difficulty;
+ st.attempts=(st.attempts||0)+1;st.lastRoll={roll,bonus,total,success};
+ st.history=st.history||[];
+ st.history.unshift(success?"La prova è riuscita.":"La prova non è riuscita; puoi riprovare.");
+ if(success){st.stage=2;st.history.unshift(q.successText)}
+ else st.history.unshift("Il D20 non basta. La situazione resta aperta e puoi tentare ancora.");
+ persistGameQuietly();renderSideQuest(q.id);
+}
+function completeSideQuest(id,outcome,outcomeText,reward){
+ const q=sideQuestCatalog.find(x=>x.id===id),st=G.sideQuests[id];if(!q||st.status==="completed")return;
+ st.status="completed";st.stage=3;st.outcome=outcome;st.outcomeText=outcomeText;st.reward=reward;st.completedAt=new Date().toISOString();
+ G.gold=(G.gold||0)+(reward.gold||0);
+ (reward.items||[]).forEach(it=>G.inventory[it.name]=(G.inventory[it.name]||0)+it.qty);
+ G.sideQuestReputation=(G.sideQuestReputation||0)+(reward.reputation||0);
+ st.history=st.history||[];st.history.unshift("Incarico completato: "+outcome+".");
+ if(battle&&!battle.ended)log("Missione secondaria completata: "+q.title+".");
+ updateHUD();persistGameQuietly();renderSideQuest(id);
+}
+function sideQuestAction(id,action){
+ if(!G)return;ensureSideQuestState();
+ const q=sideQuestCatalog.find(x=>x.id===id),st=G.sideQuests[id];if(!q||!st)return;
+ if(action==="accept"&&st.status==="available"&&sideQuestUnlocked(q)){
+  st.status="active";st.stage=1;st.history.unshift("Hai accettato l'incarico.");persistGameQuietly();renderSideQuest(id);return;
+ }
+ if(st.status!=="active")return;
+ if(action===q.checkAction&&st.stage===1){sideQuestCheck(q,st);return}
+ if(st.stage!==2)return;
+ if(id==="lume_bruma"&&action==="seal")completeSideQuest(id,"Il sigillo preservato","Hai richiuso il cristallo senza spezzare il sigillo. La cava torna silenziosa e i minatori potranno riaprire il passaggio.",{gold:16,items:[{name:"Pozione",qty:1}],reputation:1});
+ if(id==="lume_bruma"&&action==="take")completeSideQuest(id,"Il cristallo sottratto","Hai portato via il cristallo. Il suo bagliore si spegne, ma nelle gallerie resta un freddo innaturale.",{gold:24,items:[{name:"Antidoto",qty:1}],reputation:-1});
+ if(id==="morso_ponte"&&action==="spare")completeSideQuest(id,"La bestia risparmiata","Hai liberato la creatura dalla trappola e l'hai guidata lontano dal ponte. Il pastore non è convinto, ma la gente del luogo ricorderà il gesto.",{gold:18,items:[{name:"Benda",qty:1}],reputation:1});
+ if(id==="morso_ponte"&&action==="slay")completeSideQuest(id,"Il ponte liberato","La bestia non farà più del male al bestiame. Il pastore paga la ricompensa promessa.",{gold:28,items:[{name:"Antidoto",qty:1}],reputation:0});
+ if(id==="conto_mugnaio"&&action==="forgive")completeSideQuest(id,"L'accordo ritrovato","Hai convinto Odran e i viandanti a dividere la perdita e a ricominciare da capo. Il mulino riaprirà per tutti.",{gold:20,items:[{name:"Pozione",qty:1}],reputation:2});
+ if(id==="conto_mugnaio"&&action==="expose")completeSideQuest(id,"L'intermediario smascherato","Hai portato i registri alle guardie. L'intermediario dovrà rispondere del denaro sottratto.",{gold:30,items:[{name:"Purificazione",qty:1}],reputation:1});
+}
+
+function showMenu(page){
+$("menuView").classList.remove("hidden");$("gameContent").classList.remove("hidden");
+$("menuView").scrollIntoView({behavior:"smooth",block:"start"});
+const c=$("menuContent");
+if(page==="quests"){renderSideQuestList();return}
+if(page==="more"){
+c.innerHTML=`<h2>Altro</h2><div class="menuGrid">
+<button class="choice menuTile" onclick="showMenu('settings')"><strong>⚙ Impostazioni</strong><small>Musica, salvataggio e partita</small></button>
+<button class="choice menuTile" onclick="openCharacterScreen()"><strong>♙ Personaggio</strong><small>Profilo ed equipaggiamento</small></button>
+<button class="choice menuTile" onclick="openAbilitiesScreen()"><strong>✧ Abilità</strong><small>Competenze della classe</small></button>
+<button class="choice menuTile" onclick="showMenu('statistics')"><strong>✚ Statistiche</strong><small>Caratteristiche e punti</small></button>
+<button class="choice menuTile" onclick="showMenu('quests')"><strong>⚑ Missioni secondarie</strong><small>Incarichi, misteri e cacce</small></button>
+</div>`;return
+}
+if(page==="squad"){
+let members=[G.hero,...G.party];c.innerHTML=`<h2>La tua squadra</h2><p class="menuHint">Qui puoi controllare i membri del gruppo. La formazione e il combattimento restano attivi anche mentre consulti questo pannello.</p>`+
+members.map(p=>`<div class="memberCard"><img src="${asset(p.portrait)}" alt="${p.name}"><div class="memberInfo"><strong>${p.name}</strong><p>${p.isHero?p.race+" · "+p.class:"Compagno · Guerriero"}</p><p>Livello ${p.level||1} · ${p.hp}/${p.maxhp} HP</p><div class="bars"><div class="hpbar" style="width:${Math.max(0,p.hp/p.maxhp*100)}%"></div></div><span class="badge">${p.alive?"In squadra":"Caduto"}</span></div></div>`).join("");return
+}
+if(page==="settings"){
+c.innerHTML=`<button class="btn secondary menuBack" onclick="showMenu('more')">← Indietro</button><h2>Impostazioni</h2><p>Audio</p><button class="btn secondary" onclick="toggleMusic()">♫ Attiva / disattiva musica</button><hr><h3>Partita</h3><div class="row"><button class="btn secondary" onclick="saveGame()">Salva partita</button><button class="btn secondary" onclick="loadGame()">Carica partita</button></div><p class="menuHint">Il salvataggio rimane nella memoria di questo browser e dispositivo.</p><hr><button class="btn danger" onclick="backToCreator()">Torna alla creazione</button>`;return
+}
+if(page==="character"){
+const members=[G.hero,...G.party];members.forEach(x=>{if(!x.equipment)x.equipment={hair:""}});
+let p=members.find(x=>(x.isHero?"hero":x.id)===selectedEquipmentMember)||G.hero;
+const choices=(items,current)=>'<option value="">Nessuno</option>'+items.map(x=>'<option value="'+x+'" '+(current===x?'selected':'')+'>'+x+'</option>').join("");
+c.innerHTML='<button class="btn secondary menuBack" onclick="showMenu(\'more\')">← Indietro</button>'+
+'<h2>Equipaggiamento della squadra</h2><label class="equipLabel">Scegli il personaggio</label>'+
+'<select class="input" onchange="selectedEquipmentMember=this.value;showMenu(\'character\')">'+
+members.map(x=>'<option value="'+(x.isHero?"hero":x.id)+'" '+(x===p?'selected':'')+'>'+x.name+'</option>').join("")+
+'</select><h3>Equipaggiamento di '+p.name+'</h3><div class="memberCard characterCard">'+equipmentLayers(p)+
+'<div class="memberInfo"><strong>'+p.name+'</strong><p>'+(p.isHero?p.race+" · "+p.class:"Compagno · Guerriero")+'</p><p>Livello '+p.level+' · '+p.hp+'/'+p.maxhp+' HP</p></div></div>'+
+'<h3>Equipaggiamento visivo</h3><label class="equipLabel">Acconciatura</label><select class="input" onchange="setEquipment(\'hair\',this.value)">'+choices(["Capelli coda ciuffi","Capelli coda lunga","Capelli lunghi","Capelli mossi","Capelli rasati lato","Capelli rasta","Capelli spettinati","Capelli trecce"],p.equipment.hair)+'</select>'+
+'<p class="menuHint">Le acconciature vengono salvate separatamente per ogni membro della squadra.</p>'+
+(p.isHero?'<div class="stats">'+Object.entries(p.stats).map(([k,v])=>'<div class="stat"><span>'+(statNames[k]||k)+'</span><b>'+v+'</b></div>').join("")+'</div>':'<p class="menuHint">Le statistiche del compagno sono consultabili nella scheda Squadra.</p>');return
+}
+if(page==="abilities"){
+let p=G.hero,mag=canUseMagic(p);c.innerHTML=`<button class="btn secondary menuBack" onclick="showMenu('more')">← Indietro</button><h2>Abilità</h2><p><b>${p.class}</b> · Le abilità sono consultabili qui; durante il combattimento si usano i pulsanti dedicati.</p><div class="memberCard"><div class="memberInfo"><strong>Attacco normale</strong><p>Nessun costo in AP. Attacco fisico con tiro D20.</p></div></div><div class="memberCard"><div class="memberInfo"><strong>Abilità speciale</strong><p>Costo: 2 AP. Attacco potenziato con danni aggiuntivi.</p></div></div><div class="memberCard"><div class="memberInfo"><strong>${mag?"Magia":"Tecnica di classe"}</strong><p>${mag?"Costo: 3 AP. Disponibile per questa classe.":"Le magie non sono disponibili per questa classe."}</p></div></div><p class="menuHint">Le abilità avanzate e i relativi alberi di sviluppo saranno aggiunti in una fase successiva.</p>`;return
+}
+if(page==="statistics"){
+let p=G.hero;if(!Number.isInteger(G.statPoints))G.statPoints=0;
+c.innerHTML=`<button class="btn secondary menuBack" onclick="showMenu('more')">← Indietro</button><h2>Statistiche</h2><p>Punti caratteristica disponibili: <b style="color:#f0d49b">${G.statPoints}</b></p><p class="menuHint">Quando sali di livello ottieni 2 punti da assegnare. Ogni punto aumenta di 1 la caratteristica scelta.</p>`+
+Object.entries(p.stats).map(([k,v])=>`<div class="pointRow"><span>${statNames[k]||k}</span><b>${v}</b><button class="btn secondary" onclick="addStatPoint('${k}')" ${G.statPoints<1?"disabled":""}>+</button></div>`).join("")+
+`<p class="menuHint">I punti spesi vengono conservati nel salvataggio.</p>`;return
+}
+}
+const abilityCatalog=[
+{id:"warrior_1",classKey:"Guerriero",name:"Colpo poderoso",type:"Fisica",cost:2,damageBonus:6,unlockLevel:1,description:"Un fendente caricato che concentra tutta la forza in un singolo impatto."},
+{id:"warrior_2",classKey:"Guerriero",name:"Guardia di ferro",type:"Difensiva",cost:2,damageBonus:3,unlockLevel:1,description:"Un colpo controllato che protegge il guerriero e spezza il ritmo avversario."},
+{id:"warrior_3",classKey:"Guerriero",name:"Impatto frantumante",type:"Fisica",cost:3,damageBonus:10,unlockLevel:3,description:"Un colpo pesante capace di travolgere le difese nemiche."},
+{id:"warrior_4",classKey:"Guerriero",name:"Assalto del campione",type:"Fisica",cost:4,damageBonus:15,unlockLevel:5,description:"Una combinazione brutale che scarica tutta la potenza sul bersaglio."},
+{id:"mage_1",classKey:"Mago",name:"Dardo arcano",type:"Magica",cost:2,damageBonus:6,unlockLevel:1,description:"Un proiettile di energia arcana guidato dalla volontà del mago."},
+{id:"mage_2",classKey:"Mago",name:"Scheggia di gelo",type:"Magica",cost:2,damageBonus:5,unlockLevel:1,description:"Una lama di ghiaccio colpisce il nemico con precisione."},
+{id:"mage_3",classKey:"Mago",name:"Esplosione runica",type:"Magica",cost:3,damageBonus:11,unlockLevel:3,description:"Una runa si apre sotto il bersaglio e libera energia devastante."},
+{id:"mage_4",classKey:"Mago",name:"Cometa crepuscolare",type:"Magica",cost:4,damageBonus:16,unlockLevel:5,description:"Una cometa di pura energia arcana precipita sul nemico."},
+{id:"archer_1",classKey:"Arciere",name:"Tiro preciso",type:"Distanza",cost:2,damageBonus:6,unlockLevel:1,description:"Un tiro mirato individua un punto vulnerabile del bersaglio."},
+{id:"archer_2",classKey:"Arciere",name:"Doppia freccia",type:"Distanza",cost:2,damageBonus:5,unlockLevel:1,description:"Due frecce rapide colpiscono quasi nello stesso istante."},
+{id:"archer_3",classKey:"Arciere",name:"Freccia perforante",type:"Distanza",cost:3,damageBonus:11,unlockLevel:3,description:"Un tiro potente attraversa armature e protezioni."},
+{id:"archer_4",classKey:"Arciere",name:"Pioggia di stelle",type:"Distanza",cost:4,damageBonus:16,unlockLevel:5,description:"Una raffica di frecce si abbatte sul campo di battaglia."},
+{id:"druid_1",classKey:"Druido",name:"Radice strangolante",type:"Natura",cost:2,damageBonus:6,unlockLevel:1,description:"Radici antiche emergono dal terreno e avvinghiano il nemico."},
+{id:"druid_2",classKey:"Druido",name:"Spina selvaggia",type:"Natura",cost:2,damageBonus:5,unlockLevel:1,description:"Una spina incantata viene scagliata contro il bersaglio."},
+{id:"druid_3",classKey:"Druido",name:"Artiglio della foresta",type:"Natura",cost:3,damageBonus:11,unlockLevel:3,description:"Un artiglio vegetale colpisce con la forza della foresta."},
+{id:"druid_4",classKey:"Druido",name:"Ira della quercia",type:"Natura",cost:4,damageBonus:16,unlockLevel:5,description:"La forza degli alberi antichi si riversa sul nemico."},
+{id:"thief_1",classKey:"Ladro",name:"Lama dell'ombra",type:"Tecnica",cost:2,damageBonus:6,unlockLevel:1,description:"Un fendente rapido diretto a un punto scoperto."},
+{id:"thief_2",classKey:"Ladro",name:"Colpo alle spalle",type:"Tecnica",cost:2,damageBonus:5,unlockLevel:1,description:"Un attacco opportunista che sfrutta ogni apertura."},
+{id:"thief_3",classKey:"Ladro",name:"Passo fantasma",type:"Tecnica",cost:3,damageBonus:11,unlockLevel:3,description:"Il ladro svanisce per un istante e riappare alle spalle del nemico."},
+{id:"thief_4",classKey:"Ladro",name:"Esecuzione silenziosa",type:"Tecnica",cost:4,damageBonus:16,unlockLevel:5,description:"Un attacco letale eseguito con precisione assoluta."},
+{id:"cleric_1",classKey:"Chierico",name:"Luce giudicante",type:"Sacra",cost:2,damageBonus:6,unlockLevel:1,description:"Un raggio sacro punisce le creature ostili."},
+{id:"cleric_2",classKey:"Chierico",name:"Martello consacrato",type:"Sacra",cost:2,damageBonus:5,unlockLevel:1,description:"Un colpo benedetto che respinge le forze oscure."},
+{id:"cleric_3",classKey:"Chierico",name:"Sigillo punitivo",type:"Sacra",cost:3,damageBonus:11,unlockLevel:3,description:"Un sigillo luminoso esplode sotto i piedi del nemico."},
+{id:"cleric_4",classKey:"Chierico",name:"Giudizio divino",type:"Sacra",cost:4,damageBonus:16,unlockLevel:5,description:"La luce divina si abbatte sul bersaglio con forza immensa."}
+,
+{id:"druid_heal",classKey:"Druido",name:"Linfa vitale",type:"Curativa",cost:2,healAmount:18,effect:"heal",unlockLevel:1,description:"La linfa della foresta richiude le ferite di un alleato."},
+{id:"druid_guard",classKey:"Druido",name:"Corteccia protettiva",type:"Difensiva",cost:2,guardAmount:5,effect:"guard",unlockLevel:1,description:"La corteccia spirituale protegge dai prossimi colpi."},
+{id:"druid_focus",classKey:"Druido",name:"Trance naturale",type:"Concentrazione",cost:2,focusAmount:4,effect:"focus",unlockLevel:3,description:"La sintonia con la natura potenzia il prossimo attacco."},
+{id:"cleric_heal",classKey:"Chierico",name:"Cura benedetta",type:"Curativa",cost:2,healAmount:22,effect:"heal",unlockLevel:1,description:"Una luce sacra ristora le ferite dell'alleato più provato."},
+{id:"cleric_guard",classKey:"Chierico",name:"Velo sacro",type:"Difensiva",cost:2,guardAmount:6,effect:"guard",unlockLevel:1,description:"Una barriera divina assorbe parte dei prossimi danni."},
+{id:"cleric_focus",classKey:"Chierico",name:"Preghiera concentrata",type:"Concentrazione",cost:2,focusAmount:5,effect:"focus",unlockLevel:3,description:"La preghiera rafforza il prossimo attacco sacro."},
+{id:"paladin_1",classKey:"Paladino",name:"Fendente consacrato",type:"Sacra",cost:2,damageBonus:7,unlockLevel:1,description:"Un colpo marziale sostenuto dalla luce sacra."},
+{id:"paladin_2",classKey:"Paladino",name:"Scudo del giuramento",type:"Difensiva",cost:2,guardAmount:7,effect:"guard",unlockLevel:1,description:"Il giuramento protegge il paladino."},
+{id:"paladin_heal",classKey:"Paladino",name:"Mano della redenzione",type:"Curativa",cost:2,healAmount:20,effect:"heal",unlockLevel:1,description:"Una benedizione restituisce vigore a un alleato ferito."},
+{id:"paladin_4",classKey:"Paladino",name:"Giudizio del sole",type:"Sacra",cost:3,damageBonus:12,unlockLevel:3,description:"Un'esplosione di luce punisce il nemico."},
+{id:"paladin_5",classKey:"Paladino",name:"Concentrazione del templare",type:"Concentrazione",cost:2,focusAmount:5,effect:"focus",unlockLevel:3,description:"Il paladino concentra la volontà nel prossimo attacco."},
+{id:"paladin_6",classKey:"Paladino",name:"Aura salvifica",type:"Curativa",cost:4,healAmount:34,effect:"heal",unlockLevel:5,description:"Un'aura sacra cura profondamente l'alleato più ferito."},
+{id:"warrior_guard2",classKey:"Guerriero",name:"Muro d'acciaio",type:"Difensiva",cost:2,guardAmount:7,effect:"guard",unlockLevel:3,description:"Una guardia impenetrabile riduce i prossimi danni."},
+{id:"warrior_focus",classKey:"Guerriero",name:"Respiro del veterano",type:"Concentrazione",cost:2,focusAmount:5,effect:"focus",unlockLevel:5,description:"Il prossimo attacco sarà più potente."},
+{id:"mage_guard",classKey:"Mago",name:"Barriera runica",type:"Difensiva",cost:2,guardAmount:5,effect:"guard",unlockLevel:1,description:"Una runa difensiva assorbe parte dei prossimi danni."},
+{id:"mage_focus",classKey:"Mago",name:"Canalizzazione",type:"Concentrazione",cost:2,focusAmount:6,effect:"focus",unlockLevel:3,description:"Il mago concentra il potere per potenziare il prossimo incantesimo."},
+{id:"archer_guard",classKey:"Arciere",name:"Passo evasivo",type:"Difensiva",cost:2,guardAmount:5,effect:"guard",unlockLevel:1,description:"Un movimento rapido riduce i danni ricevuti."},
+{id:"archer_focus",classKey:"Arciere",name:"Mira paziente",type:"Concentrazione",cost:2,focusAmount:6,effect:"focus",unlockLevel:3,description:"L'arciere prende la mira per un colpo più preciso."},
+{id:"thief_guard",classKey:"Ladro",name:"Fumo d'ombra",type:"Difensiva",cost:2,guardAmount:5,effect:"guard",unlockLevel:1,description:"Il ladro si cela nell'ombra e riduce i danni ricevuti."},
+{id:"thief_focus",classKey:"Ladro",name:"Sangue freddo",type:"Concentrazione",cost:2,focusAmount:6,effect:"focus",unlockLevel:3,description:"Il ladro attende l'istante perfetto per colpire."}];
+function classAbilities(p){return abilityCatalog.filter(a=>a.classKey===p.class)}
+function unlockedAbilities(p){return classAbilities(p).filter(a=>(p.level||1)>=a.unlockLevel)}
+let combatAbilityMenuOpen=false;
+function changeAbilityMember(direction){const members=characterMembers();if(!members.length)return;let i=members.findIndex(x=>(x.isHero?"hero":String(x.id))===String(selectedAbilityMember));i=(i+direction+members.length)%members.length;selectedAbilityMember=members[i].isHero?"hero":String(members[i].id);renderAbilitiesScreen()}
+let selectedAbilityMember="hero";
+function abilityMember(){return characterMembers().find(x=>(x.isHero?"hero":String(x.id))===String(selectedAbilityMember))||G.hero}
+function openAbilitiesScreen(){if(!G)return;if(!characterMembers().some(x=>(x.isHero?"hero":String(x.id))===String(selectedAbilityMember)))selectedAbilityMember="hero";characterMembers().forEach(x=>{if(!Array.isArray(x.equippedAbilities))x.equippedAbilities=[]});$("abilitiesScreen").classList.add("open");renderAbilitiesScreen()}
+function closeAbilitiesScreen(){$("abilitiesScreen").classList.remove("open")}
+function toggleAbility(id){const p=abilityMember();if(!p)return;const ability=unlockedAbilities(p).find(a=>a.id===id);if(!ability)return;if(!Array.isArray(p.equippedAbilities))p.equippedAbilities=[];const i=p.equippedAbilities.indexOf(id);if(i>=0)p.equippedAbilities.splice(i,1);else if(p.equippedAbilities.length<4)p.equippedAbilities.push(id);else return;renderAbilitiesScreen();if(battle)renderBattle()}
+function renderAbilitiesScreen(){if(!G||!$("abilitiesScreen").classList.contains("open"))return;const p=abilityMember();if(!Array.isArray(p.equippedAbilities))p.equippedAbilities=[];const unlocked=unlockedAbilities(p),equipped=p.equippedAbilities.map(id=>unlocked.find(x=>x.id===id)).filter(Boolean);const slots=Array.from({length:4},(_,i)=>{const a=equipped[i];return '<div class="abilitySlot '+(a?'filled':'')+'"><span class="slotNum">'+(i+1)+'</span><div class="slotContent">'+(a?'<strong>'+a.name+'</strong><small>'+a.description+'</small>':'<strong>Slot vuoto</strong><small>Puoi assegnare un massimo di 4 abilità conosciute</small>')+'</div>'+(a?'<button class="abilityRemove" onclick="toggleAbility(\''+a.id+'\')">×</button>':'')+'</div>'}).join("");const cards=classAbilities(p).map(a=>{const selected=p.equippedAbilities.includes(a.id),locked=(p.level||1)<a.unlockLevel;return '<article class="abilityCard '+(locked?'abilityLocked':'')+'"><strong>'+a.name+'</strong><div class="abilityMeta"><span>'+a.type+'</span><span>'+a.cost+' AP</span><span>'+(a.effect==='heal'?'Cura '+a.healAmount+' HP':a.effect==='guard'?'Difesa +'+a.guardAmount:a.effect==='focus'?'Prossimo colpo +'+a.focusAmount:'+'+a.damageBonus+' danni')+'</span></div><p>'+a.description+'</p>'+(locked?'<div class="abilityLock">Si sblocca al livello '+a.unlockLevel+'</div>':'<button onclick="toggleAbility(\''+a.id+'\')" '+(!selected&&p.equippedAbilities.length>=4?'disabled':'')+'>'+(selected?'Rimuovi dalle abilità attive':p.equippedAbilities.length>=4?'Slot completi':'Equipaggia abilità')+'</button>')+'</article>'}).join("");$("abilitiesScreenBody").innerHTML='<div class="abilitiesEquipped"><h3>'+p.name+' · Abilità attive</h3><div class="menuHint">Questa classe dispone di '+classAbilities(p).length+' abilità. Ne puoi equipaggiare fino a 4.</div>'+slots+'</div><div class="abilitiesLibrary"><h3>'+p.class+' · Abilità</h3><div class="menuHint">Le prime 2 sono disponibili dal livello 1. Le altre si sbloccano crescendo.</div>'+cards+'</div>'}
+let selectedEquipmentMember="hero";function characterMembers(){return G?[G.hero,...G.party]:[]}
+function openCharacterScreen(){if(!G)return;const members=characterMembers();if(!members.length)return;if(!members.some(x=>(x.isHero?"hero":String(x.id))===String(selectedEquipmentMember)))selectedEquipmentMember="hero";members.forEach(x=>{if(!x.equipment)x.equipment={hair:""}});$("characterScreen").classList.add("open");renderCharacterScreen()}
+function closeCharacterScreen(){$("characterScreen").classList.remove("open")}
+function changeCharacter(direction){const members=characterMembers();if(!members.length)return;let i=members.findIndex(x=>(x.isHero?"hero":String(x.id))===String(selectedEquipmentMember));i=(i+direction+members.length)%members.length;selectedEquipmentMember=members[i].isHero?"hero":String(members[i].id);renderCharacterScreen()}
+function renderCharacterScreen(){if(!G||!$("characterScreen").classList.contains("open"))return;const p=characterMembers().find(x=>(x.isHero?"hero":String(x.id))===String(selectedEquipmentMember))||G.hero;if(!p.equipment)p.equipment={hair:""};const hairOptions=["Capelli coda ciuffi","Capelli coda lunga","Capelli lunghi","Capelli mossi","Capelli rasati lato","Capelli rasta","Capelli spettinati","Capelli trecce"];const opts=['<option value="">Acconciatura base</option>',...hairOptions.map(x=>'<option value="'+x+'" '+(p.equipment.hair===x?'selected':'')+'>'+x+'</option>')].join("");const stats=p.stats?Object.entries(p.stats).map(([k,v])=>'<span>'+(statNames[k]||k)+': '+v+'</span>').join(""):"";$("characterScreenBody").innerHTML='<div class="characterPortraitPanel">'+equipmentLayers(p)+'<div class="characterIdentity"><strong>'+p.name+'</strong><small>'+(p.isHero?(p.race+" · "+p.class):"Compagno")+' · Livello '+(p.level||1)+'</small></div></div><div class="characterChoices"><h3>Equipaggiamento</h3><div class="menuHint">Le modifiche vengono mostrate subito sul personaggio.</div><label class="equipLabel">Acconciatura</label><select class="input" onchange="setEquipment(\'hair\',this.value)">'+opts+'</select><label class="equipLabel">Statistiche</label><div class="characterStatsLine">'+stats+'</div><div class="menuHint">Usa le frecce in alto per passare da un membro all’altro. Le scelte restano associate al singolo personaggio.</div></div>'}
+function setEquipment(slot,value){if(!G)return;const p=selectedEquipmentMember==="hero"?G.hero:G.party.find(x=>String(x.id)===String(selectedEquipmentMember));if(!p)return;if(!p.equipment)p.equipment={hair:""};if(slot!=="hair")return;p.equipment.hair=value;renderCharacterScreen();if(battle)renderBattle()}
+function addStatPoint(key){if(!G||G.statPoints<1||!(key in G.hero.stats))return;G.hero.stats[key]++;G.statPoints--;if(key==="vitalita"){G.hero.maxhp+=3;G.hero.hp+=3}showMenu("statistics");updateHUD()}
+let equipmentManifest={};fetch('./assets/equip/manifest.json').then(r=>r.ok?r.json():{}).then(m=>{equipmentManifest=m;if(G){if(battle)renderBattle();if(document.querySelector('#characterScreen.open'))renderCharacterScreen();}}).catch(()=>{});
+renderCreator();musicLabel();
+</script>
+</body>
+</html>
