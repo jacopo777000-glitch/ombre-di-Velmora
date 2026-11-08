@@ -1,0 +1,68 @@
+name: Prepare CC0 battle background review
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/import-cc0-backgrounds.yml
+
+permissions:
+  contents: read
+
+jobs:
+  prepare-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download CC0 painted-style background collection
+        run: |
+          mkdir -p review/pack review/individual
+          curl -fL --retry 3 --retry-delay 2 "https://opengameart.org/sites/default/files/40-game-backgrounds-1-painted-style.zip" -o /tmp/painted-pack.zip
+          curl -fL --retry 3 --retry-delay 2 "https://opengameart.org/sites/default/files/background_43.png" -o review/individual/handpainted-ruins.png
+          curl -fL --retry 3 --retry-delay 2 "https://lpc.opengameart.org/sites/default/files/back_cave.png" -o review/individual/cave-cc0.png
+          curl -fL --retry 3 --retry-delay 2 "https://opengameart.org/sites/default/files/Background2Final.png" -o review/individual/castle-hill-cc0.png
+      - name: Extract and make contact sheet
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from zipfile import ZipFile
+          from PIL import Image, ImageOps, ImageDraw
+          import shutil, json
+          out=Path("review/pack")
+          with ZipFile("/tmp/painted-pack.zip") as z:
+              z.extractall(out)
+          files=[]
+          for p in out.rglob("*"):
+              if p.is_file() and p.suffix.lower() in {".png",".jpg",".jpeg",".webp"}:
+                  try:
+                      im=Image.open(p)
+                      files.append((p, im.size))
+                  except Exception:
+                      pass
+          files.sort(key=lambda x:str(x[0]).lower())
+          if not files:
+              raise SystemExit("No images found in source archive")
+          cols=4; cw=360; ch=250
+          rows=(len(files)+cols-1)//cols
+          sheet=Image.new("RGB",(cols*cw,rows*ch),(24,22,20))
+          draw=ImageDraw.Draw(sheet)
+          listing=[]
+          for i,(p,size) in enumerate(files):
+              im=Image.open(p).convert("RGB")
+              thumb=ImageOps.fit(im,(cw-12,200))
+              x=(i%cols)*cw+6; y=(i//cols)*ch+6
+              sheet.paste(thumb,(x,y))
+              label=f"{p.name} | {size[0]}x{size[1]}"
+              draw.text((x,y+204),label[:54],fill=(240,224,190))
+              listing.append({"file":str(p),"width":size[0],"height":size[1]})
+          sheet.save("review/contact-sheet.jpg",quality=88)
+          Path("review/file-list.json").write_text(json.dumps(listing,indent=2))
+          shutil.copy2("/tmp/painted-pack.zip","review/40-game-backgrounds-1-painted-style.zip")
+          print(f"Found {len(files)} images")
+          for item in listing: print(item)
+          PY
+      - name: Upload review bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: cc0-background-review
+          path: review/
+          retention-days: 7
