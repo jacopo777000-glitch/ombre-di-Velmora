@@ -1097,7 +1097,7 @@ async function playFinisher(attacker,target,magical=false){
   };
   const frames=20;
   for(let frame=0;frame<frames&&!skip;frame++){
-   const p=frame/(frames-1),ease=Math.sin(p*Math.PI/2),focusX=(ar.left+tr.left+ar.width+tr.width)/2,focusY=(ar.top+tr.top+ar.height+tr.height)/2;
+   const p=frame/(frames-1),ease=Math.sin(p*Math.PI/2),focusX=(ar.left+ar.width/2+tr.left+tr.width/2)/2,focusY=(ar.top+ar.height/2+tr.top+tr.height/2)/2;
    ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,vw,vh);ctx.fillStyle="rgba(5,4,3,.72)";ctx.fillRect(0,0,vw,vh);
    const zoom=1.22+.12*Math.sin(p*Math.PI),shake=p>.48&&p<.68?(Math.random()-.5)*9:0;
    ctx.save();ctx.translate(focusX+shake,focusY+shake*.35);ctx.scale(zoom,zoom);ctx.translate(-focusX,-focusY);
