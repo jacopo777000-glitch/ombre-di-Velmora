@@ -862,7 +862,7 @@ function proceduralPick(list,rng){return list[Math.floor(rng()*list.length)]}
 function makeProceduralPerson(rng,index,side,baseLevel,seed){
  const gender=rng()<.5?"F":"M",race=proceduralPick(proceduralRaces,rng),raceId=race[0],raceName=race[1];
  const def=proceduralPick(proceduralClasses,rng);
- const className=def.id==="mage"?(gender==="F"?"Maga":"Mago"):def.id==="druid"?(gender==="F"?"Druida":"Druido"):def.id==="paladin"?(gender==="F"?"Paladina":"Paladino"):def.id==="cleric"?"Chierico":def.id==="archer"?"Arciere":def.id==="thief"?"Ladro":"Guerriero";
+ const className=def.id==="mage"?"Mago":def.id==="druid"?"Druido":def.id==="paladin"?"Paladino":def.id==="cleric"?"Chierico":def.id==="archer"?"Arciere":def.id==="thief"?"Ladro":"Guerriero";
  const rarityRoll=rng(),rarity=rarityRoll<.50?proceduralRarity[0]:rarityRoll<.78?proceduralRarity[1]:rarityRoll<.92?proceduralRarity[2]:rarityRoll<.985?proceduralRarity[3]:proceduralRarity[4],bonus=rarity[1];
  const level=side==="enemy"?Math.max(1,baseLevel+Math.floor(rng()*2)-1):1+Math.floor(rng()*3);
  const stats={};Object.keys(def.stats).forEach(k=>stats[k]=def.stats[k]+Math.floor((level-1)/2)+Math.floor(bonus/2));
@@ -870,11 +870,13 @@ function makeProceduralPerson(rng,index,side,baseLevel,seed){
  const weaponName=proceduralPick(def.weapons,rng),armorName=def.armor,headName=proceduralPick(def.heads,rng),hairName=proceduralPick(proceduralHair,rng);
  const physical={Spada:2,Ascia:3,Martello:3,Pugnale:1,Arco:3,Bastone:1,Scudo:0}[weaponName]||1;
  const magic=weaponName==="Bastone"?(def.id==="mage"?5:3):0;
- const armor=1+Math.floor(stats.vitalita/3)+bonus;
+ let armor=1+Math.floor(stats.vitalita/3)+bonus;
+ let finalHp=maxhp,finalAtk=4+Math.floor(stats.forza/2)+(level-1)+bonus;
+ if(side==="enemy"){finalHp=18+stats.vitalita*2+(level-1)*5+bonus*2;armor=1+Math.floor(stats.vitalita/4)+bonus;finalAtk=4+Math.floor(stats.forza/3)+(level-1)+bonus}
  const name=proceduralPick(proceduralNames,rng)+" "+proceduralPick(proceduralEpithet,rng);
  const id=(side==="enemy"?"foe-":"wanderer-")+String(seed)+"-"+index;
- const p={id,proceduralId:side==="ally"?id:null,seed:Number(seed)+index,name,race:raceName,raceId,gender,class:className,role:def.role,rarity:rarity[0],personality:proceduralPick(proceduralPersonalities,rng),description:raceName+" "+className.toLowerCase()+", "+def.role.toLowerCase()+". "+rarity[0]+".",portrait:proceduralPortraits[raceId][gender],level,xp:0,stats,maxhp,hp:maxhp,ap:5,maxap:5,armor,baseArmor:armor,atk:4+Math.floor(stats.forza/2)+(level-1)+bonus,weapon:physical+bonus,alive:true,down:0,isHero:false,isProcedural:true,equipment:{hair:hairName,armor:armorName,head:headName,weapon:weaponName,physicalBonus:physical+bonus,magicBonus:magic+bonus,rarity:rarity[0]},appearance:{hair:hairName,headgear:headName,armor:armorName,weapon:weaponName}};
- if(side==="enemy"){p.kind="procedural";p.proceduralId=null;p.name=proceduralPick(["Predone","Cacciatore","Cultista","Guardiano","Razziatore"],rng)+" "+raceName.toLowerCase();p.atk+=Math.max(0,baseLevel-1)*2}
+ const p={id,proceduralId:side==="ally"?id:null,seed:Number(seed)+index,name,race:raceName,raceId,gender,class:className,role:def.role,rarity:rarity[0],personality:proceduralPick(proceduralPersonalities,rng),description:raceName+" "+className.toLowerCase()+", "+def.role.toLowerCase()+". "+rarity[0]+".",portrait:proceduralPortraits[raceId][gender],level,xp:0,stats,maxhp:finalHp,hp:finalHp,ap:5,maxap:5,armor,baseArmor:armor,atk:finalAtk,weapon:physical,alive:true,down:0,isHero:false,isProcedural:true,equipment:{hair:hairName,armor:armorName,head:headName,weapon:weaponName,physicalBonus:physical+bonus,magicBonus:magic+bonus,rarity:rarity[0]},appearance:{hair:hairName,headgear:headName,armor:armorName,weapon:weaponName}};
+ if(side==="enemy"){p.kind="procedural";p.proceduralId=null;p.name=proceduralPick(["Predone","Cacciatore","Cultista","Guardiano","Razziatore"],rng)+" "+raceName.toLowerCase()}
  return p;
 }
 function generateProceduralRoster(seed){
@@ -918,7 +920,7 @@ guildChosenMission=guildMissions.find(m=>m.id===id);guildChosenCompanions=[];$("
 $("sceneText").innerHTML='<p>Per l’incarico <b>'+guildChosenMission.title+'</b> puoi reclutare due avventurieri dalla sala comune.</p><p id="guildPickCount">Compagni scelti: 0/2</p>';renderGuildRoster();
 }
 function renderGuildRoster(){
-$("sceneChoices").innerHTML=guildRoster.map((p,i)=>'<button class="btn questCard '+(guildChosenCompanions.includes(i)?'selected':'')+'" onclick="toggleGuildCompanion('+i+')"><img src="'+asset(p.portrait)+'" style="width:54px;height:68px;object-fit:contain;float:left;margin-right:10px" alt=""><b>'+p.name+' · '+p.class+'</b><br><small>'+p.role+' · '+p.hp+' HP</small><p>'+(guildChosenCompanions.includes(i)?'✓ Selezionato':'Tocca per selezionare')+'</p></button>').join("")+'<button class="btn" '+(guildChosenCompanions.length!==2?'disabled':'')+' onclick="beginGuildMission()">Conferma il gruppo e parti</button><button class="btn secondary" onclick="showGuildMissions()">← Torna alla bacheca</button>';
+$("sceneChoices").innerHTML=guildRoster.map((p,i)=>'<button class="btn questCard '+(guildChosenCompanions.includes(i)?'selected':'')+'" onclick="toggleGuildCompanion('+i+')"><img src="'+asset(p.portrait)+'" style="width:54px;height:68px;object-fit:contain;float:left;margin-right:10px" alt=""><b>'+p.name+' · '+p.class+'</b><br><small>'+p.race+' · '+p.rarity+' · '+p.role+' · '+p.hp+'/'+p.maxhp+' HP</small><p>'+p.description+'</p><p>'+(guildChosenCompanions.includes(i)?'✓ Selezionato':'Tocca per selezionare')+'</p></button>').join("")+'<button class="btn" '+(guildChosenCompanions.length!==2?'disabled':'')+' onclick="beginGuildMission()">Conferma il gruppo e parti</button><button class="btn secondary" onclick="showGuildMissions()">← Torna alla bacheca</button>';
 $("guildPickCount").textContent="Compagni scelti: "+guildChosenCompanions.length+"/2";
 }
 function toggleGuildCompanion(i){if(guildChosenCompanions.includes(i))guildChosenCompanions=guildChosenCompanions.filter(x=>x!==i);else if(guildChosenCompanions.length<2)guildChosenCompanions.push(i);renderGuildRoster()}
@@ -929,9 +931,10 @@ G.party=guildChosenCompanions.map(i=>{const p=JSON.parse(JSON.stringify(guildRos
 G.activeGuildMission={...guildChosenMission,seed:Math.floor(Math.random()*2147483647),step:0,score:0,loot:[],flags:{},events:[]};G.guildMissionRewardPaid=false;guildRouteEvent();updateHUD();
 }
 
-function guildRouteEvent(){
+function guildRouteEvent(resume=false){
  const m=G.activeGuildMission;if(!m)return;
  $("combat").classList.add("hidden");$("afterCombat").classList.add("hidden");document.body.classList.remove("battle-mode");
+ if(resume&&m.pendingOutcome){const po=m.pendingOutcome;$("chapterBadge").textContent="INCARICO · CONSEGUENZE";$("sceneTitle").textContent=(m.currentEvent&&m.currentEvent[0])||m.title;$("sceneText").innerHTML='<p>'+po.text+'</p><p>'+(po.danger?"Un pericolo vi sbarra la strada.":"La scelta apre una nuova possibilità.")+'</p>';$("sceneChoices").innerHTML=po.danger?'<button class="btn" onclick="guildStartEncounter('+po.level+')">Affronta le conseguenze</button>':'<button class="btn" onclick="guildNextStep()">Continua il viaggio</button>';return}
  const stages=[
  [["La partenza dalla Gilda","Il capogilda vi richiama: una voce dell’ultimo minuto potrebbe cambiare il lavoro.",[["Chiedi dettagli","question"],["Parti subito","ignore"],["Controlla le provviste","repair"]]],["Un committente nervoso","Il mandante vi raggiunge: ha dimenticato un particolare importante.",[["Ascolta la storia","help"],["Chiedi più oro","trade"],["Non perdere tempo","ignore"]]]],
  [["La strada dei vecchi cippi","Pietre consumate segnano due percorsi, uno breve e pericoloso.",[["Prendi la scorciatoia","cross"],["Segui la strada battuta","ford"],["Cerca impronte","track"]]],["Il carro rovesciato","Un carro blocca il sentiero. Dal cassone arriva un rumore.",[["Esaminalo","blood"],["Aggiralo","sneak"],["Cerca feriti","heal"]]]],
@@ -944,8 +947,8 @@ function guildRouteEvent(){
  [["La verità dell’incarico","Le prove non coincidono con la versione ricevuta alla Gilda.",[["Mostra le prove","map"],["Proteggi gli innocenti","help"],["Continua senza fermarti","ignore"]]],["Il prezzo della scelta","Un alleato offre una soluzione in cambio di parte della ricompensa.",[["Accetta","trade"],["Rifiuta","question"],["Fingi di accettare","follow"]]]],
  [["Lo scontro decisivo","Davanti a voi si trova ciò che cercavate, ma non siete soli.",[["Affronta il nemico","fight"],["Colpisci di sorpresa","sneakFinal"],["Tratta un’ultima volta","talk"]]],["L’ultima occasione","Potete rischiare tutto o mettere in salvo il gruppo.",[["Rischia per il bottino","blood"],["Prepara una trappola","trap"],["Metti al sicuro il gruppo","ford"]]]]
  ];
- const pool=stages[Math.min(m.step,9)],used=m.usedEventTitles||[],available=pool.filter(e=>!used.includes(e[0])),ev=(available.length?available:pool)[Math.floor(Math.random()*(available.length||pool.length))];
- m.usedEventTitles=used;m.usedEventTitles.push(ev[0]);m.events.push(ev[0]);m.currentEvent=ev;
+ const pool=stages[Math.min(m.step,9)],used=m.usedEventTitles||[],available=pool.filter(e=>!used.includes(e[0])),ev=(resume&&m.currentEvent)?m.currentEvent:(available.length?available:pool)[Math.floor(Math.random()*(available.length||pool.length))];
+ if(!resume||!m.currentEvent){m.usedEventTitles=used;m.usedEventTitles.push(ev[0]);m.events.push(ev[0]);m.currentEvent=ev;}
  $("chapterBadge").textContent="INCARICO · TAPPA "+(m.step+1)+" DI 10";$("sceneTitle").textContent=ev[0];
  $("sceneText").innerHTML='<p><small>'+m.title+'</small></p><p>'+ev[1]+'</p><p><em>'+G.party.map(p=>p.name).join(" e ")+' attendono la tua decisione.</em></p>';
  $("sceneChoices").innerHTML=ev[2].map(c=>'<button class="btn questCard" type="button" onclick="guildChoosePath(\''+c[1]+'\')">'+c[0]+'</button>').join("");
@@ -962,7 +965,7 @@ function guildChoosePath(path){
  fight:[3,"Entrate direttamente nel covo.",true],sneakFinal:[2,"L’ingresso laterale vi porta alle spalle dei nemici.",true],talk:[1,"La creatura esita e ascolta le vostre parole.",false],
  blood:[3,"La pista termina in un’imboscata.",true],magic:[2,"Le tracce magiche rivelano una presenza nascosta.",true],trap:[3,"La trappola è pronta, ma qualcosa vi ha scoperti.",true]
  }[path]||[1,"Proseguite con cautela.",false];
- m.score+=o[0];m.flags[path]=true;m.lastPath=path;
+ m.score+=o[0];m.flags[path]=true;m.lastPath=path;m.pendingOutcome={text:o[1],danger:o[2],level:o[0],path};
  if(["help","repair","smoke","ruins","farm","magic"].includes(path)){G.inventory.Pozione=(G.inventory.Pozione||0)+1;m.loot.push("Pozione")}
  if(path==="heal")G.party.forEach(p=>p.hp=Math.min(p.maxhp,p.hp+5));
  $("sceneText").innerHTML='<p>'+o[1]+'</p><p>'+(o[2]?"Un pericolo vi sbarra la strada.":"La scelta apre una nuova possibilità.")+'</p>';
@@ -974,8 +977,8 @@ function guildStartEncounter(level){
  m.lastEncounterSeed=seed;
  startBattle(level,generateProceduralEnemies(level,seed),seed);
 }
-function guildAfterBattle(){const m=G.activeGuildMission;if(!m)return;$("afterCombat").classList.add("hidden");m.step++;if(m.step>=10)guildFinishMission();else guildRouteEvent()}
-function guildNextStep(){const m=G.activeGuildMission;if(!m)return;m.step++;if(m.step>=10)guildFinishMission();else guildRouteEvent()}
+function guildAfterBattle(){const m=G.activeGuildMission;if(!m)return;$("afterCombat").classList.add("hidden");m.pendingOutcome=null;m.step++;if(m.step>=10)guildFinishMission();else guildRouteEvent()}
+function guildNextStep(){const m=G.activeGuildMission;if(!m)return;m.pendingOutcome=null;m.step++;if(m.step>=10)guildFinishMission();else guildRouteEvent()}
 function guildFinishMission(){
  const m=G.activeGuildMission;if(!m)return;const reward=m.gold+Math.max(0,Math.min(20,m.score*2));G.gold+=reward;G.hero.xp+=35+m.score*4;G.sideQuestReputation=(G.sideQuestReputation||0)+1;
  const end=m.score>=22?"La squadra torna con prove preziose e una storia che verrà raccontata a lungo.":m.score>=12?"L’incarico è completato, ma gli imprevisti hanno lasciato il segno.":"Rientrate stanchi, ma avete portato a termine il lavoro.";
@@ -1123,7 +1126,8 @@ try{let s=JSON.parse(raw);G=s.G;battle=s.battle;busy=false;if(!G.statPoints)G.st
 $("creator").classList.add("hidden");$("game").classList.remove("hidden");$("bottomNav").classList.add("visible");
 if(battle){let all=[G.hero,...G.party,...battle.units],byId=new Map(all.map(u=>[String(u.id),u]));battle.order=(battle.order||[]).map(id=>byId.get(String(id))).filter(Boolean);
 if(!battle.ended){document.body.classList.add("battle-mode");$("combat").classList.remove("hidden");$("afterCombat").classList.add("hidden");$("battleLog").innerHTML="";battle.log.forEach(x=>$("battleLog").innerHTML+=`<p>${x}</p>`);renderBattle();advanceToPlayer()}
-else{document.body.classList.remove("battle-mode");$("combat").classList.add("hidden");showScene(G.finished?"ending":G.battleWon===1?"crypt":G.battleWon===2?"boss":"prologue")}}
+else{document.body.classList.remove("battle-mode");$("combat").classList.add("hidden");if(G.activeGuildMission){$("afterCombat").classList.remove("hidden");const won=battle.units.every(e=>!e.alive||e.hp<=0);$("afterCombat").innerHTML=won?'<h2>Vittoria!</h2><p>Lo scontro è stato registrato. Puoi proseguire l’incarico.</p><button class="btn" onclick="guildAfterBattle()">Prosegui</button>':'<h2>Il gruppo è stato respinto</h2><p>Gli avversari sono ancora sulla strada.</p><button class="btn" onclick="restartBattle()">Riprova lo scontro</button>'}else showScene(G.finished?"ending":G.battleWon===1?"crypt":G.battleWon===2?"boss":"prologue")}}
+else if(G.activeGuildMission)guildRouteEvent(true);
 else showScene(G.finished?"ending":G.battleWon===0?"prologue":G.battleWon===1?"crypt":G.battleWon===2?"boss":"ending");
 updateHUD();openTab("mission");alert("Partita caricata!")
 }catch(e){console.error(e);alert("Salvataggio non leggibile.")}
