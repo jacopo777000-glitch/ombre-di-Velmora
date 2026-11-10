@@ -841,6 +841,106 @@ body.battle-mode .actionPanel .actions{grid-template-columns:repeat(2,minmax(0,1
   .battleUnit{flex-basis:94px!important;width:94px!important}
   .battleFace{height:122px!important}
 }
+
+/* SCHERMATA COMBATTIMENTO iPHONE: campo, bersagli e azioni sempre insieme */
+@media(max-width:760px){
+ body.battle-mode main{
+   width:100%!important;max-width:100%!important;margin:3px auto 5px!important;
+   padding:0 5px 76px!important;box-sizing:border-box!important;
+ }
+ body.battle-mode #gameContent.gameLayout{
+   display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+   grid-auto-flow:row!important;gap:0!important;width:100%!important;
+ }
+ body.battle-mode #gameContent>.leftRail{display:none!important}
+ body.battle-mode #gameContent>.centerColumn{display:contents!important}
+ body.battle-mode #gameContent>#combat{
+   display:block!important;grid-column:1!important;grid-row:1!important;
+   width:100%!important;min-width:0!important;margin:0!important;
+   overflow:visible!important;
+ }
+ body.battle-mode #gameContent>.battleExtras{display:none!important}
+ body.battle-mode #combat .battleTopline{margin:0 0 3px!important;padding:3px 2px!important}
+ body.battle-mode #combat .battleTopline h2{font-size:16px!important;margin:1px 0!important}
+ body.battle-mode #combat #battleHint{font-size:9px!important;margin:2px 0 4px!important}
+ body.battle-mode #combat .battlefield{
+   display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+   grid-template-rows:auto auto!important;gap:5px!important;
+   min-height:0!important;height:auto!important;margin:3px 0 5px!important;
+   padding:6px 4px!important;overflow:hidden!important;
+ }
+ body.battle-mode #combat .battleTeam{grid-row:1!important;min-width:0!important;gap:3px!important}
+ body.battle-mode #combat .enemyTeam{grid-column:1!important}
+ body.battle-mode #combat .partyTeam{grid-column:2!important}
+ body.battle-mode #combat .battleTeam .battleSideTitle{
+   font-size:8px!important;letter-spacing:.7px!important;margin:1px 0 3px!important
+ }
+ body.battle-mode #combat .battleFormationStage .battleFormation{
+   display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;
+   justify-content:flex-start!important;align-items:stretch!important;
+   gap:4px!important;padding:2px 1px 5px!important;
+   overflow-x:auto!important;overflow-y:hidden!important;scrollbar-width:thin!important;
+   -webkit-overflow-scrolling:touch!important;
+ }
+ body.battle-mode #combat .battleFormationStage .battleUnit,
+ body.battle-mode #combat .enemyFormation .battleUnit{
+   display:flex!important;flex:0 0 clamp(68px,21vw,88px)!important;
+   flex-direction:column!important;align-items:center!important;
+   width:clamp(68px,21vw,88px)!important;max-width:none!important;min-width:0!important;
+   gap:2px!important;padding:3px!important;text-align:center!important;
+ }
+ body.battle-mode #combat .battleFormationStage .battleUnit .unitArt{
+   display:block!important;width:auto!important;height:clamp(62px,18vw,78px)!important;
+   max-height:78px!important;max-width:100%!important;aspect-ratio:auto!important;
+   object-fit:contain!important;
+ }
+ body.battle-mode #combat .battleFormationStage .battleName{
+   font-size:8px!important;line-height:1.05!important;min-height:17px!important;
+   margin:0!important;overflow-wrap:anywhere!important
+ }
+ body.battle-mode #combat .battleFormationStage .battleHP,
+ body.battle-mode #combat .battleFormationStage .battleAP{font-size:7px!important;line-height:1.1!important}
+ body.battle-mode #combat .battleFormationStage .battleBar{height:3px!important;margin:2px 0!important}
+ body.battle-mode #combat .battleDestiny{
+   grid-column:1/-1!important;grid-row:2!important;display:flex!important;
+   flex-direction:row!important;justify-content:center!important;align-items:center!important;
+   gap:8px!important;min-height:0!important;padding:4px 6px!important;
+ }
+ body.battle-mode #combat .battleDestiny .diceHeading{min-width:38px!important;font-size:8px!important;padding:0!important}
+ body.battle-mode #combat .battleDestiny .diceContent{display:flex!important;flex-direction:row!important;align-items:center!important;gap:7px!important;padding:0!important}
+ body.battle-mode #combat .battleDestiny .diceContent img{width:37px!important;height:37px!important}
+ body.battle-mode #combat .battleDestiny .diceContent strong{font-size:17px!important}
+ body.battle-mode #combat .battleDestiny .diceContent div div,
+ body.battle-mode #combat .battleDestiny .diceContent small{font-size:8px!important;line-height:1.1!important}
+ body.battle-mode #combat .actionPanel{
+   display:block!important;margin:0!important;padding:7px!important;
+   position:relative!important;z-index:2!important;
+ }
+ body.battle-mode #combat .actionPanel .activeTurn{gap:5px!important;margin-bottom:4px!important}
+ body.battle-mode #combat .actionPanel .activeTurn h3{font-size:13px!important;margin:1px 0!important}
+ body.battle-mode #combat .actionPanel .activeTurn .eyebrow{font-size:8px!important}
+ body.battle-mode #combat .actionPanel .battleSideTitle{font-size:9px!important;margin:3px 0!important}
+ body.battle-mode #combat .actionPanel .actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:4px!important}
+ body.battle-mode #combat .actionPanel .btn,
+ body.battle-mode #combat .actionPanel button{min-height:35px!important;padding:6px 5px!important;font-size:10px!important;line-height:1.1!important}
+ body.battle-mode #combat #actionMessage{font-size:9px!important;margin:4px 1px 0!important}
+ body.battle-mode #combat .combatAbilityMenu{max-height:110px!important;overflow-y:auto!important}
+}
+@media(max-width:390px){
+ body.battle-mode #combat .battleFormationStage .battleUnit,
+ body.battle-mode #combat .enemyFormation .battleUnit{flex-basis:68px!important;width:68px!important}
+ body.battle-mode #combat .battleFormationStage .battleUnit .unitArt{height:61px!important}
+ body.battle-mode #combat .battleDestiny .diceContent img{width:32px!important;height:32px!important}
+ body.battle-mode #combat .actionPanel{padding:6px!important}
+}
+@media(max-height:720px) and (max-width:760px){
+ body.battle-mode #combat .battleFormationStage .battleUnit .unitArt{height:52px!important}
+ body.battle-mode #combat .battlefield{padding:4px!important}
+ body.battle-mode #combat .battleDestiny .diceContent img{width:29px!important;height:29px!important}
+ body.battle-mode #combat .actionPanel .btn,
+ body.battle-mode #combat .actionPanel button{min-height:31px!important;padding:4px!important}
+}
+
 </style>
 </head>
 <body>
