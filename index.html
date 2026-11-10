@@ -772,36 +772,74 @@ body.battle-mode .actionPanel .actions{grid-template-columns:repeat(2,minmax(0,1
 }
 
 
-/* Correzione definitiva layout verticale iPhone: il contenitore centrale deve restare un blocco,
-   non display:contents, altrimenti il banner diventa una colonna della griglia principale. */
+/* Layout mobile portrait: barra laterale compatta + contenuto di gioco largo.
+   La stessa griglia contiene storia, combattimento, dadi, azioni e registro. */
 @media(max-width:760px){
-  .gameLayout{
+  main{width:100%;max-width:100%;padding-left:6px;padding-right:6px;box-sizing:border-box}
+  #gameContent.gameLayout{
     display:grid!important;
-    grid-template-columns:58px minmax(0,1fr)!important;
-    gap:6px!important;
-    width:100%!important;
-  }
-  .gameLayout>.leftRail{grid-column:1!important;grid-row:1!important;width:58px!important;min-width:0!important}
-  .gameLayout>.centerColumn{
-    display:block!important;
-    grid-column:2!important;
-    grid-row:1!important;
+    grid-template-columns:clamp(76px,18vw,112px) minmax(0,1fr)!important;
+    grid-auto-flow:row;
+    align-items:start;
+    gap:7px!important;
     width:100%!important;
     min-width:0!important;
   }
-  .centerColumn>#missionPanel{
-    display:block!important;
-    grid-column:auto!important;
-    width:100%!important;
-    max-width:none!important;
-    min-width:0!important;
-    margin-left:0!important;
-    margin-right:0!important;
+  #gameContent>.leftRail{
+    grid-column:1!important;grid-row:1!important;
+    display:flex!important;flex-direction:column!important;
+    width:100%!important;min-width:0!important;
+    position:sticky!important;top:5px!important;
+    padding:5px!important;gap:5px!important;
+    max-height:calc(100vh - 12px);overflow-y:auto!important;
   }
+  #gameContent>.leftRail .railTitle{font-size:8px;letter-spacing:.7px;padding:4px 2px}
+  #gameContent>.leftRail button{
+    display:flex!important;flex-direction:column!important;
+    justify-content:center!important;align-items:center!important;
+    width:100%!important;min-width:0!important;
+    min-height:43px!important;padding:5px 2px!important;
+    gap:3px!important;font-size:8px!important;line-height:1.1!important;
+    white-space:normal!important;text-align:center!important;
+  }
+  #gameContent>.leftRail button span{width:auto!important;font-size:15px!important}
+  #gameContent>.leftRail .leftParty{display:block!important}
+  #gameContent>.leftRail .leftParty #leftSquad{display:flex;flex-direction:column;gap:5px;overflow:visible}
+  #gameContent>.leftRail .leftMember{width:100%;min-width:0;flex:0 0 auto;display:block;text-align:center}
+  #gameContent>.leftRail .leftMember img{width:100%;max-width:55px;height:65px;object-fit:contain}
+  #gameContent>.leftRail .leftMemberInfo{width:100%;overflow-wrap:anywhere}
+  #gameContent>.leftRail .railBottom{display:flex!important;flex-direction:column!important;gap:4px}
+  #gameContent>.leftRail .railBottom button{font-size:7px!important;min-height:34px!important}
+  #gameContent>.centerColumn{
+    display:block!important;grid-column:2!important;grid-row:1!important;
+    width:100%!important;min-width:0!important;max-width:100%!important;
+  }
+  #gameContent>.centerColumn>*{
+    width:100%!important;max-width:100%!important;min-width:0!important;
+    box-sizing:border-box!important;
+  }
+  #missionPanel,#combat,#combat .battleTopline,#combat .battlefield,
+  #combat .actionPanel,.battleExtras,.battleExtras>.sideCard,
+  #afterCombat,#inventoryPanel{
+    width:100%!important;max-width:100%!important;min-width:0!important;
+    box-sizing:border-box!important;
+  }
+  #missionPanel{grid-column:auto!important;justify-self:stretch!important}
+  #combat{grid-column:2!important;overflow:visible!important}
+  .battlefield{overflow:hidden!important}
+  .battleFormation{max-width:100%;min-width:0;overflow-x:auto!important}
+  .battleExtras{display:grid!important;grid-template-columns:minmax(0,1fr)!important}
+  .battleExtras>.sideCard,.battleExtras .battleDiary,.battleExtras .quickInventory{grid-column:1!important}
+  .battleExtras .turnOrder{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  #gameContent>.row{flex-wrap:wrap}
 }
 @media(max-width:390px){
-  .gameLayout{grid-template-columns:54px minmax(0,1fr)!important;gap:5px!important}
-  .gameLayout>.leftRail{width:54px!important}
+  #gameContent.gameLayout{grid-template-columns:72px minmax(0,1fr)!important;gap:5px!important}
+  #gameContent>.leftRail{padding:4px!important}
+  #gameContent>.leftRail button{font-size:7px!important;min-height:40px!important}
+  .battlefield{padding:7px 4px!important}
+  .battleUnit{flex-basis:94px!important;width:94px!important}
+  .battleFace{height:122px!important}
 }
 </style>
 </head>
