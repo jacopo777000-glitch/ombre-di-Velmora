@@ -683,6 +683,94 @@ body.battle-mode .actionPanel{margin-bottom:10px}
 
 
 .equipSlots{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0}.equipSlot{padding:12px;border:1px solid rgba(210,174,105,.35);border-radius:12px;background:rgba(8,13,16,.42);display:flex;flex-direction:column;gap:7px}.equipSlot b{color:#e6c58b}.equipSlot small{color:#b8c0bd;font-size:12px}.characterEquipTotals{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.characterEquipTotals span{padding:7px 10px;border-radius:8px;background:rgba(177,139,75,.15);color:#e8d4ad;font-size:12px}@media(max-width:520px){.equipSlots{grid-template-columns:1fr}}
+
+/* ===== VELMORA REFERENCE LAYOUT 2026-11-10 =====
+   Composizione della schermata di battaglia salvata:
+   navigazione/squadra a sinistra, scontro e D20 al centro,
+   ordine dei turni e registro a destra. */
+.centerColumn{display:contents}
+.gameLayout{display:grid;grid-template-columns:168px minmax(0,1fr);gap:12px;align-items:start}
+.leftRail{grid-column:1;grid-row:1 / span 20;min-width:0}
+#missionPanel,#combat,#afterCombat,#inventoryPanel,.centerColumn>.row,.centerColumn>.note{grid-column:2;min-width:0}
+.battleExtras{display:none;grid-column:3;grid-row:1;min-width:0}
+.menuPanel{grid-column:2;grid-row:auto;min-width:0}
+body.battle-mode main{width:min(1900px,100%);margin:6px auto 14px;padding:0 10px 28px}
+body.battle-mode .gameLayout{grid-template-columns:176px minmax(0,1fr) 268px;gap:11px;align-items:start}
+body.battle-mode .centerColumn{display:contents!important}
+body.battle-mode .leftRail{display:flex!important;grid-column:1;grid-row:1 / span 8;position:sticky;top:7px;max-height:calc(100vh - 14px);overflow-y:auto;overscroll-behavior:contain}
+body.battle-mode #missionPanel,body.battle-mode #inventoryPanel,body.battle-mode .centerColumn>.row,body.battle-mode .centerColumn>.note,body.battle-mode #menuView{display:none!important}
+body.battle-mode #combat{display:block!important;grid-column:2;grid-row:1;min-width:0;width:100%}
+body.battle-mode .battleExtras{display:flex!important;flex-direction:column;grid-column:3;grid-row:1;gap:10px;min-width:0;margin:0}
+body.battle-mode .battleExtras .sideCard{width:100%;margin:0;padding:11px}
+body.battle-mode .battleExtras .turnOrder{display:flex;flex-direction:column;max-height:250px;overflow:auto}
+body.battle-mode .battleExtras .battleDiary .log{max-height:min(48vh,480px);overflow:auto}
+body.battle-mode .battleExtras .quickInventory{display:block}
+body.battle-mode .battleTopline{margin:2px 0 7px}
+body.battle-mode .battlefield{min-height:0!important;margin:5px 0 10px;padding:12px!important;overflow:hidden}
+body.battle-mode .battleFormationStage{display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-template-rows:auto auto auto;gap:11px!important;align-items:stretch}
+body.battle-mode .enemyTeam{grid-column:1;grid-row:1}
+body.battle-mode .partyTeam{grid-column:1;grid-row:2}
+body.battle-mode .battleDestiny{grid-column:1;grid-row:3}
+body.battle-mode .battleFormationStage .battleFormation{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;justify-content:center;align-items:stretch;gap:10px!important;overflow-x:auto!important;overflow-y:hidden!important;padding:6px 3px 10px!important;scrollbar-width:thin}
+body.battle-mode .battleFormationStage .battleUnit{display:flex!important;flex-direction:column!important;align-items:stretch;flex:0 0 clamp(126px,17vw,184px)!important;width:clamp(126px,17vw,184px)!important;max-width:none!important;min-width:0;padding:7px!important;text-align:center!important}
+body.battle-mode .enemyFormation .battleUnit{flex-basis:clamp(165px,22vw,238px)!important;width:clamp(165px,22vw,238px)!important}
+body.battle-mode .battleFormationStage .battleUnit .unitArt{width:100%!important;height:auto!important;aspect-ratio:912/1168;max-height:none!important}
+body.battle-mode .battleFormationStage .battleName{font-size:11px;line-height:1.2;min-height:25px}
+body.battle-mode .battleFormationStage .battleHP,body.battle-mode .battleFormationStage .battleAP{font-size:10px}
+body.battle-mode .battleDestiny{display:flex!important;flex-direction:row;align-items:center;justify-content:center;gap:18px;min-width:0;min-height:126px;padding:12px 18px!important}
+body.battle-mode .battleDestiny .diceHeading{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:76px;padding:0;border:0}
+body.battle-mode .battleDestiny .diceContent{display:flex;flex-direction:row;align-items:center;justify-content:center;gap:15px;padding:0;text-align:left}
+body.battle-mode .battleDestiny .diceContent img{width:clamp(76px,9vw,112px)!important;height:clamp(76px,9vw,112px)!important;flex:none}
+body.battle-mode .battleDestiny .diceContent div{width:auto;min-width:0}
+body.battle-mode .battleDestiny .diceContent div div{font-size:12px;line-height:1.3}
+body.battle-mode .battleDestiny .diceContent strong{font-size:clamp(25px,3vw,38px)}
+body.battle-mode .battleDestiny .diceContent small{font-size:11px}
+body.battle-mode .actionPanel{margin:0 0 10px;padding:13px}
+body.battle-mode .actionPanel .actions{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(max-width:760px){
+ body.battle-mode main{width:100%;margin:4px auto 10px;padding:0 6px 100px}
+ body.battle-mode .gameLayout{grid-template-columns:minmax(0,1fr);gap:8px}
+ body.battle-mode .leftRail{display:grid!important;grid-column:1;grid-row:1;position:static;top:auto;max-height:none;overflow:visible;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;padding:7px}
+ body.battle-mode .leftRail>.railTitle{grid-column:1/-1;display:block!important}
+ body.battle-mode .leftRail>button{display:flex!important;justify-content:center;flex-direction:column;gap:3px;text-align:center;min-height:44px;padding:5px 2px;font-size:9px}
+ body.battle-mode .leftRail>.leftParty{grid-column:1/-1;display:block!important;margin:0;padding:6px 0 0;border-top:1px solid #59442b}
+ body.battle-mode .leftRail .leftParty #leftSquad{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;overflow:visible}
+ body.battle-mode .leftRail .leftMember{display:flex;flex-direction:column;align-items:center;text-align:center;gap:3px;min-width:0;padding:4px 2px;border:1px solid #59442b;border-radius:6px}
+ body.battle-mode .leftRail .leftMember img{width:clamp(30px,9vw,43px);height:clamp(42px,12vw,58px)}
+ body.battle-mode .leftRail .leftMemberInfo{width:100%;min-width:0}
+ body.battle-mode .leftRail .leftMemberInfo b{font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ body.battle-mode .leftRail .leftMemberInfo small{font-size:8px}
+ body.battle-mode .leftRail .railBottom{display:none!important}
+ body.battle-mode #combat{grid-column:1;grid-row:2}
+ body.battle-mode .battleExtras{display:grid!important;grid-column:1;grid-row:3;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:0}
+ body.battle-mode .battleExtras .battleDiary{grid-column:1/-1}
+ body.battle-mode .battleExtras .turnOrder{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));max-height:190px}
+ body.battle-mode .battleExtras .battleDiary .log{max-height:190px}
+ body.battle-mode .battlefield{padding:7px!important}
+ body.battle-mode .battleFormationStage{gap:7px!important;padding:7px!important}
+ body.battle-mode .battleFormationStage .battleFormation{justify-content:flex-start;gap:6px!important}
+ body.battle-mode .battleFormationStage .battleUnit{flex-basis:clamp(112px,34vw,145px)!important;width:clamp(112px,34vw,145px)!important;padding:5px!important}
+ body.battle-mode .enemyFormation .battleUnit{flex-basis:clamp(138px,42vw,170px)!important;width:clamp(138px,42vw,170px)!important}
+ body.battle-mode .battleFormationStage .battleName{font-size:9px;min-height:22px}
+ body.battle-mode .battleFormationStage .battleHP,body.battle-mode .battleFormationStage .battleAP{font-size:8px}
+ body.battle-mode .battleDestiny{min-height:88px;gap:8px;padding:7px!important}
+ body.battle-mode .battleDestiny .diceHeading{min-width:48px;font-size:8px}
+ body.battle-mode .battleDestiny .diceContent{gap:8px}
+ body.battle-mode .battleDestiny .diceContent img{width:62px!important;height:62px!important}
+ body.battle-mode .battleDestiny .diceContent div div{font-size:9px}
+ body.battle-mode .battleDestiny .diceContent strong{font-size:24px}
+ body.battle-mode .battleDestiny .diceContent small{font-size:8px}
+ body.battle-mode .actionPanel{padding:8px}
+}
+@media(max-width:390px){
+ body.battle-mode .leftRail{grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;padding:5px}
+ body.battle-mode .leftRail>button{font-size:8px;min-height:40px}
+ body.battle-mode .battleFormationStage .battleUnit{flex-basis:108px!important;width:108px!important}
+ body.battle-mode .enemyFormation .battleUnit{flex-basis:132px!important;width:132px!important}
+ body.battle-mode .battleDestiny .diceContent img{width:54px!important;height:54px!important}
+ body.battle-mode .battleExtras .sideCard{padding:8px}
+}
+
 </style>
 </head>
 <body>
