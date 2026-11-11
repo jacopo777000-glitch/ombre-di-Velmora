@@ -132,6 +132,11 @@ for (const action of ['action==="deliver"', 'action==="burn"', 'action==="seal"'
 if (html.includes('id:"prezzo_nomi"') && html.includes('id:"pozzo_vuoto"')) {
   pass("Due nuove missioni secondarie ramificate presenti");
 }
+
+if (!html.includes('"Lancia"') || !html.includes('name.includes("lancia")') ||
+    !html.includes('name:"Lancia del Guardiano"')) {
+  fail("Supporto della lancia incompleto tra generazione, grafica e bottino.");
+} else pass("Lancia disponibile per classi compatibili, resa SVG e bottino");
 if (failures === 0) pass("Punti di aggancio salvataggio, equipaggiamento, colpi di grazia e generazione presenti");
 
 if (failures) {
