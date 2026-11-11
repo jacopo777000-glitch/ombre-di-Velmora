@@ -122,6 +122,16 @@ try {
 if (styles.some(css => css.includes("\\n.unitArt"))) {
   fail("CSS contiene un newline letterale escapato prima del selettore unitArt.");
 } else pass("Selettore unitArt senza newline escapati anomali");
+
+for (const questId of ['id:"prezzo_nomi"', 'id:"pozzo_vuoto"']) {
+  if (!html.includes(questId)) fail("Missione secondaria mancante: " + questId);
+}
+for (const action of ['action==="deliver"', 'action==="burn"', 'action==="seal"', 'action==="collect"']) {
+  if (!html.includes(action)) fail("Diramazione missione mancante: " + action);
+}
+if (html.includes('id:"prezzo_nomi"') && html.includes('id:"pozzo_vuoto"')) {
+  pass("Due nuove missioni secondarie ramificate presenti");
+}
 if (failures === 0) pass("Punti di aggancio salvataggio, equipaggiamento, colpi di grazia e generazione presenti");
 
 if (failures) {
