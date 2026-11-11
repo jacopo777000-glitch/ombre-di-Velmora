@@ -16,3 +16,9 @@ jobs:
           node-version: 22
       - name: Verify JavaScript, CSS, manifest and assets
         run: node scripts/verify-velmora.mjs
+      - name: Install Playwright and Chromium
+        run: |
+          npm install --no-save playwright
+          npx playwright install chromium
+      - name: Run real-browser smoke tests
+        run: node scripts/smoke-velmora.mjs
