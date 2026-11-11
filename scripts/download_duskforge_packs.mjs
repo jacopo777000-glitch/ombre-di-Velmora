@@ -25,12 +25,30 @@ try {
     page.setDefaultTimeout(45000);
     console.log("Apro la pagina ufficiale:", pack.page);
     await page.goto(pack.page, { waitUntil: "domcontentloaded", timeout: 90000 });
-    await page.getByRole("link", { name: /Download Now/i }).first().click();
-    await page.waitForURL(/\/purchase(?:\?|$)/, { timeout: 45000 });
-    const freeOption = page.getByText("No thanks, just take me to the downloads", { exact: true });
+    const downloadNow = page.getByRole("link", { name: /Download Now/i }).first();
+    const purchaseHref = await downloadNow.getAttribute("href");
+    console.log("Link ufficiale Download Now:", purchaseHref);
+    if (purchaseHref) {
+      await page.goto(new URL(purchaseHref, page.url()).href, { waitUntil: "domcontentloaded", timeout: 90000 });
+    } else {
+      await downloadNow.click();
+      await page.waitForTimeout(2500);
+    }
+    console.log("Pagina pay-what-you-want:", page.url());
+    const freeOption = page.getByText("No thanks, just take me to the downloads", { exact: false }).first();
     await freeOption.waitFor({ state: "visible", timeout: 30000 });
-    await freeOption.click();
-    await page.waitForLoadState("domcontentloaded").catch(() => {});
+    const freeHref = await freeOption.evaluate(el => {
+      let node = el;
+      while (node && !["A", "BUTTON"].includes(node.tagName)) node = node.parentElement;
+      return node ? node.getAttribute("href") : null;
+    });
+    if (freeHref) {
+      await page.goto(new URL(freeHref, page.url()).href, { waitUntil: "domcontentloaded", timeout: 90000 });
+    } else {
+      await freeOption.click();
+      await page.waitForLoadState("domcontentloaded").catch(() => {});
+    }
+    console.log("Pagina dei file:", page.url());
     const fileLink = page.locator("a").filter({ hasText: pack.filename }).first();
     await fileLink.waitFor({ state: "visible", timeout: 45000 });
     console.log("Pagina download ufficiale:", page.url());
