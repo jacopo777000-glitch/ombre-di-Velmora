@@ -12,3 +12,6 @@ The following existing, non-AI artwork is included in Ombre di Velmora. The WebP
   - CC0: https://creativecommons.org/publicdomain/zero/1.0/
 
 The source artwork remains credited to its respective authors. Changes made here: crop/resize to 1920×1080 and WebP conversion.
+
+- duskforge/ — Duskforge Studio, Enchanted Forest RPG Backgrounds and Dark Dungeon RPG Backgrounds (20 illustrated PNG backgrounds, converted to optimized WebP). Official pages: https://doomguizz.itch.io/enchanted-forest-rpg-backgrounds and https://doomguizz.itch.io/dark-dungeon-rpg-backgrounds.
+  - License stated by the author: free for commercial use, no attribution required, no redistribution of raw files. The repository contains only converted, optimized game-ready images, not the original ZIP/PNG files.

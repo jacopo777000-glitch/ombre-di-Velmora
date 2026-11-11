@@ -1,0 +1,171 @@
+{
+  "license": "Free for commercial use; no attribution required; raw files may not be redistributed.",
+  "sources": [
+    {
+      "title": "Enchanted Forest RPG Backgrounds",
+      "pack": "forest.zip",
+      "images": [
+        {
+          "file": "assets/battle/duskforge/duskforge_forest_01_01_dawn_forest.webp",
+          "sourceFile": "Enchanted_Forest_RPG_Backgrounds/01_dawn_forest.png",
+          "width": 1376,
+          "height": 768,
+          "bytes": 126762
+        },
+        {
+          "file": "assets/battle/duskforge/duskforge_forest_02_02_night_moon.webp",
+          "sourceFile": "Enchanted_Forest_RPG_Backgrounds/02_night_moon.png",
+          "width": 1376,
+          "height": 768,
+          "bytes": 121654
+        },
+        {
+          "file": "assets/battle/duskforge/duskforge_forest_03_03_mushroom_clearing.webp",
+          "sourceFile": "Enchanted_Forest_RPG_Backgrounds/03_mushroom_clearing.png",
+          "width": 1376,
+          "height": 768,
+          "bytes": 117792
+        },
+        {
+          "file": "assets/battle/duskforge/duskforge_forest_04_04_rainy_forest.webp",
+          "sourceFile": "Enchanted_Forest_RPG_Backgrounds/04_rainy_forest.png",
+          "width": 1376,
+          "height": 768,
+          "bytes": 96554
+        },
+        {
+          "file": "assets/battle/duskforge/duskforge_forest_05_05_autumn_forest.webp",
+          "sourceFile": "Enchanted_Forest_RPG_Backgrounds/05_autumn_forest.png",
+          "width": 1376,
+          "height": 768,
+          "bytes": 167028
+        },
+        {
+          "file": "assets/battle/duskforge/duskforge_forest_06_06_winter_forest.webp",
+          "sourceFile": "Enchanted_Forest_RPG_Backgrounds/06_winter_forest.png",
+          "width": 1376,
+          "height": 768,
+          "bytes": 156948
+        },
+        {
+          "file": "assets/battle/duskforge/duskforge_forest_07_07_cherry_blossom.webp",
+          "sourceFile": "Enchanted_Forest_RPG_Backgrounds/07_cherry_blossom.png",
+          "width": 1376,
+          "height": 768,
+          "bytes": 206650
+        },
+        {
+          "file": "assets/battle/duskforge/duskforge_forest_08_08_elven_ruins.webp",
+          "sourceFile": "Enchanted_Forest_RPG_Backgrounds/08_elven_ruins.png",
+          "width": 1376,
+          "height": 768,
+          "bytes": 142336
+        },
+        {
+          "file": "assets/battle/duskforge/duskforge_forest_09_09_thunderstorm.webp",
+          "sourceFile": "Enchanted_Forest_RPG_Backgrounds/09_thunderstorm.png",
+          "width": 1376,
+          "height": 768,
+          "bytes": 87122
+        },
+        {
+          "file": "assets/battle/duskforge/duskforge_forest_10_10_magic_portal.webp",
+          "sourceFile": "Enchanted_Forest_RPG_Backgrounds/10_magic_portal.png",
+          "width": 1376,
+          "height": 768,
+          "bytes": 127422
+        },
+        {
+          "file": "assets/battle/duskforge/duskforge_forest_11_preview_sheet.webp",
+          "sourceFile": "Enchanted_Forest_RPG_Backgrounds/preview_sheet.png",
+          "width": 1376,
+          "height": 768,
+          "bytes": 88104
+        }
+      ]
+    },
+    {
+      "title": "Dark Dungeon RPG Backgrounds",
+      "pack": "dungeon.zip",
+      "images": [
+        {
+          "file": "assets/battle/duskforge/duskforge_dungeon_01_01_stone_corridor.webp",
+          "sourceFile": "Dark_Dungeon_RPG_Backgrounds/01_stone_corridor.png",
+          "width": 1376,
+          "height": 768,
+          "bytes": 121468
+        },
+        {
+          "file": "assets/battle/duskforge/duskforge_dungeon_02_02_throne_room.webp",
+          "sourceFile": "Dark_Dungeon_RPG_Backgrounds/02_throne_room.png",
+          "width": 1376,
+          "height": 768,
+          "bytes": 112498
+        },
+        {
+          "file": "assets/battle/duskforge/duskforge_dungeon_03_03_treasure_room.webp",
+          "sourceFile": "Dark_Dungeon_RPG_Backgrounds/03_treasure_room.png",
+          "width": 1376,
+          "height": 768,
+          "bytes": 165928
+        },
+        {
+          "file": "assets/battle/duskforge/duskforge_dungeon_04_04_prison_cells.webp",
+          "sourceFile": "Dark_Dungeon_RPG_Backgrounds/04_prison_cells.png",
+          "width": 1376,
+          "height": 768,
+          "bytes": 151936
+        },
+        {
+          "file": "assets/battle/duskforge/duskforge_dungeon_05_05_ancient_library.webp",
+          "sourceFile": "Dark_Dungeon_RPG_Backgrounds/05_ancient_library.png",
+          "width": 1376,
+          "height": 768,
+          "bytes": 153442
+        },
+        {
+          "file": "assets/battle/duskforge/duskforge_dungeon_06_06_ritual_chamber.webp",
+          "sourceFile": "Dark_Dungeon_RPG_Backgrounds/06_ritual_chamber.png",
+          "width": 1376,
+          "height": 768,
+          "bytes": 130200
+        },
+        {
+          "file": "assets/battle/duskforge/duskforge_dungeon_07_07_crystal_cave.webp",
+          "sourceFile": "Dark_Dungeon_RPG_Backgrounds/07_crystal_cave.png",
+          "width": 1376,
+          "height": 768,
+          "bytes": 153798
+        },
+        {
+          "file": "assets/battle/duskforge/duskforge_dungeon_08_08_lava_chamber.webp",
+          "sourceFile": "Dark_Dungeon_RPG_Backgrounds/08_lava_chamber.png",
+          "width": 1376,
+          "height": 768,
+          "bytes": 160408
+        },
+        {
+          "file": "assets/battle/duskforge/duskforge_dungeon_09_09_ancient_crypt.webp",
+          "sourceFile": "Dark_Dungeon_RPG_Backgrounds/09_ancient_crypt.png",
+          "width": 1376,
+          "height": 768,
+          "bytes": 195756
+        },
+        {
+          "file": "assets/battle/duskforge/duskforge_dungeon_10_10_boss_room.webp",
+          "sourceFile": "Dark_Dungeon_RPG_Backgrounds/10_boss_room.png",
+          "width": 1376,
+          "height": 768,
+          "bytes": 97134
+        },
+        {
+          "file": "assets/battle/duskforge/duskforge_dungeon_11_preview_sheet.webp",
+          "sourceFile": "Dark_Dungeon_RPG_Backgrounds/preview_sheet.png",
+          "width": 1376,
+          "height": 768,
+          "bytes": 83100
+        }
+      ]
+    }
+  ]
+}
