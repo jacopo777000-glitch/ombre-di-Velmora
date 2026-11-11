@@ -1612,7 +1612,7 @@ function renderActions(){let u=current();if(!u||isEnemy(u))return;let list=unloc
 function unlockActions(){busy=false;renderActions();renderBattle()}
 async function playerAction(type,abilityId){
 if(busy||!battle||battle.ended)return;let u=current(),target=battle.units[selectedTarget];if(!u||!u.alive||isEnemy(u))return;
-combatUnitMenuOpen=false;
+combatUnitMenuOpen=false;document.querySelectorAll("body > .unitActionDropdown").forEach(menu=>menu.remove());
 if(type==="spell"&&!canUseMagic(u)){$("actionMessage").textContent="Questa classe non può utilizzare la magia.";return}let chosenAbility=type==="skill"?unlockedAbilities(u).find(a=>a.id===abilityId):null;if(type==="skill"&&!chosenAbility){unlockActions();return}
 busy=true;$("combatActions").querySelectorAll("button").forEach(b=>b.disabled=true);
 if(type==="skill"&&chosenAbility&&chosenAbility.effect){
