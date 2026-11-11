@@ -1255,7 +1255,7 @@ function makeProceduralPerson(rng,index,side,baseLevel,seed){
  const level=side==="enemy"?Math.max(1,baseLevel+Math.floor(rng()*2)-1):1+Math.floor(rng()*3);
  const stats={};Object.keys(def.stats).forEach(k=>stats[k]=def.stats[k]+Math.floor((level-1)/2)+Math.floor(bonus/2));
  const maxhp=24+stats.vitalita*3+(level-1)*4+bonus*3;
- const weaponName=proceduralPick(def.weapons,rng),armorName=def.armor,headName=proceduralPick(def.heads,rng),hairName=proceduralPick(proceduralHair,rng);
+ const weaponName=proceduralPick(def.weapons,rng),armorName=def.armor,rolledHead=proceduralPick(def.heads,rng),rolledHair=proceduralPick(proceduralHair,rng),canUseHairAndHeadgear=["human","elf","orc"].includes(raceId),headName=canUseHairAndHeadgear?rolledHead:"",hairName=canUseHairAndHeadgear?rolledHair:"";
  const physical={Spada:2,Ascia:3,Martello:3,Pugnale:1,Arco:3,Bastone:1,Scudo:0,Lancia:4}[weaponName]||1;
  const magic=weaponName==="Bastone"?(def.id==="mage"?5:3):0;
  let armor=1+Math.floor(stats.vitalita/3)+bonus;
@@ -1263,7 +1263,7 @@ function makeProceduralPerson(rng,index,side,baseLevel,seed){
  if(side==="enemy"){finalHp=18+stats.vitalita*2+(level-1)*5+bonus*2;armor=1+Math.floor(stats.vitalita/4)+bonus;finalAtk=4+Math.floor(stats.forza/3)+(level-1)+bonus}
  const name=proceduralPick(proceduralNames,rng)+" "+proceduralPick(proceduralEpithet,rng);
  const id=(side==="enemy"?"foe-":"wanderer-")+String(seed)+"-"+index;
- const p={id,proceduralId:side==="ally"?id:null,seed:Number(seed)+index,name,race:raceName,raceId,gender,class:className,role:def.role,rarity:rarity[0],personality:proceduralPick(proceduralPersonalities,rng),description:raceName+" "+className.toLowerCase()+", "+def.role.toLowerCase()+". "+rarity[0]+". Capelli: "+hairName.replace("Capelli ","").toLowerCase()+"; armatura: "+armorName.replaceAll("_"," ").toLowerCase()+"; copricapo: "+headName.replaceAll("_"," ").toLowerCase()+".",portrait:proceduralPortraits[raceId][gender],level,xp:0,stats,maxhp:finalHp,hp:finalHp,ap:5,maxap:5,armor,baseArmor:armor,atk:finalAtk,weapon:physical,alive:true,down:0,isHero:false,isProcedural:true,equipment:{hair:hairName,armor:armorName,head:headName,weapon:weaponName,physicalBonus:physical+bonus,magicBonus:magic+bonus,rarity:rarity[0]},appearance:{hair:hairName,headgear:headName,armor:armorName,weapon:weaponName}};
+ const p={id,proceduralId:side==="ally"?id:null,seed:Number(seed)+index,name,race:raceName,raceId,gender,class:className,role:def.role,rarity:rarity[0],personality:proceduralPick(proceduralPersonalities,rng),description:raceName+" "+className.toLowerCase()+", "+def.role.toLowerCase()+". "+rarity[0]+". "+(hairName?"Capelli: "+hairName.replace("Capelli ","").toLowerCase()+"; ":"")+"armatura: "+armorName.replaceAll("_"," ").toLowerCase()+(headName?"; copricapo: "+headName.replaceAll("_"," ").toLowerCase():"")+".",portrait:proceduralPortraits[raceId][gender],level,xp:0,stats,maxhp:finalHp,hp:finalHp,ap:5,maxap:5,armor,baseArmor:armor,atk:finalAtk,weapon:physical,alive:true,down:0,isHero:false,isProcedural:true,equipment:{hair:hairName,armor:armorName,head:headName,weapon:weaponName,physicalBonus:physical+bonus,magicBonus:magic+bonus,rarity:rarity[0]},appearance:{hair:hairName,headgear:headName,armor:armorName,weapon:weaponName}};
  if(side==="enemy"){p.kind="procedural";p.proceduralId=null;p.name=proceduralPick(["Predone","Cacciatore","Cultista","Guardiano","Razziatore"],rng)+" "+raceName.toLowerCase()}
  return p;
 }
@@ -1594,7 +1594,7 @@ function equipmentLayers(u){
  const files={"Capelli coda ciuffi":"Capelli_coda_ciuffi.jpg","Capelli coda lunga":"Capelli_coda_lunga.jpg","Capelli lunghi":"Capelli_lunghi.jpg","Capelli mossi":"Capelli_mossi.jpg","Capelli rasati lato":"Capelli_rasati_lato.jpg","Capelli rasta":"Capelli_rasta.jpg","Capelli spettinati":"Capelli_spettinati.jpg","Capelli trecce":"Capelli_trecce.jpg"};
  let hair="";
  const race=String(u&&u.race||""),anchors={Umano:{x:125,y:5,scale:1.12},Elfo:{x:125,y:2,scale:1.08},Orco:{x:120,y:7,scale:1.10}};
- const anchor=anchors[race],genderScale=u&&u.gender==="F"?.96:1;
+ const anchor=anchors[race],genderScale=isFemaleCharacter(u)?.96:1;
  if(eq.hair&&!eq.head&&anchor&&equipmentManifest[files[eq.hair]]){
   const d=equipmentManifest[files[eq.hair]];
   if(d&&d.sourceWidth&&d.sourceHeight){
@@ -1926,21 +1926,33 @@ const lootGear=[
 function lootMeta(name){return lootGear.find(x=>x.name===name)||null}
 function rollMissionLoot(boss=false){if(!G)return null;G.equipmentBag=G.equipmentBag||[];const pool=lootGear.filter(x=>!boss||x.rarity==="Raro"||x.rarity==="Epico");const item=pool[Math.floor(Math.random()*pool.length)];G.equipmentBag.push({...item,id:"loot_"+Date.now()+"_"+Math.floor(Math.random()*9999)});return item}
 
+function supportsHumanoidHairAndHeadgear(p){
+const raceId=String(p&&p.raceId||"").toLowerCase(),race=String(p&&p.race||"").toLowerCase();
+return ["human","elf","orc"].includes(raceId)||["umano","elfo","orco"].includes(race);
+}
+function isFemaleCharacter(p){
+const gender=String(p&&p.gender||"").toLowerCase();
+return gender==="f"||gender==="female"||gender.startsWith("fem");
+}
 function equipmentRules(p){
 const c=String(p.class||"").toLowerCase();
-if(c.includes("arciere"))return {weapons:["Arco","Pugnale"],armors:["Armatura_arciere"],heads:["Elmo_leone"]};
-if(c.includes("mago")||c.includes("maga"))return {weapons:["Bastone"],armors:["Armatura_mago"],heads:["Cappello_mago"]};
-if(c.includes("druido")||c.includes("druida"))return {weapons:["Bastone","Pugnale"],armors:["Armatura_druido"],heads:["Cappello_mago"]};
-if(c.includes("paladin")||c.includes("paladino")||c.includes("paladina")||c.includes("chierico"))return {weapons:["Spada","Martello","Scudo","Lancia"],armors:["Armatura_guerriero"],heads:["Elmo_leone","Elmo_drago"]};
-if(c.includes("ladro"))return {weapons:["Pugnale","Arco"],armors:["Armatura_arciere"],heads:["Cappello_punk"]};
-let base=c.includes("paladin")||c.includes("paladino")||c.includes("paladina")||c.includes("chierico")?{weapons:["Spada","Martello","Scudo"],armors:["Armatura_guerriero"],heads:["Elmo_leone","Elmo_drago"]}:{weapons:["Spada","Ascia","Martello","Scudo","Lancia"],armors:["Armatura_guerriero"],heads:["Elmo_drago","Elmo_leone"]};
-(G.equipmentBag||[]).forEach(x=>{if(x.classes.includes(p.class)){if(x.slot==="weapon")base.weapons.push(x.name);if(x.slot==="armor")base.armors.push(x.name);if(x.slot==="head")base.heads.push(x.name)}});return base;
+let base;
+if(c.includes("arciere"))base={weapons:["Arco","Pugnale"],armors:["Armatura_arciere"],heads:["Elmo_leone"]};
+else if(c.includes("mago")||c.includes("maga"))base={weapons:["Bastone"],armors:["Armatura_mago"],heads:["Cappello_mago"]};
+else if(c.includes("druido")||c.includes("druida"))base={weapons:["Bastone","Pugnale"],armors:["Armatura_druido"],heads:["Cappello_mago"]};
+else if(c.includes("paladin")||c.includes("paladino")||c.includes("paladina")||c.includes("chierico"))base={weapons:["Spada","Martello","Scudo","Lancia"],armors:["Armatura_guerriero"],heads:["Elmo_leone","Elmo_drago"]};
+else if(c.includes("ladro"))base={weapons:["Pugnale","Arco"],armors:["Armatura_arciere"],heads:["Cappello_punk"]};
+else base={weapons:["Spada","Ascia","Martello","Scudo","Lancia"],armors:["Armatura_guerriero"],heads:["Elmo_drago","Elmo_leone"]};
+(G.equipmentBag||[]).forEach(x=>{if(x.classes.includes(p.class)){if(x.slot==="weapon")base.weapons.push(x.name);if(x.slot==="armor")base.armors.push(x.name);if(x.slot==="head"&&supportsHumanoidHairAndHeadgear(p))base.heads.push(x.name)}});
+if(!supportsHumanoidHairAndHeadgear(p))base.heads=[];
+return base;
 }
 function renderCharacterScreen(){
 if(!G||!$("characterScreen").classList.contains("open"))return;
 const p=characterMembers().find(x=>(x.isHero?"hero":String(x.id))===String(selectedEquipmentMember))||G.hero;
 if(!p.equipment)p.equipment={hair:"",armor:"",weapon:"",head:""};
-const rules=equipmentRules(p),hairOptions=["Capelli coda ciuffi","Capelli coda lunga","Capelli lunghi","Capelli mossi","Capelli rasati lato","Capelli rasta","Capelli spettinati","Capelli trecce"];
+const rules=equipmentRules(p),hairOptions=supportsHumanoidHairAndHeadgear(p)?["Capelli coda ciuffi","Capelli coda lunga","Capelli lunghi","Capelli mossi","Capelli rasati lato","Capelli rasta","Capelli spettinati","Capelli trecce"]:[];
+if(!supportsHumanoidHairAndHeadgear(p))p.equipment.hair="";
 if(p.equipment.weapon&&!rules.weapons.includes(p.equipment.weapon))p.equipment.weapon="";
 if(p.equipment.armor&&!rules.armors.includes(p.equipment.armor))p.equipment.armor="";
 if(p.equipment.head&&!rules.heads.includes(p.equipment.head))p.equipment.head="";
@@ -1961,6 +1973,7 @@ const rules=equipmentRules(p);
 if(slot==="weapon"&&value&&!rules.weapons.includes(value))return;
 if(slot==="armor"&&value&&!rules.armors.includes(value))return;
 if(slot==="head"&&value&&!rules.heads.includes(value))return;
+if(slot==="hair"&&value&&!supportsHumanoidHairAndHeadgear(p))return;
 if(!["hair","armor","weapon","head"].includes(slot))return;
 p.equipment[slot]=value;
 const armorBonus=({Armatura_guerriero:3,Armatura_arciere:2,Armatura_druido:2,Armatura_mago:1})[p.equipment.armor]||0;
