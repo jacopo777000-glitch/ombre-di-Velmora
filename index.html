@@ -1017,6 +1017,50 @@ body.battle-mode .actionPanel .actions{grid-template-columns:repeat(2,minmax(0,1
   #combat .actionPanel .btn,#combat .actionPanel button{font-size:9px!important}
 }
 
+
+/* ===== BATTAGLIA MOBILE: FORMAZIONI VISIBILI + MENU SUL PERSONAGGIO ===== */
+@media(max-width:760px){
+ body.battle-mode main{width:100%!important;max-width:100%!important;margin:4px auto!important;padding:0 5px 12px!important}
+ body.battle-mode .gameLayout{display:block!important;width:100%!important}
+ body.battle-mode .leftRail{display:none!important}
+ body.battle-mode .centerColumn{display:block!important;width:100%!important;min-width:0!important}
+ body.battle-mode #missionPanel,body.battle-mode #inventoryPanel,body.battle-mode .centerColumn>.row,body.battle-mode .centerColumn>.note,body.battle-mode .battleExtras,body.battle-mode #afterCombat{display:none!important}
+ body.battle-mode #combat{display:block!important;width:100%!important;min-width:0!important;overflow:visible!important}
+ body.battle-mode #combat .battlefield.battleFormationStage{display:flex!important;flex-direction:column!important;gap:8px!important;min-height:0!important;height:auto!important;padding:8px 6px!important;overflow:visible!important}
+ body.battle-mode #combat .battleTeam{display:block!important;width:100%!important;min-width:0!important}
+ body.battle-mode #combat .battleSideTitle{font-size:9px!important;margin:2px 0 5px!important;text-align:left!important}
+ body.battle-mode #combat .battleFormationStage .battleFormation{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;justify-content:flex-start!important;align-items:flex-end!important;gap:6px!important;width:100%!important;min-width:0!important;padding:4px 2px 8px!important;overflow-x:auto!important;overflow-y:visible!important;scrollbar-width:thin!important;-webkit-overflow-scrolling:touch!important}
+ body.battle-mode #combat .battleFormationStage .battleUnit{position:relative!important;display:flex!important;flex:0 0 76px!important;flex-direction:column!important;align-items:center!important;width:76px!important;max-width:none!important;min-width:0!important;padding:5px 3px!important;gap:3px!important;text-align:center!important;cursor:pointer!important}
+ body.battle-mode #combat .battleFormationStage .battleUnit .unitArt{display:block!important;width:100%!important;height:92px!important;max-height:92px!important;object-fit:contain!important;aspect-ratio:auto!important}
+ body.battle-mode #combat .battleFormationStage .battleUnitInfo{width:100%!important;min-width:0!important}
+ body.battle-mode #combat .battleFormationStage .battleName{font-size:8px!important;line-height:1.1!important;min-height:18px!important;overflow-wrap:anywhere!important}
+ body.battle-mode #combat .battleFormationStage .battleHP,body.battle-mode #combat .battleFormationStage .battleAP{font-size:7px!important;line-height:1.1!important}
+ body.battle-mode #combat .battleFormationStage .battleBar{height:4px!important;margin:3px 0!important}
+ body.battle-mode #combat .battleDestiny{display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;gap:8px!important;width:100%!important;min-height:0!important;padding:5px!important;margin:0!important}
+ body.battle-mode #combat .battleDestiny .diceHeading{font-size:8px!important;padding:0!important}
+ body.battle-mode #combat .battleDestiny .diceContent{display:flex!important;flex-direction:row!important;align-items:center!important;gap:7px!important;padding:0!important}
+ body.battle-mode #combat .battleDestiny .diceContent img{width:38px!important;height:38px!important}
+ body.battle-mode #combat .battleDestiny .diceContent div div,body.battle-mode #combat .battleDestiny .diceContent small{font-size:8px!important;line-height:1.15!important}
+ body.battle-mode #combat .battleDestiny .diceContent strong{font-size:16px!important}
+ body.battle-mode #combat .actionPanel{display:none!important}
+ body.battle-mode #combat .battleUnit.active{border:2px solid #72e59a!important;box-shadow:0 0 0 2px rgba(65,220,125,.35),0 0 18px rgba(48,230,115,.8),inset 0 0 14px rgba(53,220,110,.2)!important;z-index:8!important}
+ body.battle-mode #combat .battleUnit.active:after{color:#8cffad!important}
+ body.battle-mode #combat .unitActionDropdown{position:absolute;left:50%;bottom:calc(100% + 7px);transform:translateX(-50%);width:min(250px,78vw);max-height:45vh;overflow-y:auto;z-index:30;padding:8px;background:linear-gradient(145deg,rgba(20,29,25,.98),rgba(8,13,12,.99));border:2px solid #72d996;border-radius:10px;box-shadow:0 8px 28px #000e,0 0 15px #49d77c66;text-align:left}
+ body.battle-mode #combat .unitActionDropdown:after{content:"";position:absolute;left:calc(50% - 7px);bottom:-8px;width:12px;height:12px;background:#101914;border-right:1px solid #72d996;border-bottom:1px solid #72d996;transform:rotate(45deg)}
+ body.battle-mode #combat .unitActionHeading{font-size:9px;letter-spacing:1px;color:#a9efbd;margin:0 0 6px;padding-bottom:5px;border-bottom:1px solid #668c70}
+ body.battle-mode #combat .unitActionBtn{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;min-height:31px;margin:3px 0;padding:6px 8px;border:1px solid #806b49;border-radius:6px;background:linear-gradient(145deg,#3a3022,#171713);color:#f2dfb7;font: bold 10px Georgia,serif;text-align:left}
+ body.battle-mode #combat .unitActionBtn.primary{border-color:#c7a76d;background:linear-gradient(145deg,#6b512e,#302316)}
+ body.battle-mode #combat .unitActionBtn.magic{border-color:#8a78c2}
+ body.battle-mode #combat .unitActionBtn.defense{border-color:#72a98a}
+ body.battle-mode #combat .unitActionBtn em{font-size:8px;font-style:normal;opacity:.8;white-space:nowrap}
+ body.battle-mode #combat .unitActionBtn:disabled{opacity:.35}
+ body.battle-mode #combat .unitActionBtn.close{justify-content:center;background:#202522;border-color:#596b5e}
+}
+@media(max-width:390px){
+ body.battle-mode #combat .battleFormationStage .battleUnit{flex-basis:70px!important;width:70px!important}
+ body.battle-mode #combat .battleFormationStage .battleUnit .unitArt{height:82px!important}
+}
+
 </style>
 </head>
 <body>
@@ -1527,7 +1571,7 @@ if(d&&d.sourceWidth&&d.sourceHeight){const x=100*(d.x+anchor.x)/d.sourceWidth,y=
 }
 return '<div class="unitArt"><img class="unitBase" src="'+base+'" alt="'+(u.name||'')+'">'+hair+weaponSvgFor(u)+'</div>';
 }
-function unitHTML(u,active){let max=u.maxhp||u.hp,hp=Math.max(0,u.hp),status=!u.alive?"CADUTO":hp+"/"+max+" HP",enemy=isEnemy(u),targetIndex=enemy?battle.units.indexOf(u):-1,selected=enemy&&targetIndex===selectedTarget,art=equipmentLayers(u);if(enemy&&u.alive)art=art.replace('<div class="unitArt">','<div class="unitArt enemyTargetImage" role="button" tabindex="0" aria-label="Seleziona '+u.name+' come bersaglio" onclick="selectTarget('+targetIndex+')" onkeydown="if(event.key===\'Enter\'||event.key===\' \')selectTarget('+targetIndex+')">');return '<div class="battleUnit '+(active?'active':'')+' '+(!u.alive?'dead':'')+' '+(selected?'target-selected':'')+'" data-unit-id="'+u.id+'">'+art+'<div class="battleUnitInfo"><div class="battleName">'+u.name+'</div><div class="battleHP">'+status+'</div><div class="battleBar"><div style="width:'+Math.max(0,hp/max*100)+'%"></div></div>'+(!enemy&&u.alive?'<div class="battleAP">AP '+u.ap+'/5</div>':'')+(u.status?'<div class="battleAP">'+u.status.name+'</div>':'')+'</div></div>';}
+function unitHTML(u,active){let max=u.maxhp||u.hp,hp=Math.max(0,u.hp),status=!u.alive?"CADUTO":hp+"/"+max+" HP",enemy=isEnemy(u),targetIndex=enemy?battle.units.indexOf(u):-1,selected=enemy&&targetIndex===selectedTarget,art=equipmentLayers(u);if(enemy&&u.alive)art=art.replace('<div class="unitArt">','<div class="unitArt enemyTargetImage" role="button" tabindex="0" aria-label="Seleziona '+u.name+' come bersaglio" onclick="selectTarget('+targetIndex+')" onkeydown="if(event.key===\'Enter\'||event.key===\' \')selectTarget('+targetIndex+')">');return '<div class="battleUnit '+(active?'active':'')+' '+(!u.alive?'dead':'')+' '+(selected?'target-selected':'')+'" data-unit-id="'+u.id+'"'+(active&&!enemy?' role="button" tabindex="0" aria-label="Apri le azioni di '+u.name+'" onclick="toggleUnitActionMenu(event)" onkeydown="if(event.key===\'Enter\'||event.key===\' \')toggleUnitActionMenu(event)"':'')+' >'+art+'<div class="battleUnitInfo"><div class="battleName">'+u.name+'</div><div class="battleHP">'+status+'</div><div class="battleBar"><div style="width:'+Math.max(0,hp/max*100)+'%"></div></div>'+(!enemy&&u.alive?'<div class="battleAP">AP '+u.ap+'/5</div>':'')+(u.status?'<div class="battleAP">'+u.status.name+'</div>':'')+'</div></div>';}
 function renderTurnOrder(){
  const box=$("turnOrder");if(!box||!battle)return;
  $("roundSide").textContent=String(battle.round||1).padStart(2,"0");
@@ -1535,7 +1579,7 @@ function renderTurnOrder(){
  box.innerHTML=order.map((u,i)=>{const dead=!u.alive||u.hp<=0,active=current()===u;return `<div class="turnEntry ${active?"active":""} ${dead?"dead":""}"><span class="turnNumber">${String(i+1).padStart(2,"0")}</span><img class="turnPortrait" src="${asset(u.portrait||"")}" alt="" onerror="this.style.opacity='.2'"><div class="turnText"><b>${u.name}</b><small>${dead?"Caduto":(isEnemy(u)?"Nemico":"Alleato")+" · "+Math.max(0,u.hp)+" HP"}</small></div></div>`}).join("");
 }
 function renderLeftSquad(){const box=$("leftSquad");if(!box||!G)return;const members=[G.hero,...G.party];box.innerHTML=members.map(p=>`<div class="leftMember"><img src="${asset(p.portrait||"")}" alt="${p.name}" onerror="this.style.opacity='.25'"><div class="leftMemberInfo"><b>${p.name}</b><small>Liv. ${p.level||1} · ${Math.max(0,p.hp)}/${p.maxhp} HP</small><div class="leftMiniBar"><i style="width:${Math.max(0,p.hp/p.maxhp*100)}%"></i></div></div></div>`).join("")}
-function renderBattle(){if(!battle)return;$("combat").dataset.battleScene=battle.n===1?"forest":battle.n===2?"crypt":"bell";$("roundBadge").textContent="Turno "+battle.round;$("partyList").innerHTML=[G.hero,...G.party].map(p=>unitHTML(p,current()===p)).join("");$("enemyList").innerHTML=battle.units.map(e=>unitHTML(e,current()===e)).join("");renderTurnOrder();renderLeftSquad();updateHUD()}
+function renderBattle(){if(!battle)return;$("combat").dataset.battleScene=battle.n===1?"forest":battle.n===2?"crypt":"bell";$("roundBadge").textContent="Turno "+battle.round;$("partyList").innerHTML=[G.hero,...G.party].map(p=>unitHTML(p,current()===p)).join("");$("enemyList").innerHTML=battle.units.map(e=>unitHTML(e,current()===e)).join("");syncUnitActionMenu();renderTurnOrder();renderLeftSquad();updateHUD()}
 function findUnitElement(u){return Array.from(document.querySelectorAll(".battleUnit")).find(el=>el.dataset.unitId===String(u.id))}
 function animateStrike(attacker,target,kind="attack"){return new Promise(resolve=>{let a=findUnitElement(attacker),t=findUnitElement(target);if(!a||!t){resolve();return}let attackClass=kind==="spell"?"castMagic":kind==="skill"?"dashSkill":isEnemy(attacker)?"dashEnemy":"dashHero";a.classList.remove("dashEnemy","dashHero","dashSkill","castMagic");void a.offsetWidth;a.classList.add(attackClass);let impactDelay=kind==="spell"?330:kind==="skill"?260:210;let total=kind==="spell"?720:kind==="skill"?650:520;setTimeout(()=>{t.classList.add(kind==="spell"?"magicHit":"hit");if(kind!=="spell")t.classList.add("impactSlash")},impactDelay);setTimeout(()=>{a.classList.remove("dashEnemy","dashHero","dashSkill","castMagic");t.classList.remove("hit","impactSlash","magicHit");resolve()},total)})}
 async function advanceToPlayer(){
@@ -1554,11 +1598,12 @@ function selectTarget(i){if(busy)return;selectedTarget=i;renderTargets()}
 function hasCure(){return ["Antidoto","Benda","Purificazione"].some(k=>Number(G.inventory[k]||0)>0)}
 function hasDowned(){return [G.hero,...G.party].some(p=>!p.alive&&p.down>0)}
 function canUseMagic(u){return ["Mago","Chierico","Druido","mage","cleric","druid"].includes(u.class)}
-function toggleCombatAbilityMenu(){combatAbilityMenuOpen=!combatAbilityMenuOpen;renderActions()}
+let combatUnitMenuOpen=false;function toggleUnitActionMenu(ev){if(ev){ev.stopPropagation();ev.preventDefault()}if(busy||!battle||!current()||isEnemy(current()))return;combatUnitMenuOpen=!combatUnitMenuOpen;renderBattle()}function syncUnitActionMenu(){document.querySelectorAll(".unitActionDropdown").forEach(x=>x.remove());const u=current();if(!combatUnitMenuOpen||!u||isEnemy(u)||!u.alive)return;const card=Array.from(document.querySelectorAll("#partyList .battleUnit")).find(x=>x.dataset.unitId===String(u.id));if(!card)return;const list=unlockedAbilities(u);let html='<div class="unitActionDropdown" onclick="event.stopPropagation()"><div class="unitActionHeading">AZIONI · '+u.name+'</div><button class="unitActionBtn primary" onclick="playerAction(\'attack\')">⚔ Attacco</button>';if(list.length)html+='<div class="unitActionGroup"><small>ABILITÀ</small>'+list.map(a=>'<button class="unitActionBtn" onclick="playerAction(\'skill\',\''+a.id+'\')" '+(u.ap<a.cost?'disabled':'')+'><span>'+a.name+'</span><em>'+a.cost+' AP</em></button>').join("")+'</div>';if(canUseMagic(u))html+='<button class="unitActionBtn magic" onclick="playerAction(\'spell\')" '+(u.ap<3?'disabled':'')+'>✧ Magia · 3 AP</button>';html+='<button class="unitActionBtn defense" onclick="playerAction(\'defend\')" '+(u.ap<1?'disabled':'')+'>🛡 Difesa · 1 AP</button>';if(G.inventory.Pozione>0)html+='<button class="unitActionBtn" onclick="playerAction(\'potion\')">Pozione</button>';if(hasCure())html+='<button class="unitActionBtn" onclick="playerAction(\'cure\')">Cura alterazioni</button>';if(hasDowned())html+='<button class="unitActionBtn" onclick="playerAction(\'rescue\')">Soccorri compagno</button>';html+='<button class="unitActionBtn close" onclick="combatUnitMenuOpen=false;renderBattle()">Chiudi</button></div>';card.insertAdjacentHTML("beforeend",html)}
 function renderActions(){let u=current();if(!u||isEnemy(u))return;let list=unlockedAbilities(u);let menu=list.length?list.map(a=>'<button class="abilityChoice" onclick="playerAction(\'skill\',\''+a.id+'\')" '+(u.ap<a.cost?'disabled':'')+'><span><b>'+a.name+'</b><small>'+a.description+'</small></span><em>'+a.cost+' AP</em></button>').join(""):'<p class="small">Nessuna abilità disponibile.</p>';$("combatActions").innerHTML='<button class="btn" onclick="playerAction(\'attack\')">Attacco normale · 0 AP</button><div class="combatAbilityPicker"><button class="btn abilityToggle" onclick="toggleCombatAbilityMenu()">Abilità <span>'+(combatAbilityMenuOpen?'▴':'▾')+'</span></button><div class="combatAbilityMenu '+(combatAbilityMenuOpen?'open':'')+'">'+menu+'</div></div><button class="btn secondary" onclick="playerAction(\'potion\')" '+(G.inventory.Pozione<1?'disabled':'')+'>Pozione curativa</button><button class="btn secondary" onclick="playerAction(\'cure\')" '+(!hasCure()?'disabled':'')+'>Usa cura</button><button class="btn secondary" onclick="playerAction(\'rescue\')" '+(!hasDowned()?'disabled':'')+'>Soccorri compagno</button><button class="btn danger" onclick="playerAction(\'flee\')">Tenta la fuga</button>'}
 function unlockActions(){busy=false;renderActions();renderBattle()}
 async function playerAction(type,abilityId){
 if(busy||!battle||battle.ended)return;let u=current(),target=battle.units[selectedTarget];if(!u||!u.alive||isEnemy(u))return;
+combatUnitMenuOpen=false;
 if(type==="spell"&&!canUseMagic(u)){$("actionMessage").textContent="Questa classe non può utilizzare la magia.";return}let chosenAbility=type==="skill"?unlockedAbilities(u).find(a=>a.id===abilityId):null;if(type==="skill"&&!chosenAbility){unlockActions();return}
 busy=true;$("combatActions").querySelectorAll("button").forEach(b=>b.disabled=true);
 if(type==="skill"&&chosenAbility&&chosenAbility.effect){
@@ -1572,7 +1617,7 @@ if(!target||!target.alive){unlockActions();return}let cost=type==="skill"?(chose
 let activeSkill=type==="skill"?chosenAbility:null;let magical=(type==="spell"||(activeSkill&&activeSkill.type==="Magica")),stat=magical?(u.stats.intelletto||u.stats.volonta||5):(u.stats.forza||5),bonus=Math.floor(stat/2),eq=u.equipment||{},weaponBonus=magical?(eq.magicBonus||0):(eq.physicalBonus||0),weapon=u.weapon+(type==="skill"?(activeSkill?activeSkill.damageBonus||0:0):magical?4:0)+weaponBonus,damage=Math.max(1,die+bonus+weapon+(u.focus||0)-target.armor);if(die===20)damage+=10;const lethal=target.hp-damage<=0;if(lethal)await playFinisher(u,target,magical);target.hp-=damage;if(u.focusUses){u.focus=0;u.focusUses=0;log(`${u.name} consuma la concentrazione nel colpo.`)}
 log(`${u.name}: D20 ${die} → ${type==="spell"?"incantesimo":type==="skill"?(activeSkill?activeSkill.name:"abilità"):"attacco"} su ${target.name}, ${damage} danni${die===20?" (CRITICO!)":""}.`);
 if(target.hp<=0){target.hp=0;target.alive=false;log(`${target.name} è stato sconfitto.`)}
-}else if(type==="potion"){if(G.inventory.Pozione<1){unlockActions();return}G.inventory.Pozione--;let oldHP=u.hp;u.hp=Math.min(u.maxhp,u.hp+18);log(`${u.name} usa una pozione e recupera ${u.hp-oldHP} HP.`)}
+}else if(type==="defend"){if(u.ap<1){unlockActions();return}u.ap-=1;u.guard=Math.max(u.guard||0,4);u.guardTurns=1;log(`${u.name} assume una posizione difensiva: i prossimi danni sono ridotti.`)}else if(type==="potion"){if(G.inventory.Pozione<1){unlockActions();return}G.inventory.Pozione--;let oldHP=u.hp;u.hp=Math.min(u.maxhp,u.hp+18);log(`${u.name} usa una pozione e recupera ${u.hp-oldHP} HP.`)}
 else if(type==="cure"){let k=["Antidoto","Benda","Purificazione"].find(x=>G.inventory[x]>0);if(!k){unlockActions();return}G.inventory[k]--;if(u.status){u.status=null;log(`${u.name} usa ${k}: effetto negativo rimosso.`)}else log(`${u.name} usa ${k}, ma non ha alterazioni da curare.`)}
 else if(type==="rescue"){let p=[G.hero,...G.party].find(p=>!p.alive&&p.down>0);if(!p){unlockActions();return}p.alive=true;p.down=0;p.hp=Math.max(8,Math.floor(p.maxhp*.25));log(`${u.name} soccorre ${p.name}, che torna in piedi con ${p.hp} HP.`)}
 else if(type==="flee"){if(battle.n===3)log("Il Custode blocca ogni via di fuga.");else if(Math.random()<.55){log("La fuga riesce. Lo scontro termina, ma la missione resta incompleta.");battle.ended=true;busy=false;$("combat").classList.add("hidden");showScene(battle.n===1?"forest":"crypt");return}else log("La fuga fallisce!")}
