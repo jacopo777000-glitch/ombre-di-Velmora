@@ -1,0 +1,41 @@
+name: Import licensed Duskforge battle backgrounds
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/import-duskforge-backgrounds.yml"
+      - "scripts/download_duskforge_packs.mjs"
+      - "scripts/process_duskforge_packs.py"
+permissions:
+  contents: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install browser and image processing tools
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install --upgrade pip pillow
+      - name: Download the two free packs through their official itch.io pages
+        run: node scripts/download_duskforge_packs.mjs
+      - name: Convert images to optimized WebP and record license
+        run: python scripts/process_duskforge_packs.py
+      - name: Commit optimized game-ready backgrounds
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/battle/duskforge assets/battle/CREDITS.md
+          git diff --cached --quiet || git commit -m "Add optimized licensed Duskforge battle backgrounds"
+          git pull --rebase origin main
+          git push
