@@ -189,6 +189,56 @@ try {
   fail("Test generazione procedurale: " + error.message);
 }
 
+try {
+  const saveStart = html.indexOf("function saveGame(){");
+  const loadStart = html.indexOf("function loadGame(){", saveStart);
+  const loadEnd = html.indexOf("\nfunction ", loadStart + 20);
+  if (saveStart < 0 || loadStart < 0 || loadEnd < 0) throw new Error("funzioni save/load non individuate");
+  const saveCode = html.slice(saveStart, loadStart);
+  const loadCode = html.slice(loadStart, loadEnd);
+  const hero = {id:"hero",name:"Prova"};
+  const companion = {id:"ally-1",name:"Compagna"};
+  const foe = {id:"foe-1",name:"Predone",alive:true,hp:10};
+  const originalG = {hero,party:[companion],inventory:{Pozione:2},proceduralSeed:1234,proceduralRoster:[{id:"wanderer-1"}],activeGuildMission:{id:"test",step:4,seed:77}};
+  const originalBattle = {n:1,round:3,units:[foe],order:[hero,companion,foe],idx:1,log:["Prova"],ended:false};
+  const store = {};
+  const alerts = [];
+  const elements = new Map();
+  const fakeElement = () => ({classList:{add(){},remove(){}},innerHTML:"",textContent:""});
+  const deps = {
+    G:originalG,battle:originalBattle,localStorage:{getItem:k=>store[k]||null,setItem:(k,v)=>store[k]=v},
+    alert:m=>alerts.push(m),$:id=>{if(!elements.has(id))elements.set(id,fakeElement());return elements.get(id)},
+    document:{body:{classList:{add(){},remove(){}}}},
+    ensureSideQuestState(){},ensureProceduralRoster(){},renderBattle(){},advanceToPlayer(){},
+    showScene(){},guildRouteEvent(){},updateHUD(){},openTab(){}
+  };
+  const factory = new Function("deps", `let G=deps.G,battle=deps.battle,busy=true;
+    const localStorage=deps.localStorage,alert=deps.alert,$=deps.$,document=deps.document;
+    const ensureSideQuestState=deps.ensureSideQuestState,ensureProceduralRoster=deps.ensureProceduralRoster;
+    const renderBattle=deps.renderBattle,advanceToPlayer=deps.advanceToPlayer,showScene=deps.showScene;
+    const guildRouteEvent=deps.guildRouteEvent,updateHUD=deps.updateHUD,openTab=deps.openTab;
+    ${saveCode}
+    ${loadCode}
+    return {saveGame,loadGame,getState:()=>({G,battle,busy})};`);
+  const writer=factory(deps);
+  writer.saveGame();
+  const saved=JSON.parse(store.velmoraDemoSave);
+  if (saved.battle.order.join(",") !== "hero,ally-1,foe-1") throw new Error("ordine dei turni non serializzato come ID");
+  const reader=factory({...deps,G:null,battle:null});
+  reader.loadGame();
+  const restored=reader.getState();
+  if (restored.G.proceduralSeed !== 1234 || restored.G.activeGuildMission.step !== 4 ||
+      restored.battle.order[0] !== restored.G.hero ||
+      restored.battle.order[1] !== restored.G.party[0] ||
+      restored.battle.order[2] !== restored.battle.units[0] ||
+      restored.busy !== false) {
+    throw new Error("salvataggio partita/missione/ordine turni non ripristinato correttamente");
+  }
+  pass("Test save/load: party, seed, missione attiva e ordine turni ripristinati");
+} catch (error) {
+  fail("Test persistenza save/load: " + error.message);
+}
+
 if (failures) {
   console.error("\nVerifica terminata con " + failures + " errore/i.");
   process.exit(1);
