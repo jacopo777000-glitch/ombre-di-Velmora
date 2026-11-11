@@ -1234,13 +1234,13 @@ const proceduralPersonalities=["prudente e osservatore","impulsivo ma leale","si
 const proceduralHair=["Capelli coda ciuffi","Capelli coda lunga","Capelli lunghi","Capelli mossi","Capelli rasati lato","Capelli rasta","Capelli spettinati","Capelli trecce"];
 const proceduralRarity=[["Comune",0],["Non comune",1],["Raro",2],["Epico",3],["Mitico",4]];
 const proceduralClasses=[
- {id:"warrior",role:"Difensore",weapons:["Spada","Ascia","Martello"],armor:"Armatura_guerriero",heads:["Elmo_drago","Elmo_leone"],stats:{forza:7,agilita:5,vitalita:7,intelletto:3,volonta:4,percezione:4,carisma:4}},
+ {id:"warrior",role:"Difensore",weapons:["Spada","Ascia","Martello","Lancia"],armor:"Armatura_guerriero",heads:["Elmo_drago","Elmo_leone"],stats:{forza:7,agilita:5,vitalita:7,intelletto:3,volonta:4,percezione:4,carisma:4}},
  {id:"thief",role:"Esploratore",weapons:["Pugnale","Arco"],armor:"Armatura_arciere",heads:["Cappello_punk"],stats:{forza:5,agilita:8,vitalita:5,intelletto:4,volonta:4,percezione:8,carisma:5}},
  {id:"mage",role:"Incantatore",weapons:["Bastone"],armor:"Armatura_mago",heads:["Cappello_mago"],stats:{forza:3,agilita:5,vitalita:4,intelletto:9,volonta:8,percezione:5,carisma:5}},
  {id:"cleric",role:"Guaritore",weapons:["Martello","Spada"],armor:"Armatura_guerriero",heads:["Elmo_leone"],stats:{forza:4,agilita:4,vitalita:6,intelletto:6,volonta:8,percezione:5,carisma:7}},
  {id:"druid",role:"Custode della natura",weapons:["Bastone","Pugnale"],armor:"Armatura_druido",heads:["Cappello_mago"],stats:{forza:4,agilita:6,vitalita:5,intelletto:7,volonta:7,percezione:6,carisma:5}},
  {id:"archer",role:"Tiratore",weapons:["Arco","Pugnale"],armor:"Armatura_arciere",heads:["Elmo_leone"],stats:{forza:5,agilita:8,vitalita:5,intelletto:4,volonta:5,percezione:8,carisma:4}},
- {id:"paladin",role:"Difesa e supporto",weapons:["Spada","Martello","Scudo"],armor:"Armatura_guerriero",heads:["Elmo_leone","Elmo_drago"],stats:{forza:7,agilita:4,vitalita:8,intelletto:5,volonta:7,percezione:5,carisma:7}}
+ {id:"paladin",role:"Difesa e supporto",weapons:["Spada","Martello","Scudo","Lancia"],armor:"Armatura_guerriero",heads:["Elmo_leone","Elmo_drago"],stats:{forza:7,agilita:4,vitalita:8,intelletto:5,volonta:7,percezione:5,carisma:7}}
 ];
 function seededRandom(seed){
  let state=(Number(seed)>>>0)||1;
@@ -1256,7 +1256,7 @@ function makeProceduralPerson(rng,index,side,baseLevel,seed){
  const stats={};Object.keys(def.stats).forEach(k=>stats[k]=def.stats[k]+Math.floor((level-1)/2)+Math.floor(bonus/2));
  const maxhp=24+stats.vitalita*3+(level-1)*4+bonus*3;
  const weaponName=proceduralPick(def.weapons,rng),armorName=def.armor,headName=proceduralPick(def.heads,rng),hairName=proceduralPick(proceduralHair,rng);
- const physical={Spada:2,Ascia:3,Martello:3,Pugnale:1,Arco:3,Bastone:1,Scudo:0}[weaponName]||1;
+ const physical={Spada:2,Ascia:3,Martello:3,Pugnale:1,Arco:3,Bastone:1,Scudo:0,Lancia:4}[weaponName]||1;
  const magic=weaponName==="Bastone"?(def.id==="mage"?5:3):0;
  let armor=1+Math.floor(stats.vitalita/3)+bonus;
  let finalHp=maxhp,finalAtk=4+Math.floor(stats.forza/2)+(level-1)+bonus;
@@ -1450,6 +1450,7 @@ function weaponSvgFor(u){
  let shape="";
  if(name.includes("arco"))shape='<path d="M58 8 Q5 88 58 170" fill="none" stroke="#b98548" stroke-width="7"/><path d="M58 8 L58 170" stroke="#d8c9a4" stroke-width="2"/><path d="M58 62 L94 62" stroke="#d8c9a4" stroke-width="3"/>';
  else if(name.includes("bastone"))shape='<path d="M48 12 L52 170" stroke="#8a6137" stroke-width="11" stroke-linecap="round"/><path d="M50 10 L50 33" stroke="#d8bc7b" stroke-width="9" stroke-linecap="round"/><circle cx="50" cy="9" r="9" fill="#72a7b4" stroke="#e0ca8c" stroke-width="3"/>';
+ else if(name.includes("lancia")||name.includes("lance"))shape='<path d="M50 18 L50 170" stroke="#80562f" stroke-width="9" stroke-linecap="round"/><path d="M50 2 L67 38 L50 31 L33 38 Z" fill="#cbd0d2" stroke="#f0dfb4" stroke-width="3"/><path d="M38 55 L62 55" stroke="#d5b56e" stroke-width="4"/>';
  else if(name.includes("ascia"))shape='<path d="M49 20 L52 170" stroke="#8a6137" stroke-width="10" stroke-linecap="round"/><path d="M49 20 Q13 1 12 47 Q27 60 49 47 Z" fill="#aeb3b4" stroke="#d7c99f" stroke-width="4"/>';
  else if(name.includes("martello"))shape='<path d="M49 28 L52 170" stroke="#8a6137" stroke-width="10" stroke-linecap="round"/><path d="M19 12 L82 12 L78 48 L24 48 Z" fill="#9fa4a6" stroke="#d8c99c" stroke-width="4"/>';
  else if(name.includes("scudo"))shape='<path d="M15 12 L85 12 L79 105 Q50 155 21 105 Z" fill="#765331" stroke="#d8bc7b" stroke-width="6"/><path d="M50 20 L50 120 M22 65 L78 65" stroke="#d8bc7b" stroke-width="4"/>';
@@ -1921,9 +1922,9 @@ const c=String(p.class||"").toLowerCase();
 if(c.includes("arciere"))return {weapons:["Arco","Pugnale"],armors:["Armatura_arciere"],heads:["Elmo_leone"]};
 if(c.includes("mago")||c.includes("maga"))return {weapons:["Bastone"],armors:["Armatura_mago"],heads:["Cappello_mago"]};
 if(c.includes("druido")||c.includes("druida"))return {weapons:["Bastone","Pugnale"],armors:["Armatura_druido"],heads:["Cappello_mago"]};
-if(c.includes("paladin")||c.includes("paladino")||c.includes("paladina")||c.includes("chierico"))return {weapons:["Spada","Martello","Scudo"],armors:["Armatura_guerriero"],heads:["Elmo_leone","Elmo_drago"]};
+if(c.includes("paladin")||c.includes("paladino")||c.includes("paladina")||c.includes("chierico"))return {weapons:["Spada","Martello","Scudo","Lancia"],armors:["Armatura_guerriero"],heads:["Elmo_leone","Elmo_drago"]};
 if(c.includes("ladro"))return {weapons:["Pugnale","Arco"],armors:["Armatura_arciere"],heads:["Cappello_punk"]};
-let base=c.includes("paladin")||c.includes("paladino")||c.includes("paladina")||c.includes("chierico")?{weapons:["Spada","Martello","Scudo"],armors:["Armatura_guerriero"],heads:["Elmo_leone","Elmo_drago"]}:{weapons:["Spada","Ascia","Martello","Scudo"],armors:["Armatura_guerriero"],heads:["Elmo_drago","Elmo_leone"]};
+let base=c.includes("paladin")||c.includes("paladino")||c.includes("paladina")||c.includes("chierico")?{weapons:["Spada","Martello","Scudo"],armors:["Armatura_guerriero"],heads:["Elmo_leone","Elmo_drago"]}:{weapons:["Spada","Ascia","Martello","Scudo","Lancia"],armors:["Armatura_guerriero"],heads:["Elmo_drago","Elmo_leone"]};
 (G.equipmentBag||[]).forEach(x=>{if(x.classes.includes(p.class)){if(x.slot==="weapon")base.weapons.push(x.name);if(x.slot==="armor")base.armors.push(x.name);if(x.slot==="head")base.heads.push(x.name)}});return base;
 }
 function renderCharacterScreen(){
@@ -1937,7 +1938,7 @@ if(p.equipment.head&&!rules.heads.includes(p.equipment.head))p.equipment.head=""
 const makeOpts=(items,current,empty)=>'<option value="">'+empty+'</option>'+items.map(x=>'<option value="'+x+'" '+(current===x?'selected':'')+'>'+x.replaceAll("_"," ")+'</option>').join("");
 const stats=p.stats?Object.entries(p.stats).map(([k,v])=>'<span>'+(statNames[k]||k)+': '+v+'</span>').join(""):"";
 const weaponLoot=lootMeta(p.equipment.weapon),armorLoot=lootMeta(p.equipment.armor),headLoot=lootMeta(p.equipment.head);
-const weaponPower=weaponLoot?weaponLoot.physical:(({Spada:2,Ascia:3,Martello:3,Pugnale:1,Arco:3,Bastone:2,Scudo:0})[p.equipment.weapon]||0);
+const weaponPower=weaponLoot?weaponLoot.physical:(({Spada:2,Ascia:3,Martello:3,Pugnale:1,Arco:3,Bastone:2,Scudo:0,Lancia:4})[p.equipment.weapon]||0);
 const magicPower=weaponLoot?weaponLoot.magic:(p.equipment.weapon==="Bastone"?5:0);
 const armorBonus=(armorLoot?armorLoot.defense:(({Armatura_guerriero:3,Armatura_arciere:2,Armatura_druido:2,Armatura_mago:1})[p.equipment.armor]||0))+(headLoot?headLoot.defense:0);
 $("characterScreenBody").innerHTML='<div class="characterPortraitPanel">'+equipmentLayers(p)+'<div class="characterIdentity"><strong>'+p.name+'</strong><small>'+(p.isHero?(p.race+" · "+p.class):"Compagno · "+p.class)+' · Livello '+(p.level||1)+'</small></div></div><div class="characterChoices"><h3>Equipaggiamento</h3><div class="menuHint">Sono mostrati solo gli oggetti compatibili con la classe. Le scelte restano associate al singolo personaggio.</div><div class="equipSlots"><div class="equipSlot"><b>⚔ Arma</b><select class="input" onchange="setEquipment(\'weapon\',this.value)">'+makeOpts(rules.weapons,p.equipment.weapon,"Arma iniziale")+'</select><small>'+(p.class==="Mago"||p.class==="Druido"||p.class==="Maga"||p.class==="Druida"?"Potenza magica":"Danno fisico")+': +'+(p.equipment.weapon==="Bastone"?magicPower:weaponPower)+'</small></div><div class="equipSlot"><b>🛡 Armatura</b><select class="input" onchange="setEquipment(\'armor\',this.value)">'+makeOpts(rules.armors,p.equipment.armor,"Armatura base")+'</select><small>Bonus difesa: +'+armorBonus+'</small></div><div class="equipSlot"><b>⛑ Elmo / copricapo</b><select class="input" onchange="setEquipment(\'head\',this.value)">'+makeOpts(rules.heads,p.equipment.head,"Nessuno")+'</select></div><div class="equipSlot"><b>✦ Aspetto</b><select class="input" onchange="setEquipment(\'hair\',this.value)">'+makeOpts(hairOptions,p.equipment.hair,"Acconciatura base")+'</select></div></div><div class="characterEquipTotals"><span>Bonus fisico: +'+weaponPower+'</span><span>Bonus magico: +'+magicPower+'</span><span>Difesa: +'+armorBonus+'</span></div><label class="equipLabel">Statistiche</label><div class="characterStatsLine">'+stats+'</div><div class="menuHint">Usa le frecce in alto per cambiare personaggio.</div></div>';
@@ -1957,7 +1958,7 @@ const armorBonus=({Armatura_guerriero:3,Armatura_arciere:2,Armatura_druido:2,Arm
 const headMeta=lootMeta(p.equipment.head);p.armor=(p.baseArmor??p.armor??0)+armorBonus+(headMeta?headMeta.defense:0);
 p.equipment.armorBonus=armorBonus+(headMeta?headMeta.defense:0);
 const wm=lootMeta(p.equipment.weapon),am=lootMeta(p.equipment.armor),hm=lootMeta(p.equipment.head);
-p.equipment.physicalBonus=wm?wm.physical:(({Spada:2,Ascia:3,Martello:3,Pugnale:1,Arco:3,Bastone:0,Scudo:0})[p.equipment.weapon]||0);
+p.equipment.physicalBonus=wm?wm.physical:(({Spada:2,Ascia:3,Martello:3,Pugnale:1,Arco:3,Bastone:0,Scudo:0,Lancia:4})[p.equipment.weapon]||0);
 p.equipment.magicBonus=wm?wm.magic:(p.equipment.weapon==="Bastone"?5:0);
 p.equipment.armorBonus=(am?am.defense:(({Armatura_guerriero:3,Armatura_arciere:2,Armatura_druido:2,Armatura_mago:1})[p.equipment.armor]||0))+(hm?hm.defense:0);
 renderCharacterScreen();if(battle)renderBattle();
