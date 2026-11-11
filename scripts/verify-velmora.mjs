@@ -78,6 +78,22 @@ for (const name of ["modello_umano_maschile.png.JPG.JPG", "modello_umano_femmini
 for (const fn of ["function saveGame", "function loadGame", "function equipmentLayers", "function playFinisher", "function generateProceduralRoster"]) {
   if (!html.includes(fn)) fail("Funzione fondamentale non trovata: " + fn);
 }
+
+if (!html.includes("function equipmentLayerData") ||
+    !html.includes('data-equipment-slot="armor"') ||
+    !html.includes('data-equipment-slot="head"')) {
+  fail("Render dei livelli di armatura e copricapo non collegato ai modelli.");
+} else pass("Layer di armatura e copricapo presenti nel renderer dei personaggi");
+
+if (!html.includes("armorData") || !html.includes("headData") ||
+    !html.includes("if(v.armor&&v.armorData)") ||
+    !html.includes("if(v.head&&v.headData)")) {
+  fail("Il colpo di grazia non riproduce tutti i livelli equipaggiati.");
+} else pass("Colpo di grazia: armatura e copricapo inclusi nella composizione 2D");
+
+if (styles.some(css => css.includes("\\n.unitArt"))) {
+  fail("CSS contiene un newline letterale escapato prima del selettore unitArt.");
+} else pass("Selettore unitArt senza newline escapati anomali");
 if (failures === 0) pass("Punti di aggancio salvataggio, equipaggiamento, colpi di grazia e generazione presenti");
 
 if (failures) {
