@@ -204,7 +204,7 @@ try {
   const companion = {id:"ally-1",name:"Compagna"};
   const foe = {id:"foe-1",name:"Predone",alive:true,hp:10};
   const originalG = {hero,party:[companion],inventory:{Pozione:2},proceduralSeed:1234,proceduralRoster:[{id:"wanderer-1"}],activeGuildMission:{id:"test",step:4,seed:77}};
-  const originalBattle = {n:1,round:3,units:[foe],order:[hero,companion,foe],idx:1,log:["Prova"],ended:false};
+  const originalBattle = {n:1,backgroundSeed:98765,round:3,units:[foe],order:[hero,companion,foe],idx:1,log:["Prova"],ended:false};
   const store = {};
   const alerts = [];
   const elements = new Map();
@@ -234,13 +234,33 @@ try {
   if (restored.G.proceduralSeed !== 1234 || restored.G.activeGuildMission.step !== 4 ||
       restored.battle.order[0] !== restored.G.hero ||
       restored.battle.order[1] !== restored.G.party[0] ||
-      restored.battle.order[2] !== restored.battle.units[0] ||
+      restored.battle.order[2] !== restored.battle.units[0] || restored.battle.backgroundSeed !== 98765 ||
       restored.busy !== false) {
     throw new Error("salvataggio partita/missione/ordine turni non ripristinato correttamente");
   }
   pass("Test save/load: party, seed, missione attiva e ordine turni ripristinati");
 } catch (error) {
   fail("Test persistenza save/load: " + error.message);
+}
+
+try {
+  const battleManifestPath = path.join(root, "assets/battle/duskforge/manifest.json");
+  const battleManifest = JSON.parse(fs.readFileSync(battleManifestPath, "utf8"));
+  const usable = (battleManifest.sources || []).flatMap(source => source.images || [])
+    .filter(item => item && item.file && !/preview_sheet/i.test(String(item.sourceFile || item.file)));
+  if (usable.length !== 20) throw new Error("attesi 20 sfondi effettivi, trovati " + usable.length);
+  for (const item of usable) {
+    const full = path.resolve(root, item.file);
+    if (!full.startsWith(root + path.sep) || !fs.existsSync(full)) throw new Error("sfondo mancante: " + item.file);
+  }
+  if (!html.includes("function applyDuskforgeBattleBackground") ||
+      !html.includes("backgroundSeed:") ||
+      !html.includes("fetch('./assets/battle/duskforge/manifest.json')")) {
+    throw new Error("selezione e caricamento sfondi non collegati alle battaglie");
+  }
+  pass("Sfondi Duskforge: 20 WebP ottimizzati, manifest e collegamento alle battaglie");
+} catch (error) {
+  fail("Test sfondi Duskforge: " + error.message);
 }
 
 if (failures) {
