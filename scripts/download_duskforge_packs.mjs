@@ -26,7 +26,7 @@ try {
     await freeOption.waitFor({ state: "visible", timeout: 30000 });
     console.log("Pagina pay-what-you-want:", page.url());
 
-    const downloadPromise = page.waitForEvent("download", { timeout: 90000 }).catch(() => null);
+    const downloadPromise = page.waitForEvent("download", { timeout: 15000 }).catch(() => null);
     await freeOption.click();
     let download = await downloadPromise;
     const target = path.join(out, pack.id + ".zip");
@@ -36,28 +36,34 @@ try {
       await page.waitForLoadState("domcontentloaded").catch(() => {});
       await page.waitForTimeout(500);
       console.log("Pagina restituita da itch.io:", page.url());
-      const links = await page.locator("a").evaluateAll(as => as.map(a => ({ text:(a.innerText||a.textContent||"").trim(), href:a.href })).filter(a => a.href));
+      const links = await page.locator("a").evaluateAll(as => as.map(a => ({ text:(a.innerText||a.textContent||"").trim(), href:a.getAttribute("href") || "", absolute:a.href })).filter(a => a.href));
       const bodyText = await page.locator("body").innerText().catch(() => "");
-      console.log("Testo pagina download:", bodyText.slice(0,1800).replace(/\s+/g," "));
-      console.log("Collegamenti pagina download:", JSON.stringify(links.slice(0,25)));
+      console.log("Testo pagina download:", bodyText.slice(0,2600).replace(/\s+/g," "));
+      console.log("Collegamenti pagina download:", JSON.stringify(links.slice(0,30)));
 
-      const candidate = links.find(a => a.text.includes(pack.filename) || /\.zip(?:[?#]|$)/i.test(a.href));
-      if (candidate) {
-        console.log("Seguo il collegamento al file mostrato dalla pagina ufficiale:", candidate.href);
-        const response = await context.request.get(candidate.href, { timeout: 180000 });
-        if (!response.ok()) throw new Error("Download file ufficiale HTTP " + response.status());
-        await fs.writeFile(target, await response.body());
+      // itch.io's official download landing page exposes a JavaScript Download
+      // control inside #game_download_<upload-id>, rather than a direct ZIP URL.
+      const jump = links.find(a => /#game_download_\d+/.test(a.href));
+      const sectionId = jump && jump.href.split("#").pop();
+      const section = sectionId ? page.locator("#" + sectionId) : page.locator("body");
+      const sectionHtml = await section.evaluate(el => el.outerHTML.slice(0,7000)).catch(() => "");
+      console.log("Sezione file ufficiale:", sectionHtml.slice(0,5000));
+      const downloadControl = section.getByRole("link", { name: /^Download$/i }).first();
+      if (await downloadControl.count()) {
+        const actualDownload = page.waitForEvent("download", { timeout: 180000 });
+        await downloadControl.click();
+        download = await actualDownload;
+        await download.saveAs(target);
       } else {
-        const currentUrl = page.url();
-        if (!/\/download\//.test(currentUrl)) throw new Error("itch.io non ha esposto né un evento download né un collegamento al file ZIP.");
-        const response = await context.request.get(currentUrl, { timeout: 180000 });
-        const bytes = await response.body();
-        const type = response.headers()["content-type"] || "";
-        console.log("Risposta endpoint download:", response.status(), type, response.headers()["content-disposition"] || "", "byte:", bytes.length);
-        if (!response.ok() || !type.toLowerCase().includes("zip")) {
-          throw new Error("Endpoint ufficiale ha restituito una pagina non-zip (" + type + "). Testo: " + bytes.toString("utf8").slice(0,900).replace(/\s+/g," "));
+        const candidate = links.find(a => a.text.includes(pack.filename) || /\.zip(?:[?#]|$)/i.test(a.absolute));
+        if (candidate) {
+          console.log("Seguo il collegamento al file mostrato dalla pagina ufficiale:", candidate.absolute);
+          const response = await context.request.get(candidate.absolute, { timeout: 180000 });
+          if (!response.ok()) throw new Error("Download file ufficiale HTTP " + response.status());
+          await fs.writeFile(target, await response.body());
+        } else {
+          throw new Error("La pagina ufficiale non espone il pulsante Download del file. Sezione: " + sectionHtml.slice(0,1200).replace(/\s+/g," "));
         }
-        await fs.writeFile(target, bytes);
       }
     } else {
       await download.saveAs(target);
