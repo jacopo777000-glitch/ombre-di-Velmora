@@ -93,11 +93,14 @@ if (!html.includes("armorData") || !html.includes("headData") ||
 } else pass("Colpo di grazia: armatura e copricapo inclusi nella composizione 2D");
 
 try {
+  const femaleStart = html.indexOf("function isFemaleCharacter(p){");
+  const femaleEnd = html.indexOf("\nfunction equipmentRules", femaleStart);
   const layerStart = html.indexOf("function equipmentLayerData(u,slot){");
   const layerEnd = html.indexOf("\nfunction unitHTML", layerStart);
-  if (layerStart < 0 || layerEnd < 0) throw new Error("renderer equipment non individuato");
+  if (femaleStart < 0 || femaleEnd < 0 || layerStart < 0 || layerEnd < 0) throw new Error("renderer equipment o helper sesso non individuati");
+  const helperCode = html.slice(femaleStart, femaleEnd);
   const layerCode = html.slice(layerStart, layerEnd);
-  const makeRenderer = new Function("asset", "equipmentManifest", "weaponSvgFor", layerCode + "; return equipmentLayers;");
+  const makeRenderer = new Function("asset", "equipmentManifest", "weaponSvgFor", helperCode + ";" + layerCode + "; return equipmentLayers;");
   const sample = {};
   for (const key of ["Armatura_guerriero.JPG", "Elmo_drago.JPG", "Capelli_mossi.jpg"]) {
     sample[key] = {file:"assets/equip/test.png",x:90,y:40,width:180,height:220,sourceWidth:912,sourceHeight:1168};
@@ -161,10 +164,10 @@ try {
 }
 
 try {
-  const procStart = html.indexOf("function seededRandom(seed){");
+  const procStart = html.indexOf("const proceduralPortraits={");
   const procEnd = html.indexOf("\nfunction generateProceduralRoster", procStart);
   if (procStart < 0 || procEnd < 0) throw new Error("motore procedurale non individuato");
-  const procCode = html.slice(procStart, procEnd);
+  const procCode = "function seededRandom(seed){let state=(Number(seed)>>>0)||1;return function(){state=(Math.imul(state,1664525)+1013904223)>>>0;return state/4294967296}}function proceduralPick(list,rng){return list[Math.floor(rng()*list.length)]}" + html.slice(procStart, procEnd);
   const proc = new Function(procCode + ";return {seededRandom,makeProceduralPerson};")();
   let generated = 0;
   for (let seed = 1; seed <= 120; seed++) {
