@@ -32,7 +32,13 @@ const failures = [];
 const page = await browser.newPage({viewport:{width:1280,height:900}});
 page.on("pageerror", error => failures.push("pageerror: "+error.message));
 page.on("console", msg => { if (msg.type()==="error") failures.push("console: "+msg.text()); });
-page.on("requestfailed", req => failures.push("request failed: "+req.url()+" — "+(req.failure()?.errorText||"unknown")));
+page.on("requestfailed", req => {
+  const error=req.failure()?.errorText||"unknown";
+  // Chromium aborts the background music request when the test reloads the page.
+  if (!(req.resourceType()==="media" && error==="net::ERR_ABORTED")) {
+    failures.push("request failed: "+req.url()+" — "+error);
+  }
+ });
 
 try {
   await page.goto("http://127.0.0.1:4173/", {waitUntil:"domcontentloaded",timeout:30000});
