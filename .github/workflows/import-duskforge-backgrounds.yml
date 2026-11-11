@@ -25,7 +25,7 @@ jobs:
       - name: Install browser and image processing tools
         run: |
           npm install --no-save playwright
-          npx playwright install --with-deps chromium
+          npx playwright install chromium
           python -m pip install --upgrade pip pillow
       - name: Download the two free packs through their official itch.io pages
         run: node scripts/download_duskforge_packs.mjs
