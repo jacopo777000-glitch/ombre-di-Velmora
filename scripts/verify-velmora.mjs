@@ -80,8 +80,9 @@ for (const fn of ["function saveGame", "function loadGame", "function equipmentL
 }
 
 if (!html.includes("function equipmentLayerData") ||
-    !html.includes('data-equipment-slot="armor"') ||
-    !html.includes('data-equipment-slot="head"')) {
+    !html.includes("data-equipment-slot=") ||
+    !html.includes('equipmentLayerMarkup(u,"armor"') ||
+    !html.includes('equipmentLayerMarkup(u,"head"')) {
   fail("Render dei livelli di armatura e copricapo non collegato ai modelli.");
 } else pass("Layer di armatura e copricapo presenti nel renderer dei personaggi");
 
