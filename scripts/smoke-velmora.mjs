@@ -35,7 +35,8 @@ page.on("console", msg => { if (msg.type()==="error") failures.push("console: "+
 page.on("requestfailed", req => failures.push("request failed: "+req.url()+" — "+(req.failure()?.errorText||"unknown")));
 
 try {
-  await page.goto("http://127.0.0.1:4173/", {waitUntil:"networkidle",timeout:60000});
+  await page.goto("http://127.0.0.1:4173/", {waitUntil:"domcontentloaded",timeout:30000});
+  await page.locator("#heroName").waitFor({state:"visible",timeout:15000});
   await page.locator("#heroName").fill("Prova Browser Velmora");
   await page.getByRole("button",{name:/INIZIA IL VIAGGIO/i}).click();
   await page.locator("#game").waitFor({state:"visible",timeout:10000});
@@ -61,6 +62,23 @@ try {
   await checkBattle(2,"duskforge_dungeon_");
   await checkBattle(3,"boss_room");
 
+  // Verify the real canvas finisher can be skipped and always restores the battle art.
+  await page.evaluate(() => {
+    window.__velmoraFinisherTest = playFinisher(G.hero, battle.units[0]);
+  });
+  await page.locator(".finisherOverlay").waitFor({state:"visible",timeout:10000});
+  await page.locator(".finisherOverlay").click({position:{x:12,y:12}});
+  await page.waitForFunction(() => !document.querySelector(".finisherOverlay"), {timeout:10000});
+  const finisherRestored = await page.evaluate(() => ({
+    hero:document.querySelector("#partyList .unitArt")?.style.visibility || "",
+    enemy:document.querySelector("#enemyList .unitArt")?.style.visibility || ""
+  }));
+  if (finisherRestored.hero==="hidden" || finisherRestored.enemy==="hidden") {
+    throw new Error("il salto del colpo di grazia non ha ripristinato i personaggi");
+  }
+  await page.evaluate(() => window.__velmoraFinisherTest);
+  console.log("PASS: colpo di grazia saltato e personaggi ripristinati");
+
   await page.evaluate(() => { window.alert=()=>{}; window.saveGame(); });
   const saved = await page.evaluate(() => JSON.parse(localStorage.getItem("velmoraDemoSave")||"null"));
   if (!saved?.battle?.backgroundSeed) throw new Error("backgroundSeed non presente nel salvataggio");
@@ -76,7 +94,8 @@ try {
   if (mobile.battlefieldWidth < 250) throw new Error("area di battaglia troppo stretta su iPhone: "+JSON.stringify(mobile));
   console.log("PASS: layout mobile 390px senza overflow",mobile);
 
-  await page.reload({waitUntil:"networkidle",timeout:60000});
+  await page.reload({waitUntil:"domcontentloaded",timeout:30000});
+  await page.locator("#heroName").waitFor({state:"visible",timeout:15000}).catch(()=>{});
   await page.evaluate(() => { window.alert=()=>{}; window.loadGame(); });
   await page.waitForFunction(() => {
     const field=document.querySelector("#combat .battlefield");
