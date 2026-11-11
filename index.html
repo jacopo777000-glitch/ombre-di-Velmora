@@ -1434,7 +1434,7 @@ busy=false;document.body.classList.add("battle-mode");const sets={
 2:[{name:"Orco veterano",hp:34,atk:7,armor:3,kind:"orc",portrait:"orco_m_base.png.JPG"},{name:"Guardiano della cripta",hp:32,atk:6,armor:4,kind:"guard",portrait:"orco_f_base.png.JPG"},{name:"Sciamano della cripta",hp:29,atk:7,armor:2,kind:"priest",portrait:"elfo_f_base.png.JPG"}],
 3:[{name:"Custode della Campana",hp:145,atk:10,armor:5,kind:"boss",portrait:"modello_umano_maschile.png.JPG.JPG"}]};
 const encounterUnits=Array.isArray(enemyOverride)?enemyOverride:sets[n];
-battle={n,round:1,units:encounterUnits.map((e,i)=>({...e,id:e.id||"e"+i,maxhp:e.maxhp||e.hp,alive:true,down:0})),proceduralSeed:proceduralSeed||null,order:[],idx:0,log:[],ended:false,turnPrepared:false};
+battle={n,backgroundSeed:(Number(proceduralSeed)||((Number(G.proceduralSeed)||1)+Date.now()+n*101))>>>0,round:1,units:encounterUnits.map((e,i)=>({...e,id:e.id||"e"+i,maxhp:e.maxhp||e.hp,alive:true,down:0})),proceduralSeed:proceduralSeed||null,order:[],idx:0,log:[],ended:false,turnPrepared:false};
 let allies=[G.hero,...G.party];allies.forEach(p=>{p.ap=5;if(p.hp<=0&&p.isHero)p.hp=1});
 battle.order=[...allies.filter(p=>p.alive&&p.hp>0),...battle.units].sort((a,b)=>(b.stats?.agilita||3)-(a.stats?.agilita||3));
 selectedTarget=0;$("combat").classList.remove("hidden");$("afterCombat").classList.add("hidden");
@@ -1615,7 +1615,7 @@ function renderTurnOrder(){
  box.innerHTML=order.map((u,i)=>{const dead=!u.alive||u.hp<=0,active=current()===u;return `<div class="turnEntry ${active?"active":""} ${dead?"dead":""}"><span class="turnNumber">${String(i+1).padStart(2,"0")}</span><img class="turnPortrait" src="${asset(u.portrait||"")}" alt="" onerror="this.style.opacity='.2'"><div class="turnText"><b>${u.name}</b><small>${dead?"Caduto":(isEnemy(u)?"Nemico":"Alleato")+" · "+Math.max(0,u.hp)+" HP"}</small></div></div>`}).join("");
 }
 function renderLeftSquad(){const box=$("leftSquad");if(!box||!G)return;const members=[G.hero,...G.party];box.innerHTML=members.map(p=>`<div class="leftMember"><img src="${asset(p.portrait||"")}" alt="${p.name}" onerror="this.style.opacity='.25'"><div class="leftMemberInfo"><b>${p.name}</b><small>Liv. ${p.level||1} · ${Math.max(0,p.hp)}/${p.maxhp} HP</small><div class="leftMiniBar"><i style="width:${Math.max(0,p.hp/p.maxhp*100)}%"></i></div></div></div>`).join("")}
-function renderBattle(){if(!battle)return;$("combat").dataset.battleScene=battle.n===1?"forest":battle.n===2?"crypt":"bell";$("roundBadge").textContent="Turno "+battle.round;$("partyList").innerHTML=[G.hero,...G.party].map(p=>unitHTML(p,current()===p)).join("");$("enemyList").innerHTML=battle.units.map(e=>unitHTML(e,current()===e)).join("");document.querySelectorAll("#partyList .battleUnit[data-action-card]").forEach(card=>{card.style.cursor="pointer";card.addEventListener("click",toggleUnitActionMenu);card.addEventListener("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();toggleUnitActionMenu(ev)}})});syncUnitActionMenu();renderTurnOrder();renderLeftSquad();updateHUD()}
+function renderBattle(){if(!battle)return;$("combat").dataset.battleScene=battle.n===1?"forest":battle.n===2?"crypt":"bell";$("roundBadge").textContent="Turno "+battle.round;$("partyList").innerHTML=[G.hero,...G.party].map(p=>unitHTML(p,current()===p)).join("");$("enemyList").innerHTML=battle.units.map(e=>unitHTML(e,current()===e)).join("");document.querySelectorAll("#partyList .battleUnit[data-action-card]").forEach(card=>{card.style.cursor="pointer";card.addEventListener("click",toggleUnitActionMenu);card.addEventListener("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();toggleUnitActionMenu(ev)}})});syncUnitActionMenu();renderTurnOrder();renderLeftSquad();applyDuskforgeBattleBackground();updateHUD()}
 function findUnitElement(u){return Array.from(document.querySelectorAll(".battleUnit")).find(el=>el.dataset.unitId===String(u.id))}
 function animateStrike(attacker,target,kind="attack"){return new Promise(resolve=>{let a=findUnitElement(attacker),t=findUnitElement(target);if(!a||!t){resolve();return}let attackClass=kind==="spell"?"castMagic":kind==="skill"?"dashSkill":isEnemy(attacker)?"dashEnemy":"dashHero";a.classList.remove("dashEnemy","dashHero","dashSkill","castMagic");void a.offsetWidth;a.classList.add(attackClass);let impactDelay=kind==="spell"?330:kind==="skill"?260:210;let total=kind==="spell"?720:kind==="skill"?650:520;setTimeout(()=>{t.classList.add(kind==="spell"?"magicHit":"hit");if(kind!=="spell")t.classList.add("impactSlash")},impactDelay);setTimeout(()=>{a.classList.remove("dashEnemy","dashHero","dashSkill","castMagic");t.classList.remove("hit","impactSlash","magicHit");resolve()},total)})}
 async function advanceToPlayer(){
@@ -1987,7 +1987,29 @@ p.equipment.armorBonus=(am?am.defense:(({Armatura_guerriero:3,Armatura_arciere:2
 renderCharacterScreen();if(battle)renderBattle();
 }
 function addStatPoint(key){if(!G||G.statPoints<1||!(key in G.hero.stats))return;G.hero.stats[key]++;G.statPoints--;if(key==="vitalita"){G.hero.maxhp+=3;G.hero.hp+=3}showMenu("statistics");updateHUD()}
-let equipmentManifest={};fetch('./assets/equip/manifest.json').then(r=>r.ok?r.json():{}).then(m=>{equipmentManifest=m;if(G){if(battle)renderBattle();if(document.querySelector('#characterScreen.open'))renderCharacterScreen();}}).catch(()=>{});
+let equipmentManifest={};
+fetch('./assets/equip/manifest.json').then(r=>r.ok?r.json():{}).then(m=>{equipmentManifest=m;if(G){if(battle)renderBattle();if(document.querySelector('#characterScreen.open'))renderCharacterScreen();}}).catch(()=>{});
+let duskforgeBackgroundManifest=null;
+function applyDuskforgeBattleBackground(){
+ if(!battle||!duskforgeBackgroundManifest||!Array.isArray(duskforgeBackgroundManifest.sources))return;
+ const packName=Number(battle.n)===1?"forest.zip":"dungeon.zip";
+ const pack=duskforgeBackgroundManifest.sources.find(x=>x.pack===packName);
+ if(!pack||!Array.isArray(pack.images))return;
+ let images=pack.images.filter(x=>x&&x.file&&!/preview_sheet/i.test(String(x.sourceFile||x.file)));
+ if(Number(battle.n)>=3){images=images.filter(x=>/boss_room/i.test(String(x.sourceFile||x.file)));}
+ else if(Number(battle.n)===2){images=images.filter(x=>!/boss_room/i.test(String(x.sourceFile||x.file)));}
+ if(!images.length)return;
+ const seed=(Number(battle.backgroundSeed)||Number(battle.proceduralSeed)||Number(G&&G.proceduralSeed)||Number(battle.n)||1)>>>0;
+ const selected=images[seed%images.length];
+ const stage=document.querySelector('#combat .battlefield');
+ if(!stage||!selected||!selected.file)return;
+ stage.style.backgroundImage='url("'+selected.file+'")';
+ stage.style.backgroundSize='cover';
+ stage.style.backgroundPosition='center';
+ stage.style.backgroundRepeat='no-repeat';
+ stage.dataset.backgroundSource='Duskforge';
+}
+fetch('./assets/battle/duskforge/manifest.json').then(r=>r.ok?r.json():null).then(m=>{if(!m)return;duskforgeBackgroundManifest=m;if(battle)applyDuskforgeBattleBackground();}).catch(()=>{});
 renderCreator();musicLabel();
 </script>
 </body>
