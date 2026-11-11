@@ -94,7 +94,7 @@ if (!html.includes("armorData") || !html.includes("headData") ||
 
 try {
   const layerStart = html.indexOf("function equipmentLayerData(u){");
-  const layerEnd = html.indexOf("\\nfunction unitHTML", layerStart);
+  const layerEnd = html.indexOf("\nfunction unitHTML", layerStart);
   if (layerStart < 0 || layerEnd < 0) throw new Error("renderer equipment non individuato");
   const layerCode = html.slice(layerStart, layerEnd);
   const makeRenderer = new Function("asset", "equipmentManifest", "weaponSvgFor", layerCode + "; return equipmentLayers;");
