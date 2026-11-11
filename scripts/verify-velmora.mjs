@@ -139,6 +139,53 @@ if (!html.includes('"Lancia"') || !html.includes('name.includes("lancia")') ||
 } else pass("Lancia disponibile per classi compatibili, resa SVG e bottino");
 if (failures === 0) pass("Punti di aggancio salvataggio, equipaggiamento, colpi di grazia e generazione presenti");
 
+try {
+  const compatStart = html.indexOf("function supportsHumanoidHairAndHeadgear(p){");
+  const compatEnd = html.indexOf("\nfunction renderCharacterScreen", compatStart);
+  if (compatStart < 0 || compatEnd < 0) throw new Error("helper di compatibilità razza non individuati");
+  const compatCode = html.slice(compatStart, compatEnd);
+  const compat = new Function("G", compatCode + ";return {supportsHumanoidHairAndHeadgear,isFemaleCharacter,equipmentRules};")({equipmentBag:[]});
+  for (const race of ["Umano","Elfo","Orco"]) {
+    if (!compat.supportsHumanoidHairAndHeadgear({race})) throw new Error(race + " deve supportare capelli e copricapi");
+  }
+  for (const race of ["Popolo Leone","Popolo Lupo","Popolo Coniglio"]) {
+    if (compat.supportsHumanoidHairAndHeadgear({race})) throw new Error(race + " non deve ricevere overlay umani");
+    if (compat.equipmentRules({race,class:"Guerriero"}).heads.length) throw new Error(race + " ha ricevuto un copricapo non compatibile");
+  }
+  if (!compat.isFemaleCharacter({gender:"female"}) || !compat.isFemaleCharacter({gender:"F"}) || compat.isFemaleCharacter({gender:"male"})) {
+    throw new Error("riconoscimento sesso femminile non coerente tra eroe e personaggi procedurali");
+  }
+  pass("Compatibilità razza: capelli/copricapi limitati ai modelli adatti; sesso femminile riconosciuto");
+} catch (error) {
+  fail("Test compatibilità razza/equipaggiamento: " + error.message);
+}
+
+try {
+  const procStart = html.indexOf("function seededRandom(seed){");
+  const procEnd = html.indexOf("\nfunction generateProceduralRoster", procStart);
+  if (procStart < 0 || procEnd < 0) throw new Error("motore procedurale non individuato");
+  const procCode = html.slice(procStart, procEnd);
+  const proc = new Function(procCode + ";return {seededRandom,makeProceduralPerson};")();
+  let generated = 0;
+  for (let seed = 1; seed <= 120; seed++) {
+    const person = proc.makeProceduralPerson(proc.seededRandom(seed), 0, "ally", 1, seed);
+    const beastfolk = ["lion","wolf","rabbit"].includes(person.raceId);
+    if (beastfolk && (person.equipment.hair || person.equipment.head)) {
+      throw new Error("personaggio " + seed + " (" + person.raceId + ") ha ricevuto capelli/copricapo umano");
+    }
+    if (!beastfolk && (!person.equipment.hair || !person.equipment.head)) {
+      throw new Error("personaggio " + seed + " (" + person.raceId + ") non ha ricevuto una combinazione estetica umanoide");
+    }
+    if (!person.portrait || !person.equipment.weapon || !person.equipment.armor) {
+      throw new Error("personaggio " + seed + " privo di ritratto/arma/armatura");
+    }
+    generated++;
+  }
+  pass("Test generazione procedurale: " + generated + " seed, equipaggiamento coerente con la razza");
+} catch (error) {
+  fail("Test generazione procedurale: " + error.message);
+}
+
 if (failures) {
   console.error("\nVerifica terminata con " + failures + " errore/i.");
   process.exit(1);
