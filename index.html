@@ -1470,7 +1470,9 @@ function finisherHairSource(u){
  const race=String(u&&u.race||"Umano"),anchors={Umano:{x:125,y:5,scale:1.12},Elfo:{x:125,y:2,scale:1.08},Orco:{x:120,y:7,scale:1.10}},a=anchors[race];
  if(!eq.hair||eq.head||!a||!equipmentManifest[files[eq.hair]])return null;
  const d=equipmentManifest[files[eq.hair]];
- return {src:d.file,x:(d.x+a.x)/d.sourceWidth,y:(d.y+a.y)/1168,w:(d.width*a.scale*(u.gender==="F"?.96:1))/d.sourceWidth,h:(d.height*a.scale*(u.gender==="F"?.96:1))/1168};
+ if(!d||!d.file||!Number(d.sourceWidth)||!Number(d.sourceHeight))return null;
+ const femaleScale=isFemaleCharacter(u)?.96:1;
+ return {src:d.file,x:(Number(d.x||0)+a.x)/Number(d.sourceWidth),y:(Number(d.y||0)+a.y)/Number(d.sourceHeight),w:(Number(d.width)*a.scale*femaleScale)/Number(d.sourceWidth),h:(Number(d.height)*a.scale*femaleScale)/Number(d.sourceHeight)};
 }
 async function finisherVisual(u){
  const base=await loadFinisherImage(asset(u.portrait||""));
