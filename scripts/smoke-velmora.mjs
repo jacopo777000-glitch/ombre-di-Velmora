@@ -128,8 +128,27 @@ try {
   await page.evaluate(() => window.__velmoraFinisherTest);
   console.log("PASS: colpo di grazia saltato e personaggi ripristinati");
 
+  const rosterSnapshot = await page.evaluate(() => {
+    ensureProceduralRoster();
+    const snapshot=G.proceduralRoster.map(p=>({
+      id:p.id,seed:p.seed,name:p.name,race:p.race,raceId:p.raceId,
+      gender:p.gender,class:p.class,equipment:p.equipment
+    }));
+    if(snapshot.length!==6) throw new Error("attesi sei avventurieri persistenti nella Gilda");
+    const a=generateProceduralEnemies(2,7788),b=generateProceduralEnemies(2,7788);
+    const key=items=>items.map(p=>({id:p.id,seed:p.seed,race:p.race,class:p.class,equipment:p.equipment}));
+    if(JSON.stringify(key(a))!==JSON.stringify(key(b))) throw new Error("gli avversari con lo stesso seed non sono riproducibili");
+    window.__velmoraRosterSnapshot=snapshot;
+    return snapshot;
+  });
   await page.evaluate(() => { window.alert=()=>{}; window.saveGame(); });
   const saved = await page.evaluate(() => JSON.parse(localStorage.getItem("velmoraDemoSave")||"null"));
+  if (JSON.stringify(saved?.G?.proceduralRoster?.map(p=>({
+    id:p.id,seed:p.seed,name:p.name,race:p.race,raceId:p.raceId,
+    gender:p.gender,class:p.class,equipment:p.equipment
+  }))) !== JSON.stringify(rosterSnapshot)) {
+    throw new Error("il salvataggio non conserva l'identità dei compagni generati");
+  }
   if (!saved?.battle?.backgroundSeed) throw new Error("backgroundSeed non presente nel salvataggio");
   const seed = saved.battle.backgroundSeed;
 
@@ -153,7 +172,9 @@ try {
   }, {timeout:20000});
   const restored = await page.evaluate(() => JSON.parse(localStorage.getItem("velmoraDemoSave")||"null"));
   if (restored?.battle?.backgroundSeed !== seed) throw new Error("backgroundSeed cambiato dopo reload/loadGame");
-  console.log("PASS: ricaricamento partita mantiene combattimento e sfondo selezionato");
+  const restoredRoster=await page.evaluate(()=>G.proceduralRoster.map(p=>({id:p.id,seed:p.seed,name:p.name,race:p.race,raceId:p.raceId,gender:p.gender,class:p.class,equipment:p.equipment})));
+  if (JSON.stringify(restoredRoster)!==JSON.stringify(rosterSnapshot)) throw new Error("identità/equipaggiamento dei compagni generati non ripristinati");
+  console.log("PASS: ricaricamento partita mantiene combattimento, sfondo e roster procedurale");
 
   if (failures.length) throw new Error(failures.join("\n"));
   console.log("Smoke test browser Velmora completato senza errori.");
