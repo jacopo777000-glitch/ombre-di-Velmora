@@ -1575,6 +1575,7 @@ async function playFinisher(attacker,target,magical=false){
  finally{aArt.style.visibility=oldA;tArt.style.visibility=oldT;overlay.remove()}
 }
 function equipmentLayerData(u,slot){
+ if(slot==="head"&&!supportsHumanoidHairAndHeadgear(u))return null;
  const eq=u&&u.equipment||{};
  const maps={
   armor:{Armatura_arciere:"Armatura_arciere.JPG",Armatura_druido:"Armatura_druido.JPG",Armatura_guerriero:"Armatura_guerriero.JPG",Armatura_mago:"Armatura_mago.JPG"},
