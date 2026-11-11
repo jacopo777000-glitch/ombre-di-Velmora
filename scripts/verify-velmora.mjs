@@ -93,7 +93,7 @@ if (!html.includes("armorData") || !html.includes("headData") ||
 } else pass("Colpo di grazia: armatura e copricapo inclusi nella composizione 2D");
 
 try {
-  const layerStart = html.indexOf("function equipmentLayerData(u){");
+  const layerStart = html.indexOf("function equipmentLayerData(u,slot){");
   const layerEnd = html.indexOf("\nfunction unitHTML", layerStart);
   if (layerStart < 0 || layerEnd < 0) throw new Error("renderer equipment non individuato");
   const layerCode = html.slice(layerStart, layerEnd);
