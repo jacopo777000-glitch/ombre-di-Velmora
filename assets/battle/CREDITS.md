@@ -1,6 +1,6 @@
 # Battle background credits
 
-The following existing, non-AI artwork is included in Ombre di Velmora. The WebP files in this folder are cropped/resized to 1920×1080 and converted from the original files for browser performance.
+The following artwork is included in Ombre di Velmora. The four original scene backgrounds (foresta_imboscata.webp, cripta_antica.webp, valle_battaglia.webp and sala_custode.webp) are cropped/resized to 1920×1080 and converted to WebP. The Duskforge backgrounds preserve the authors' 1376×768 composition and are converted from PNG to optimized WebP for browser performance.
 
 - foresta_imboscata.webp and cripta_antica.webp — Heindal_Wesnoth, from Fantasyart Background on OpenGameArt. Used under Creative Commons Attribution-ShareAlike 3.0. The original collection also lists GPL 3.0; this project uses the CC BY-SA 3.0 option. Source: https://opengameart.org/content/fantasyart-background
   - Required attribution: Heindal_Wesnoth.
