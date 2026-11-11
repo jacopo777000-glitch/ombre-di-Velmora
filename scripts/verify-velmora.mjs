@@ -245,7 +245,7 @@ try {
 
 try {
   const hairStart = html.indexOf("function finisherHairSource(u){");
-  const hairEnd = html.indexOf("\\nasync function finisherVisual", hairStart);
+  const hairEnd = html.indexOf("\nasync function finisherVisual", hairStart);
   if (hairStart < 0 || hairEnd < 0) throw new Error("funzione finisherHairSource non individuata");
   const hairCode = html.slice(hairStart, hairEnd);
   const manifest = {
