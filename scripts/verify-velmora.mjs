@@ -92,6 +92,33 @@ if (!html.includes("armorData") || !html.includes("headData") ||
   fail("Il colpo di grazia non riproduce tutti i livelli equipaggiati.");
 } else pass("Colpo di grazia: armatura e copricapo inclusi nella composizione 2D");
 
+try {
+  const layerStart = html.indexOf("function equipmentLayerData(u){");
+  const layerEnd = html.indexOf("\\nfunction unitHTML", layerStart);
+  if (layerStart < 0 || layerEnd < 0) throw new Error("renderer equipment non individuato");
+  const layerCode = html.slice(layerStart, layerEnd);
+  const makeRenderer = new Function("asset", "equipmentManifest", "weaponSvgFor", layerCode + "; return equipmentLayers;");
+  const sample = {};
+  for (const key of ["Armatura_guerriero.JPG", "Elmo_drago.JPG", "Capelli_mossi.jpg"]) {
+    sample[key] = {file:"assets/equip/test.png",x:90,y:40,width:180,height:220,sourceWidth:912,sourceHeight:1168};
+  }
+  const render = makeRenderer(name => name, sample, () => '<svg class="weaponLayer"></svg>');
+  const equipped = render({portrait:"hero.png",name:"Prova",race:"Umano",gender:"M",equipment:{armor:"Armatura_guerriero",head:"Elmo_drago",hair:"Capelli mossi",weapon:"Spada"}});
+  if (!equipped.includes('data-equipment-slot="armor"') ||
+      !equipped.includes('data-equipment-slot="head"') ||
+      equipped.includes('data-equipment-slot="hair"')) {
+    throw new Error("armatura/elmo non renderizzati o capelli non nascosti dall'elmo");
+  }
+  const bareHead = render({portrait:"hero.png",name:"Prova",race:"Umano",gender:"M",equipment:{armor:"Armatura_guerriero",head:"",hair:"Capelli mossi",weapon:"Spada"}});
+  if (!bareHead.includes('data-equipment-slot="hair"')) throw new Error("capelli non ripristinati rimuovendo l'elmo");
+  if (!(equipped.indexOf('data-equipment-slot="armor"') < equipped.indexOf('data-equipment-slot="head"'))) {
+    throw new Error("ordine dei layer armatura/copricapo non valido");
+  }
+  pass("Test renderer: armatura, copricapo, capelli nascosti e ripristinati");
+} catch (error) {
+  fail("Test renderer equipaggiamento: " + error.message);
+}
+
 if (styles.some(css => css.includes("\\n.unitArt"))) {
   fail("CSS contiene un newline letterale escapato prima del selettore unitArt.");
 } else pass("Selettore unitArt senza newline escapati anomali");
