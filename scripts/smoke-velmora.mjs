@@ -68,6 +68,49 @@ try {
   await checkBattle(2,"duskforge_dungeon_");
   await checkBattle(3,"boss_room");
 
+  // Load and exercise the real equipment overlays on both original human base models.
+  await page.waitForFunction(() => Object.keys(equipmentManifest||{}).length===16, {timeout:15000});
+  const equipmentChecks = await page.evaluate(async () => {
+    const hero=G.hero;
+    const backup={race:hero.race,gender:hero.gender,portrait:hero.portrait,equipment:JSON.parse(JSON.stringify(hero.equipment||{}))};
+    const results=[];
+    async function settleImages(root){
+      const imgs=[...root.querySelectorAll("img")];
+      await Promise.all(imgs.map(img=>img.decode().catch(()=>null)));
+      return imgs;
+    }
+    for (const sample of [
+      {gender:"M",portrait:"modello_umano_maschile.png.JPG.JPG"},
+      {gender:"F",portrait:"modello_umano_femminile.png.JPG.JPG"}
+    ]) {
+      hero.race="Umano";hero.gender=sample.gender;hero.portrait=sample.portrait;
+      hero.equipment={hair:"Capelli mossi",armor:"Armatura_guerriero",head:"Elmo_drago",weapon:"Spada"};
+      renderBattle();
+      let art=document.querySelector('#partyList [data-unit-id="hero"] .unitArt');
+      let imgs=await settleImages(art);
+      const covered={
+        armor:!!art.querySelector('[data-equipment-slot="armor"]'),
+        head:!!art.querySelector('[data-equipment-slot="head"]'),
+        hair:!!art.querySelector('[data-equipment-slot="hair"]'),
+        loaded:imgs.every(img=>img.complete&&img.naturalWidth>0)
+      };
+      if(!covered.armor||!covered.head||covered.hair||!covered.loaded) throw new Error("overlay coperto/non caricato sul modello "+sample.gender+": "+JSON.stringify(covered));
+      hero.equipment.head="";
+      renderBattle();
+      art=document.querySelector('#partyList [data-unit-id="hero"] .unitArt');
+      imgs=await settleImages(art);
+      const uncovered={
+        hair:!!art.querySelector('[data-equipment-slot="hair"]'),
+        loaded:imgs.every(img=>img.complete&&img.naturalWidth>0)
+      };
+      if(!uncovered.hair||!uncovered.loaded) throw new Error("capelli non ripristinati o immagine non caricata sul modello "+sample.gender+": "+JSON.stringify(uncovered));
+      results.push({gender:sample.gender,covered,uncovered});
+    }
+    Object.assign(hero,backup);renderBattle();
+    return results;
+  });
+  console.log("PASS: overlay armatura/elmo e ripristino capelli su modelli maschile e femminile",equipmentChecks);
+
   // Verify the real canvas finisher can be skipped and always restores the battle art.
   await page.evaluate(() => {
     window.__velmoraFinisherTest = playFinisher(G.hero, battle.units[0]);
