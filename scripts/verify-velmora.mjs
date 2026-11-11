@@ -244,6 +244,33 @@ try {
 }
 
 try {
+  const hairStart = html.indexOf("function finisherHairSource(u){");
+  const hairEnd = html.indexOf("\\nasync function finisherVisual", hairStart);
+  if (hairStart < 0 || hairEnd < 0) throw new Error("funzione finisherHairSource non individuata");
+  const hairCode = html.slice(hairStart, hairEnd);
+  const manifest = {
+    "Capelli_mossi.jpg": {file:"assets/equip/Capelli_mossi.png",x:100,y:20,width:120,height:140,sourceWidth:912,sourceHeight:1000}
+  };
+  const makeHair = new Function("equipmentManifest","isFemaleCharacter",hairCode+";return finisherHairSource;");
+  const isFemale = p => ["f","female"].includes(String(p.gender||"").toLowerCase());
+  const hair = makeHair(manifest,isFemale);
+  const female = hair({race:"Umano",gender:"female",equipment:{hair:"Capelli mossi",head:""}});
+  const expectedY = 25/1000, expectedHeight = (140*1.12*.96)/1000;
+  if (!female || Math.abs(female.y-expectedY)>1e-9 || Math.abs(female.h-expectedHeight)>1e-9) {
+    throw new Error("coordinate capelli femminili non usano sourceHeight o scala sesso corretti");
+  }
+  if (hair({race:"Umano",gender:"F",equipment:{hair:"Capelli mossi",head:"Elmo_drago"}})!==null) {
+    throw new Error("i capelli non vengono esclusi quando è equipaggiato un copricapo");
+  }
+  if (hair({race:"Popolo Lupo",gender:"female",equipment:{hair:"Capelli mossi",head:""}})!==null) {
+    throw new Error("overlay capelli umano applicato a una razza bestiale");
+  }
+  pass("Colpo di grazia: coordinate capelli coerenti con altezza sorgente, sesso, elmo e razza");
+} catch (error) {
+  fail("Test allineamento capelli nel colpo di grazia: " + error.message);
+}
+
+try {
   const battleManifestPath = path.join(root, "assets/battle/duskforge/manifest.json");
   const battleManifest = JSON.parse(fs.readFileSync(battleManifestPath, "utf8"));
   const usable = (battleManifest.sources || []).flatMap(source => source.images || [])
