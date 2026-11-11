@@ -93,7 +93,7 @@ if (!html.includes("armorData") || !html.includes("headData") ||
 } else pass("Colpo di grazia: armatura e copricapo inclusi nella composizione 2D");
 
 try {
-  const femaleStart = html.indexOf("function isFemaleCharacter(p){");
+  const femaleStart = html.indexOf("function supportsHumanoidHairAndHeadgear(p){");
   const femaleEnd = html.indexOf("\nfunction equipmentRules", femaleStart);
   const layerStart = html.indexOf("function equipmentLayerData(u,slot){");
   const layerEnd = html.indexOf("\nfunction unitHTML", layerStart);
@@ -117,7 +117,11 @@ try {
   if (!(equipped.indexOf('data-equipment-slot="armor"') < equipped.indexOf('data-equipment-slot="head"'))) {
     throw new Error("ordine dei layer armatura/copricapo non valido");
   }
-  pass("Test renderer: armatura, copricapo, capelli nascosti e ripristinati");
+  const beast = render({portrait:"wolf.png",name:"Lupo",race:"Popolo Lupo",gender:"M",equipment:{armor:"Armatura_guerriero",head:"Elmo_drago",hair:"Capelli mossi",weapon:"Ascia"}});
+  if (beast.includes('data-equipment-slot="head"') || beast.includes('data-equipment-slot="hair"')) {
+    throw new Error("overlay umano applicato a un modello bestiale");
+  }
+  pass("Test renderer: armatura, copricapo, capelli nascosti/ripristinati e filtro razze bestiali");
 } catch (error) {
   fail("Test renderer equipaggiamento: " + error.message);
 }
