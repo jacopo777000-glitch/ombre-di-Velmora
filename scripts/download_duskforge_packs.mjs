@@ -25,6 +25,7 @@ try {
     page.setDefaultTimeout(45000);
     console.log("Apro la pagina ufficiale:", pack.page);
     await page.goto(pack.page, { waitUntil: "domcontentloaded", timeout: 90000 });
+
     const downloadNow = page.getByRole("link", { name: /Download Now/i }).first();
     const purchaseHref = await downloadNow.getAttribute("href");
     console.log("Link ufficiale Download Now:", purchaseHref);
@@ -32,35 +33,53 @@ try {
       await page.goto(new URL(purchaseHref, page.url()).href, { waitUntil: "domcontentloaded", timeout: 90000 });
     } else {
       await downloadNow.click();
-      await page.waitForTimeout(2500);
+      await page.waitForTimeout(1500);
     }
-    console.log("Pagina pay-what-you-want:", page.url());
+
     const freeOption = page.getByText("No thanks, just take me to the downloads", { exact: false }).first();
     await freeOption.waitFor({ state: "visible", timeout: 30000 });
-    const freeHref = await freeOption.evaluate(el => {
-      let node = el;
-      while (node && !["A", "BUTTON"].includes(node.tagName)) node = node.parentElement;
-      return node ? node.getAttribute("href") : null;
-    });
-    if (freeHref) {
-      await page.goto(new URL(freeHref, page.url()).href, { waitUntil: "domcontentloaded", timeout: 90000 });
-    } else {
-      await freeOption.click();
-      await page.waitForLoadState("domcontentloaded").catch(() => {});
-    }
-    console.log("Pagina dei file:", page.url());
-    const fileLink = page.locator("a").filter({ hasText: pack.filename }).first();
-    await fileLink.waitFor({ state: "visible", timeout: 45000 });
-    console.log("Pagina download ufficiale:", page.url());
-    const [download] = await Promise.all([
-      page.waitForEvent("download", { timeout: 180000 }),
-      fileLink.click()
-    ]);
+    console.log("Pagina pay-what-you-want:", page.url());
+
+    // itch.io may deliver the ZIP immediately after this button, without
+    // showing a separate file-list page. Listen before clicking so the
+    // attachment response cannot be missed.
+    const downloadPromise = page.waitForEvent("download", { timeout: 90000 }).catch(() => null);
+    await freeOption.click();
+    let download = await downloadPromise;
+
     const target = path.join(out, pack.id + ".zip");
-    await download.saveAs(target);
-    const stat = await fs.stat(target);
-    if (stat.size < 100000) throw new Error("Archivio troppo piccolo o download incompleto: " + pack.filename);
-    console.log("Scaricato", pack.filename, stat.size, "byte");
+    if (download) {
+      await download.saveAs(target);
+    } else {
+      // Some itch.io layouts navigate directly to a signed /download/<token>
+      // endpoint instead of raising Playwright's download event. Re-request
+      // only that URL produced by the official page, preserving the official
+      // download flow and its short-lived token.
+      await page.waitForTimeout(1200);
+      const currentUrl = page.url();
+      console.log("Dopo la scelta gratuita:", currentUrl);
+      if (/\.itch\.io\/[^/]+\/download\//i.test(currentUrl)) {
+        const response = await context.request.get(currentUrl, { timeout: 180000 });
+        if (!response.ok()) throw new Error("Download ufficiale non riuscito: HTTP " + response.status());
+        const bytes = await response.body();
+        await fs.writeFile(target, bytes);
+        console.log("Risposta del download diretto:", response.headers()["content-type"], response.headers()["content-disposition"] || "");
+      } else {
+        const fileLink = page.locator("a").filter({ hasText: pack.filename }).first();
+        await fileLink.waitFor({ state: "visible", timeout: 30000 });
+        const [fallbackDownload] = await Promise.all([
+          page.waitForEvent("download", { timeout: 180000 }),
+          fileLink.click()
+        ]);
+        await fallbackDownload.saveAs(target);
+      }
+    }
+
+    const bytes = await fs.readFile(target);
+    if (bytes.length < 100000 || bytes[0] !== 0x50 || bytes[1] !== 0x4b) {
+      throw new Error("Archivio ZIP non valido o incompleto per " + pack.filename + " (" + bytes.length + " byte)");
+    }
+    console.log("Scaricato tramite il flusso ufficiale:", pack.filename, bytes.length, "byte");
     await context.close();
   }
 } finally {
