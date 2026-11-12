@@ -133,7 +133,7 @@ try {
         throw new Error("fit armatura fuori area per "+name+" "+gender+": "+JSON.stringify(armor));
       }
       if(["human","elf","orc"].includes(id)){
-        const head=renderer.equipmentLayerData(person,"head"),hair=renderer.equipmentHairData(person);
+        const head=renderer.equipmentLayerData(person,"head"),hair=renderer.equipmentHairData({...person,equipment:{...person.equipment,head:""}});
         if(!head||head.w<.14||head.w>.28||!hair||hair.x<0||hair.y<0||hair.x+hair.w>1||hair.y+hair.h>1){
           throw new Error("fit capelli/copricapo non valido per "+name+" "+gender);
         }
