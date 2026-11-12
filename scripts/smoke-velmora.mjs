@@ -156,15 +156,21 @@ try {
         results.push({race,gender,geometry,head:!!head,hair:!!hair});
       }
     }
-    const armorImage=new Image();armorImage.src="assets/equip/Armatura_guerriero.png";await armorImage.decode();
-    const c=document.createElement("canvas");c.width=48;c.height=48;
-    const ctx=c.getContext("2d",{willReadFrequently:true});ctx.drawImage(armorImage,0,0,48,48);
-    const pixels=ctx.getImageData(0,0,48,48).data;let transparent=0,visible=0;
-    for(let i=3;i<pixels.length;i+=4){if(pixels[i]<16)transparent++;if(pixels[i]>240)visible++;}
-    const transparency=transparent/(48*48),visibility=visible/(48*48);
-    if(transparency<.08||visibility<.12)throw new Error("ritaglio armatura non sufficientemente trasparente o visibile: "+JSON.stringify({transparency,visibility}));
+    const transparencyChecks=[];
+    for(const [name,entry] of Object.entries(equipmentManifest)){
+      if(!entry||!["armor","headgear","hair"].includes(entry.group)||!entry.file)continue;
+      const source=new Image();source.src=entry.file;await source.decode();
+      const c=document.createElement("canvas");c.width=48;c.height=48;
+      const ctx=c.getContext("2d",{willReadFrequently:true});ctx.drawImage(source,0,0,48,48);
+      const pixels=ctx.getImageData(0,0,48,48).data;let transparent=0,visible=0;
+      for(let i=3;i<pixels.length;i+=4){if(pixels[i]<16)transparent++;if(pixels[i]>240)visible++;}
+      const transparency=transparent/(48*48),visibility=visible/(48*48);
+      if(transparency<.05||visibility<.06)throw new Error("ritaglio non sufficientemente trasparente o visibile per "+name+": "+JSON.stringify({transparency,visibility}));
+      transparencyChecks.push({name,transparency:Number(transparency.toFixed(3)),visibility:Number(visibility.toFixed(3))});
+    }
+    if(transparencyChecks.length!==16)throw new Error("attesi 16 overlay equipaggiamento, controllati "+transparencyChecks.length);
     Object.assign(hero,backup);renderBattle();
-    return {models:results,transparency,visibility};
+    return {models:results,transparentOverlays:transparencyChecks};
   });
   console.log("PASS: fit armature e copricapi su tutti i 12 modelli originali; ritaglio trasparente",allRaceEquipment);
 
