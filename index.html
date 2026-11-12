@@ -267,7 +267,7 @@ main{width:min(1900px,99%);margin:10px auto 28px;padding:0 10px 100px}
 }
 
 .equipLabel{display:block;color:#e9c98e;font-size:12px;margin:10px 0 3px}
-.unitArt{position:relative;display:block;width:100%;aspect-ratio:912/1168;overflow:hidden;background:#17120d;border:1px solid #80623a;border-radius:6px;flex:0 0 auto}.unitArt img{position:absolute;display:block;object-fit:contain;pointer-events:none}.unitBase{inset:0;width:100%;height:100%;z-index:1}.equipLayer{z-index:2}.armorLayer{z-index:2}.hairLayer{z-index:3}.headLayer{z-index:4}.weaponLayer{position:absolute;left:70%;top:55%;width:25%;height:42%;z-index:5;overflow:visible;pointer-events:none;filter:drop-shadow(0 2px 2px #000b)}.finisherOverlay{position:fixed;inset:0;z-index:5000;background:rgba(5,4,3,.72);touch-action:manipulation;cursor:pointer}.finisherCanvas{position:absolute;inset:0;display:block}.finisherSkip{position:absolute;left:0;right:0;bottom:calc(22px + env(safe-area-inset-bottom));text-align:center;color:#f0d49b;font:12px Georgia,serif;letter-spacing:2px;text-shadow:0 2px 6px #000;pointer-events:none}.characterCard .unitArt{width:72px;flex:0 0 72px}.battleUnit .unitArt{width:100%;height:auto;aspect-ratio:912/1168}.equipLabel{display:block;color:#e9c98e;font-size:12px;margin:10px 0 3px}
+.unitArt{position:relative;display:block;width:100%;aspect-ratio:912/1168;overflow:hidden;background:#17120d;border:1px solid #80623a;border-radius:6px;flex:0 0 auto}.unitArt img{position:absolute;display:block;object-fit:contain;pointer-events:none}.unitBase{inset:0;width:100%;height:100%;z-index:1}.equipLayer{z-index:2}.armorLayer{z-index:2;object-fit:fill}.hairLayer{z-index:3}.headLayer{z-index:4;object-fit:fill}.weaponLayer{position:absolute;left:70%;top:55%;width:25%;height:42%;z-index:5;overflow:visible;pointer-events:none;filter:drop-shadow(0 2px 2px #000b)}.finisherOverlay{position:fixed;inset:0;z-index:5000;background:rgba(5,4,3,.72);touch-action:manipulation;cursor:pointer}.finisherCanvas{position:absolute;inset:0;display:block}.finisherSkip{position:absolute;left:0;right:0;bottom:calc(22px + env(safe-area-inset-bottom));text-align:center;color:#f0d49b;font:12px Georgia,serif;letter-spacing:2px;text-shadow:0 2px 6px #000;pointer-events:none}.characterCard .unitArt{width:72px;flex:0 0 72px}.battleUnit .unitArt{width:100%;height:auto;aspect-ratio:912/1168}.equipLabel{display:block;color:#e9c98e;font-size:12px;margin:10px 0 3px}
 
 /* Velmora battle presentation — painterly illustrated scenes */
 .gameLayout{grid-template-columns:168px minmax(0,1fr);gap:14px}
@@ -1465,15 +1465,7 @@ function loadFinisherImage(src){
  const promise=new Promise(resolve=>{const im=new Image();im.onload=()=>resolve(im);im.onerror=()=>resolve(null);im.src=src});
  finisherImageCache.set(src,promise);return promise;
 }
-function finisherHairSource(u){
- const eq=u&&u.equipment||{},files={"Capelli coda ciuffi":"Capelli_coda_ciuffi.jpg","Capelli coda lunga":"Capelli_coda_lunga.jpg","Capelli lunghi":"Capelli_lunghi.jpg","Capelli mossi":"Capelli_mossi.jpg","Capelli rasati lato":"Capelli_rasati_lato.jpg","Capelli rasta":"Capelli_rasta.jpg","Capelli spettinati":"Capelli_spettinati.jpg","Capelli trecce":"Capelli_trecce.jpg"};
- const race=String(u&&u.race||"Umano"),anchors={Umano:{x:125,y:5,scale:1.12},Elfo:{x:125,y:2,scale:1.08},Orco:{x:120,y:7,scale:1.10}},a=anchors[race];
- if(!eq.hair||eq.head||!a||!equipmentManifest[files[eq.hair]])return null;
- const d=equipmentManifest[files[eq.hair]];
- if(!d||!d.file||!Number(d.sourceWidth)||!Number(d.sourceHeight))return null;
- const femaleScale=isFemaleCharacter(u)?.96:1;
- return {src:d.file,x:(Number(d.x||0)+a.x)/Number(d.sourceWidth),y:(Number(d.y||0)+a.y)/Number(d.sourceHeight),w:(Number(d.width)*a.scale*femaleScale)/Number(d.sourceWidth),h:(Number(d.height)*a.scale*femaleScale)/Number(d.sourceHeight)};
-}
+function finisherHairSource(u){return equipmentHairData(u)}
 async function finisherVisual(u){
  const base=await loadFinisherImage(asset(u.portrait||""));
  const svg=weaponSvgFor(u).replace('class="weaponLayer"',"");
@@ -1576,6 +1568,30 @@ async function playFinisher(attacker,target,magical=false){
  }catch(e){console.warn("Finisher skipped",e)}
  finally{aArt.style.visibility=oldA;tArt.style.visibility=oldT;overlay.remove()}
 }
+function equipmentRaceId(u){
+ const id=String(u&&u.raceId||"").toLowerCase();
+ if(["human","elf","orc","lion","wolf","rabbit"].includes(id))return id;
+ const race=String(u&&u.race||"").toLowerCase();
+ if(race.includes("umano"))return "human";
+ if(race.includes("elf"))return "elf";
+ if(race.includes("orc"))return "orc";
+ if(race.includes("leone")||race.includes("leonide"))return "lion";
+ if(race.includes("lupo"))return "wolf";
+ if(race.includes("coniglio"))return "rabbit";
+ return "human";
+}
+function equipmentHairData(u){
+ const eq=u&&u.equipment||{},files={"Capelli coda ciuffi":"Capelli_coda_ciuffi.jpg","Capelli coda lunga":"Capelli_coda_lunga.jpg","Capelli lunghi":"Capelli_lunghi.jpg","Capelli mossi":"Capelli_mossi.jpg","Capelli rasati lato":"Capelli_rasati_lato.jpg","Capelli rasta":"Capelli_rasta.jpg","Capelli spettinati":"Capelli_spettinati.jpg","Capelli trecce":"Capelli_trecce.jpg"};
+ const race=equipmentRaceId(u),gender=isFemaleCharacter(u)?"F":"M";
+ const anchors={
+  human:{M:{x:125,y:5,scale:1.12},F:{x:121,y:4,scale:1.08}},
+  elf:{M:{x:130,y:2,scale:1.14},F:{x:126,y:1,scale:1.10}},
+  orc:{M:{x:120,y:7,scale:1.12},F:{x:122,y:5,scale:1.08}}
+ };
+ const a=anchors[race]&&anchors[race][gender],d=eq.hair&&!eq.head&&equipmentManifest[files[eq.hair]];
+ if(!a||!d||!d.file||!Number(d.sourceWidth)||!Number(d.sourceHeight))return null;
+ return {src:d.file,x:(Number(d.x||0)+a.x)/Number(d.sourceWidth),y:(Number(d.y||0)+a.y)/Number(d.sourceHeight),w:(Number(d.width)*a.scale)/Number(d.sourceWidth),h:(Number(d.height)*a.scale)/Number(d.sourceHeight)};
+}
 function equipmentLayerData(u,slot){
  if(slot==="head"&&!supportsHumanoidHairAndHeadgear(u))return null;
  const eq=u&&u.equipment||{};
@@ -1583,9 +1599,30 @@ function equipmentLayerData(u,slot){
   armor:{Armatura_arciere:"Armatura_arciere.JPG",Armatura_druido:"Armatura_druido.JPG",Armatura_guerriero:"Armatura_guerriero.JPG",Armatura_mago:"Armatura_mago.JPG"},
   head:{Cappello_mago:"Cappello_mago.JPG",Cappello_punk:"Cappello_punk.JPG",Elmo_drago:"Elmo_drago.JPG",Elmo_leone:"Elmo_leone.JPG"}
  };
- const key=maps[slot]&&maps[slot][eq[slot]];
- const d=key&&equipmentManifest[key];
+ const key=maps[slot]&&maps[slot][eq[slot]],d=key&&equipmentManifest[key];
  if(!d||!d.file||!Number(d.sourceWidth)||!Number(d.sourceHeight)||!Number(d.width)||!Number(d.height))return null;
+ if(slot==="armor"){
+  const race=equipmentRaceId(u),gender=isFemaleCharacter(u)?"F":"M";
+  const fits={
+   human:{M:{cx:590,top:190,w:430,h:925},F:{cx:590,top:225,w:405,h:880}},
+   elf:{M:{cx:590,top:190,w:420,h:925},F:{cx:590,top:225,w:395,h:880}},
+   orc:{M:{cx:590,top:200,w:440,h:915},F:{cx:590,top:235,w:415,h:875}},
+   lion:{M:{cx:590,top:260,w:440,h:850},F:{cx:590,top:255,w:415,h:860}},
+   wolf:{M:{cx:590,top:260,w:440,h:850},F:{cx:590,top:255,w:415,h:860}},
+   rabbit:{M:{cx:590,top:260,w:430,h:850},F:{cx:590,top:255,w:410,h:860}}
+  };
+  const styles={Armatura_guerriero:{w:1,h:1},Armatura_arciere:{w:.96,h:1},Armatura_druido:{w:1.02,h:1.02},Armatura_mago:{w:1,h:1.02}};
+  const fit=fits[race][gender],style=styles[eq.armor]||styles.Armatura_guerriero,w=fit.w*style.w,h=fit.h*style.h;
+  return {src:d.file,x:(fit.cx-w/2)/912,y:fit.top/1168,w:w/912,h:h/1168};
+ }
+ if(slot==="head"){
+  const race=equipmentRaceId(u),gender=isFemaleCharacter(u)?"F":"M";
+  const style={Cappello_mago:{w:210,top:18},Cappello_punk:{w:180,top:24},Elmo_drago:{w:180,top:16},Elmo_leone:{w:215,top:42}}[eq.head];
+  if(!style)return null;
+  const raceScale={human:1,elf:1.12,orc:1.06}[race]||1,genderScale=gender==="F"?.97:1,w=style.w*raceScale*genderScale,h=w*(Number(d.height)/Number(d.width));
+  const center={human:590,elf:590,orc:590}[race]||590;
+  return {src:d.file,x:(center-w/2)/912,y:style.top/1168,w:w/912,h:h/1168};
+ }
  return {src:d.file,x:Number(d.x||0)/Number(d.sourceWidth),y:Number(d.y||0)/Number(d.sourceHeight),w:Number(d.width)/Number(d.sourceWidth),h:Number(d.height)/Number(d.sourceHeight)};
 }
 function equipmentLayerMarkup(u,slot,className){
@@ -1593,18 +1630,8 @@ function equipmentLayerMarkup(u,slot,className){
  return '<img class="equipLayer '+className+'" data-equipment-slot="'+slot+'" src="'+d.src+'" alt="" draggable="false" style="left:'+(d.x*100)+'%;top:'+(d.y*100)+'%;width:'+(d.w*100)+'%;height:'+(d.h*100)+'%">';
 }
 function equipmentLayers(u){
- const eq=u&&u.equipment||{},base=asset(u.portrait||"");
- const files={"Capelli coda ciuffi":"Capelli_coda_ciuffi.jpg","Capelli coda lunga":"Capelli_coda_lunga.jpg","Capelli lunghi":"Capelli_lunghi.jpg","Capelli mossi":"Capelli_mossi.jpg","Capelli rasati lato":"Capelli_rasati_lato.jpg","Capelli rasta":"Capelli_rasta.jpg","Capelli spettinati":"Capelli_spettinati.jpg","Capelli trecce":"Capelli_trecce.jpg"};
- let hair="";
- const race=String(u&&u.race||""),anchors={Umano:{x:125,y:5,scale:1.12},Elfo:{x:125,y:2,scale:1.08},Orco:{x:120,y:7,scale:1.10}};
- const anchor=anchors[race],genderScale=isFemaleCharacter(u)?.96:1;
- if(eq.hair&&!eq.head&&anchor&&equipmentManifest[files[eq.hair]]){
-  const d=equipmentManifest[files[eq.hair]];
-  if(d&&d.sourceWidth&&d.sourceHeight){
-   const x=100*(Number(d.x)+anchor.x)/Number(d.sourceWidth),y=100*(Number(d.y)+anchor.y)/Number(d.sourceHeight),w=100*(Number(d.width)*anchor.scale*genderScale)/Number(d.sourceWidth),h=100*(Number(d.height)*anchor.scale*genderScale)/Number(d.sourceHeight);
-   hair='<img class="equipLayer hairLayer" data-equipment-slot="hair" src="'+d.file+'" alt="" draggable="false" style="left:'+x+'%;top:'+y+'%;width:'+w+'%;height:'+h+'%">';
-  }
- }
+ const base=asset(u.portrait||""),hairData=equipmentHairData(u);
+ const hair=hairData?'<img class="equipLayer hairLayer" data-equipment-slot="hair" src="'+hairData.src+'" alt="" draggable="false" style="left:'+(hairData.x*100)+'%;top:'+(hairData.y*100)+'%;width:'+(hairData.w*100)+'%;height:'+(hairData.h*100)+'%">':"";
  const armor=equipmentLayerMarkup(u,"armor","armorLayer");
  const head=equipmentLayerMarkup(u,"head","headLayer");
  return '<div class="unitArt"><img class="unitBase" src="'+base+'" alt="'+(u.name||"")+'">'+armor+hair+head+weaponSvgFor(u)+'</div>';
