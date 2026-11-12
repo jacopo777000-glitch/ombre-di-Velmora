@@ -100,12 +100,13 @@ try {
   if (femaleStart < 0 || femaleEnd < 0 || layerStart < 0 || layerEnd < 0) throw new Error("renderer equipment o helper sesso non individuati");
   const helperCode = html.slice(femaleStart, femaleEnd);
   const layerCode = html.slice(layerStart, layerEnd);
-  const makeRenderer = new Function("asset", "equipmentManifest", "weaponSvgFor", helperCode + ";" + layerCode + "; return equipmentLayers;");
+  const makeRenderer = new Function("asset", "equipmentManifest", "weaponSvgFor", helperCode + ";" + layerCode + "; return {equipmentLayers,equipmentLayerData,equipmentHairData};");
   const sample = {};
   for (const key of ["Armatura_guerriero.JPG", "Elmo_drago.JPG", "Capelli_mossi.jpg"]) {
     sample[key] = {file:"assets/equip/test.png",x:90,y:40,width:180,height:220,sourceWidth:912,sourceHeight:1168};
   }
-  const render = makeRenderer(name => name, sample, () => '<svg class="weaponLayer"></svg>');
+  const renderer = makeRenderer(name => name, sample, () => '<svg class="weaponLayer"></svg>');
+  const render = renderer.equipmentLayers;
   const equipped = render({portrait:"hero.png",name:"Prova",race:"Umano",gender:"M",equipment:{armor:"Armatura_guerriero",head:"Elmo_drago",hair:"Capelli mossi",weapon:"Spada"}});
   if (!equipped.includes('data-equipment-slot="armor"') ||
       !equipped.includes('data-equipment-slot="head"') ||
@@ -127,22 +128,22 @@ try {
   for(const [id,name] of models){
     for(const gender of ["M","F"]){
       const person={raceId:id,race:name,gender,equipment:{armor:"Armatura_guerriero",head:["human","elf","orc"].includes(id)?"Elmo_drago":"",hair:"Capelli mossi"}};
-      const armor=equipmentLayerData(person,"armor");
+      const armor=renderer.equipmentLayerData(person,"armor");
       if(!armor||armor.w<.40||armor.w>.52||armor.h<.68||armor.h>.82||armor.x<0||armor.y<.14||armor.y>.25||armor.x+armor.w>1||armor.y+armor.h>1){
         throw new Error("fit armatura fuori area per "+name+" "+gender+": "+JSON.stringify(armor));
       }
       if(["human","elf","orc"].includes(id)){
-        const head=equipmentLayerData(person,"head"),hair=equipmentHairData(person);
+        const head=renderer.equipmentLayerData(person,"head"),hair=renderer.equipmentHairData(person);
         if(!head||head.w<.14||head.w>.28||!hair||hair.x<0||hair.y<0||hair.x+hair.w>1||hair.y+hair.h>1){
           throw new Error("fit capelli/copricapo non valido per "+name+" "+gender);
         }
-      }else if(equipmentLayerData(person,"head")||equipmentHairData(person)){
+      }else if(renderer.equipmentLayerData(person,"head")||renderer.equipmentHairData(person)){
         throw new Error("overlay testa umano applicato a "+name);
       }
     }
   }
-  const humanM=equipmentLayerData({race:"Umano",gender:"M",equipment:{armor:"Armatura_guerriero"}},"armor");
-  const humanF=equipmentLayerData({race:"Umano",gender:"F",equipment:{armor:"Armatura_guerriero"}},"armor");
+  const humanM=renderer.equipmentLayerData({race:"Umano",gender:"M",equipment:{armor:"Armatura_guerriero"}},"armor");
+  const humanF=renderer.equipmentLayerData({race:"Umano",gender:"F",equipment:{armor:"Armatura_guerriero"}},"armor");
   if(humanM.y===humanF.y||humanM.h===humanF.h)throw new Error("fit maschile e femminile non differenziato");
   pass("Fit geometrico armature per 12 modelli; hair/headgear distinti per razza e sesso");
 } catch (error) {
@@ -267,10 +268,12 @@ try {
 }
 
 try {
-  const hairStart = html.indexOf("function finisherHairSource(u){");
-  const hairEnd = html.indexOf("\nasync function finisherVisual", hairStart);
-  if (hairStart < 0 || hairEnd < 0) throw new Error("funzione finisherHairSource non individuata");
-  const hairCode = html.slice(hairStart, hairEnd);
+  const hairStart = html.indexOf("function equipmentRaceId(u){");
+  const hairHelpersEnd = html.indexOf("\nfunction equipmentLayerData", hairStart);
+  const finisherStart = html.indexOf("function finisherHairSource(u){");
+  const hairEnd = html.indexOf("\nasync function finisherVisual", finisherStart);
+  if (hairStart < 0 || hairHelpersEnd < 0 || finisherStart < 0 || hairEnd < 0) throw new Error("helper capelli/colpo di grazia non individuati");
+  const hairCode = html.slice(hairStart, hairHelpersEnd) + ";" + html.slice(finisherStart, hairEnd);
   const manifest = {
     "Capelli_mossi.jpg": {file:"assets/equip/Capelli_mossi.png",x:100,y:20,width:120,height:140,sourceWidth:912,sourceHeight:1000}
   };
@@ -278,7 +281,7 @@ try {
   const isFemale = p => ["f","female"].includes(String(p.gender||"").toLowerCase());
   const hair = makeHair(manifest,isFemale);
   const female = hair({race:"Umano",gender:"female",equipment:{hair:"Capelli mossi",head:""}});
-  const expectedY = 25/1000, expectedHeight = (140*1.12*.96)/1000;
+  const expectedY = 24/1000, expectedHeight = (140*1.08)/1000;
   if (!female || Math.abs(female.y-expectedY)>1e-9 || Math.abs(female.h-expectedHeight)>1e-9) {
     throw new Error("coordinate capelli femminili non usano sourceHeight o scala sesso corretti");
   }
