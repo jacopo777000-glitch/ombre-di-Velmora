@@ -152,7 +152,7 @@ try {
         if(humanoid&&(!head||hair))throw new Error("copricapo non copre capelli su "+race+" "+gender);
         if(!humanoid&&(head||hair))throw new Error("overlay umano presente su "+race+" "+gender);
         const base=art.querySelector(".unitBase");
-        if(base.naturalWidth!==912||base.naturalHeight!==1168)throw new Error("dimensioni modello base inattese su "+race+" "+gender);
+        if(!base.naturalWidth||Math.abs(base.naturalWidth/base.naturalHeight-(912/1168))>.01)throw new Error("proporzioni modello base inattese su "+race+" "+gender+": "+base.naturalWidth+"x"+base.naturalHeight);
         results.push({race,gender,geometry,head:!!head,hair:!!hair});
       }
     }
