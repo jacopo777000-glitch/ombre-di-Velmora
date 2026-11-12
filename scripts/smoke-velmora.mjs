@@ -128,10 +128,15 @@ try {
       await Promise.all(imgs.map(img=>img.decode().catch(()=>null)));
       return imgs.every(img=>img.complete&&img.naturalWidth>0);
     }
+    const armorOptions=["Armatura_guerriero","Armatura_arciere","Armatura_druido","Armatura_mago"];
+    const headOptions=["Cappello_mago","Cappello_punk","Elmo_drago","Elmo_leone"];
+    const hairOptions=["Capelli coda ciuffi","Capelli coda lunga","Capelli lunghi","Capelli mossi","Capelli rasati lato","Capelli rasta","Capelli spettinati","Capelli trecce"];
+    let armorFits=0,headFits=0,hairFits=0;
     for(const [raceId,race,male,female] of models){
       for(const [gender,portrait] of [["M",male],["F",female]]){
         hero.raceId=raceId;hero.race=race;hero.gender=gender;hero.portrait=portrait;
-        hero.equipment={hair:"Capelli mossi",armor:"Armatura_guerriero",head:["human","elf","orc"].includes(raceId)?"Elmo_drago":"",weapon:"Spada"};
+        const humanoid=["human","elf","orc"].includes(raceId);
+        hero.equipment={hair:"Capelli mossi",armor:"Armatura_guerriero",head:humanoid?"Elmo_drago":"",weapon:"Spada"};
         renderBattle();
         const art=document.querySelector('#partyList [data-unit-id="hero"] .unitArt');
         const loaded=await settle(art);
@@ -148,14 +153,53 @@ try {
         if(!loaded||!geometry||geometry.w<.40||geometry.w>.52||geometry.h<.68||geometry.h>.82||geometry.x<0||geometry.y<.14||geometry.y>.25||geometry.x+geometry.w>1||geometry.y+geometry.h>1){
           throw new Error("armatura fuori geometria o asset non caricato su "+race+" "+gender+": "+JSON.stringify({loaded,geometry}));
         }
-        const humanoid=["human","elf","orc"].includes(raceId);
-        if(humanoid&&(!head||hair))throw new Error("copricapo non copre capelli su "+race+" "+gender);
-        if(!humanoid&&(head||hair))throw new Error("overlay umano presente su "+race+" "+gender);
+        for(const armorName of armorOptions){
+          hero.equipment.armor=armorName;
+          const d=equipmentLayerData(hero,"armor");
+          if(!d||d.w<.40||d.w>.52||d.h<.68||d.h>.82||d.x<0||d.y<.14||d.y>.25||d.x+d.w>1||d.y+d.h>1){
+            throw new Error("profilo armatura non valido: "+race+" "+gender+" "+armorName+" "+JSON.stringify(d));
+          }
+          armorFits++;
+        }
+        if(humanoid){
+          for(const headName of headOptions){
+            hero.equipment.head=headName;
+            const d=equipmentLayerData(hero,"head");
+            if(!d||d.w<.14||d.w>.28||d.h<.10||d.h>.25||d.x<0||d.y<0||d.x+d.w>1||d.y+d.h>1){
+              throw new Error("profilo copricapo non valido: "+race+" "+gender+" "+headName+" "+JSON.stringify(d));
+            }
+            headFits++;
+          }
+          hero.equipment.head="";
+          for(const hairName of hairOptions){
+            hero.equipment.hair=hairName;
+            const d=equipmentHairData(hero);
+            if(!d||d.x<0||d.y<0||d.w<=0||d.h<=0||d.x+d.w>1||d.y+d.h>1){
+              throw new Error("profilo capelli non valido: "+race+" "+gender+" "+hairName+" "+JSON.stringify(d));
+            }
+            hairFits++;
+          }
+          hero.equipment.head="Elmo_drago";hero.equipment.hair="Capelli mossi";
+          renderBattle();
+          const coveredArt=document.querySelector('#partyList [data-unit-id="hero"] .unitArt');
+          await settle(coveredArt);
+          if(!coveredArt.querySelector('[data-equipment-slot="head"]')||coveredArt.querySelector('[data-equipment-slot="hair"]')){
+            throw new Error("il copricapo non nasconde i capelli su "+race+" "+gender);
+          }
+          hero.equipment.head="";
+          renderBattle();
+          const bareArt=document.querySelector('#partyList [data-unit-id="hero"] .unitArt');
+          await settle(bareArt);
+          if(!bareArt.querySelector('[data-equipment-slot="hair"]'))throw new Error("capelli non ripristinati su "+race+" "+gender);
+        }else if(head||hair||equipmentLayerData(hero,"head")||equipmentHairData(hero)){
+          throw new Error("overlay umano presente su "+race+" "+gender);
+        }
         const base=art.querySelector(".unitBase");
         if(!base.naturalWidth||Math.abs(base.naturalWidth/base.naturalHeight-(912/1168))>.01)throw new Error("proporzioni modello base inattese su "+race+" "+gender+": "+base.naturalWidth+"x"+base.naturalHeight);
         results.push({race,gender,geometry,head:!!head,hair:!!hair});
       }
     }
+    if(armorFits!==48||headFits!==24||hairFits!==48)throw new Error("conteggio fit non completo: "+JSON.stringify({armorFits,headFits,hairFits}));
     const transparencyChecks=[];
     for(const [name,entry] of Object.entries(equipmentManifest)){
       if(!entry||!["armor","headgear","hair"].includes(entry.group)||!entry.file)continue;
