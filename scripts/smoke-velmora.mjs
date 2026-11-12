@@ -111,6 +111,63 @@ try {
   });
   console.log("PASS: overlay armatura/elmo e ripristino capelli su modelli maschile e femminile",equipmentChecks);
 
+  const allRaceEquipment = await page.evaluate(async () => {
+    const hero=G.hero;
+    const backup={race:hero.race,raceId:hero.raceId,gender:hero.gender,portrait:hero.portrait,equipment:JSON.parse(JSON.stringify(hero.equipment||{}))};
+    const models=[
+      ["human","Umano","modello_umano_maschile.png.JPG.JPG","modello_umano_femminile.png.JPG.JPG"],
+      ["elf","Elfo","elfo_m_base.png.JPG","elfo_f_base.png.JPG"],
+      ["orc","Orco","orco_m_base.png.JPG","orco_f_base.png.JPG"],
+      ["lion","Leonide","uomo_leone_m_base.png.JPG","uomo_leone_f_base.png.JPG"],
+      ["wolf","Lupo","uomo_lupo_m_base.png.JPG","uomo_lupo_f_base.png.JPG"],
+      ["rabbit","Coniglio","uomo_coniglio_m_base.png.JPG","uomo_coniglio_f_base.png.JPG"]
+    ];
+    const results=[];
+    async function settle(root){
+      const imgs=[...root.querySelectorAll("img")];
+      await Promise.all(imgs.map(img=>img.decode().catch(()=>null)));
+      return imgs.every(img=>img.complete&&img.naturalWidth>0);
+    }
+    for(const [raceId,race,male,female] of models){
+      for(const [gender,portrait] of [["M",male],["F",female]]){
+        hero.raceId=raceId;hero.race=race;hero.gender=gender;hero.portrait=portrait;
+        hero.equipment={hair:"Capelli mossi",armor:"Armatura_guerriero",head:["human","elf","orc"].includes(raceId)?"Elmo_drago":"",weapon:"Spada"};
+        renderBattle();
+        const art=document.querySelector('#partyList [data-unit-id="hero"] .unitArt');
+        const loaded=await settle(art);
+        const armor=art.querySelector('[data-equipment-slot="armor"]');
+        const head=art.querySelector('[data-equipment-slot="head"]');
+        const hair=art.querySelector('[data-equipment-slot="hair"]');
+        const artRect=art.getBoundingClientRect(),armorRect=armor?.getBoundingClientRect();
+        const geometry=armorRect?{
+          x:(armorRect.left-artRect.left)/artRect.width,
+          y:(armorRect.top-artRect.top)/artRect.height,
+          w:armorRect.width/artRect.width,
+          h:armorRect.height/artRect.height
+        }:null;
+        if(!loaded||!geometry||geometry.w<.40||geometry.w>.52||geometry.h<.68||geometry.h>.82||geometry.x<0||geometry.y<.14||geometry.y>.25||geometry.x+geometry.w>1||geometry.y+geometry.h>1){
+          throw new Error("armatura fuori geometria o asset non caricato su "+race+" "+gender+": "+JSON.stringify({loaded,geometry}));
+        }
+        const humanoid=["human","elf","orc"].includes(raceId);
+        if(humanoid&&(!head||hair))throw new Error("copricapo non copre capelli su "+race+" "+gender);
+        if(!humanoid&&(head||hair))throw new Error("overlay umano presente su "+race+" "+gender);
+        const base=art.querySelector(".unitBase");
+        if(base.naturalWidth!==912||base.naturalHeight!==1168)throw new Error("dimensioni modello base inattese su "+race+" "+gender);
+        results.push({race,gender,geometry,head:!!head,hair:!!hair});
+      }
+    }
+    const armorImage=new Image();armorImage.src="assets/equip/Armatura_guerriero.png";await armorImage.decode();
+    const c=document.createElement("canvas");c.width=48;c.height=48;
+    const ctx=c.getContext("2d",{willReadFrequently:true});ctx.drawImage(armorImage,0,0,48,48);
+    const pixels=ctx.getImageData(0,0,48,48).data;let transparent=0,visible=0;
+    for(let i=3;i<pixels.length;i+=4){if(pixels[i]<16)transparent++;if(pixels[i]>240)visible++;}
+    const transparency=transparent/(48*48),visibility=visible/(48*48);
+    if(transparency<.08||visibility<.12)throw new Error("ritaglio armatura non sufficientemente trasparente o visibile: "+JSON.stringify({transparency,visibility}));
+    Object.assign(hero,backup);renderBattle();
+    return {models:results,transparency,visibility};
+  });
+  console.log("PASS: fit armature e copricapi su tutti i 12 modelli originali; ritaglio trasparente",allRaceEquipment);
+
   // Verify the real canvas finisher can be skipped and always restores the battle art.
   await page.evaluate(() => {
     window.__velmoraFinisherTest = playFinisher(G.hero, battle.units[0]);
