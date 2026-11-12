@@ -95,7 +95,7 @@ if (!html.includes("armorData") || !html.includes("headData") ||
 try {
   const femaleStart = html.indexOf("function supportsHumanoidHairAndHeadgear(p){");
   const femaleEnd = html.indexOf("\nfunction equipmentRules", femaleStart);
-  const layerStart = html.indexOf("function equipmentLayerData(u,slot){");
+  const layerStart = html.indexOf("function equipmentRaceId(u){");
   const layerEnd = html.indexOf("\nfunction unitHTML", layerStart);
   if (femaleStart < 0 || femaleEnd < 0 || layerStart < 0 || layerEnd < 0) throw new Error("renderer equipment o helper sesso non individuati");
   const helperCode = html.slice(femaleStart, femaleEnd);
@@ -121,7 +121,30 @@ try {
   if (beast.includes('data-equipment-slot="head"') || beast.includes('data-equipment-slot="hair"')) {
     throw new Error("overlay umano applicato a un modello bestiale");
   }
-  pass("Test renderer: armatura, copricapo, capelli nascosti/ripristinati e filtro razze bestiali");
+  const models=[
+    ["human","Umano"],["elf","Elfo"],["orc","Orco"],["lion","Leonide"],["wolf","Lupo"],["rabbit","Coniglio"]
+  ];
+  for(const [id,name] of models){
+    for(const gender of ["M","F"]){
+      const person={raceId:id,race:name,gender,equipment:{armor:"Armatura_guerriero",head:["human","elf","orc"].includes(id)?"Elmo_drago":"",hair:"Capelli mossi"}};
+      const armor=equipmentLayerData(person,"armor");
+      if(!armor||armor.w<.40||armor.w>.52||armor.h<.68||armor.h>.82||armor.x<0||armor.y<.14||armor.y>.25||armor.x+armor.w>1||armor.y+armor.h>1){
+        throw new Error("fit armatura fuori area per "+name+" "+gender+": "+JSON.stringify(armor));
+      }
+      if(["human","elf","orc"].includes(id)){
+        const head=equipmentLayerData(person,"head"),hair=equipmentHairData(person);
+        if(!head||head.w<.14||head.w>.28||!hair||hair.x<0||hair.y<0||hair.x+hair.w>1||hair.y+hair.h>1){
+          throw new Error("fit capelli/copricapo non valido per "+name+" "+gender);
+        }
+      }else if(equipmentLayerData(person,"head")||equipmentHairData(person)){
+        throw new Error("overlay testa umano applicato a "+name);
+      }
+    }
+  }
+  const humanM=equipmentLayerData({race:"Umano",gender:"M",equipment:{armor:"Armatura_guerriero"}},"armor");
+  const humanF=equipmentLayerData({race:"Umano",gender:"F",equipment:{armor:"Armatura_guerriero"}},"armor");
+  if(humanM.y===humanF.y||humanM.h===humanF.h)throw new Error("fit maschile e femminile non differenziato");
+  pass("Fit geometrico armature per 12 modelli; hair/headgear distinti per razza e sesso");
 } catch (error) {
   fail("Test renderer equipaggiamento: " + error.message);
 }
