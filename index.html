@@ -1520,7 +1520,10 @@ async function playFinisher(attacker,target,magical=false){
   };
   const cls=String(attacker.class||attacker.classKey||"").toLowerCase();
   const style=cls.includes("guerr")?{name:"GUERRIERO · FENDENTE DEVASTANTE",color:"#f2a34b",flash:"rgba(255,150,55,.48)"}:cls.includes("mago")?{name:"MAGO · DETONAZIONE ARCANA",color:"#75caff",flash:"rgba(100,190,255,.48)"}:cls.includes("ladro")?{name:"LADRO · ASSALTO D'OMBRA",color:"#bd8aff",flash:"rgba(120,65,190,.42)"}:cls.includes("arcier")?{name:"ARCIERE · FRECCIA ETEREA",color:"#8de4b0",flash:"rgba(120,255,185,.42)"}:cls.includes("paladin")?{name:"PALADINO · GIUDIZIO SACRO",color:"#ffe28a",flash:"rgba(255,225,125,.5)"}:cls.includes("chier")?{name:"CHIERICO · SIGILLO DIVINO",color:"#fff0c2",flash:"rgba(255,245,200,.48)"}:cls.includes("druid")?{name:"DRUIDO · RADICI ANTICHE",color:"#8fd66b",flash:"rgba(100,210,90,.42)"}:{name:"COLPO DI GRAZIA",color:magical?"#75caff":"#edbe6f",flash:"rgba(255,228,171,.45)"};
-  const frames=24;
+  const frames=16,frameImages=[];
+  canvas.style.opacity="0";
+  window.__velmoraFinisherFrameCount=0;
+  window.__velmoraFinisherFrameTypes=[];
   for(let frame=0;frame<frames&&!skip;frame++){
    const p=frame/(frames-1),ease=Math.sin(p*Math.PI/2),focusX=(ar.left+ar.width/2+tr.left+tr.width/2)/2,focusY=(ar.top+ar.height/2+tr.top+tr.height/2)/2;
    ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,vw,vh);ctx.fillStyle="rgba(5,4,3,.72)";ctx.fillRect(0,0,vw,vh);
@@ -1563,7 +1566,26 @@ async function playFinisher(attacker,target,magical=false){
    ctx.restore();
    if(p>.49&&p<.68){const flash=1-Math.abs(p-.585)/.095;ctx.fillStyle=style.flash.replace(/,\s*[^)]+\)$/,", "+(flash*.55)+")");ctx.fillRect(0,0,vw,vh)}
    ctx.textAlign="center";ctx.fillStyle=style.color;ctx.font="bold 15px Georgia";ctx.shadowColor="#000";ctx.shadowBlur=8;ctx.fillText(style.name,vw/2,Math.max(34,vh*.12));ctx.shadowBlur=0;
-   await new Promise(resolve=>setTimeout(resolve,105));
+   const frameBlob=await new Promise(resolve=>{
+    if(typeof canvas.toBlob!=="function"){resolve(canvas.toDataURL("image/png"));return}
+    try{canvas.toBlob(blob=>resolve(blob||canvas.toDataURL("image/png")),"image/webp",.78)}
+    catch(e){resolve(canvas.toDataURL("image/png"))}
+   });
+   frameImages.push(frameBlob);
+  }
+  window.__velmoraFinisherFrameCount=frameImages.length;
+  window.__velmoraFinisherFrameTypes=frameImages.map(frame=>typeof frame==="string"?"image/png":frame.type||"image/png");
+  canvas.style.opacity="1";
+  for(let i=0;i<frameImages.length&&!skip;i++){
+   const frame=frameImages[i],image=new Image();let frameUrl="";
+   const loaded=new Promise((resolve,reject)=>{image.onload=resolve;image.onerror=reject});
+   if(typeof frame==="string")image.src=frame;
+   else{frameUrl=URL.createObjectURL(frame);image.src=frameUrl}
+   try{if(typeof image.decode==="function")await image.decode();else await loaded}
+   catch(e){if(!image.complete||!image.naturalWidth)await loaded}
+   if(!image.naturalWidth)throw new Error("Frame colpo di grazia non decodificato");
+   if(!skip){ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,vw,vh);ctx.drawImage(image,0,0,vw,vh);await new Promise(resolve=>setTimeout(resolve,150))}
+   if(frameUrl)URL.revokeObjectURL(frameUrl);
   }
  }catch(e){console.warn("Finisher skipped",e)}
  finally{aArt.style.visibility=oldA;tArt.style.visibility=oldT;overlay.remove()}

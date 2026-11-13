@@ -218,9 +218,31 @@ try {
   });
   console.log("PASS: fit armature e copricapi su tutti i 12 modelli originali; ritaglio trasparente",allRaceEquipment);
 
-  // Verify the real canvas finisher can be skipped and always restores the battle art.
+  // Verify the finisher is composed as a real in-memory WebP/PNG frame sequence, then can be skipped safely.
   await page.evaluate(() => {
+    window.__velmoraFinisherFrameCount=0;
     window.__velmoraFinisherTest = playFinisher(G.hero, battle.units[0]);
+  });
+  await page.locator(".finisherOverlay").waitFor({state:"visible",timeout:10000});
+  await page.waitForFunction(() => window.__velmoraFinisherFrameCount===16, {timeout:20000});
+  const frameSequence = await page.evaluate(() => ({
+    count:window.__velmoraFinisherFrameCount,
+    types:window.__velmoraFinisherFrameTypes||[]
+  }));
+  if(frameSequence.count!==16||frameSequence.types.length!==16||frameSequence.types.some(type=>!/^image\/(?:webp|png)$/i.test(type))){
+    throw new Error("sequenza frame del colpo di grazia non valida: "+JSON.stringify(frameSequence));
+  }
+  await page.waitForFunction(() => !document.querySelector(".finisherOverlay"), {timeout:15000});
+  const finisherFullRestored = await page.evaluate(() => ({
+    hero:document.querySelector("#partyList .unitArt")?.style.visibility || "",
+    enemy:document.querySelector("#enemyList .unitArt")?.style.visibility || ""
+  }));
+  if(finisherFullRestored.hero==="hidden"||finisherFullRestored.enemy==="hidden")throw new Error("la sequenza completa non ha ripristinato i personaggi");
+  console.log("PASS: colpo di grazia composto e riprodotto come sequenza di 16 immagini",frameSequence);
+
+  await page.evaluate(() => {
+    window.__velmoraFinisherFrameCount=0;
+    window.__velmoraFinisherTest=playFinisher(G.hero,battle.units[0]);
   });
   await page.locator(".finisherOverlay").waitFor({state:"visible",timeout:10000});
   await page.locator(".finisherOverlay").click({position:{x:12,y:12}});
@@ -229,9 +251,7 @@ try {
     hero:document.querySelector("#partyList .unitArt")?.style.visibility || "",
     enemy:document.querySelector("#enemyList .unitArt")?.style.visibility || ""
   }));
-  if (finisherRestored.hero==="hidden" || finisherRestored.enemy==="hidden") {
-    throw new Error("il salto del colpo di grazia non ha ripristinato i personaggi");
-  }
+  if(finisherRestored.hero==="hidden"||finisherRestored.enemy==="hidden")throw new Error("il salto del colpo di grazia non ha ripristinato i personaggi");
   await page.evaluate(() => window.__velmoraFinisherTest);
   console.log("PASS: colpo di grazia saltato e personaggi ripristinati");
 
