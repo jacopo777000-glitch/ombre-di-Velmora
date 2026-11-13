@@ -1697,7 +1697,7 @@ function equipmentLayerData(u,slot){
   if(slot!=="armor"&&eq[slot]===false)return null;
   const rawStyle=eq.armor,style=armorVisualMap[rawStyle]||rawStyle,partStyle=(slot==="shoulders"||slot==="arms"||slot==="boots")?(eq[slot+"Style"]||(style==="Armatura_guerriero"?"Armatura_arciere":style)):style,key=maps.armor[partStyle],d=key&&equipmentManifest[key];
   const regions=armorPartPolygons[partStyle]&&armorPartPolygons[partStyle][slot];
-  if(!d||!d.file||!regions||!Number(d.width)||!Number(d.height))return null;
+  if(!d||!d.file||!Number(d.width)||!Number(d.height))return null;
   const race=equipmentRaceId(u),gender=isFemaleCharacter(u)?"F":"M";
   const fits={
    human:{M:{cx:590,top:190,w:430,h:925},F:{cx:590,top:225,w:405,h:880}},
@@ -1709,6 +1709,21 @@ function equipmentLayerData(u,slot){
   };
   const styles={Armatura_guerriero:{w:1,h:1},Armatura_arciere:{w:.96,h:1},Armatura_druido:{w:1.02,h:1.02},Armatura_mago:{w:1,h:1.02}};
   const fit=fits[race][gender],styleFit=styles[partStyle]||styles.Armatura_guerriero,w=fit.w*styleFit.w,h=fit.h*styleFit.h,left=fit.cx-w/2,top=fit.top;
+  const modularParts=d.parts&&d.parts[slot];
+  if(Array.isArray(modularParts)&&modularParts.length){
+   return modularParts.map((part,index)=>{
+    if(!part||!part.file||!Number(part.width)||!Number(part.height))return null;
+    const partX=(Number(part.x)-Number(d.x||0))/Number(d.width)*w;
+    const partY=(Number(part.y)-Number(d.y||0))/Number(d.height)*h;
+    const partW=Number(part.width)/Number(d.width)*w;
+    const partH=Number(part.height)/Number(d.height)*h;
+    const sideOffset=slot==="boots"?(index===0?-18:4):(slot==="shoulders"||slot==="arms"||slot==="legs")?(index===0?-4:4):0;
+    const verticalOffset=slot==="shoulders"?-2:slot==="boots"?34:0;
+    const widthScale=slot==="arms"?1.012:1,heightScale=slot==="arms"?1.008:1;
+    return {src:part.file,x:(left+partX+sideOffset)/912,y:(top+partY+verticalOffset)/1168,w:(partW*widthScale)/912,h:(partH*heightScale)/1168,modular:true};
+   }).filter(Boolean);
+  }
+  if(!regions)return null;
   return regions.map((polygon,index)=>{
    const points=polygon.map(([px,py])=>[
     Math.max(0,Math.min(100,(px-Number(d.x||0))/Number(d.width)*100)),
