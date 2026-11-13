@@ -72,7 +72,7 @@ def main():
                     "x":sx+x0,"y":sy+y0,"width":x1-x0,"height":y1-y0
                 })
                 total+=1; total_bytes+=out.stat().st_size
-    MANIFEST.write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+"\\n",encoding="utf-8")
+    MANIFEST.write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+chr(10),encoding="utf-8")
     print(f"OK: {total} PNG modulari generati ({total_bytes:,} byte)")
     for style in POLYGONS:
         print(style,{slot:len(manifest[style+".JPG"]["parts"][slot]) for slot in POLYGONS[style]})
