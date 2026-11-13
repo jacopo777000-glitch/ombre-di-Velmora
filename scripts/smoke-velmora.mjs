@@ -159,6 +159,9 @@ try {
     selectedEquipmentMember="hero";openCharacterScreen();
     const names=[...document.querySelectorAll("[data-armor-part]")].map(x=>x.dataset.armorPart).sort();
     if(names.join(",")!=="arms,armor,boots,legs,shoulders")throw new Error("tendine modulari non presenti: "+names.join(","));
+    let art=document.querySelector('#partyList [data-unit-id="hero"] .unitArt');
+    const torsoOnly=!!art.querySelector('[data-equipment-slot="armor"]')&&!art.querySelector('[data-equipment-slot="shoulders"],[data-equipment-slot="arms"],[data-equipment-slot="legs"],[data-equipment-slot="boots"]');
+    if(!torsoOnly)throw new Error("selezionare il torso equipaggia ancora automaticamente altri pezzi");
     let control=document.querySelector('[data-armor-part="arms"]');
     control.value="Armatura_arciere";control.dispatchEvent(new Event("change",{bubbles:true}));
     let selected=document.querySelector('#partyList [data-unit-id="hero"] .unitArt [data-equipment-slot="arms"]');
@@ -171,7 +174,7 @@ try {
     const restored=!!document.querySelector('#partyList [data-unit-id="hero"] .unitArt [data-equipment-slot="arms"]');
     closeCharacterScreen();G.hero.equipment=oldEquipment;G.hero.class=oldClass;renderBattle();
     if(!changed||!hidden||!restored)throw new Error("tendina non cambia, rimuove e ripristina la parte selezionata");
-    return {parts:names,changed,hidden,restored};
+    return {parts:names,torsoOnly,changed,hidden,restored};
   });
   console.log("PASS: schermata equipaggiamento espone quattro controlli modulari",modularUi);
   const lootVisualChecks = await page.evaluate(async () => {
