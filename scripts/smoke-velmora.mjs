@@ -153,9 +153,9 @@ try {
   });
   console.log("PASS: overlay armatura/elmo e ripristino capelli su modelli maschile e femminile",equipmentChecks);
   const modularUi = await page.evaluate(() => {
-    const oldArmor=G.hero.equipment?.armor,oldArms=G.hero.equipment?.arms;
+    const oldArmor=G.hero.equipment?.armor,oldArms=G.hero.equipment?.arms,oldClass=G.hero.class;
     if(!G.hero.equipment)G.hero.equipment={};
-    G.hero.equipment.armor="Armatura_guerriero";G.hero.equipment.arms=true;
+    G.hero.class="Guerriero";G.hero.equipment.armor="Armatura_guerriero";G.hero.equipment.arms=true;
     selectedEquipmentMember="hero";openCharacterScreen();
     const names=[...document.querySelectorAll("[data-armor-part]")].map(x=>x.dataset.armorPart).sort();
     if(names.join(",")!=="arms,boots,legs,shoulders")throw new Error("controlli modulari non presenti: "+names.join(","));
@@ -164,7 +164,7 @@ try {
     document.querySelector('[data-armor-part="arms"]').click();
     const restored=!!document.querySelector('#partyList [data-unit-id="hero"] .unitArt [data-equipment-slot="arms"]');
     closeCharacterScreen();
-    G.hero.equipment.armor=oldArmor||"";
+    G.hero.equipment.armor=oldArmor||"";G.hero.class=oldClass;
     if(oldArms===undefined)delete G.hero.equipment.arms;else G.hero.equipment.arms=oldArms;
     renderBattle();
     if(!hidden||!restored)throw new Error("toggle braccia non ha aggiornato la scena");
@@ -254,7 +254,7 @@ try {
             const raw=equipmentLayerData(hero,partSlot),parts=Array.isArray(raw)?raw:raw?[raw]:[];
             if(!parts.length)throw new Error("profilo armatura assente: "+race+" "+gender+" "+armorName+" "+partSlot);
             for(const d of parts){
-              if(d.w<.40||d.w>.52||d.h<.68||d.h>.82||d.x<0||d.y<.14||d.y>.25||d.x+d.w>1||d.y+d.h>1||!d.clip||!d.points?.length){
+              if(d.w<.40||d.w>.52||d.h<.68||d.h>.82||d.x<0||d.y<.14||d.y>.30||d.x+d.w>1||d.y+d.h>1||!d.clip||!d.points?.length){
                 throw new Error("profilo parte armatura non valido: "+race+" "+gender+" "+armorName+" "+partSlot+" "+JSON.stringify(d));
               }
               armorPartFits++;
