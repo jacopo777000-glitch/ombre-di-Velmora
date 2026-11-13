@@ -104,7 +104,8 @@ try {
   const makeRenderer = new Function("asset", "equipmentManifest", "weaponSvgFor", helperCode + ";" + layerCode + "; return {equipmentLayers,equipmentLayerData,equipmentHairData};");
   const sample = {};
   for (const key of ["Armatura_arciere.JPG", "Armatura_druido.JPG", "Armatura_guerriero.JPG", "Armatura_mago.JPG", "Elmo_drago.JPG", "Capelli_mossi.jpg"]) {
-    sample[key] = {file:"assets/equip/test.png",x:90,y:40,width:180,height:220,sourceWidth:912,sourceHeight:1168};
+    if(!manifest[key])throw new Error("voce manifest non trovata per "+key);
+    sample[key] = manifest[key];
   }
   const renderer = makeRenderer(name => name, sample, () => '<svg class="weaponLayer"></svg>');
   const render = renderer.equipmentLayers;
