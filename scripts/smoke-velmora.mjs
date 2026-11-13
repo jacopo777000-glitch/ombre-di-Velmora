@@ -47,6 +47,38 @@ try {
   await page.getByRole("button",{name:/INIZIA IL VIAGGIO/i}).click();
   await page.locator("#game").waitFor({state:"visible",timeout:10000});
 
+  const companionQuestChecks = await page.evaluate(() => {
+    const original=G,originalSave=localStorage.getItem("velmoraDemoSave"),originalRandom=Math.random,results=[];
+    const cases=[
+      {id:"richiamo_branco",companion:"rauk",name:"Rauk",portrait:"uomo_lupo_m_base.png.JPG",choice:"reconcile",bond:2},
+      {id:"promessa_cenere",companion:"leona",name:"Leona",portrait:"uomo_leone_f_base.png.JPG",choice:"return",bond:2}
+    ];
+    try{
+      for(const item of cases){
+        G=JSON.parse(JSON.stringify(original));G.battleWon=3;G.party=[];G.companions={wolf:false,lion:false};
+        ensureSideQuestState();
+        const quest=sideQuestCatalog.find(q=>q.id===item.id);
+        if(sideQuestUnlocked(quest))throw new Error("missione personale sbloccata senza "+item.name);
+        G.party.push(makeCompanion(item.name,40,7,4,4,item.portrait));
+        G.companions[item.companion==="rauk"?"wolf":"lion"]=true;
+        if(!sideQuestUnlocked(quest))throw new Error("missione personale non sbloccata con "+item.name);
+        sideQuestAction(item.id,"accept");
+        Math.random=()=>.99;
+        sideQuestAction(item.id,quest.checkAction);
+        if(G.sideQuests[item.id].stage!==2||G.sideQuests[item.id].lastRoll.actor!==item.name)throw new Error("prova personale non attribuita a "+item.name);
+        sideQuestAction(item.id,item.choice);
+        const state=G.sideQuests[item.id],saved=JSON.parse(localStorage.getItem("velmoraDemoSave")||"null");
+        if(state.status!=="completed"||G.companionBonds[item.companion]!==item.bond||saved?.G?.companionBonds?.[item.companion]!==item.bond)throw new Error("esito o legame non persistito per "+item.name);
+        results.push({quest:item.id,companion:item.name,actor:state.lastRoll.actor,bond:G.companionBonds[item.companion],outcome:state.outcome});
+      }
+    }finally{
+      Math.random=originalRandom;G=original;
+      if(originalSave===null)localStorage.removeItem("velmoraDemoSave");else localStorage.setItem("velmoraDemoSave",originalSave);
+    }
+    return results;
+  });
+  console.log("PASS: due missioni personali, requisiti compagno, prove del compagno e legami persistenti",companionQuestChecks);
+
   async function checkBattle(n, expected) {
     await page.evaluate(value => window.startBattle(value), n);
     await page.waitForFunction((needle) => {
