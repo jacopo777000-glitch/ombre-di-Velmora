@@ -1724,7 +1724,7 @@ function equipmentLayerData(u,slot){
  const visualHead=headVisualMap[eq.head]||eq.head,key=maps.head[visualHead],d=key&&equipmentManifest[key];
  if(!d||!d.file||!Number(d.width)||!Number(d.height))return null;
  const race=equipmentRaceId(u),gender=isFemaleCharacter(u)?"F":"M";
- const headStyle={Cappello_mago:{w:210,top:18},Cappello_punk:{w:180,top:24},Elmo_drago:{w:180,top:16},Elmo_leone:{w:215,top:42}}[eq.head];
+ const headStyle={Cappello_mago:{w:210,top:18},Cappello_punk:{w:180,top:24},Elmo_drago:{w:180,top:16},Elmo_leone:{w:215,top:42}}[visualHead];
  if(!headStyle)return null;
  const raceScale={human:1,elf:1.12,orc:1.06}[race]||1,genderScale=gender==="F"?.97:1,w=headStyle.w*raceScale*genderScale,h=w*(Number(d.height)/Number(d.width));
  const center={human:590,elf:590,orc:590}[race]||590;
