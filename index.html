@@ -1695,7 +1695,7 @@ function equipmentLayerData(u,slot){
  const headVisualMap={"Cappuccio dell'Oracolo":"Cappello_mago","Elmo del Drago Antico":"Elmo_drago","Maschera del Predatore":"Cappello_punk"};
  if(["armor","shoulders","arms","legs","boots"].includes(slot)){
   if(slot!=="armor"&&eq[slot]===false)return null;
-  const rawStyle=slot==="armor"?eq.armor:(Object.prototype.hasOwnProperty.call(eq,slot+"Style")?eq[slot+"Style"]:eq.armor);
+  const rawStyle=slot==="armor"?eq.armor:eq[slot+"Style"];
   const style=armorVisualMap[rawStyle]||rawStyle,key=maps.armor[style],d=key&&equipmentManifest[key];
   if(!d||!d.file||!Number(d.width)||!Number(d.height))return null;
   const race=equipmentRaceId(u),gender=isFemaleCharacter(u)?"F":"M";
@@ -2108,7 +2108,7 @@ return base;
 }
 function equipmentArmorDefense(p){
  const eq=p&&p.equipment||{},meta=lootMeta(eq.armor),base=meta?meta.defense:({Armatura_guerriero:3,Armatura_arciere:2,Armatura_druido:2,Armatura_mago:1})[eq.armor]||0;
- const hasPart=slot=>Object.prototype.hasOwnProperty.call(eq,slot+"Style")?!!eq[slot+"Style"]:eq[slot]!==false&&!!eq.armor;
+ const hasPart=slot=>Object.prototype.hasOwnProperty.call(eq,slot+"Style")?!!eq[slot+"Style"]:eq[slot]===true;
  const coverage=.36+(hasPart("shoulders")?.14:0)+(hasPart("arms")?.14:0)+(hasPart("legs")?.22:0)+(hasPart("boots")?.14:0);
  const head=lootMeta(eq.head);
  return Math.round(base*coverage*10)/10+(head?head.defense:0);
@@ -2124,7 +2124,7 @@ if(p.equipment.weapon&&!rules.weapons.includes(p.equipment.weapon))p.equipment.w
 if(p.equipment.head&&!rules.heads.includes(p.equipment.head))p.equipment.head="";
 const armorStyles=["Armatura_guerriero","Armatura_arciere","Armatura_druido","Armatura_mago"];
 const makeOpts=(items,current,empty)=>'<option value="">'+empty+'</option>'+items.map(x=>'<option value="'+x+'" '+(current===x?'selected':'')+'>'+x.replaceAll("_"," ")+'</option>').join("");
-const armorSelect=(slot,label)=>{const current=slot==="armor"?p.equipment.armor:(Object.prototype.hasOwnProperty.call(p.equipment,slot+"Style")?p.equipment[slot+"Style"]:p.equipment.armor);return '<div class="equipSlot"><b>'+label+'</b><select class="input" data-armor-part="'+slot+'" aria-label="'+label+'" onchange="setEquipment(\''+slot+'\',this.value)">'+makeOpts(armorStyles,current,"Nessun pezzo")+'</select></div>'};
+const armorSelect=(slot,label)=>{const current=slot==="armor"?p.equipment.armor:p.equipment[slot+"Style"];return '<div class="equipSlot"><b>'+label+'</b><select class="input" data-armor-part="'+slot+'" aria-label="'+label+'" onchange="setEquipment(\''+slot+'\',this.value)">'+makeOpts(armorStyles,current,"Nessun pezzo")+'</select></div>'};
 const stats=p.stats?Object.entries(p.stats).map(([k,v])=>'<span>'+(statNames[k]||k)+': '+v+'</span>').join(""):"";
 const weaponLoot=lootMeta(p.equipment.weapon),armorBonus=equipmentArmorDefense(p);
 const weaponPower=weaponLoot?weaponLoot.physical:(({Spada:2,Ascia:3,Martello:3,Pugnale:1,Arco:3,Bastone:2,Scudo:0,Lancia:4})[p.equipment.weapon]||0);
