@@ -132,7 +132,7 @@ try {
   ];
   for(const [id,name] of models){
     for(const gender of ["M","F"]){
-      const person={raceId:id,race:name,gender,equipment:{armor:"Armatura_guerriero",head:["human","elf","orc"].includes(id)?"Elmo_drago":"",hair:"Capelli mossi"}};
+      const person={raceId:id,race:name,gender,equipment:{armor:"Armatura_guerriero",shouldersStyle:"Armatura_guerriero",armsStyle:"Armatura_guerriero",legsStyle:"Armatura_guerriero",bootsStyle:"Armatura_guerriero",head:["human","elf","orc"].includes(id)?"Elmo_drago":"",hair:"Capelli mossi"}};
       for(const partSlot of ["armor","shoulders","arms","legs","boots"]){
         const raw=renderer.equipmentLayerData(person,partSlot),parts=Array.isArray(raw)?raw:raw?[raw]:[];
         if(!parts.length)throw new Error("parte armatura assente per "+name+" "+gender+" "+partSlot);
