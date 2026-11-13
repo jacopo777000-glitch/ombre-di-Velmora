@@ -55,7 +55,13 @@ for (const css of styles) for (const match of css.matchAll(/url\(["']?([^"')]+)[
 for (const code of scripts) {
   for (const match of code.matchAll(/["']([^"']+?\.(?:png|jpe?g|webp|gif|svg|mp3|json|ogg|wav)(?:\.JPG){0,2})["']/gi)) addPath(match[1]);
 }
-for (const entry of Object.values(manifest)) if (entry && entry.file) referenced.add(entry.file);
+for (const entry of Object.values(manifest)) {
+  if (entry && entry.file) referenced.add(entry.file);
+  for (const list of Object.values(entry?.parts || {})) for (const part of (list || [])) if (part && part.file) referenced.add(part.file);
+}
+const modularPartCount = Object.values(manifest).flatMap(entry => Object.values(entry?.parts || {}).flat()).length;
+if (modularPartCount !== 36) fail("Attese 36 parti PNG modulari, trovate " + modularPartCount);
+else pass("Parti armatura modulari nel manifest: " + modularPartCount);
 
 for (const file of [...referenced].sort()) {
   const full = path.resolve(root, file);
@@ -129,7 +135,7 @@ try {
         const raw=renderer.equipmentLayerData(person,partSlot),parts=Array.isArray(raw)?raw:raw?[raw]:[];
         if(!parts.length)throw new Error("parte armatura assente per "+name+" "+gender+" "+partSlot);
         for(const armor of parts){
-          if(armor.w<.40||armor.w>.52||armor.h<.68||armor.h>.82||armor.x<0||armor.y<.14||armor.y>.30||armor.x+armor.w>1||armor.y+armor.h>1||!armor.clip||!Array.isArray(armor.points)||armor.points.length<4){
+          if(armor.modular?(!String(armor.src||"").includes("assets/equip/modular/")||armor.w<=0||armor.h<=0||armor.x<0||armor.y<0||armor.x+armor.w>1||armor.y+armor.h>1):(armor.w<.40||armor.w>.52||armor.h<.68||armor.h>.82||armor.x<0||armor.y<.14||armor.y>.30||armor.x+armor.w>1||armor.y+armor.h>1||!armor.clip||!Array.isArray(armor.points)||armor.points.length<4)){
             throw new Error("fit parte armatura fuori area per "+name+" "+gender+" "+partSlot+": "+JSON.stringify(armor));
           }
         }
@@ -144,7 +150,7 @@ try {
       }
     }
   }
-  const lootArmorMap=[["Armatura di Scaglie","assets/equip/Armatura_guerriero.png"],["Corazza del Viandante","assets/equip/Armatura_arciere.png"],["Veste Lunare","assets/equip/Armatura_mago.png"],["Mantello del Bosco","assets/equip/Armatura_druido.png"]];
+  const lootArmorMap=[["Armatura di Scaglie","assets/equip/modular/Armatura_guerriero_armor_01.png"],["Corazza del Viandante","assets/equip/modular/Armatura_arciere_armor_01.png"],["Veste Lunare","assets/equip/modular/Armatura_mago_armor_01.png"],["Mantello del Bosco","assets/equip/modular/Armatura_druido_armor_01.png"]];
   for(const [name,src] of lootArmorMap){
     const layers=renderer.equipmentLayerData({race:"Umano",gender:"M",equipment:{armor:name}},"armor");
     if(!Array.isArray(layers)||!layers.length||layers[0].src!==src)throw new Error("armatura loot senza grafica: "+name);

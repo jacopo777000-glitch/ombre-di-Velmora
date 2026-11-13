@@ -175,10 +175,10 @@ try {
     const hero=G.hero,backup={race:hero.race,raceId:hero.raceId,gender:hero.gender,portrait:hero.portrait,equipment:JSON.parse(JSON.stringify(hero.equipment||{})),armor:hero.armor,baseArmor:hero.baseArmor};
     hero.race="Umano";hero.raceId="human";hero.gender="M";hero.portrait="modello_umano_maschile.png.JPG.JPG";
     const armorItems=[
-      ["Armatura di Scaglie","assets/equip/Armatura_guerriero.png"],
-      ["Corazza del Viandante","assets/equip/Armatura_arciere.png"],
-      ["Veste Lunare","assets/equip/Armatura_mago.png"],
-      ["Mantello del Bosco","assets/equip/Armatura_druido.png"]
+      ["Armatura di Scaglie","assets/equip/modular/Armatura_guerriero_armor_01.png"],
+      ["Corazza del Viandante","assets/equip/modular/Armatura_arciere_armor_01.png"],
+      ["Veste Lunare","assets/equip/modular/Armatura_mago_armor_01.png"],
+      ["Mantello del Bosco","assets/equip/modular/Armatura_druido_armor_01.png"]
     ];
     const headItems=[
       ["Cappuccio dell'Oracolo","assets/equip/Cappello_mago.png"],
@@ -291,16 +291,13 @@ try {
         renderBattle();
         const art=document.querySelector('#partyList [data-unit-id="hero"] .unitArt');
         const loaded=await settle(art);
-        const armor=art.querySelector('[data-equipment-slot="armor"]');
         const head=art.querySelector('[data-equipment-slot="head"]');
         const hair=art.querySelector('[data-equipment-slot="hair"]');
-        const artRect=art.getBoundingClientRect(),armorRect=armor?.getBoundingClientRect();
-        const geometry=armorRect?{
-          x:(armorRect.left-artRect.left)/artRect.width,
-          y:(armorRect.top-artRect.top)/artRect.height,
-          w:armorRect.width/artRect.width,
-          h:armorRect.height/artRect.height
-        }:null;
+        const artRect=art.getBoundingClientRect();
+        const armorLayers=[...art.querySelectorAll('[data-equipment-slot="armor"],[data-equipment-slot="shoulders"],[data-equipment-slot="arms"],[data-equipment-slot="legs"],[data-equipment-slot="boots"]')];
+        const rects=armorLayers.map(el=>el.getBoundingClientRect());
+        const union=rects.length?{left:Math.min(...rects.map(r=>r.left)),top:Math.min(...rects.map(r=>r.top)),right:Math.max(...rects.map(r=>r.right)),bottom:Math.max(...rects.map(r=>r.bottom))}:null;
+        const geometry=union?{x:(union.left-artRect.left)/artRect.width,y:(union.top-artRect.top)/artRect.height,w:(union.right-union.left)/artRect.width,h:(union.bottom-union.top)/artRect.height}:null;
         if(!loaded||!geometry||geometry.w<.40||geometry.w>.52||geometry.h<.68||geometry.h>.82||geometry.x<0||geometry.y<.14||geometry.y>.25||geometry.x+geometry.w>1||geometry.y+geometry.h>1){
           throw new Error("armatura fuori geometria o asset non caricato su "+race+" "+gender+": "+JSON.stringify({loaded,geometry}));
         }
@@ -310,7 +307,7 @@ try {
             const raw=equipmentLayerData(hero,partSlot),parts=Array.isArray(raw)?raw:raw?[raw]:[];
             if(!parts.length)throw new Error("profilo armatura assente: "+race+" "+gender+" "+armorName+" "+partSlot);
             for(const d of parts){
-              if(d.w<.40||d.w>.52||d.h<.68||d.h>.82||d.x<0||d.y<.14||d.y>.30||d.x+d.w>1||d.y+d.h>1||!d.clip||!d.points?.length){
+              if(!d.modular||!String(d.src||"").includes("assets/equip/modular/")||d.w<=0||d.h<=0||d.x<0||d.y<0||d.x+d.w>1||d.y+d.h>1){
                 throw new Error("profilo parte armatura non valido: "+race+" "+gender+" "+armorName+" "+partSlot+" "+JSON.stringify(d));
               }
               armorPartFits++;
@@ -371,7 +368,11 @@ try {
     }
     if(transparencyChecks.length!==16)throw new Error("attesi 16 overlay equipaggiamento, controllati "+transparencyChecks.length);
     Object.assign(hero,backup);renderBattle();
-    return {models:results,transparentOverlays:transparencyChecks};
+    const modularFiles=[...new Set(Object.values(equipmentManifest).flatMap(entry=>Object.values(entry.parts||{}).flat().map(part=>part.file)))];
+    const modularTransparencyChecks=[];
+    for(const file of modularFiles){const source=new Image();source.src=file;await source.decode();const c=document.createElement("canvas");c.width=32;c.height=32;const ctx=c.getContext("2d",{willReadFrequently:true});ctx.drawImage(source,0,0,32,32);const data=ctx.getImageData(0,0,32,32).data;let transparent=0,visible=0;for(let i=3;i<data.length;i+=4){if(data[i]<16)transparent++;if(data[i]>240)visible++;}if(!transparent||!visible)throw new Error("PNG modulare senza trasparenza o pixel visibili: "+file);modularTransparencyChecks.push(file);}
+    if(modularTransparencyChecks.length!==36)throw new Error("attese 36 immagini modulari, controllate "+modularTransparencyChecks.length);
+    return {models:results,transparentOverlays:transparencyChecks,modularParts:modularTransparencyChecks};
   });
   console.log("PASS: 432 parti modulari armatura, copricapi e capelli su tutti i 12 modelli originali; ritaglio trasparente",allRaceEquipment);
 
