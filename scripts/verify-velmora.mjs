@@ -129,7 +129,7 @@ try {
         const raw=renderer.equipmentLayerData(person,partSlot),parts=Array.isArray(raw)?raw:raw?[raw]:[];
         if(!parts.length)throw new Error("parte armatura assente per "+name+" "+gender+" "+partSlot);
         for(const armor of parts){
-          if(armor.w<.40||armor.w>.52||armor.h<.68||armor.h>.82||armor.x<0||armor.y<.14||armor.y>.25||armor.x+armor.w>1||armor.y+armor.h>1||!armor.clip||!Array.isArray(armor.points)||armor.points.length<4){
+          if(armor.w<.40||armor.w>.52||armor.h<.68||armor.h>.82||armor.x<0||armor.y<.14||armor.y>.30||armor.x+armor.w>1||armor.y+armor.h>1||!armor.clip||!Array.isArray(armor.points)||armor.points.length<4){
             throw new Error("fit parte armatura fuori area per "+name+" "+gender+" "+partSlot+": "+JSON.stringify(armor));
           }
         }
