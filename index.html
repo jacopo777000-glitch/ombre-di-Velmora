@@ -1695,7 +1695,7 @@ function equipmentLayerData(u,slot){
  const headVisualMap={"Cappuccio dell'Oracolo":"Cappello_mago","Elmo del Drago Antico":"Elmo_drago","Maschera del Predatore":"Cappello_punk"};
  if(["armor","shoulders","arms","legs","boots"].includes(slot)){
   if(slot!=="armor"&&eq[slot]===false)return null;
-  const rawStyle=slot==="armor"?eq.armor:(eq[slot+"Style"]||eq.armor);
+  const rawStyle=slot==="armor"?eq.armor:(Object.prototype.hasOwnProperty.call(eq,slot+"Style")?eq[slot+"Style"]:eq.armor);
   const style=armorVisualMap[rawStyle]||rawStyle,key=maps.armor[style],d=key&&equipmentManifest[key];
   if(!d||!d.file||!Number(d.width)||!Number(d.height))return null;
   const race=equipmentRaceId(u),gender=isFemaleCharacter(u)?"F":"M";
@@ -2108,10 +2108,12 @@ return base;
 }
 function equipmentArmorDefense(p){
  const eq=p&&p.equipment||{},meta=lootMeta(eq.armor),base=meta?meta.defense:({Armatura_guerriero:3,Armatura_arciere:2,Armatura_druido:2,Armatura_mago:1})[eq.armor]||0;
- const coverage=.36+(eq.shoulders===false?0:.14)+(eq.arms===false?0:.14)+(eq.legs===false?0:.22)+(eq.boots===false?0:.14);
+ const hasPart=slot=>Object.prototype.hasOwnProperty.call(eq,slot+"Style")?!!eq[slot+"Style"]:eq[slot]!==false&&!!eq.armor;
+ const coverage=.36+(hasPart("shoulders")?.14:0)+(hasPart("arms")?.14:0)+(hasPart("legs")?.22:0)+(hasPart("boots")?.14:0);
  const head=lootMeta(eq.head);
  return Math.round(base*coverage*10)/10+(head?head.defense:0);
 }
+
 function renderCharacterScreen(){
 if(!G||!$("characterScreen").classList.contains("open"))return;
 const p=characterMembers().find(x=>(x.isHero?"hero":String(x.id))===String(selectedEquipmentMember))||G.hero;
