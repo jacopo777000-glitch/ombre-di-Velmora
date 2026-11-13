@@ -7,7 +7,9 @@
     "width": 179,
     "height": 250,
     "sourceWidth": 912,
-    "sourceHeight": 962
+    "sourceHeight": 962,
+    "transparentRatio": 0.885,
+    "opaqueRatio": 0.115
   },
   "Capelli_coda_lunga.jpg": {
     "file": "assets/equip/Capelli_coda_lunga.png",
@@ -17,7 +19,9 @@
     "width": 159,
     "height": 172,
     "sourceWidth": 912,
-    "sourceHeight": 964
+    "sourceHeight": 964,
+    "transparentRatio": 0.91,
+    "opaqueRatio": 0.09
   },
   "Capelli_lunghi.jpg": {
     "file": "assets/equip/Capelli_lunghi.png",
@@ -27,7 +31,9 @@
     "width": 181,
     "height": 206,
     "sourceWidth": 912,
-    "sourceHeight": 956
+    "sourceHeight": 956,
+    "transparentRatio": 0.868,
+    "opaqueRatio": 0.132
   },
   "Capelli_mossi.jpg": {
     "file": "assets/equip/Capelli_mossi.png",
@@ -37,7 +43,9 @@
     "width": 126,
     "height": 123,
     "sourceWidth": 912,
-    "sourceHeight": 987
+    "sourceHeight": 987,
+    "transparentRatio": 0.949,
+    "opaqueRatio": 0.051
   },
   "Capelli_rasati_lato.jpg": {
     "file": "assets/equip/Capelli_rasati_lato.png",
@@ -47,7 +55,9 @@
     "width": 139,
     "height": 134,
     "sourceWidth": 909,
-    "sourceHeight": 975
+    "sourceHeight": 975,
+    "transparentRatio": 0.935,
+    "opaqueRatio": 0.065
   },
   "Capelli_rasta.jpg": {
     "file": "assets/equip/Capelli_rasta.png",
@@ -57,7 +67,9 @@
     "width": 194,
     "height": 266,
     "sourceWidth": 912,
-    "sourceHeight": 983
+    "sourceHeight": 983,
+    "transparentRatio": 0.816,
+    "opaqueRatio": 0.184
   },
   "Capelli_spettinati.jpg": {
     "file": "assets/equip/Capelli_spettinati.png",
@@ -67,7 +79,9 @@
     "width": 161,
     "height": 135,
     "sourceWidth": 912,
-    "sourceHeight": 983
+    "sourceHeight": 983,
+    "transparentRatio": 0.899,
+    "opaqueRatio": 0.101
   },
   "Capelli_trecce.jpg": {
     "file": "assets/equip/Capelli_trecce.png",
@@ -77,17 +91,21 @@
     "width": 113,
     "height": 135,
     "sourceWidth": 912,
-    "sourceHeight": 988
+    "sourceHeight": 988,
+    "transparentRatio": 0.969,
+    "opaqueRatio": 0.031
   },
   "Armatura_arciere.JPG": {
     "file": "assets/equip/Armatura_arciere.png",
     "group": "armor",
-    "x": 313,
-    "y": 82,
-    "width": 493,
-    "height": 1033,
+    "x": 314,
+    "y": 85,
+    "width": 491,
+    "height": 1030,
     "sourceWidth": 912,
-    "sourceHeight": 1163
+    "sourceHeight": 1163,
+    "transparentRatio": 0.667,
+    "opaqueRatio": 0.333
   },
   "Armatura_druido.JPG": {
     "file": "assets/equip/Armatura_druido.png",
@@ -97,17 +115,21 @@
     "width": 686,
     "height": 967,
     "sourceWidth": 912,
-    "sourceHeight": 1168
+    "sourceHeight": 1168,
+    "transparentRatio": 0.525,
+    "opaqueRatio": 0.475
   },
   "Armatura_guerriero.JPG": {
     "file": "assets/equip/Armatura_guerriero.png",
     "group": "armor",
-    "x": 328,
-    "y": 104,
-    "width": 508,
-    "height": 1010,
+    "x": 330,
+    "y": 105,
+    "width": 506,
+    "height": 1009,
     "sourceWidth": 912,
-    "sourceHeight": 1162
+    "sourceHeight": 1162,
+    "transparentRatio": 0.684,
+    "opaqueRatio": 0.316
   },
   "Armatura_mago.JPG": {
     "file": "assets/equip/Armatura_mago.png",
@@ -117,17 +139,21 @@
     "width": 610,
     "height": 967,
     "sourceWidth": 912,
-    "sourceHeight": 1168
+    "sourceHeight": 1168,
+    "transparentRatio": 0.559,
+    "opaqueRatio": 0.441
   },
   "Cappello_mago.JPG": {
     "file": "assets/equip/Cappello_mago.png",
     "group": "headgear",
-    "x": 295,
-    "y": 40,
-    "width": 318,
-    "height": 232,
+    "x": 297,
+    "y": 41,
+    "width": 316,
+    "height": 231,
     "sourceWidth": 912,
-    "sourceHeight": 1168
+    "sourceHeight": 1168,
+    "transparentRatio": 0.895,
+    "opaqueRatio": 0.105
   },
   "Cappello_punk.JPG": {
     "file": "assets/equip/Cappello_punk.png",
@@ -137,17 +163,21 @@
     "width": 244,
     "height": 219,
     "sourceWidth": 912,
-    "sourceHeight": 1169
+    "sourceHeight": 1169,
+    "transparentRatio": 0.882,
+    "opaqueRatio": 0.118
   },
   "Elmo_drago.JPG": {
     "file": "assets/equip/Elmo_drago.png",
     "group": "headgear",
     "x": 350,
-    "y": 24,
-    "width": 239,
-    "height": 320,
+    "y": 26,
+    "width": 237,
+    "height": 318,
     "sourceWidth": 912,
-    "sourceHeight": 1168
+    "sourceHeight": 1168,
+    "transparentRatio": 0.882,
+    "opaqueRatio": 0.118
   },
   "Elmo_leone.JPG": {
     "file": "assets/equip/Elmo_leone.png",
@@ -157,6 +187,8 @@
     "width": 369,
     "height": 249,
     "sourceWidth": 912,
-    "sourceHeight": 1162
+    "sourceHeight": 1162,
+    "transparentRatio": 0.836,
+    "opaqueRatio": 0.164
   }
 }
