@@ -105,7 +105,82 @@
     "sourceWidth": 912,
     "sourceHeight": 1163,
     "transparentRatio": 0.667,
-    "opaqueRatio": 0.333
+    "opaqueRatio": 0.333,
+    "parts": {
+      "armor": [
+        {
+          "file": "assets/equip/modular/Armatura_arciere_armor_01.png",
+          "x": 357,
+          "y": 137,
+          "width": 435,
+          "height": 446
+        }
+      ],
+      "shoulders": [
+        {
+          "file": "assets/equip/modular/Armatura_arciere_shoulders_01.png",
+          "x": 355,
+          "y": 165,
+          "width": 168,
+          "height": 248
+        },
+        {
+          "file": "assets/equip/modular/Armatura_arciere_shoulders_02.png",
+          "x": 639,
+          "y": 104,
+          "width": 153,
+          "height": 317
+        }
+      ],
+      "arms": [
+        {
+          "file": "assets/equip/modular/Armatura_arciere_arms_01.png",
+          "x": 317,
+          "y": 333,
+          "width": 151,
+          "height": 440
+        },
+        {
+          "file": "assets/equip/modular/Armatura_arciere_arms_02.png",
+          "x": 657,
+          "y": 320,
+          "width": 147,
+          "height": 445
+        }
+      ],
+      "legs": [
+        {
+          "file": "assets/equip/modular/Armatura_arciere_legs_01.png",
+          "x": 349,
+          "y": 548,
+          "width": 244,
+          "height": 434
+        },
+        {
+          "file": "assets/equip/modular/Armatura_arciere_legs_02.png",
+          "x": 572,
+          "y": 549,
+          "width": 197,
+          "height": 434
+        }
+      ],
+      "boots": [
+        {
+          "file": "assets/equip/modular/Armatura_arciere_boots_01.png",
+          "x": 392,
+          "y": 872,
+          "width": 139,
+          "height": 242
+        },
+        {
+          "file": "assets/equip/modular/Armatura_arciere_boots_02.png",
+          "x": 633,
+          "y": 870,
+          "width": 151,
+          "height": 244
+        }
+      ]
+    }
   },
   "Armatura_druido.JPG": {
     "file": "assets/equip/Armatura_druido.png",
@@ -117,7 +192,82 @@
     "sourceWidth": 912,
     "sourceHeight": 1168,
     "transparentRatio": 0.525,
-    "opaqueRatio": 0.475
+    "opaqueRatio": 0.475,
+    "parts": {
+      "armor": [
+        {
+          "file": "assets/equip/modular/Armatura_druido_armor_01.png",
+          "x": 347,
+          "y": 197,
+          "width": 436,
+          "height": 506
+        }
+      ],
+      "shoulders": [
+        {
+          "file": "assets/equip/modular/Armatura_druido_shoulders_01.png",
+          "x": 228,
+          "y": 249,
+          "width": 295,
+          "height": 254
+        },
+        {
+          "file": "assets/equip/modular/Armatura_druido_shoulders_02.png",
+          "x": 607,
+          "y": 178,
+          "width": 228,
+          "height": 335
+        }
+      ],
+      "arms": [
+        {
+          "file": "assets/equip/modular/Armatura_druido_arms_01.png",
+          "x": 239,
+          "y": 377,
+          "width": 219,
+          "height": 446
+        },
+        {
+          "file": "assets/equip/modular/Armatura_druido_arms_02.png",
+          "x": 617,
+          "y": 357,
+          "width": 218,
+          "height": 466
+        }
+      ],
+      "legs": [
+        {
+          "file": "assets/equip/modular/Armatura_druido_legs_01.png",
+          "x": 324,
+          "y": 608,
+          "width": 279,
+          "height": 475
+        },
+        {
+          "file": "assets/equip/modular/Armatura_druido_legs_02.png",
+          "x": 557,
+          "y": 608,
+          "width": 264,
+          "height": 451
+        }
+      ],
+      "boots": [
+        {
+          "file": "assets/equip/modular/Armatura_druido_boots_01.png",
+          "x": 323,
+          "y": 899,
+          "width": 209,
+          "height": 220
+        },
+        {
+          "file": "assets/equip/modular/Armatura_druido_boots_02.png",
+          "x": 582,
+          "y": 898,
+          "width": 244,
+          "height": 221
+        }
+      ]
+    }
   },
   "Armatura_guerriero.JPG": {
     "file": "assets/equip/Armatura_guerriero.png",
@@ -129,7 +279,82 @@
     "sourceWidth": 912,
     "sourceHeight": 1162,
     "transparentRatio": 0.684,
-    "opaqueRatio": 0.316
+    "opaqueRatio": 0.316,
+    "parts": {
+      "armor": [
+        {
+          "file": "assets/equip/modular/Armatura_guerriero_armor_01.png",
+          "x": 406,
+          "y": 153,
+          "width": 387,
+          "height": 420
+        }
+      ],
+      "shoulders": [
+        {
+          "file": "assets/equip/modular/Armatura_guerriero_shoulders_01.png",
+          "x": 385,
+          "y": 181,
+          "width": 133,
+          "height": 242
+        },
+        {
+          "file": "assets/equip/modular/Armatura_guerriero_shoulders_02.png",
+          "x": 677,
+          "y": 145,
+          "width": 158,
+          "height": 278
+        }
+      ],
+      "arms": [
+        {
+          "file": "assets/equip/modular/Armatura_guerriero_arms_01.png",
+          "x": 334,
+          "y": 339,
+          "width": 134,
+          "height": 424
+        },
+        {
+          "file": "assets/equip/modular/Armatura_guerriero_arms_02.png",
+          "x": 687,
+          "y": 318,
+          "width": 148,
+          "height": 436
+        }
+      ],
+      "legs": [
+        {
+          "file": "assets/equip/modular/Armatura_guerriero_legs_01.png",
+          "x": 388,
+          "y": 533,
+          "width": 205,
+          "height": 469
+        },
+        {
+          "file": "assets/equip/modular/Armatura_guerriero_legs_02.png",
+          "x": 582,
+          "y": 536,
+          "width": 221,
+          "height": 467
+        }
+      ],
+      "boots": [
+        {
+          "file": "assets/equip/modular/Armatura_guerriero_boots_01.png",
+          "x": 371,
+          "y": 868,
+          "width": 178,
+          "height": 245
+        },
+        {
+          "file": "assets/equip/modular/Armatura_guerriero_boots_02.png",
+          "x": 629,
+          "y": 868,
+          "width": 168,
+          "height": 245
+        }
+      ]
+    }
   },
   "Armatura_mago.JPG": {
     "file": "assets/equip/Armatura_mago.png",
@@ -141,7 +366,82 @@
     "sourceWidth": 912,
     "sourceHeight": 1168,
     "transparentRatio": 0.559,
-    "opaqueRatio": 0.441
+    "opaqueRatio": 0.441,
+    "parts": {
+      "armor": [
+        {
+          "file": "assets/equip/modular/Armatura_mago_armor_01.png",
+          "x": 297,
+          "y": 177,
+          "width": 506,
+          "height": 546
+        }
+      ],
+      "shoulders": [
+        {
+          "file": "assets/equip/modular/Armatura_mago_shoulders_01.png",
+          "x": 269,
+          "y": 175,
+          "width": 264,
+          "height": 348
+        },
+        {
+          "file": "assets/equip/modular/Armatura_mago_shoulders_02.png",
+          "x": 607,
+          "y": 154,
+          "width": 228,
+          "height": 369
+        }
+      ],
+      "arms": [
+        {
+          "file": "assets/equip/modular/Armatura_mago_arms_01.png",
+          "x": 236,
+          "y": 346,
+          "width": 227,
+          "height": 477
+        },
+        {
+          "file": "assets/equip/modular/Armatura_mago_arms_02.png",
+          "x": 617,
+          "y": 328,
+          "width": 218,
+          "height": 495
+        }
+      ],
+      "legs": [
+        {
+          "file": "assets/equip/modular/Armatura_mago_legs_01.png",
+          "x": 306,
+          "y": 618,
+          "width": 296,
+          "height": 485
+        },
+        {
+          "file": "assets/equip/modular/Armatura_mago_legs_02.png",
+          "x": 559,
+          "y": 620,
+          "width": 275,
+          "height": 463
+        }
+      ],
+      "boots": [
+        {
+          "file": "assets/equip/modular/Armatura_mago_boots_01.png",
+          "x": 325,
+          "y": 930,
+          "width": 201,
+          "height": 189
+        },
+        {
+          "file": "assets/equip/modular/Armatura_mago_boots_02.png",
+          "x": 583,
+          "y": 928,
+          "width": 243,
+          "height": 191
+        }
+      ]
+    }
   },
   "Cappello_mago.JPG": {
     "file": "assets/equip/Cappello_mago.png",
@@ -191,4 +491,4 @@
     "transparentRatio": 0.836,
     "opaqueRatio": 0.164
   }
-}
+}\n
