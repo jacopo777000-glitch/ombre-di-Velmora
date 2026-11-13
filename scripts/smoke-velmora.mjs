@@ -171,6 +171,50 @@ try {
     return {parts:names,hidden,restored};
   });
   console.log("PASS: schermata equipaggiamento espone quattro controlli modulari",modularUi);
+  const lootVisualChecks = await page.evaluate(async () => {
+    const hero=G.hero,backup={race:hero.race,raceId:hero.raceId,gender:hero.gender,portrait:hero.portrait,equipment:JSON.parse(JSON.stringify(hero.equipment||{})),armor:hero.armor,baseArmor:hero.baseArmor};
+    hero.race="Umano";hero.raceId="human";hero.gender="M";hero.portrait="modello_umano_maschile.png.JPG.JPG";
+    const armorItems=[
+      ["Armatura di Scaglie","assets/equip/Armatura_guerriero.png"],
+      ["Corazza del Viandante","assets/equip/Armatura_arciere.png"],
+      ["Veste Lunare","assets/equip/Armatura_mago.png"],
+      ["Mantello del Bosco","assets/equip/Armatura_druido.png"]
+    ];
+    const headItems=[
+      ["Cappuccio dell'Oracolo","assets/equip/Cappello_mago.png"],
+      ["Elmo del Drago Antico","assets/equip/Elmo_drago.png"],
+      ["Maschera del Predatore","assets/equip/Cappello_punk.png"]
+    ];
+    const checked=[];
+    async function settle(art){await Promise.all([...art.querySelectorAll("img")].map(img=>img.decode().catch(()=>null)))}
+    for(const [name,src] of armorItems){
+      hero.equipment={armor:name,shoulders:true,arms:true,legs:true,boots:true,head:"",hair:"",weapon:"Spada"};
+      renderBattle();
+      const art=document.querySelector('#partyList [data-unit-id="hero"] .unitArt');
+      await settle(art);
+      const layer=art.querySelector('[data-equipment-slot="armor"]');
+      if(!layer||layer.getAttribute("src")!==src||!layer.complete||!layer.naturalWidth)throw new Error("armatura loot non visibile: "+name);
+      checked.push({name,src});
+    }
+    for(const [name,src] of headItems){
+      hero.equipment={armor:"Armatura_guerriero",shoulders:true,arms:true,legs:true,boots:true,head:name,hair:"Capelli mossi",weapon:"Spada"};
+      renderBattle();
+      const art=document.querySelector('#partyList [data-unit-id="hero"] .unitArt');
+      await settle(art);
+      const layer=art.querySelector('[data-equipment-slot="head"]');
+      if(!layer||layer.getAttribute("src")!==src||!layer.complete||!layer.naturalWidth||art.querySelector('[data-equipment-slot="hair"]'))throw new Error("copricapo loot non visibile o non nasconde capelli: "+name);
+      checked.push({name,src});
+    }
+    selectedEquipmentMember="hero";
+    hero.equipment={armor:"Armatura_guerriero",shoulders:true,arms:true,legs:true,boots:true,head:"",hair:"",weapon:"Spada"};
+    hero.baseArmor=1;hero.armor=1;hero.equipment.armorBonus=0;
+    setEquipment("arms",false);const reduced=hero.armor;
+    setEquipment("arms",true);const restored=hero.armor;
+    if(!(reduced<restored)||Math.abs(restored-4)>0.001)throw new Error("difesa modulare accumulata o non ricalcolata: "+JSON.stringify({reduced,restored}));
+    Object.assign(hero,backup);renderBattle();
+    return {items:checked,reducedDefense:reduced,restoredDefense:restored};
+  });
+  console.log("PASS: grafica di sette oggetti loot e difesa modulare senza accumulo",lootVisualChecks);
 
   // Capture a 12-model visual diagnostic to inspect race/sex fit, not just numeric bounds.
   await page.evaluate(async () => {
