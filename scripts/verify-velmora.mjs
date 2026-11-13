@@ -115,12 +115,14 @@ try {
   }
   const renderer = makeRenderer(name => name, sample, () => '<svg class="weaponLayer"></svg>');
   const render = renderer.equipmentLayers;
-  const equipped = render({portrait:"hero.png",name:"Prova",race:"Umano",gender:"M",equipment:{armor:"Armatura_guerriero",shoulders:true,arms:true,legs:true,boots:true,head:"Elmo_drago",hair:"Capelli mossi",weapon:"Spada"}});
+  const equipped = render({portrait:"hero.png",name:"Prova",race:"Umano",gender:"M",equipment:{armor:"Armatura_guerriero",shouldersStyle:"Armatura_guerriero",armsStyle:"Armatura_guerriero",legsStyle:"Armatura_guerriero",bootsStyle:"Armatura_guerriero",head:"Elmo_drago",hair:"Capelli mossi",weapon:"Spada"}});
   for(const slot of ["armor","shoulders","arms","legs","boots"])if(!equipped.includes('data-equipment-slot="'+slot+'"'))throw new Error("parte modulare non renderizzata: "+slot);
   if (!equipped.includes('data-equipment-slot="head"') || equipped.includes('data-equipment-slot="hair"')) throw new Error("elmo non nasconde i capelli");
+  const torsoOnly=render({portrait:"hero.png",name:"Prova",race:"Umano",gender:"M",equipment:{armor:"Armatura_guerriero",head:"",hair:"",weapon:"Spada"}});
+  for(const slot of ["shoulders","arms","legs","boots"])if(torsoOnly.includes('data-equipment-slot="'+slot+'"'))throw new Error("il torso equipaggia automaticamente "+slot);
   const bareHead = render({portrait:"hero.png",name:"Prova",race:"Umano",gender:"M",equipment:{armor:"Armatura_guerriero",head:"",hair:"Capelli mossi",weapon:"Spada"}});
   if (!bareHead.includes('data-equipment-slot="hair"')) throw new Error("capelli non ripristinati rimuovendo l'elmo");
-  const noArms=render({portrait:"hero.png",name:"Prova",race:"Umano",gender:"M",equipment:{armor:"Armatura_guerriero",arms:false,head:"",hair:"",weapon:"Spada"}});
+  const noArms=render({portrait:"hero.png",name:"Prova",race:"Umano",gender:"M",equipment:{armor:"Armatura_guerriero",shouldersStyle:"Armatura_guerriero",arms:false,legsStyle:"Armatura_guerriero",bootsStyle:"Armatura_guerriero",head:"",hair:"",weapon:"Spada"}});
   if(noArms.includes('data-equipment-slot="arms"'))throw new Error("braccia non rimovibili separatamente");
   if (!(equipped.indexOf('data-equipment-slot="legs"') < equipped.indexOf('data-equipment-slot="head"'))) throw new Error("ordine dei layer modulari non valido");
   const beast = render({portrait:"wolf.png",name:"Lupo",race:"Popolo Lupo",gender:"M",equipment:{armor:"Armatura_guerriero",head:"Elmo_drago",hair:"Capelli mossi",weapon:"Ascia"}});
