@@ -103,7 +103,7 @@ try {
   const layerCode = html.slice(layerStart, layerEnd);
   const makeRenderer = new Function("asset", "equipmentManifest", "weaponSvgFor", helperCode + ";" + layerCode + "; return {equipmentLayers,equipmentLayerData,equipmentHairData};");
   const sample = {};
-  for (const key of ["Armatura_arciere.JPG", "Armatura_druido.JPG", "Armatura_guerriero.JPG", "Armatura_mago.JPG", "Elmo_drago.JPG", "Capelli_mossi.jpg"]) {
+  for (const key of ["Armatura_arciere.JPG", "Armatura_druido.JPG", "Armatura_guerriero.JPG", "Armatura_mago.JPG", "Cappello_mago.JPG", "Cappello_punk.JPG", "Elmo_drago.JPG", "Capelli_mossi.jpg"]) {
     if(!manifest[key])throw new Error("voce manifest non trovata per "+key);
     sample[key] = manifest[key];
   }
