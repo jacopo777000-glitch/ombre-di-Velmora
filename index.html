@@ -1693,7 +1693,7 @@ function equipmentLayerData(u,slot){
  };
  if(["armor","shoulders","arms","legs","boots"].includes(slot)){
   if(slot!=="armor"&&eq[slot]===false)return null;
-  const style=eq.armor,partStyle=slot==="arms"?(eq.armsStyle||(style==="Armatura_guerriero"?"Armatura_arciere":style)):style,key=maps.armor[partStyle],d=key&&equipmentManifest[key];
+  const style=eq.armor,partStyle=(slot==="shoulders"||slot==="arms"||slot==="boots")?(eq[slot+"Style"]||(style==="Armatura_guerriero"?"Armatura_arciere":style)):style,key=maps.armor[partStyle],d=key&&equipmentManifest[key];
   const regions=armorPartPolygons[partStyle]&&armorPartPolygons[partStyle][slot];
   if(!d||!d.file||!regions||!Number(d.width)||!Number(d.height))return null;
   const race=equipmentRaceId(u),gender=isFemaleCharacter(u)?"F":"M";
@@ -1712,7 +1712,7 @@ function equipmentLayerData(u,slot){
     Math.max(0,Math.min(100,(px-Number(d.x||0))/Number(d.width)*100)),
     Math.max(0,Math.min(100,(py-Number(d.y||0))/Number(d.height)*100))
    ]);
-   const sideOffset=(slot==="shoulders"||slot==="arms"||slot==="legs"||slot==="boots")?(index===0?-4:4):0;
+   const sideOffset=slot==="boots"?(index===0?-18:4):(slot==="shoulders"||slot==="arms"||slot==="legs")?(index===0?-4:4):0;
    const verticalOffset=slot==="shoulders"?-2:slot==="boots"?34:0;
    const widthScale=slot==="arms"?1.012:1,heightScale=slot==="arms"?1.008:1;
    const clip="polygon("+points.map(p=>p[0].toFixed(2)+"% "+p[1].toFixed(2)+"%").join(",")+")";
