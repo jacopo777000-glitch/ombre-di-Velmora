@@ -122,11 +122,15 @@ try {
       let imgs=await settleImages(art);
       const covered={
         armor:!!art.querySelector('[data-equipment-slot="armor"]'),
+        shoulders:!!art.querySelector('[data-equipment-slot="shoulders"]'),
+        arms:!!art.querySelector('[data-equipment-slot="arms"]'),
+        legs:!!art.querySelector('[data-equipment-slot="legs"]'),
+        boots:!!art.querySelector('[data-equipment-slot="boots"]'),
         head:!!art.querySelector('[data-equipment-slot="head"]'),
         hair:!!art.querySelector('[data-equipment-slot="hair"]'),
         loaded:imgs.every(img=>img.complete&&img.naturalWidth>0)
       };
-      if(!covered.armor||!covered.head||covered.hair||!covered.loaded) throw new Error("overlay coperto/non caricato sul modello "+sample.gender+": "+JSON.stringify(covered));
+      if(!covered.armor||!covered.shoulders||!covered.arms||!covered.legs||!covered.boots||!covered.head||covered.hair||!covered.loaded) throw new Error("componenti armatura/elmo non caricati sul modello "+sample.gender+": "+JSON.stringify(covered));
       hero.equipment.head="";
       renderBattle();
       art=document.querySelector('#partyList [data-unit-id="hero"] .unitArt');
@@ -136,12 +140,37 @@ try {
         loaded:imgs.every(img=>img.complete&&img.naturalWidth>0)
       };
       if(!uncovered.hair||!uncovered.loaded) throw new Error("capelli non ripristinati o immagine non caricata sul modello "+sample.gender+": "+JSON.stringify(uncovered));
-      results.push({gender:sample.gender,covered,uncovered});
+      hero.equipment.arms=false;
+      renderBattle();
+      const withoutArms=document.querySelector('#partyList [data-unit-id="hero"] .unitArt');
+      if(withoutArms.querySelector('[data-equipment-slot="arms"]'))throw new Error("braccia non rimovibili separatamente sul modello "+sample.gender);
+      hero.equipment.arms=true;
+      renderBattle();
+      results.push({gender:sample.gender,covered,uncovered,modularArms:true});
     }
     Object.assign(hero,backup);renderBattle();
     return results;
   });
   console.log("PASS: overlay armatura/elmo e ripristino capelli su modelli maschile e femminile",equipmentChecks);
+  const modularUi = await page.evaluate(() => {
+    const oldArmor=G.hero.equipment?.armor,oldArms=G.hero.equipment?.arms;
+    if(!G.hero.equipment)G.hero.equipment={};
+    G.hero.equipment.armor="Armatura_guerriero";G.hero.equipment.arms=true;
+    selectedEquipmentMember="hero";openCharacterScreen();
+    const names=[...document.querySelectorAll("[data-armor-part]")].map(x=>x.dataset.armorPart).sort();
+    if(names.join(",")!=="arms,boots,legs,shoulders")throw new Error("controlli modulari non presenti: "+names.join(","));
+    document.querySelector('[data-armor-part="arms"]').click();
+    const hidden=!document.querySelector('#partyList [data-unit-id="hero"] .unitArt [data-equipment-slot="arms"]');
+    document.querySelector('[data-armor-part="arms"]').click();
+    const restored=!!document.querySelector('#partyList [data-unit-id="hero"] .unitArt [data-equipment-slot="arms"]');
+    closeCharacterScreen();
+    G.hero.equipment.armor=oldArmor||"";
+    if(oldArms===undefined)delete G.hero.equipment.arms;else G.hero.equipment.arms=oldArms;
+    renderBattle();
+    if(!hidden||!restored)throw new Error("toggle braccia non ha aggiornato la scena");
+    return {parts:names,hidden,restored};
+  });
+  console.log("PASS: schermata equipaggiamento espone quattro controlli modulari",modularUi);
 
   // Capture a high-resolution visual diagnostic of the current armor fit on the two original human models.
   await page.evaluate(async () => {
@@ -197,7 +226,7 @@ try {
     const armorOptions=["Armatura_guerriero","Armatura_arciere","Armatura_druido","Armatura_mago"];
     const headOptions=["Cappello_mago","Cappello_punk","Elmo_drago","Elmo_leone"];
     const hairOptions=["Capelli coda ciuffi","Capelli coda lunga","Capelli lunghi","Capelli mossi","Capelli rasati lato","Capelli rasta","Capelli spettinati","Capelli trecce"];
-    let armorFits=0,headFits=0,hairFits=0;
+    let armorFits=0,armorPartFits=0,headFits=0,hairFits=0;
     for(const [raceId,race,male,female] of models){
       for(const [gender,portrait] of [["M",male],["F",female]]){
         hero.raceId=raceId;hero.race=race;hero.gender=gender;hero.portrait=portrait;
@@ -221,9 +250,15 @@ try {
         }
         for(const armorName of armorOptions){
           hero.equipment.armor=armorName;
-          const d=equipmentLayerData(hero,"armor");
-          if(!d||d.w<.40||d.w>.52||d.h<.68||d.h>.82||d.x<0||d.y<.14||d.y>.25||d.x+d.w>1||d.y+d.h>1){
-            throw new Error("profilo armatura non valido: "+race+" "+gender+" "+armorName+" "+JSON.stringify(d));
+          for(const partSlot of ["armor","shoulders","arms","legs","boots"]){
+            const raw=equipmentLayerData(hero,partSlot),parts=Array.isArray(raw)?raw:raw?[raw]:[];
+            if(!parts.length)throw new Error("profilo armatura assente: "+race+" "+gender+" "+armorName+" "+partSlot);
+            for(const d of parts){
+              if(d.w<.40||d.w>.52||d.h<.68||d.h>.82||d.x<0||d.y<.14||d.y>.25||d.x+d.w>1||d.y+d.h>1||!d.clip||!d.points?.length){
+                throw new Error("profilo parte armatura non valido: "+race+" "+gender+" "+armorName+" "+partSlot+" "+JSON.stringify(d));
+              }
+              armorPartFits++;
+            }
           }
           armorFits++;
         }
@@ -265,7 +300,7 @@ try {
         results.push({race,gender,geometry,head:!!head,hair:!!hair});
       }
     }
-    if(armorFits!==48||headFits!==24||hairFits!==48)throw new Error("conteggio fit non completo: "+JSON.stringify({armorFits,headFits,hairFits}));
+    if(armorFits!==48||armorPartFits!==432||headFits!==24||hairFits!==48)throw new Error("conteggio fit non completo: "+JSON.stringify({armorFits,armorPartFits,headFits,hairFits}));
     const transparencyChecks=[];
     for(const [name,entry] of Object.entries(equipmentManifest)){
       if(!entry||!["armor","headgear","hair"].includes(entry.group)||!entry.file)continue;
@@ -282,7 +317,7 @@ try {
     Object.assign(hero,backup);renderBattle();
     return {models:results,transparentOverlays:transparencyChecks};
   });
-  console.log("PASS: fit armature e copricapi su tutti i 12 modelli originali; ritaglio trasparente",allRaceEquipment);
+  console.log("PASS: 432 parti modulari armatura, copricapi e capelli su tutti i 12 modelli originali; ritaglio trasparente",allRaceEquipment);
 
   const finisherMotionChecks = await page.evaluate(() => {
     const cases=[
