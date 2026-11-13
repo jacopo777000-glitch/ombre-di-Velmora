@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - "process_equipment_assets.py"
+      - "scripts/build-modular-armor.py"
       - ".github/workflows/process-equipment-assets.yml"
   workflow_dispatch:
 permissions:
@@ -20,6 +21,8 @@ jobs:
         run: pip install pillow numpy opencv-python-headless
       - name: Remove parchment and crop equipment
         run: python process_equipment_assets.py
+      - name: Split outfit artwork into independent transparent parts
+        run: python scripts/build-modular-armor.py
       - name: Commit transparent equipment PNGs
         run: |
           git config user.name "github-actions[bot]"
