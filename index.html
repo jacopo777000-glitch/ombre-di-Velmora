@@ -2142,7 +2142,7 @@ if(slot==="weapon"&&value&&!rules.weapons.includes(value))return;
 if(slot==="head"&&value&&!rules.heads.includes(value))return;
 if(slot==="hair"&&value&&!supportsHumanoidHairAndHeadgear(p))return;
 if(slot==="armor")p.equipment.armor=value;
-else if(["shoulders","arms","legs","boots"].includes(slot))p.equipment[slot+"Style"]=value;
+else if(["shoulders","arms","legs","boots"].includes(slot)){if(typeof value==="boolean"){p.equipment[slot]=value;delete p.equipment[slot+"Style"]}else{delete p.equipment[slot];p.equipment[slot+"Style"]=value}}
 else if(["hair","weapon","head"].includes(slot))p.equipment[slot]=value;
 else return;
 const armorBonus=equipmentArmorDefense(p);
