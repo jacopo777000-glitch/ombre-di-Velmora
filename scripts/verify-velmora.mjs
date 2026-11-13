@@ -144,6 +144,17 @@ try {
       }
     }
   }
+  const lootArmorMap=[["Armatura di Scaglie","assets/equip/Armatura_guerriero.png"],["Corazza del Viandante","assets/equip/Armatura_arciere.png"],["Veste Lunare","assets/equip/Armatura_mago.png"],["Mantello del Bosco","assets/equip/Armatura_druido.png"]];
+  for(const [name,src] of lootArmorMap){
+    const layers=renderer.equipmentLayerData({race:"Umano",gender:"M",equipment:{armor:name}},"armor");
+    if(!Array.isArray(layers)||!layers.length||layers[0].src!==src)throw new Error("armatura loot senza grafica: "+name);
+  }
+  const lootHeadMap=[["Cappuccio dell'Oracolo","assets/equip/Cappello_mago.png"],["Elmo del Drago Antico","assets/equip/Elmo_drago.png"],["Maschera del Predatore","assets/equip/Cappello_punk.png"]];
+  for(const [name,src] of lootHeadMap){
+    const head=renderer.equipmentLayerData({race:"Umano",gender:"M",equipment:{head:name}},"head");
+    if(!head||head.src!==src)throw new Error("copricapo loot senza grafica: "+name);
+  }
+  pass("Oggetti loot: quattro armature e tre copricapi collegati alla grafica");
   const humanM=renderer.equipmentLayerData({race:"Umano",gender:"M",equipment:{armor:"Armatura_guerriero"}},"armor")[0];
   const humanF=renderer.equipmentLayerData({race:"Umano",gender:"F",equipment:{armor:"Armatura_guerriero"}},"armor")[0];
   if(humanM.y===humanF.y||humanM.h===humanF.h)throw new Error("fit maschile e femminile non differenziato");
