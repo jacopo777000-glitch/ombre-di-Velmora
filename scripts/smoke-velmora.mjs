@@ -116,7 +116,7 @@ try {
       {gender:"F",portrait:"modello_umano_femminile.png.JPG.JPG"}
     ]) {
       hero.race="Umano";hero.gender=sample.gender;hero.portrait=sample.portrait;
-      hero.equipment={hair:"Capelli mossi",armor:"Armatura_guerriero",head:"Elmo_drago",weapon:"Spada"};
+      hero.equipment={hair:"Capelli mossi",armor:"Armatura_guerriero",shouldersStyle:"Armatura_guerriero",armsStyle:"Armatura_guerriero",legsStyle:"Armatura_guerriero",bootsStyle:"Armatura_guerriero",head:"Elmo_drago",weapon:"Spada"};
       renderBattle();
       let art=document.querySelector('#partyList [data-unit-id="hero"] .unitArt');
       let imgs=await settleImages(art);
@@ -191,7 +191,7 @@ try {
     const checked=[];
     async function settle(art){await Promise.all([...art.querySelectorAll("img")].map(img=>img.decode().catch(()=>null)))}
     for(const [name,src] of armorItems){
-      hero.equipment={armor:name,shoulders:true,arms:true,legs:true,boots:true,head:"",hair:"",weapon:"Spada"};
+      hero.equipment={armor:name,shouldersStyle:"Armatura_guerriero",armsStyle:"Armatura_guerriero",legsStyle:"Armatura_guerriero",bootsStyle:"Armatura_guerriero",head:"",hair:"",weapon:"Spada"};
       renderBattle();
       const art=document.querySelector('#partyList [data-unit-id="hero"] .unitArt');
       await settle(art);
@@ -200,7 +200,7 @@ try {
       checked.push({name,src});
     }
     for(const [name,src] of headItems){
-      hero.equipment={armor:"Armatura_guerriero",shoulders:true,arms:true,legs:true,boots:true,head:name,hair:"Capelli mossi",weapon:"Spada"};
+      hero.equipment={armor:"Armatura_guerriero",shouldersStyle:"Armatura_guerriero",armsStyle:"Armatura_guerriero",legsStyle:"Armatura_guerriero",bootsStyle:"Armatura_guerriero",head:name,hair:"Capelli mossi",weapon:"Spada"};
       renderBattle();
       const art=document.querySelector('#partyList [data-unit-id="hero"] .unitArt');
       await settle(art);
@@ -209,7 +209,7 @@ try {
       checked.push({name,src});
     }
     selectedEquipmentMember="hero";
-    hero.equipment={armor:"Armatura_guerriero",shoulders:true,arms:true,legs:true,boots:true,head:"",hair:"",weapon:"Spada"};
+    hero.equipment={armor:"Armatura_guerriero",shouldersStyle:"Armatura_guerriero",armsStyle:"Armatura_guerriero",legsStyle:"Armatura_guerriero",bootsStyle:"Armatura_guerriero",head:"",hair:"",weapon:"Spada"};
     hero.baseArmor=1;hero.armor=1;hero.equipment.armorBonus=0;
     setEquipment("arms",false);const reduced=hero.armor;
     setEquipment("arms",true);const restored=hero.armor;
@@ -243,7 +243,7 @@ try {
     for(const sample of samples){
       hero.race=sample.race;hero.raceId=sample.raceId;hero.gender=sample.gender;hero.portrait=sample.portrait;
       const humanoid=["human","elf","orc"].includes(sample.raceId);
-      hero.equipment={hair:humanoid?"Capelli mossi":"",armor:"Armatura_guerriero",shoulders:true,arms:true,legs:true,boots:true,head:humanoid?"Elmo_drago":"",weapon:"Spada"};
+      hero.equipment={hair:humanoid?"Capelli mossi":"",armor:"Armatura_guerriero",shouldersStyle:"Armatura_guerriero",armsStyle:"Armatura_guerriero",legsStyle:"Armatura_guerriero",bootsStyle:"Armatura_guerriero",head:humanoid?"Elmo_drago":"",weapon:"Spada"};
       renderBattle();
       const source=document.querySelector('#partyList [data-unit-id="hero"] .unitArt');
       const clone=source.cloneNode(true);
@@ -290,7 +290,7 @@ try {
       for(const [gender,portrait] of [["M",male],["F",female]]){
         hero.raceId=raceId;hero.race=race;hero.gender=gender;hero.portrait=portrait;
         const humanoid=["human","elf","orc"].includes(raceId);
-        hero.equipment={hair:"Capelli mossi",armor:"Armatura_guerriero",head:humanoid?"Elmo_drago":"",weapon:"Spada"};
+        hero.equipment={hair:"Capelli mossi",armor:"Armatura_guerriero",shouldersStyle:"Armatura_guerriero",armsStyle:"Armatura_guerriero",legsStyle:"Armatura_guerriero",bootsStyle:"Armatura_guerriero",head:humanoid?"Elmo_drago":"",weapon:"Spada"};
         renderBattle();
         const art=document.querySelector('#partyList [data-unit-id="hero"] .unitArt');
         const loaded=await settle(art);
