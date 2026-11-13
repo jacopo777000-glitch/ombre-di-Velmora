@@ -1695,8 +1695,8 @@ function equipmentLayerData(u,slot){
  const headVisualMap={"Cappuccio dell'Oracolo":"Cappello_mago","Elmo del Drago Antico":"Elmo_drago","Maschera del Predatore":"Cappello_punk"};
  if(["armor","shoulders","arms","legs","boots"].includes(slot)){
   if(slot!=="armor"&&eq[slot]===false)return null;
-  const rawStyle=eq.armor,style=armorVisualMap[rawStyle]||rawStyle,partStyle=(slot==="shoulders"||slot==="arms"||slot==="boots")?(eq[slot+"Style"]||(style==="Armatura_guerriero"?"Armatura_arciere":style)):style,key=maps.armor[partStyle],d=key&&equipmentManifest[key];
-  const regions=armorPartPolygons[partStyle]&&armorPartPolygons[partStyle][slot];
+  const rawStyle=slot==="armor"?eq.armor:(eq[slot+"Style"]||eq.armor);
+  const style=armorVisualMap[rawStyle]||rawStyle,key=maps.armor[style],d=key&&equipmentManifest[key];
   if(!d||!d.file||!Number(d.width)||!Number(d.height))return null;
   const race=equipmentRaceId(u),gender=isFemaleCharacter(u)?"F":"M";
   const fits={
@@ -1708,33 +1708,20 @@ function equipmentLayerData(u,slot){
    rabbit:{M:{cx:590,top:260,w:430,h:850},F:{cx:590,top:255,w:410,h:860}}
   };
   const styles={Armatura_guerriero:{w:1,h:1},Armatura_arciere:{w:.96,h:1},Armatura_druido:{w:1.02,h:1.02},Armatura_mago:{w:1,h:1.02}};
-  const fit=fits[race][gender],styleFit=styles[partStyle]||styles.Armatura_guerriero,w=fit.w*styleFit.w,h=fit.h*styleFit.h,left=fit.cx-w/2,top=fit.top;
+  const fit=fits[race]&&fits[race][gender];if(!fit)return null;
+  const styleFit=styles[style]||styles.Armatura_guerriero,w=fit.w*styleFit.w,h=fit.h*styleFit.h,left=fit.cx-w/2,top=fit.top;
   const modularParts=d.parts&&d.parts[slot];
   if(Array.isArray(modularParts)&&modularParts.length){
-   return modularParts.map((part,index)=>{
+   return modularParts.map(part=>{
     if(!part||!part.file||!Number(part.width)||!Number(part.height))return null;
     const partX=(Number(part.x)-Number(d.x||0))/Number(d.width)*w;
     const partY=(Number(part.y)-Number(d.y||0))/Number(d.height)*h;
     const partW=Number(part.width)/Number(d.width)*w;
     const partH=Number(part.height)/Number(d.height)*h;
-    const sideOffset=slot==="boots"?(index===0?-18:4):(slot==="shoulders"||slot==="arms"||slot==="legs")?(index===0?-4:4):0;
-    const verticalOffset=slot==="shoulders"?-2:slot==="boots"?34:0;
-    const widthScale=slot==="arms"?1.012:1,heightScale=slot==="arms"?1.008:1;
-    return {src:part.file,x:(left+partX+sideOffset)/912,y:(top+partY+verticalOffset)/1168,w:(partW*widthScale)/912,h:(partH*heightScale)/1168,modular:true};
+    return {src:part.file,x:(left+partX)/912,y:(top+partY)/1168,w:partW/912,h:partH/1168,modular:true};
    }).filter(Boolean);
   }
-  if(!regions)return null;
-  return regions.map((polygon,index)=>{
-   const points=polygon.map(([px,py])=>[
-    Math.max(0,Math.min(100,(px-Number(d.x||0))/Number(d.width)*100)),
-    Math.max(0,Math.min(100,(py-Number(d.y||0))/Number(d.height)*100))
-   ]);
-   const sideOffset=slot==="boots"?(index===0?-18:4):(slot==="shoulders"||slot==="arms"||slot==="legs")?(index===0?-4:4):0;
-   const verticalOffset=slot==="shoulders"?-2:slot==="boots"?34:0;
-   const widthScale=slot==="arms"?1.012:1,heightScale=slot==="arms"?1.008:1;
-   const clip="polygon("+points.map(p=>p[0].toFixed(2)+"% "+p[1].toFixed(2)+"%").join(",")+")";
-   return {src:d.file,x:(left+sideOffset)/912,y:(top+verticalOffset)/1168,w:(w*widthScale)/912,h:(h*heightScale)/1168,clip,points};
-  });
+  return null;
  }
  const visualHead=headVisualMap[eq.head]||eq.head,key=maps.head[visualHead],d=key&&equipmentManifest[key];
  if(!d||!d.file||!Number(d.width)||!Number(d.height))return null;
@@ -2129,18 +2116,18 @@ function renderCharacterScreen(){
 if(!G||!$("characterScreen").classList.contains("open"))return;
 const p=characterMembers().find(x=>(x.isHero?"hero":String(x.id))===String(selectedEquipmentMember))||G.hero;
 if(!p.equipment)p.equipment={hair:"",armor:"",weapon:"",head:""};
-["shoulders","arms","legs","boots"].forEach(slot=>{if(p.equipment[slot]===undefined)p.equipment[slot]=true});
 const rules=equipmentRules(p),hairOptions=supportsHumanoidHairAndHeadgear(p)?["Capelli coda ciuffi","Capelli coda lunga","Capelli lunghi","Capelli mossi","Capelli rasati lato","Capelli rasta","Capelli spettinati","Capelli trecce"]:[];
 if(!supportsHumanoidHairAndHeadgear(p))p.equipment.hair="";
 if(p.equipment.weapon&&!rules.weapons.includes(p.equipment.weapon))p.equipment.weapon="";
-if(p.equipment.armor&&!rules.armors.includes(p.equipment.armor))p.equipment.armor="";
 if(p.equipment.head&&!rules.heads.includes(p.equipment.head))p.equipment.head="";
+const armorStyles=["Armatura_guerriero","Armatura_arciere","Armatura_druido","Armatura_mago"];
 const makeOpts=(items,current,empty)=>'<option value="">'+empty+'</option>'+items.map(x=>'<option value="'+x+'" '+(current===x?'selected':'')+'>'+x.replaceAll("_"," ")+'</option>').join("");
+const armorSelect=(slot,label)=>{const current=slot==="armor"?p.equipment.armor:(p.equipment[slot+"Style"]||p.equipment.armor);return '<div class="equipSlot"><b>'+label+'</b><select class="input" aria-label="'+label+'" onchange="setEquipment(\''+slot+'\',this.value)">'+makeOpts(armorStyles,current,"Nessun pezzo")+'</select></div>'};
 const stats=p.stats?Object.entries(p.stats).map(([k,v])=>'<span>'+(statNames[k]||k)+': '+v+'</span>').join(""):"";
 const weaponLoot=lootMeta(p.equipment.weapon),armorBonus=equipmentArmorDefense(p);
 const weaponPower=weaponLoot?weaponLoot.physical:(({Spada:2,Ascia:3,Martello:3,Pugnale:1,Arco:3,Bastone:2,Scudo:0,Lancia:4})[p.equipment.weapon]||0);
 const magicPower=weaponLoot?weaponLoot.magic:(p.equipment.weapon==="Bastone"?5:0);
-$("characterScreenBody").innerHTML='<div class="characterPortraitPanel">'+equipmentLayers(p)+'<div class="characterIdentity"><strong>'+p.name+'</strong><small>'+(p.isHero?(p.race+" · "+p.class):"Compagno · "+p.class)+' · Livello '+(p.level||1)+'</small></div></div><div class="characterChoices"><h3>Equipaggiamento</h3><div class="menuHint">Le parti dell’armatura sono livelli indipendenti: puoi rimuovere spalle, braccia, gambe o stivali senza perdere il busto.</div><div class="equipSlots"><div class="equipSlot"><b>⚔ Arma</b><select class="input" onchange="setEquipment(\'weapon\',this.value)">'+makeOpts(rules.weapons,p.equipment.weapon,"Arma iniziale")+'</select><small>'+(p.class==="Mago"||p.class==="Druido"||p.class==="Maga"||p.class==="Druida"?"Potenza magica":"Danno fisico")+': +'+(p.equipment.weapon==="Bastone"?magicPower:weaponPower)+'</small></div><div class="equipSlot"><b>🛡 Busto</b><select class="input" onchange="setEquipment(\'armor\',this.value)">'+makeOpts(rules.armors,p.equipment.armor,"Armatura base")+'</select><small>Difesa: +'+armorBonus+'</small></div><div class="equipSlot"><b>⛑ Elmo / copricapo</b><select class="input" onchange="setEquipment(\'head\',this.value)">'+makeOpts(rules.heads,p.equipment.head,"Nessuno")+'</select></div><div class="equipSlot"><b>✦ Aspetto</b><select class="input" onchange="setEquipment(\'hair\',this.value)">'+makeOpts(hairOptions,p.equipment.hair,"Acconciatura base")+'</select></div></div><div class="equipPartControls"><label class="equipPartToggle"><input type="checkbox" data-armor-part="shoulders" '+(p.equipment.shoulders===false?"":"checked")+' onchange="setEquipment(\'shoulders\',this.checked)"> Spalle</label><label class="equipPartToggle"><input type="checkbox" data-armor-part="arms" '+(p.equipment.arms===false?"":"checked")+' onchange="setEquipment(\'arms\',this.checked)"> Braccia</label><label class="equipPartToggle"><input type="checkbox" data-armor-part="legs" '+(p.equipment.legs===false?"":"checked")+' onchange="setEquipment(\'legs\',this.checked)"> Gambe</label><label class="equipPartToggle"><input type="checkbox" data-armor-part="boots" '+(p.equipment.boots===false?"":"checked")+' onchange="setEquipment(\'boots\',this.checked)"> Stivali</label></div><div class="characterEquipTotals"><span>Bonus fisico: +'+weaponPower+'</span><span>Bonus magico: +'+magicPower+'</span><span>Difesa: +'+armorBonus+'</span></div><label class="equipLabel">Statistiche</label><div class="characterStatsLine">'+stats+'</div><div class="menuHint">Usa le frecce in alto per cambiare personaggio.</div></div>';
+$("characterScreenBody").innerHTML='<div class="characterPortraitPanel">'+equipmentLayers(p)+'<div class="characterIdentity"><strong>'+p.name+'</strong><small>'+(p.isHero?(p.race+" · "+p.class):"Compagno · "+p.class)+' · Livello '+(p.level||1)+'</small></div></div><div class="characterChoices"><h3>Equipaggiamento</h3><div class="menuHint">Scegli ogni componente separatamente: puoi abbinare pezzi di set diversi oppure lasciare uno slot vuoto.</div><div class="equipSlots"><div class="equipSlot"><b>⚔ Arma</b><select class="input" onchange="setEquipment(\'weapon\',this.value)">'+makeOpts(rules.weapons,p.equipment.weapon,"Arma iniziale")+'</select><small>'+(p.class==="Mago"||p.class==="Druido"||p.class==="Maga"||p.class==="Druida"?"Potenza magica":"Danno fisico")+': +'+(p.equipment.weapon==="Bastone"?magicPower:weaponPower)+'</small></div>'+armorSelect("armor","🛡 Torso") +armorSelect("shoulders","🛡 Spalle")+armorSelect("arms","🛡 Braccia")+armorSelect("legs","🛡 Gambe")+armorSelect("boots","🛡 Stivali")+'<div class="equipSlot"><b>⛑ Elmo / copricapo</b><select class="input" onchange="setEquipment(\'head\',this.value)">'+makeOpts(rules.heads,p.equipment.head,"Nessuno")+'</select></div><div class="equipSlot"><b>✦ Acconciatura</b><select class="input" onchange="setEquipment(\'hair\',this.value)">'+makeOpts(hairOptions,p.equipment.hair,"Acconciatura base")+'</select></div></div><div class="characterEquipTotals"><span>Bonus fisico: +'+weaponPower+'</span><span>Bonus magico: +'+magicPower+'</span><span>Difesa: +'+armorBonus+'</span></div><label class="equipLabel">Statistiche</label><div class="characterStatsLine">'+stats+'</div><div class="menuHint">Usa le frecce in alto per cambiare personaggio.</div></div>';
 }
 
 function setEquipment(slot,value){
@@ -2150,11 +2137,11 @@ if(!p)return;
 if(!p.equipment)p.equipment={hair:"",armor:"",weapon:"",head:""};
 const rules=equipmentRules(p);
 if(slot==="weapon"&&value&&!rules.weapons.includes(value))return;
-if(slot==="armor"&&value&&!rules.armors.includes(value))return;
 if(slot==="head"&&value&&!rules.heads.includes(value))return;
 if(slot==="hair"&&value&&!supportsHumanoidHairAndHeadgear(p))return;
-if(["shoulders","arms","legs","boots"].includes(slot))p.equipment[slot]=!!value;
-else if(["hair","armor","weapon","head"].includes(slot))p.equipment[slot]=value;
+if(slot==="armor")p.equipment.armor=value;
+else if(["shoulders","arms","legs","boots"].includes(slot))p.equipment[slot+"Style"]=value;
+else if(["hair","weapon","head"].includes(slot))p.equipment[slot]=value;
 else return;
 const armorBonus=equipmentArmorDefense(p);
 if(p.baseArmor===undefined)p.baseArmor=Math.max(0,(p.armor||0)-(p.equipment.armorBonus||0));
