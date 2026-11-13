@@ -37,8 +37,20 @@ def grabcut_crop(rgb, roi, seed):
     bgd=np.zeros((1,65),np.float64); fgd=np.zeros((1,65),np.float64)
     cv2.grabCut(crop,mask,None,bgd,fgd,9,cv2.GC_INIT_WITH_MASK)
     alpha=np.where((mask==cv2.GC_FGD)|(mask==cv2.GC_PR_FGD),255,0).astype(np.uint8)
-    # Suppress only near-identical parchment pixels, preserving pale metal and white details.
-    alpha=np.where(dist<13,0,alpha).astype(np.uint8)
+    # Refine GrabCut by removing parchment-colored regions connected to the crop edges.
+    # The warm/low-saturation test targets paper, while connected-components keeps
+    # isolated silver and gold armor details even when their brightness is similar.
+    hsv=cv2.cvtColor(crop,cv2.COLOR_RGB2HSV)
+    hue,sat,val=[hsv[:,:,i] for i in range(3)]
+    warm_paper=(hue>=8)&(hue<=38)&(sat<48)&(val>165)&(dist<78)
+    background_candidates=(dist<38)|warm_paper
+    count,labels=cv2.connectedComponents(background_candidates.astype(np.uint8),connectivity=8)
+    edge_labels=np.unique(np.concatenate([labels[0,:],labels[-1,:],labels[:,0],labels[:,-1]]))
+    edge_background=np.isin(labels,edge_labels)&background_candidates
+    edge_background=cv2.dilate(edge_background.astype(np.uint8),np.ones((3,3),np.uint8),iterations=1)>0
+    alpha[edge_background]=0
+    # Keep only very near-identical paper pixels as a final safety cleanup.
+    alpha=np.where(dist<12,0,alpha).astype(np.uint8)
     alpha=cv2.morphologyEx(alpha,cv2.MORPH_CLOSE,np.ones((3,3),np.uint8))
     alpha=cv2.morphologyEx(alpha,cv2.MORPH_OPEN,np.ones((2,2),np.uint8))
     return crop,alpha,(x0,y0)
@@ -82,8 +94,8 @@ for group,files in GROUPS.items():
   outname=Path(filename).stem+".png"
   cut.save(OUT/outname,optimize=True)
   ox,oy=origin
-  manifest[filename]={"file":"assets/equip/"+outname,"group":group,"x":ox+bbox[0],"y":oy+bbox[1],"width":bbox[2]-bbox[0],"height":bbox[3]-bbox[1],"sourceWidth":w,"sourceHeight":h}
-  print("OK",filename,manifest[filename]["x"],manifest[filename]["y"],manifest[filename]["width"],manifest[filename]["height"])
+  manifest[filename]={"file":"assets/equip/"+outname,"group":group,"x":ox+bbox[0],"y":oy+bbox[1],"width":bbox[2]-bbox[0],"height":bbox[3]-bbox[1],"sourceWidth":w,"sourceHeight":h,"transparentRatio":round(float(np.mean(alpha==0)),3),"opaqueRatio":round(float(np.mean(alpha>220)),3)}
+  print("OK",filename,manifest[filename]["x"],manifest[filename]["y"],manifest[filename]["width"],manifest[filename]["height"],"transparent",manifest[filename]["transparentRatio"])
 (OUT/"manifest.json").write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding="utf-8")
 print("Processed",len(manifest),"transparent cutouts")
 
