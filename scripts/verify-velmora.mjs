@@ -80,14 +80,15 @@ for (const fn of ["function saveGame", "function loadGame", "function equipmentL
 }
 
 if (!html.includes("function equipmentLayerData") ||
+    !html.includes("armorPartPolygons") || !html.includes("data-armor-part=") ||
     !html.includes("data-equipment-slot=") ||
     !html.includes('equipmentLayerMarkup(u,"armor"') ||
     !html.includes('equipmentLayerMarkup(u,"head"')) {
   fail("Render dei livelli di armatura e copricapo non collegato ai modelli.");
 } else pass("Layer di armatura e copricapo presenti nel renderer dei personaggi");
 
-if (!html.includes("armorData") || !html.includes("headData") ||
-    !html.includes("if(v.armor&&v.armorData)") ||
+if (!html.includes("armorParts") || !html.includes("headData") ||
+    !html.includes("for(const part of (v.armorParts||[]))") ||
     !html.includes("if(v.head&&v.headData)")) {
   fail("Il colpo di grazia non riproduce tutti i livelli equipaggiati.");
 } else pass("Colpo di grazia: armatura e copricapo inclusi nella composizione 2D");
@@ -102,35 +103,35 @@ try {
   const layerCode = html.slice(layerStart, layerEnd);
   const makeRenderer = new Function("asset", "equipmentManifest", "weaponSvgFor", helperCode + ";" + layerCode + "; return {equipmentLayers,equipmentLayerData,equipmentHairData};");
   const sample = {};
-  for (const key of ["Armatura_guerriero.JPG", "Elmo_drago.JPG", "Capelli_mossi.jpg"]) {
+  for (const key of ["Armatura_arciere.JPG", "Armatura_druido.JPG", "Armatura_guerriero.JPG", "Armatura_mago.JPG", "Elmo_drago.JPG", "Capelli_mossi.jpg"]) {
     sample[key] = {file:"assets/equip/test.png",x:90,y:40,width:180,height:220,sourceWidth:912,sourceHeight:1168};
   }
   const renderer = makeRenderer(name => name, sample, () => '<svg class="weaponLayer"></svg>');
   const render = renderer.equipmentLayers;
-  const equipped = render({portrait:"hero.png",name:"Prova",race:"Umano",gender:"M",equipment:{armor:"Armatura_guerriero",head:"Elmo_drago",hair:"Capelli mossi",weapon:"Spada"}});
-  if (!equipped.includes('data-equipment-slot="armor"') ||
-      !equipped.includes('data-equipment-slot="head"') ||
-      equipped.includes('data-equipment-slot="hair"')) {
-    throw new Error("armatura/elmo non renderizzati o capelli non nascosti dall'elmo");
-  }
+  const equipped = render({portrait:"hero.png",name:"Prova",race:"Umano",gender:"M",equipment:{armor:"Armatura_guerriero",shoulders:true,arms:true,legs:true,boots:true,head:"Elmo_drago",hair:"Capelli mossi",weapon:"Spada"}});
+  for(const slot of ["armor","shoulders","arms","legs","boots"])if(!equipped.includes('data-equipment-slot="'+slot+'"'))throw new Error("parte modulare non renderizzata: "+slot);
+  if (!equipped.includes('data-equipment-slot="head"') || equipped.includes('data-equipment-slot="hair"')) throw new Error("elmo non nasconde i capelli");
   const bareHead = render({portrait:"hero.png",name:"Prova",race:"Umano",gender:"M",equipment:{armor:"Armatura_guerriero",head:"",hair:"Capelli mossi",weapon:"Spada"}});
   if (!bareHead.includes('data-equipment-slot="hair"')) throw new Error("capelli non ripristinati rimuovendo l'elmo");
-  if (!(equipped.indexOf('data-equipment-slot="armor"') < equipped.indexOf('data-equipment-slot="head"'))) {
-    throw new Error("ordine dei layer armatura/copricapo non valido");
-  }
+  const noArms=render({portrait:"hero.png",name:"Prova",race:"Umano",gender:"M",equipment:{armor:"Armatura_guerriero",arms:false,head:"",hair:"",weapon:"Spada"}});
+  if(noArms.includes('data-equipment-slot="arms"'))throw new Error("braccia non rimovibili separatamente");
+  if (!(equipped.indexOf('data-equipment-slot="legs"') < equipped.indexOf('data-equipment-slot="head"'))) throw new Error("ordine dei layer modulari non valido");
   const beast = render({portrait:"wolf.png",name:"Lupo",race:"Popolo Lupo",gender:"M",equipment:{armor:"Armatura_guerriero",head:"Elmo_drago",hair:"Capelli mossi",weapon:"Ascia"}});
-  if (beast.includes('data-equipment-slot="head"') || beast.includes('data-equipment-slot="hair"')) {
-    throw new Error("overlay umano applicato a un modello bestiale");
-  }
+  if (beast.includes('data-equipment-slot="head"') || beast.includes('data-equipment-slot="hair"')) throw new Error("overlay umano applicato a un modello bestiale");
   const models=[
     ["human","Umano"],["elf","Elfo"],["orc","Orco"],["lion","Leonide"],["wolf","Lupo"],["rabbit","Coniglio"]
   ];
   for(const [id,name] of models){
     for(const gender of ["M","F"]){
       const person={raceId:id,race:name,gender,equipment:{armor:"Armatura_guerriero",head:["human","elf","orc"].includes(id)?"Elmo_drago":"",hair:"Capelli mossi"}};
-      const armor=renderer.equipmentLayerData(person,"armor");
-      if(!armor||armor.w<.40||armor.w>.52||armor.h<.68||armor.h>.82||armor.x<0||armor.y<.14||armor.y>.25||armor.x+armor.w>1||armor.y+armor.h>1){
-        throw new Error("fit armatura fuori area per "+name+" "+gender+": "+JSON.stringify(armor));
+      for(const partSlot of ["armor","shoulders","arms","legs","boots"]){
+        const raw=renderer.equipmentLayerData(person,partSlot),parts=Array.isArray(raw)?raw:raw?[raw]:[];
+        if(!parts.length)throw new Error("parte armatura assente per "+name+" "+gender+" "+partSlot);
+        for(const armor of parts){
+          if(armor.w<.40||armor.w>.52||armor.h<.68||armor.h>.82||armor.x<0||armor.y<.14||armor.y>.25||armor.x+armor.w>1||armor.y+armor.h>1||!armor.clip||!Array.isArray(armor.points)||armor.points.length<4){
+            throw new Error("fit parte armatura fuori area per "+name+" "+gender+" "+partSlot+": "+JSON.stringify(armor));
+          }
+        }
       }
       if(["human","elf","orc"].includes(id)){
         const head=renderer.equipmentLayerData(person,"head"),hair=renderer.equipmentHairData({...person,equipment:{...person.equipment,head:""}});
@@ -142,8 +143,8 @@ try {
       }
     }
   }
-  const humanM=renderer.equipmentLayerData({race:"Umano",gender:"M",equipment:{armor:"Armatura_guerriero"}},"armor");
-  const humanF=renderer.equipmentLayerData({race:"Umano",gender:"F",equipment:{armor:"Armatura_guerriero"}},"armor");
+  const humanM=renderer.equipmentLayerData({race:"Umano",gender:"M",equipment:{armor:"Armatura_guerriero"}},"armor")[0];
+  const humanF=renderer.equipmentLayerData({race:"Umano",gender:"F",equipment:{armor:"Armatura_guerriero"}},"armor")[0];
   if(humanM.y===humanF.y||humanM.h===humanF.h)throw new Error("fit maschile e femminile non differenziato");
   pass("Fit geometrico armature per 12 modelli; hair/headgear distinti per razza e sesso");
 } catch (error) {
