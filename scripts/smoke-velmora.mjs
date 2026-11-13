@@ -153,22 +153,25 @@ try {
   });
   console.log("PASS: overlay armatura/elmo e ripristino capelli su modelli maschile e femminile",equipmentChecks);
   const modularUi = await page.evaluate(() => {
-    const oldArmor=G.hero.equipment?.armor,oldArms=G.hero.equipment?.arms,oldClass=G.hero.class;
+    const oldEquipment=JSON.parse(JSON.stringify(G.hero.equipment||{})),oldClass=G.hero.class;
     if(!G.hero.equipment)G.hero.equipment={};
-    G.hero.class="Guerriero";G.hero.equipment.armor="Armatura_guerriero";G.hero.equipment.arms=true;
+    G.hero.class="Guerriero";G.hero.equipment.armor="Armatura_guerriero";
     selectedEquipmentMember="hero";openCharacterScreen();
     const names=[...document.querySelectorAll("[data-armor-part]")].map(x=>x.dataset.armorPart).sort();
-    if(names.join(",")!=="arms,boots,legs,shoulders")throw new Error("controlli modulari non presenti: "+names.join(","));
-    document.querySelector('[data-armor-part="arms"]').click();
+    if(names.join(",")!=="arms,armor,boots,legs,shoulders")throw new Error("tendine modulari non presenti: "+names.join(","));
+    let control=document.querySelector('[data-armor-part="arms"]');
+    control.value="Armatura_arciere";control.dispatchEvent(new Event("change",{bubbles:true}));
+    let selected=document.querySelector('#partyList [data-unit-id="hero"] .unitArt [data-equipment-slot="arms"]');
+    const changed=!!selected&&selected.getAttribute("src").includes("Armatura_arciere_arms_01.png");
+    control=document.querySelector('[data-armor-part="arms"]');
+    control.value="";control.dispatchEvent(new Event("change",{bubbles:true}));
     const hidden=!document.querySelector('#partyList [data-unit-id="hero"] .unitArt [data-equipment-slot="arms"]');
-    document.querySelector('[data-armor-part="arms"]').click();
+    control=document.querySelector('[data-armor-part="arms"]');
+    control.value="Armatura_guerriero";control.dispatchEvent(new Event("change",{bubbles:true}));
     const restored=!!document.querySelector('#partyList [data-unit-id="hero"] .unitArt [data-equipment-slot="arms"]');
-    closeCharacterScreen();
-    G.hero.equipment.armor=oldArmor||"";G.hero.class=oldClass;
-    if(oldArms===undefined)delete G.hero.equipment.arms;else G.hero.equipment.arms=oldArms;
-    renderBattle();
-    if(!hidden||!restored)throw new Error("toggle braccia non ha aggiornato la scena");
-    return {parts:names,hidden,restored};
+    closeCharacterScreen();G.hero.equipment=oldEquipment;G.hero.class=oldClass;renderBattle();
+    if(!changed||!hidden||!restored)throw new Error("tendina non cambia, rimuove e ripristina la parte selezionata");
+    return {parts:names,changed,hidden,restored};
   });
   console.log("PASS: schermata equipaggiamento espone quattro controlli modulari",modularUi);
   const lootVisualChecks = await page.evaluate(async () => {
