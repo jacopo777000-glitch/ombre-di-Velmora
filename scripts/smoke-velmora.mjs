@@ -218,6 +218,19 @@ try {
   });
   console.log("PASS: fit armature e copricapi su tutti i 12 modelli originali; ritaglio trasparente",allRaceEquipment);
 
+  const finisherMotionChecks = await page.evaluate(() => {
+    const cases=[
+      ["Guerriero","Spada","blade"],["Guerriero","Ascia","heavy"],["Guerriero","Martello","heavy"],
+      ["Guerriero","Lancia","spear"],["Guerriero","Scudo","shield"],["Arciere","Arco","ranged"],
+      ["Ladro","Pugnale","quick"],["Mago","Bastone","arcane"],["Druido","Bastone","nature"],
+      ["Paladino","Spada","holy"],["Chierico","Martello","holy"]
+    ];
+    return cases.map(([klass,weapon,expected])=>({klass,weapon,expected,actual:finisherMotionFor({class:klass,equipment:{weapon}})}));
+  });
+  const badFinisherMotions=finisherMotionChecks.filter(x=>x.actual!==x.expected);
+  if(badFinisherMotions.length)throw new Error("mossa colpo di grazia non coerente con classe/arma: "+JSON.stringify(badFinisherMotions));
+  console.log("PASS: 11 profili di colpo di grazia distinti per classe e categoria d'arma",finisherMotionChecks);
+
   // Verify the finisher is composed as a real in-memory WebP/PNG frame sequence, then can be skipped safely.
   await page.evaluate(() => {
     window.__velmoraFinisherFrameCount=0;

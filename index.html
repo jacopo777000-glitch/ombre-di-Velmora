@@ -1489,6 +1489,32 @@ function playFinisherSound(u,magical){
   osc.connect(gain);gain.connect(ctx.destination);osc.start(now);osc.stop(now+.36);
  }catch(e){}
 }
+function finisherWeaponKind(u){
+ const raw=String(u&&u.equipment&&u.equipment.weapon||u&&u.weaponType||"Spada").toLowerCase();
+ if(raw.includes("arco"))return "bow";
+ if(raw.includes("bastone"))return "staff";
+ if(raw.includes("pugnale"))return "dagger";
+ if(raw.includes("ascia"))return "axe";
+ if(raw.includes("martello"))return "hammer";
+ if(raw.includes("lancia"))return "spear";
+ if(raw.includes("scudo"))return "shield";
+ return "sword";
+}
+function finisherMotionFor(u){
+ const c=String(u&& (u.class||u.classKey)||"").toLowerCase(),weapon=finisherWeaponKind(u);
+ if(weapon==="bow")return "ranged";
+ if(weapon==="staff")return c.includes("druid")||c.includes("druido")?"nature":"arcane";
+ if(weapon==="dagger")return "quick";
+ if(c.includes("druid")||c.includes("druido"))return "nature";
+ if(c.includes("paladin")||c.includes("chier"))return "holy";
+ if(c.includes("mage")||c.includes("mago")||c.includes("maga"))return "arcane";
+ if(c.includes("archer")||c.includes("arcier"))return "ranged";
+ if(c.includes("thief")||c.includes("ladro")||c.includes("assassin"))return "quick";
+ if(weapon==="spear")return "spear";
+ if(weapon==="shield")return "shield";
+ if(weapon==="axe"||weapon==="hammer")return "heavy";
+ return "blade";
+}
 async function playFinisher(attacker,target,magical=false){
  const aUnit=findUnitElement(attacker),tUnit=findUnitElement(target);
  const aArt=aUnit&&aUnit.querySelector(".unitArt"),tArt=tUnit&&tUnit.querySelector(".unitArt");
@@ -1518,7 +1544,7 @@ async function playFinisher(attacker,target,magical=false){
    if(v.weapon){ctx.save();ctx.translate(x+w*.70,y+h*.55);ctx.rotate(rotation);ctx.drawImage(v.weapon,0,0,w*.25,h*.42);ctx.restore()}
    ctx.restore();
   };
-  const cls=String(attacker.class||attacker.classKey||"").toLowerCase();
+  const cls=String(attacker.class||attacker.classKey||"").toLowerCase(),weaponKind=finisherWeaponKind(attacker),motion=finisherMotionFor(attacker);
   const style=cls.includes("guerr")?{name:"GUERRIERO · FENDENTE DEVASTANTE",color:"#f2a34b",flash:"rgba(255,150,55,.48)"}:cls.includes("mago")?{name:"MAGO · DETONAZIONE ARCANA",color:"#75caff",flash:"rgba(100,190,255,.48)"}:cls.includes("ladro")?{name:"LADRO · ASSALTO D'OMBRA",color:"#bd8aff",flash:"rgba(120,65,190,.42)"}:cls.includes("arcier")?{name:"ARCIERE · FRECCIA ETEREA",color:"#8de4b0",flash:"rgba(120,255,185,.42)"}:cls.includes("paladin")?{name:"PALADINO · GIUDIZIO SACRO",color:"#ffe28a",flash:"rgba(255,225,125,.5)"}:cls.includes("chier")?{name:"CHIERICO · SIGILLO DIVINO",color:"#fff0c2",flash:"rgba(255,245,200,.48)"}:cls.includes("druid")?{name:"DRUIDO · RADICI ANTICHE",color:"#8fd66b",flash:"rgba(100,210,90,.42)"}:{name:"COLPO DI GRAZIA",color:magical?"#75caff":"#edbe6f",flash:"rgba(255,228,171,.45)"};
   const frames=16,frameImages=[];
   canvas.style.opacity="0";
@@ -1527,40 +1553,49 @@ async function playFinisher(attacker,target,magical=false){
   for(let frame=0;frame<frames&&!skip;frame++){
    const p=frame/(frames-1),ease=Math.sin(p*Math.PI/2),focusX=(ar.left+ar.width/2+tr.left+tr.width/2)/2,focusY=(ar.top+ar.height/2+tr.top+tr.height/2)/2;
    ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,vw,vh);ctx.fillStyle="rgba(5,4,3,.72)";ctx.fillRect(0,0,vw,vh);
-   const zoom=1.18+.16*Math.sin(p*Math.PI),shake=p>.48&&p<.7?(Math.random()-.5)*(cls.includes("ladro")?4:10):0;
+   const zoom=1.18+.16*Math.sin(p*Math.PI),shake=p>.48&&p<.7?(Math.random()-.5)*(motion==="quick"?4:10):0;
    ctx.save();ctx.translate(focusX+shake,focusY+shake*.35);ctx.scale(zoom,zoom);ctx.translate(-focusX,-focusY);
    let lunge=(tr.left-ar.left)*.16*ease,rise=-Math.sin(p*Math.PI)*Math.min(26,ar.height*.12),rotation=magical?-.16:-.32,scale=1+.08*Math.sin(p*Math.PI);
-   if(cls.includes("ladro")){lunge=(tr.left-ar.left)*(.10+.10*Math.sin(p*Math.PI*2));rise=-Math.sin(p*Math.PI*2)*ar.height*.10;scale=1+.14*Math.sin(p*Math.PI*3);rotation=-.75}
-   else if(cls.includes("arcier")){lunge=-(tr.left-ar.left)*.025;rise=-Math.sin(p*Math.PI)*ar.height*.035;rotation=-.08;scale=1+.035*Math.sin(p*Math.PI)}
-   else if(cls.includes("druid")){lunge=(tr.left-ar.left)*.07;rise=-Math.abs(Math.sin(p*Math.PI))*ar.height*.06;rotation=-.18}
-   else if(cls.includes("paladin")||cls.includes("chier")){lunge=(tr.left-ar.left)*.11;rise=-Math.sin(p*Math.PI)*ar.height*.16;rotation=-.28}
-   else if(cls.includes("mago")){lunge=0;rise=-Math.sin(p*Math.PI)*ar.height*.13;rotation=.08;scale=1+.12*Math.sin(p*Math.PI)}
+   if(motion==="quick"){lunge=(tr.left-ar.left)*(.10+.10*Math.sin(p*Math.PI*2));rise=-Math.sin(p*Math.PI*2)*ar.height*.10;scale=1+.14*Math.sin(p*Math.PI*3);rotation=-.75}
+   else if(motion==="ranged"){lunge=-(tr.left-ar.left)*.025;rise=-Math.sin(p*Math.PI)*ar.height*.035;rotation=-.08;scale=1+.035*Math.sin(p*Math.PI)}
+   else if(motion==="nature"){lunge=(tr.left-ar.left)*.07;rise=-Math.abs(Math.sin(p*Math.PI))*ar.height*.06;rotation=-.18}
+   else if(motion==="holy"){lunge=(tr.left-ar.left)*.11;rise=-Math.sin(p*Math.PI)*ar.height*.16;rotation=-.28}
+   else if(motion==="arcane"){lunge=0;rise=-Math.sin(p*Math.PI)*ar.height*.13;rotation=.08;scale=1+.12*Math.sin(p*Math.PI)}
+   else if(motion==="spear"){lunge=(tr.left-ar.left)*.25;rise=-Math.sin(p*Math.PI)*ar.height*.035;rotation=-.04;scale=1+.04*Math.sin(p*Math.PI)}
+   else if(motion==="shield"){lunge=(tr.left-ar.left)*.07;rise=-Math.sin(p*Math.PI)*ar.height*.025;rotation=0;scale=1+.06*Math.sin(p*Math.PI)}
+   else if(motion==="heavy"){lunge=(tr.left-ar.left)*.18;rise=-Math.sin(p*Math.PI)*ar.height*.08;rotation=weaponKind==="hammer"?-.12:-.48;scale=1+.12*Math.sin(p*Math.PI)}
    drawCharacter(tv,tr,0,p>.5?(Math.random()-.5)*7:0,1,p>.66?Math.max(.3,1-(p-.66)*2):1,0);
    drawCharacter(av,ar,lunge,rise,scale,1,rotation);
    const burst=Math.max(0,Math.min(1,(p-.43)*2.7)),cx=tr.left+tr.width*.55+lunge*.3,cy=tr.top+tr.height*.48;
    if(burst>0){
-    ctx.save();ctx.globalAlpha=1-burst*.35;ctx.strokeStyle=style.color;ctx.fillStyle=style.color;ctx.lineWidth=cls.includes("guerr")?5:3;
-    if(cls.includes("guerr")){
+    ctx.save();ctx.globalAlpha=1-burst*.35;ctx.strokeStyle=style.color;ctx.fillStyle=style.color;ctx.lineWidth=motion==="heavy"?5:3;
+    if(motion==="heavy"&&weaponKind==="hammer"){
+      ctx.beginPath();ctx.arc(cx,cy,18+burst*82,0,Math.PI*2);ctx.stroke();
+      for(let n=0;n<6;n++){const an=n*Math.PI/3;ctx.beginPath();ctx.moveTo(cx+Math.cos(an)*burst*25,cy+Math.sin(an)*burst*25);ctx.lineTo(cx+Math.cos(an)*burst*100,cy+Math.sin(an)*burst*100);ctx.stroke()}
+    }else if(motion==="heavy"||motion==="blade"){
       ctx.beginPath();ctx.moveTo(cx-90*burst,cy-65*burst);ctx.lineTo(cx+75*burst,cy+30*burst);ctx.lineTo(cx+35*burst,cy-72*burst);ctx.stroke();
       ctx.beginPath();ctx.arc(cx,cy,20+burst*72,Math.PI*1.05,Math.PI*1.85);ctx.stroke();
-    }else if(cls.includes("mago")){
-      for(let n=0;n<3;n++){ctx.beginPath();ctx.arc(cx,cy,18+burst*(35+n*23),p*5+n*2, p*5+n*2+Math.PI*1.55);ctx.stroke()}
+    }else if(motion==="arcane"){
+      for(let n=0;n<3;n++){ctx.beginPath();ctx.arc(cx,cy,18+burst*(35+n*23),p*5+n*2,p*5+n*2+Math.PI*1.55);ctx.stroke()}
       for(let n=0;n<8;n++){const an=n*Math.PI/4+p*5;ctx.beginPath();ctx.arc(cx+Math.cos(an)*burst*76,cy+Math.sin(an)*burst*76,3,0,Math.PI*2);ctx.fill()}
-    }else if(cls.includes("ladro")){
+    }else if(motion==="quick"){
       for(let n=0;n<3;n++){const yy=cy-35+n*34;ctx.beginPath();ctx.moveTo(cx-85*burst,yy-22);ctx.lineTo(cx+75*burst,yy+18);ctx.stroke()}
-    }else if(cls.includes("arcier")){
+    }else if(motion==="ranged"){
       ctx.beginPath();ctx.moveTo(cx-110*burst,cy);ctx.lineTo(cx+100*burst,cy);ctx.stroke();
       ctx.beginPath();ctx.moveTo(cx+70*burst,cy-15);ctx.lineTo(cx+100*burst,cy);ctx.lineTo(cx+70*burst,cy+15);ctx.stroke();
-    }else if(cls.includes("druid")){
+    }else if(motion==="nature"){
       for(let n=0;n<5;n++){const xx=cx-55+n*28;ctx.beginPath();ctx.moveTo(xx,cy+70*burst);ctx.quadraticCurveTo(xx-22,cy+15,xx+Math.sin(p*8+n)*18,cy-65*burst);ctx.stroke()}
-    }else if(cls.includes("paladin")){
+    }else if(motion==="holy"){
       ctx.beginPath();ctx.arc(cx,cy,22+burst*82,0,Math.PI*2);ctx.stroke();
       ctx.beginPath();ctx.moveTo(cx,cy-90*burst);ctx.lineTo(cx,cy+90*burst);ctx.moveTo(cx-55*burst,cy);ctx.lineTo(cx+55*burst,cy);ctx.stroke();
-    }else if(cls.includes("chier")){
-      ctx.beginPath();ctx.arc(cx,cy,25+burst*70,0,Math.PI*2);ctx.stroke();
-      for(let n=0;n<4;n++){ctx.save();ctx.translate(cx,cy);ctx.rotate(n*Math.PI/2);ctx.strokeRect(-12,-12,24,24);ctx.restore()}
+    }else if(motion==="spear"){
+      ctx.beginPath();ctx.moveTo(cx-105*burst,cy);ctx.lineTo(cx+105*burst,cy);ctx.stroke();
+      ctx.beginPath();ctx.moveTo(cx+75*burst,cy-20*burst);ctx.lineTo(cx+105*burst,cy);ctx.lineTo(cx+75*burst,cy+20*burst);ctx.stroke();
+    }else if(motion==="shield"){
+      ctx.beginPath();ctx.arc(cx,cy,20+burst*76,0,Math.PI*2);ctx.stroke();
+      ctx.beginPath();ctx.arc(cx,cy,12+burst*42,0,Math.PI*2);ctx.stroke();
     }
-    for(let k=0;k<18;k++){const ang=Math.PI*2*k/18+p*(cls.includes("ladro")?8:3),dist=12+burst*(cls.includes("arcier")?115:85),px=cx+Math.cos(ang)*dist,py=cy+Math.sin(ang)*dist;ctx.globalAlpha=Math.max(.1,1-burst*.55);ctx.beginPath();ctx.arc(px,py,2+(k%3),0,Math.PI*2);ctx.fill()}
+    for(let k=0;k<18;k++){const ang=Math.PI*2*k/18+p*(motion==="quick"?8:3),dist=12+burst*(motion==="ranged"?115:85),px=cx+Math.cos(ang)*dist,py=cy+Math.sin(ang)*dist;ctx.globalAlpha=Math.max(.1,1-burst*.55);ctx.beginPath();ctx.arc(px,py,2+(k%3),0,Math.PI*2);ctx.fill()}
     ctx.restore();
    }
    ctx.restore();
