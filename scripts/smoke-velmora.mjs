@@ -172,33 +172,45 @@ try {
   });
   console.log("PASS: schermata equipaggiamento espone quattro controlli modulari",modularUi);
 
-  // Capture a high-resolution visual diagnostic of the current armor fit on the two original human models.
+  // Capture a 12-model visual diagnostic to inspect race/sex fit, not just numeric bounds.
   await page.evaluate(async () => {
     const hero=G.hero;
-    const backup={race:hero.race,gender:hero.gender,portrait:hero.portrait,equipment:JSON.parse(JSON.stringify(hero.equipment||{}))};
+    const backup={race:hero.race,raceId:hero.raceId,gender:hero.gender,portrait:hero.portrait,equipment:JSON.parse(JSON.stringify(hero.equipment||{}))};
     const samples=[
-      {gender:"M",portrait:"modello_umano_maschile.png.JPG.JPG",label:"UOMO"},
-      {gender:"F",portrait:"modello_umano_femminile.png.JPG.JPG",label:"DONNA"}
+      {raceId:"human",race:"Umano",gender:"M",portrait:"modello_umano_maschile.png.JPG.JPG",label:"UMANO M"},
+      {raceId:"human",race:"Umano",gender:"F",portrait:"modello_umano_femminile.png.JPG.JPG",label:"UMANO F"},
+      {raceId:"elf",race:"Elfo",gender:"M",portrait:"elfo_m_base.png.JPG",label:"ELFO M"},
+      {raceId:"elf",race:"Elfo",gender:"F",portrait:"elfo_f_base.png.JPG",label:"ELFO F"},
+      {raceId:"orc",race:"Orco",gender:"M",portrait:"orco_m_base.png.JPG",label:"ORCO M"},
+      {raceId:"orc",race:"Orco",gender:"F",portrait:"orco_f_base.png.JPG",label:"ORCO F"},
+      {raceId:"lion",race:"Leonide",gender:"M",portrait:"uomo_leone_m_base.png.JPG",label:"LEONIDE M"},
+      {raceId:"lion",race:"Leonide",gender:"F",portrait:"uomo_leone_f_base.png.JPG",label:"LEONIDE F"},
+      {raceId:"wolf",race:"Lupo",gender:"M",portrait:"uomo_lupo_m_base.png.JPG",label:"LUPO M"},
+      {raceId:"wolf",race:"Lupo",gender:"F",portrait:"uomo_lupo_f_base.png.JPG",label:"LUPO F"},
+      {raceId:"rabbit",race:"Coniglio",gender:"M",portrait:"uomo_coniglio_m_base.png.JPG",label:"CONIGLIO M"},
+      {raceId:"rabbit",race:"Coniglio",gender:"F",portrait:"uomo_coniglio_f_base.png.JPG",label:"CONIGLIO F"}
     ];
     const panel=document.createElement("div");
     panel.id="__velmoraArmorPreview";
-    panel.style.cssText="position:fixed;z-index:999999;left:12px;top:12px;display:flex;gap:18px;padding:18px;background:#100e0c;border:2px solid #d6b16c;border-radius:12px;box-shadow:0 0 30px #000;color:#f0d49b;font:14px Georgia,serif";
+    panel.style.cssText="position:fixed;z-index:999999;left:12px;top:12px;display:grid;grid-template-columns:repeat(6,170px);gap:12px;padding:18px;background:#100e0c;border:2px solid #d6b16c;border-radius:12px;box-shadow:0 0 30px #000;color:#f0d49b;font:12px Georgia,serif";
     for(const sample of samples){
-      hero.race="Umano";hero.raceId="human";hero.gender=sample.gender;hero.portrait=sample.portrait;
-      hero.equipment={hair:"Capelli mossi",armor:"Armatura_guerriero",head:"Elmo_drago",weapon:"Spada"};
+      hero.race=sample.race;hero.raceId=sample.raceId;hero.gender=sample.gender;hero.portrait=sample.portrait;
+      const humanoid=["human","elf","orc"].includes(sample.raceId);
+      hero.equipment={hair:humanoid?"Capelli mossi":"",armor:"Armatura_guerriero",shoulders:true,arms:true,legs:true,boots:true,head:humanoid?"Elmo_drago":"",weapon:"Spada"};
       renderBattle();
       const source=document.querySelector('#partyList [data-unit-id="hero"] .unitArt');
       const clone=source.cloneNode(true);
-      clone.style.cssText="width:320px;height:410px;aspect-ratio:912/1168;flex:none;background:#17120d;border:1px solid #96713b";
+      clone.style.cssText="width:170px;height:218px;aspect-ratio:912/1168;flex:none;background:#17120d;border:1px solid #96713b";
       const card=document.createElement("div");
-      card.style.cssText="display:flex;flex-direction:column;gap:8px;align-items:center";
-      const label=document.createElement("strong");label.textContent=sample.label;card.append(label,clone);panel.append(card);
+      card.style.cssText="display:flex;flex-direction:column;gap:5px;align-items:center";
+      const label=document.createElement("strong");label.textContent=sample.label;
+      card.append(label,clone);panel.append(card);
     }
     document.body.append(panel);
     await Promise.all([...panel.querySelectorAll("img")].map(img=>img.decode().catch(()=>null)));
     window.__velmoraArmorPreviewBackup=backup;
   });
-  const armorPreview=await page.locator("#__velmoraArmorPreview").screenshot({type:"jpeg",quality:78});
+  const armorPreview=await page.locator("#__velmoraArmorPreview").screenshot({type:"jpeg",quality:76});
   console.log("VELMORA_ARMOR_PREVIEW_BASE64="+armorPreview.toString("base64"));
   await page.evaluate(() => {
     document.querySelector("#__velmoraArmorPreview")?.remove();
