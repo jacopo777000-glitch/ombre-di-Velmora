@@ -1691,9 +1691,11 @@ function equipmentLayerData(u,slot){
   armor:{Armatura_arciere:"Armatura_arciere.JPG",Armatura_druido:"Armatura_druido.JPG",Armatura_guerriero:"Armatura_guerriero.JPG",Armatura_mago:"Armatura_mago.JPG"},
   head:{Cappello_mago:"Cappello_mago.JPG",Cappello_punk:"Cappello_punk.JPG",Elmo_drago:"Elmo_drago.JPG",Elmo_leone:"Elmo_leone.JPG"}
  };
+ const armorVisualMap={"Armatura di Scaglie":"Armatura_guerriero","Corazza del Viandante":"Armatura_arciere","Veste Lunare":"Armatura_mago","Mantello del Bosco":"Armatura_druido"};
+ const headVisualMap={"Cappuccio dell'Oracolo":"Cappello_mago","Elmo del Drago Antico":"Elmo_drago","Maschera del Predatore":"Cappello_punk"};
  if(["armor","shoulders","arms","legs","boots"].includes(slot)){
   if(slot!=="armor"&&eq[slot]===false)return null;
-  const style=eq.armor,partStyle=(slot==="shoulders"||slot==="arms"||slot==="boots")?(eq[slot+"Style"]||(style==="Armatura_guerriero"?"Armatura_arciere":style)):style,key=maps.armor[partStyle],d=key&&equipmentManifest[key];
+  const rawStyle=eq.armor,style=armorVisualMap[rawStyle]||rawStyle,partStyle=(slot==="shoulders"||slot==="arms"||slot==="boots")?(eq[slot+"Style"]||(style==="Armatura_guerriero"?"Armatura_arciere":style)):style,key=maps.armor[partStyle],d=key&&equipmentManifest[key];
   const regions=armorPartPolygons[partStyle]&&armorPartPolygons[partStyle][slot];
   if(!d||!d.file||!regions||!Number(d.width)||!Number(d.height))return null;
   const race=equipmentRaceId(u),gender=isFemaleCharacter(u)?"F":"M";
@@ -1719,7 +1721,7 @@ function equipmentLayerData(u,slot){
    return {src:d.file,x:(left+sideOffset)/912,y:(top+verticalOffset)/1168,w:(w*widthScale)/912,h:(h*heightScale)/1168,clip,points};
   });
  }
- const key=maps.head[eq.head],d=key&&equipmentManifest[key];
+ const visualHead=headVisualMap[eq.head]||eq.head,key=maps.head[visualHead],d=key&&equipmentManifest[key];
  if(!d||!d.file||!Number(d.width)||!Number(d.height))return null;
  const race=equipmentRaceId(u),gender=isFemaleCharacter(u)?"F":"M";
  const headStyle={Cappello_mago:{w:210,top:18},Cappello_punk:{w:180,top:24},Elmo_drago:{w:180,top:16},Elmo_leone:{w:215,top:42}}[eq.head];
