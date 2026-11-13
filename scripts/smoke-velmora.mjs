@@ -143,6 +143,40 @@ try {
   });
   console.log("PASS: overlay armatura/elmo e ripristino capelli su modelli maschile e femminile",equipmentChecks);
 
+  // Capture a high-resolution visual diagnostic of the current armor fit on the two original human models.
+  await page.evaluate(async () => {
+    const hero=G.hero;
+    const backup={race:hero.race,gender:hero.gender,portrait:hero.portrait,equipment:JSON.parse(JSON.stringify(hero.equipment||{}))};
+    const samples=[
+      {gender:"M",portrait:"modello_umano_maschile.png.JPG.JPG",label:"UOMO"},
+      {gender:"F",portrait:"modello_umano_femminile.png.JPG.JPG",label:"DONNA"}
+    ];
+    const panel=document.createElement("div");
+    panel.id="__velmoraArmorPreview";
+    panel.style.cssText="position:fixed;z-index:999999;left:12px;top:12px;display:flex;gap:18px;padding:18px;background:#100e0c;border:2px solid #d6b16c;border-radius:12px;box-shadow:0 0 30px #000;color:#f0d49b;font:14px Georgia,serif";
+    for(const sample of samples){
+      hero.race="Umano";hero.raceId="human";hero.gender=sample.gender;hero.portrait=sample.portrait;
+      hero.equipment={hair:"Capelli mossi",armor:"Armatura_guerriero",head:"Elmo_drago",weapon:"Spada"};
+      renderBattle();
+      const source=document.querySelector('#partyList [data-unit-id="hero"] .unitArt');
+      const clone=source.cloneNode(true);
+      clone.style.cssText="width:320px;height:410px;aspect-ratio:912/1168;flex:none;background:#17120d;border:1px solid #96713b";
+      const card=document.createElement("div");
+      card.style.cssText="display:flex;flex-direction:column;gap:8px;align-items:center";
+      const label=document.createElement("strong");label.textContent=sample.label;card.append(label,clone);panel.append(card);
+    }
+    document.body.append(panel);
+    await Promise.all([...panel.querySelectorAll("img")].map(img=>img.decode().catch(()=>null)));
+    window.__velmoraArmorPreviewBackup=backup;
+  });
+  const armorPreview=await page.locator("#__velmoraArmorPreview").screenshot({type:"jpeg",quality:78});
+  console.log("VELMORA_ARMOR_PREVIEW_BASE64="+armorPreview.toString("base64"));
+  await page.evaluate(() => {
+    document.querySelector("#__velmoraArmorPreview")?.remove();
+    const b=window.__velmoraArmorPreviewBackup;
+    if(b){Object.assign(G.hero,b);delete window.__velmoraArmorPreviewBackup;renderBattle();}
+  });
+
   const allRaceEquipment = await page.evaluate(async () => {
     const hero=G.hero;
     const backup={race:hero.race,raceId:hero.raceId,gender:hero.gender,portrait:hero.portrait,equipment:JSON.parse(JSON.stringify(hero.equipment||{}))};
