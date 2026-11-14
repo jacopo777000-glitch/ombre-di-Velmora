@@ -228,12 +228,12 @@ try {
     const hero=G.hero;
     const backup={race:hero.race,raceId:hero.raceId,gender:hero.gender,portrait:hero.portrait,equipment:JSON.parse(JSON.stringify(hero.equipment||{}))};
     const samples=[
-      {raceId:"human",race:"Umano",gender:"M",portrait:"modello_umano_maschile.png.JPG.JPG",label:"UMANO M"},
-      {raceId:"human",race:"Umano",gender:"F",portrait:"modello_umano_femminile.png.JPG.JPG",label:"UMANO F"},
-      {raceId:"elf",race:"Elfo",gender:"M",portrait:"elfo_m_base.png.JPG",label:"ELFO M"},
-      {raceId:"elf",race:"Elfo",gender:"F",portrait:"elfo_f_base.png.JPG",label:"ELFO F"},
-      {raceId:"orc",race:"Orco",gender:"M",portrait:"orco_m_base.png.JPG",label:"ORCO M"},
-      {raceId:"orc",race:"Orco",gender:"F",portrait:"orco_f_base.png.JPG",label:"ORCO F"},
+      {raceId:"human",race:"Umano",gender:"M",portrait:"modello_umano_maschile.png.JPG.JPG",hair:"Capelli coda ciuffi",label:"UMANO M"},
+      {raceId:"human",race:"Umano",gender:"F",portrait:"modello_umano_femminile.png.JPG.JPG",hair:"Capelli lunghi",label:"UMANO F"},
+      {raceId:"elf",race:"Elfo",gender:"M",portrait:"elfo_m_base.png.JPG",hair:"Capelli rasati lato",label:"ELFO M"},
+      {raceId:"elf",race:"Elfo",gender:"F",portrait:"elfo_f_base.png.JPG",hair:"Capelli trecce",label:"ELFO F"},
+      {raceId:"orc",race:"Orco",gender:"M",portrait:"orco_m_base.png.JPG",hair:"Capelli rasta",label:"ORCO M"},
+      {raceId:"orc",race:"Orco",gender:"F",portrait:"orco_f_base.png.JPG",hair:"Capelli spettinati",label:"ORCO F"},
       {raceId:"lion",race:"Leonide",gender:"M",portrait:"uomo_leone_m_base.png.JPG",label:"LEONIDE M"},
       {raceId:"lion",race:"Leonide",gender:"F",portrait:"uomo_leone_f_base.png.JPG",label:"LEONIDE F"},
       {raceId:"wolf",race:"Lupo",gender:"M",portrait:"uomo_lupo_m_base.png.JPG",label:"LUPO M"},
@@ -286,7 +286,7 @@ try {
     panel.style.cssText="position:fixed;z-index:999999;left:12px;top:12px;display:grid;grid-template-columns:repeat(3,230px);gap:12px;padding:18px;background:#100e0c;border:2px solid #d6b16c;border-radius:12px;box-shadow:0 0 30px #000;color:#f0d49b;font:13px Georgia,serif";
     for(const sample of samples){
       hero.race=sample.race;hero.raceId=sample.raceId;hero.gender=sample.gender;hero.portrait=sample.portrait;
-      hero.equipment={hair:"Capelli mossi",head:"",armor:"",weapon:""};
+      hero.equipment={hair:sample.hair,head:"",armor:"",weapon:""};
       renderBattle();
       const source=document.querySelector('#partyList [data-unit-id="hero"] .unitArt');
       const clone=source.cloneNode(true);
