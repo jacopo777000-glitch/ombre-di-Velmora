@@ -1342,7 +1342,14 @@ function guildRouteEvent(resume=false){
  [["La verità dell’incarico","Le prove non coincidono con la versione ricevuta alla Gilda.",[["Mostra le prove","map"],["Proteggi gli innocenti","help"],["Continua senza fermarti","ignore"]]],["Il prezzo della scelta","Un alleato offre una soluzione in cambio di parte della ricompensa.",[["Accetta","trade"],["Rifiuta","question"],["Fingi di accettare","follow"]]]],
  [["Lo scontro decisivo","Davanti a voi si trova ciò che cercavate, ma non siete soli.",[["Affronta il nemico","fight"],["Colpisci di sorpresa","sneakFinal"],["Tratta un’ultima volta","talk"]]],["L’ultima occasione","Potete rischiare tutto o mettere in salvo il gruppo.",[["Rischia per il bottino","blood"],["Prepara una trappola","trap"],["Metti al sicuro il gruppo","ford"]]]]
  ];
- const pool=stages[Math.min(m.step,9)],used=m.usedEventTitles||[],available=pool.filter(e=>!used.includes(e[0])),ev=(resume&&m.currentEvent)?m.currentEvent:(available.length?available:pool)[Math.floor(Math.random()*(available.length||pool.length))];
+ const pool=stages[Math.min(m.step,9)],used=m.usedEventTitles||[],factionRep=G.factionReputation||{},factionEvents=[];
+ if(Number(factionRep.guard)>=3)factionEvents.push(["Il lasciapassare della Guardia","Una pattuglia riconosce il vostro aiuto alle strade. Il sergente offre un lasciapassare che potrebbe evitare un altro controllo.",[["Accetta il lasciapassare","question"],["Chiedi una scorta","help"],["Rifiuta con cortesia","ignore"]]]);
+ if(Number(factionRep.caravans)>=3)factionEvents.push(["La mappa dei carovanieri","Una carovana vi riconosce e apre una cassa di mappe. Il capo offre una rotta più sicura in cambio di un favore.",[["Compra la mappa","trade"],["Chiedi un passaggio","help"],["Segui la rotta nascosta","map"]]]);
+ if(Number(factionRep.blackMarket)>=3)factionEvents.push(["L'informatore sotto la pioggia","Un uomo dai guanti neri vi aspetta sotto una tettoia. Conosce un nome legato al vostro incarico, ma non lo consegna gratuitamente.",[["Paga l'informazione","trade"],["Interrogalo","question"],["Seguilo di nascosto","follow"]]]);
+ if(Number(factionRep.pack)>=3)factionEvents.push(["Un richiamo tra i pini","Un ululato attraversa la foresta. Rauk riconosce il richiamo del branco e indica un sentiero che gli altri non avrebbero notato.",[["Segui il richiamo","track"],["Lascia guidare Rauk","companion"],["Ignora il richiamo","ignore"]]]);
+ if(Number(factionRep.ashCompany)>=3)factionEvents.push(["Il segno della cenere","Un veterano riconosce il simbolo della vecchia compagnia di Leona. Potrebbe conoscere il nome di chi impartì l'ordine di ritirata.",[["Mostra il medaglione","talk"],["Chiedi un nome","question"],["Nascondi la prova","sneak"]]]);
+ const candidates=[...pool,...factionEvents].filter(e=>!used.includes(e[0]));
+ const ev=(resume&&m.currentEvent)?m.currentEvent:(candidates.length?candidates:pool)[Math.floor(Math.random()*(candidates.length||pool.length))];
  if(!resume||!m.currentEvent){m.usedEventTitles=used;m.usedEventTitles.push(ev[0]);m.events.push(ev[0]);m.currentEvent=ev;}
  $("chapterBadge").textContent="INCARICO · TAPPA "+(m.step+1)+" DI 10";$("sceneTitle").textContent=ev[0];
  $("sceneText").innerHTML='<p><small>'+m.title+'</small></p><p>'+ev[1]+'</p><p><em>'+G.party.map(p=>p.name).join(" e ")+' attendono la tua decisione.</em></p>';
@@ -1404,10 +1411,22 @@ function guildStartEncounter(level){
 function guildAfterBattle(){const m=G.activeGuildMission;if(!m)return;$("afterCombat").classList.add("hidden");m.pendingOutcome=null;m.step++;if(m.step>=10)guildFinishMission();else guildRouteEvent()}
 function guildNextStep(){const m=G.activeGuildMission;if(!m)return;m.pendingOutcome=null;m.step++;if(m.step>=10)guildFinishMission();else guildRouteEvent()}
 function guildFinishMission(){
- const m=G.activeGuildMission;if(!m)return;const reward=m.gold+Math.max(0,Math.min(20,m.score*2));G.gold+=reward;G.hero.xp+=35+m.score*4;G.sideQuestReputation=(G.sideQuestReputation||0)+1;
+ const m=G.activeGuildMission;if(!m)return;ensureSideQuestState();
+ const reward=m.gold+Math.max(0,Math.min(20,m.score*2));G.gold+=reward;G.hero.xp+=35+m.score*4;G.sideQuestReputation=(G.sideQuestReputation||0)+1;
+ const factionChanges={};
+ const gain=(id,amount)=>{const applied=adjustFactionReputation(id,amount);if(applied)factionChanges[id]=applied};
+ gain("guild",m.score>=22?2:1);
+ if(m.flags.help||m.flags.heal||m.flags.repair||m.flags.farm)gain("village",1);
+ if(m.flags.trade||m.flags.map)gain("caravans",1);
+ if(m.flags.follow||m.flags.blood)gain("blackMarket",1);
+ if(m.flags.question||m.flags.talk)gain("guard",1);
+ if(m.flags.companion&&(G.party||[]).some(p=>String(p.id||"").toLowerCase()==="rauk"))gain("pack",1);
+ if(m.flags.ruins&&(G.party||[]).some(p=>String(p.id||"").toLowerCase()==="leona"))gain("ashCompany",1);
+ m.factionChanges=factionChanges;
+ const factionReport=Object.entries(factionChanges).map(([id,delta])=>{const faction=sideQuestFactions.find(item=>item.id===id);return (faction?faction.name:id)+" "+(delta>0?"+":"")+delta}).join(" · ");
  const end=m.score>=22?"La squadra torna con prove preziose e una storia che verrà raccontata a lungo.":m.score>=12?"L’incarico è completato, ma gli imprevisti hanno lasciato il segno.":"Rientrate stanchi, ma avete portato a termine il lavoro.";
- $("chapterBadge").textContent="INCARICO CONCLUSO";$("sceneTitle").textContent="Ritorno alla Gilda";$("sceneText").innerHTML='<p>'+end+'</p><p>Ricompensa: <b>'+reward+' monete d’oro</b> e '+(35+m.score*4)+' XP. Eventi: '+m.events.join(" → ")+'.</p>';
- $("sceneChoices").innerHTML='<button class="btn" onclick="guildReturnBoard()">Rientra nella sala della Gilda</button>';G.activeGuildMission=null;updateHUD();
+ $("chapterBadge").textContent="INCARICO CONCLUSO";$("sceneTitle").textContent="Ritorno alla Gilda";$("sceneText").innerHTML='<p>'+end+'</p><p>Ricompensa: <b>'+reward+' monete d’oro</b> e '+(35+m.score*4)+' XP.</p>'+(factionReport?'<p>Rapporti con le fazioni: '+factionReport+'.</p>':'')+'<p>Eventi: '+m.events.join(" → ")+'.</p>';
+ $("sceneChoices").innerHTML='<button class="btn" onclick="guildReturnBoard()">Rientra nella sala della Gilda</button>';G.activeGuildMission=null;updateHUD();persistGameQuietly();
 }
 function guildReturnBoard(){syncProceduralRoster();G.party=[];showGuildMissions();updateHUD()}
 
@@ -1925,13 +1944,14 @@ function sideQuestFactionStanding(score){
  if(score<=-2)return "Diffidente";
  return "Neutrale";
 }
+function adjustFactionReputation(id,delta){
+ if(!G)return 0;ensureSideQuestState();
+ const before=Number(G.factionReputation[id])||0,after=Math.max(-10,Math.min(10,before+(Number(delta)||0)));
+ G.factionReputation[id]=after;return after-before;
+}
 function applySideQuestFactionOutcome(id,outcome){
  const effects=sideQuestFactionOutcomes[id]?.[outcome]||{},applied={};
- G.factionReputation=G.factionReputation||{};
- Object.entries(effects).forEach(([faction,delta])=>{
-  const before=Number(G.factionReputation[faction])||0,after=Math.max(-10,Math.min(10,before+delta));
-  G.factionReputation[faction]=after;applied[faction]=after-before;
- });
+ Object.entries(effects).forEach(([faction,delta])=>{applied[faction]=adjustFactionReputation(faction,delta)});
  return applied;
 }
 function ensureSideQuestState(){
