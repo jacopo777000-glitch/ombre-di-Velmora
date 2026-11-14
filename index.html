@@ -1900,11 +1900,47 @@ const sideQuestCatalog = [
  {id:"richiamo_branco",title:"Il richiamo del branco",type:"Missione personale",location:"Selva dei Pini Neri",minBattleWon:1,requiresCompanion:"rauk",summary:"Un ululato risponde al richiamo di Rauk. Il guerriero teme che un membro del suo vecchio branco sia ancora intrappolato nella selva.",intro:"Rauk si arresta davanti a un tronco segnato da tre graffi obliqui. «È un richiamo del mio branco. Pensavo che nessuno fosse sopravvissuto alla notte delle ceneri». Tra gli alberi arriva un secondo ululato, più debole, seguito dal rumore di una catena trascinata sul terreno. Rauk non ti chiede di combattere al suo posto: ti chiede di restargli accanto mentre affronta ciò che ha lasciato indietro.",checkAction:"track",checkLabel:"Segui le tracce insieme a Rauk",checkStat:"percezione",difficulty:13,successText:"Rauk riconosce il passo del compagno e trova una vecchia trappola nascosta tra le radici. La creatura intrappolata è viva, ma la pista mostra che qualcuno l'ha usata come esca."},
  {id:"promessa_cenere",title:"La promessa di cenere",type:"Missione personale",location:"Caserma bruciata di Valscura",minBattleWon:2,requiresCompanion:"leona",summary:"Tra le rovine di una caserma Leona riconosce il simbolo della sua vecchia compagnia e una promessa mai mantenuta.",intro:"Leona si ferma davanti a un muro annerito. Sotto la cenere affiora il simbolo della compagnia con cui marciava prima di arrivare a Velmora. «Avevamo giurato di non abbandonare nessuno», dice, «ma quella notte il capitano chiuse il portone e lasciò i feriti all'interno». Tra le travi carbonizzate intravedi un medaglione spezzato. Leona vuole sapere chi abbia ordinato la ritirata, ma teme ciò che potrebbe scoprire.",checkAction:"confront",checkLabel:"Ricostruisci con Leona gli ultimi istanti della ritirata",checkStat:"forza",difficulty:14,successText:"Leona solleva una trave annerita e trova il registro della guardia. Il capitano non fuggì: ricevette un ordine sigillato e lasciò una seconda pattuglia a custodire il portone. Il medaglione appartiene a uno dei soldati rimasti indietro."}
 ];
+const sideQuestFactions=[
+ {id:"village",name:"Comunità di Rovoscuro",description:"Abitanti, artigiani e famiglie dei villaggi che cercano di sopravvivere tra debiti, bestie e presagi."},
+ {id:"guild",name:"Gilda degli Avventurieri",description:"La rete di esploratori e mercenari che assegna incarichi e protegge le strade quando le guardie non arrivano."},
+ {id:"guard",name:"Guardia di Velmora",description:"Ufficiali e pattuglie che mantengono l'ordine, ma non sempre distinguono la legge dalla convenienza."},
+ {id:"caravans",name:"Carovanieri del Porto Secco",description:"Mercanti e conducenti che conoscono ogni passaggio, debito e sentiero fuori dalle mura."},
+ {id:"pack",name:"Branco dei Pini Neri",description:"I superstiti del branco di Rauk, legati da richiami, memoria e antiche promesse."},
+ {id:"ashCompany",name:"Compagnia della Cenere",description:"I veterani della vecchia compagnia di Leona, divisi tra dovere, colpa e verità."},
+ {id:"blackMarket",name:"Mercato Nero",description:"Ricettatori e intermediari pronti a pagare per reliquie, segreti e nomi che sarebbe meglio dimenticare."}
+];
+const sideQuestFactionOutcomes={
+ lume_bruma:{"Il sigillo preservato":{village:2,guild:1},"Il cristallo sottratto":{blackMarket:2,village:-2}},
+ morso_ponte:{"La bestia risparmiata":{village:1,pack:2},"Il ponte liberato":{village:2,pack:-1}},
+ conto_mugnaio:{"L'accordo ritrovato":{village:2,caravans:2},"L'intermediario smascherato":{guard:2,caravans:-1}},
+ prezzo_nomi:{"I nomi restituiti":{guard:2,caravans:1,blackMarket:-2},"La fuga nella pioggia":{caravans:2,guard:-1,blackMarket:1}},
+ pozzo_vuoto:{"Il respiro placato":{village:2,guild:1},"La fiala nera":{blackMarket:2,village:-1}},
+ richiamo_branco:{"Il branco ritrovato":{pack:3,guild:1},"La pista chiusa nel sangue":{pack:-2,guild:1}},
+ promessa_cenere:{"Il medaglione restituito":{ashCompany:3,guard:1},"La prova conservata":{ashCompany:-1,guard:2}}
+};
+function sideQuestFactionStanding(score){
+ if(score>=5)return "Alleata";
+ if(score>=2)return "Ben disposta";
+ if(score<=-5)return "Ostile";
+ if(score<=-2)return "Diffidente";
+ return "Neutrale";
+}
+function applySideQuestFactionOutcome(id,outcome){
+ const effects=sideQuestFactionOutcomes[id]?.[outcome]||{},applied={};
+ G.factionReputation=G.factionReputation||{};
+ Object.entries(effects).forEach(([faction,delta])=>{
+  const before=Number(G.factionReputation[faction])||0,after=Math.max(-10,Math.min(10,before+delta));
+  G.factionReputation[faction]=after;applied[faction]=after-before;
+ });
+ return applied;
+}
 function ensureSideQuestState(){
  if(!G)return;
  if(!G.sideQuests||typeof G.sideQuests!=="object")G.sideQuests={};
  sideQuestCatalog.forEach(q=>{if(!G.sideQuests[q.id])G.sideQuests[q.id]={status:"available",stage:0,attempts:0,outcome:null,history:[],reward:null,lastRoll:null}});
  if(!Number.isFinite(G.sideQuestReputation))G.sideQuestReputation=0;
+ if(!G.factionReputation||typeof G.factionReputation!=="object")G.factionReputation={};
+ sideQuestFactions.forEach(f=>{if(!Number.isFinite(Number(G.factionReputation[f.id])))G.factionReputation[f.id]=0});
  if(!G.companionBonds||typeof G.companionBonds!=="object")G.companionBonds={};
 }
 function sideQuestCompanionAvailable(q){
@@ -1920,7 +1956,7 @@ function sideQuestStatus(q,st){
 function renderSideQuestList(){
  ensureSideQuestState();
  const c=$("menuContent");
- c.innerHTML='<button class="btn secondary menuBack" onclick="showMenu(\'more\')">← Indietro</button><h2>Missioni secondarie</h2><p class="menuHint">Incarichi facoltativi di Velmora. Non modificano il prologo né la futura trama principale. Le decisioni e gli esiti vengono conservati nel salvataggio.</p><div class="questReputation">Reputazione locale: <b>'+G.sideQuestReputation+'</b></div>'+
+ c.innerHTML='<button class="btn secondary menuBack" onclick="showMenu(\'more\')">← Indietro</button><h2>Missioni secondarie</h2><p class="menuHint">Incarichi facoltativi di Velmora. Non modificano il prologo né la futura trama principale. Le decisioni e gli esiti vengono conservati nel salvataggio.</p><div class="questReputation">Reputazione locale: <b>'+G.sideQuestReputation+'</b></div><button class="btn secondary" onclick="showMenu(\'factions\')">Consulta le fazioni e i rapporti</button>'+
  sideQuestCatalog.map(q=>{const st=G.sideQuests[q.id],unlocked=sideQuestUnlocked(q),status=sideQuestStatus(q,st),lock=q.requiresCompanion&&!sideQuestCompanionAvailable(q)?(q.requiresCompanion==="rauk"?"Richiede Rauk nella squadra.":"Richiede Leona nella squadra."):"Si sblocca dopo "+(q.minBattleWon||0)+" scontri.";return '<button class="questCard" onclick="renderSideQuest(\''+q.id+'\')" '+(!unlocked&&st.status!=="completed"?'disabled':'')+'><span class="questCardTop"><b>'+q.title+'</b><em class="questStatus '+st.status+'">'+status+'</em></span><small>'+q.type+' · '+q.location+'</small><p>'+q.summary+'</p>'+(!unlocked?'<span class="questLock">'+lock+'</span>':'')+'</button>'}).join("");
 }
 function renderSideQuest(id){
@@ -1968,6 +2004,9 @@ function completeSideQuest(id,outcome,outcomeText,reward){
  G.sideQuestReputation=(G.sideQuestReputation||0)+(reward.reputation||0);
  if(q.requiresCompanion){G.companionBonds=G.companionBonds||{};G.companionBonds[q.requiresCompanion]=(G.companionBonds[q.requiresCompanion]||0)+(reward.bond||0);st.companionBondChange=reward.bond||0;}
  st.history=st.history||[];st.history.unshift("Incarico completato: "+outcome+".");
+ const factionEffects=applySideQuestFactionOutcome(id,outcome);st.factionEffects=factionEffects;
+ const factionSummary=Object.entries(factionEffects).filter(([,delta])=>delta!==0).map(([key,delta])=>{const faction=sideQuestFactions.find(item=>item.id===key);return (faction?faction.name:key)+" "+(delta>0?"+":"")+delta}).join(" · ");
+ if(factionSummary)st.history.unshift("Rapporti con le fazioni: "+factionSummary+".");
  if(battle&&!battle.ended)log("Missione secondaria completata: "+q.title+".");
  updateHUD();persistGameQuietly();renderSideQuest(id);
 }
@@ -1996,17 +2035,25 @@ function sideQuestAction(id,action){
  if(id==="promessa_cenere"&&action==="keep")completeSideQuest(id,"La prova conservata","Leona conserva il medaglione come prova dell'ordine ricevuto. La verità potrà essere usata contro chi ha impartito il comando, ma il rito di commiato resta incompiuto.",{gold:32,items:[{name:"Purificazione",qty:1}],reputation:-1,bond:-1});
 }
 
+function renderFactionScreen(){
+ ensureSideQuestState();
+ const c=$("menuContent");
+ c.innerHTML='<button class="btn secondary menuBack" onclick="showMenu(\'more\')">← Indietro</button><h2>Fazioni di Velmora</h2><p class="menuHint">Le decisioni nelle missioni secondarie modificano i rapporti. La reputazione resta nel salvataggio e può influenzare incarichi e incontri futuri.</p>'+
+ sideQuestFactions.map(f=>{const score=Number(G.factionReputation[f.id])||0,fill=Math.max(0,Math.min(100,(score+10)*5));return '<div class="memberCard factionCard"><div class="memberInfo"><strong>'+f.name+'</strong><p>'+f.description+'</p><p><b>'+sideQuestFactionStanding(score)+'</b> · Reputazione '+(score>0?"+":"")+score+'</p><div class="bars"><div class="hpbar" style="width:'+fill+'%"></div></div></div></div>'}).join("");
+}
 function showMenu(page){
 $("menuView").classList.remove("hidden");$("gameContent").classList.remove("hidden");
 $("menuView").scrollIntoView({behavior:"smooth",block:"start"});
 const c=$("menuContent");
 if(page==="quests"){renderSideQuestList();return}
+if(page==="factions"){renderFactionScreen();return}
 if(page==="more"){
 c.innerHTML=`<h2>Altro</h2><div class="menuGrid">
 <button class="choice menuTile" onclick="showMenu('settings')"><strong>⚙ Impostazioni</strong><small>Musica, salvataggio e partita</small></button>
 <button class="choice menuTile" onclick="openCharacterScreen()"><strong>♙ Personaggio</strong><small>Profilo ed equipaggiamento</small></button>
 <button class="choice menuTile" onclick="openAbilitiesScreen()"><strong>✧ Abilità</strong><small>Competenze della classe</small></button>
 <button class="choice menuTile" onclick="showMenu('statistics')"><strong>✚ Statistiche</strong><small>Caratteristiche e punti</small></button>
+<button class="choice menuTile" onclick="showMenu('factions')"><strong>⚑ Fazioni</strong><small>Reputazione e conseguenze delle scelte</small></button>
 <button class="choice menuTile" onclick="showMenu('quests')"><strong>⚑ Missioni secondarie</strong><small>Incarichi, misteri e cacce</small></button>
 </div>`;return
 }
