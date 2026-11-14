@@ -113,26 +113,40 @@ try {
   if(sideQuestBranchChecks.length!==10)throw new Error("rami missione secondaria non verificati: "+JSON.stringify(sideQuestBranchChecks));
   console.log("PASS: 10 finali alternativi delle cinque missioni principali",sideQuestBranchChecks);
 
-  async function checkBattle(n, expected) {
+
+  async function checkBattle(n, expectedScene) {
     await page.evaluate(value => window.startBattle(value), n);
-    await page.waitForFunction((needle) => {
+    await page.waitForFunction(scene => {
       const field=document.querySelector("#combat .battlefield");
-      return field && field.style.backgroundImage.includes(needle);
-    }, expected, {timeout:20000});
+      return field && field.style.backgroundImage.includes("assets/battle/") && field.dataset.backgroundScene===scene;
+    }, expectedScene, {timeout:30000});
     const result=await page.locator("#combat .battlefield").evaluate(el=>({
       image:el.style.backgroundImage,
       source:el.dataset.backgroundSource,
+      scene:el.dataset.backgroundScene,
       width:el.getBoundingClientRect().width
     }));
-    if (!result.image.includes(expected) || result.source!=="Duskforge") {
-      throw new Error("Sfondo non applicato per battaglia "+n+": "+JSON.stringify(result));
+    if (!result.image.includes("assets/battle/") || !["Duskforge","Kalponic Studio","GegX"].includes(result.source) || result.scene!==expectedScene) {
+      throw new Error("Sfondo painterly non applicato per battaglia "+n+": "+JSON.stringify(result));
     }
-    console.log("PASS: battaglia "+n+" usa "+result.image);
+    const assetUrl=(result.image.match(/url\\(["']?(.*?)["']?\\)/)||[])[1];
+    const response=assetUrl?await page.evaluate(async url=>{const r=await fetch(url,{cache:"no-store"});return {ok:r.ok,status:r.status}},assetUrl):{ok:false,status:0};
+    if(!response.ok)throw new Error("Asset di battaglia non raggiungibile: "+assetUrl+" HTTP "+response.status);
+    console.log("PASS: battaglia "+n+" usa uno sfondo "+result.source+" per la scena "+expectedScene+": "+assetUrl);
   }
 
-  await checkBattle(1,"duskforge_forest_");
-  await checkBattle(2,"duskforge_dungeon_");
-  await checkBattle(3,"boss_room");
+  await checkBattle(1,"forest");
+  await checkBattle(2,"crypt");
+  await checkBattle(3,"boss");
+  const prologueBackground=await page.evaluate(()=>{
+    showScene("prologue");
+    const panel=$("missionPanel");
+    return {source:panel.dataset.sceneBackgroundSource||"",image:panel.style.getPropertyValue("--mission-scene-image"),hasTavern:(gegxBackgroundManifest?.images||[]).some(x=>(x.scenes||[]).includes("tavern"))};
+  });
+  if(prologueBackground.hasTavern&&prologueBackground.source!=="GegX")throw new Error("sfondo taverna GegX non collegato al prologo: "+JSON.stringify(prologueBackground));
+  console.log("PASS: scena prologo mantiene uno sfondo illustrato e usa la taverna GegX quando presente",prologueBackground);
+
+
 
   // Load and exercise the real equipment overlays on both original human base models.
   await page.waitForFunction(() => Object.keys(equipmentManifest||{}).length===16, {timeout:15000});

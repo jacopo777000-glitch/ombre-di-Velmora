@@ -1,0 +1,96 @@
+name: Import licensed painterly battle backgrounds
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/import-painterly-backgrounds.yml"
+      - "scripts/download_painterly_packs.mjs"
+      - "scripts/process_painterly_packs.py"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: velmora-painterly-pages
+  cancel-in-progress: false
+
+jobs:
+  import-and-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment:
+      name: github-pages
+      url: \${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Check out the latest main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install official-download and image tools
+        run: |
+          npm install --no-save playwright
+          npx playwright install --with-deps chromium
+          python -m pip install --quiet Pillow
+      - name: Download the free packs through their official itch.io pages
+        run: node scripts/download_painterly_packs.mjs
+      - name: Convert and classify optimized game backgrounds
+        run: python scripts/process_painterly_packs.py
+      - name: Verify JavaScript, licenses, manifests and every asset
+        run: node scripts/verify-velmora.mjs
+      - name: Install browser smoke-test dependencies
+        run: |
+          npm install --no-save playwright
+          npx playwright install chromium
+      - name: Run real-browser smoke and save/load tests
+        run: node scripts/smoke-velmora.mjs
+      - name: Commit imported game-ready backgrounds
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/battle/kalponic assets/battle/gegx assets/battle/CREDITS.md
+          if git diff --cached --quiet; then
+            echo "No background changes to commit."
+          else
+            git commit -m "Add optimized Kalponic and GegX painterly battle backgrounds"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Prepare clean static site
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import shutil
+          source=Path(".")
+          target=Path("/tmp/velmora-pages")
+          target.mkdir(parents=True,exist_ok=True)
+          excluded={".git",".github","node_modules","scripts","backups"}
+          for item in source.iterdir():
+              if item.name in excluded or item.suffix.lower() in {".py",".mjs"} or item.name in {"package.json","package-lock.json"}:
+                  continue
+              dest=target/item.name
+              if item.is_dir():
+                  shutil.copytree(item,dest,dirs_exist_ok=True)
+              elif item.is_file():
+                  shutil.copy2(item,dest)
+          PY
+      - name: Upload static game to Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: /tmp/velmora-pages
+      - name: Deploy updated game to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -116,11 +116,11 @@ main{width:min(1600px,98%);margin:12px auto 30px;padding-bottom:35px}
 .leftRail{position:sticky;top:10px;display:flex;flex-direction:column;gap:6px}.railTitle,.eyebrow{font-size:9px;letter-spacing:1.8px;color:#c29b5e;font-weight:bold}.railTitle{padding:5px 7px 9px;border-bottom:1px solid #59442b;margin-bottom:4px}.leftRail button{display:flex;align-items:center;gap:9px;text-align:left;background:linear-gradient(90deg,#292117,#19140f);border:1px solid #51402a;color:#e3d1ae;border-radius:6px;padding:10px 8px;font:12px Georgia,serif;cursor:pointer}.leftRail button span{width:17px;text-align:center;color:#e0b86e;font-size:15px}.leftRail button:active,.leftRail button:hover{border-color:#d0a65d;background:#40301d}.railBottom{border-top:1px solid #51402a;margin-top:8px;padding-top:8px;display:grid;gap:6px}
 .centerColumn{min-width:0}.centerColumn>.panel{margin-bottom:12px}.sideCard{background:linear-gradient(180deg,rgba(38,31,23,.98),rgba(17,14,11,.98));border:1px solid #614a2e;border-radius:8px;padding:10px;min-width:0}.sideHeading{display:flex;justify-content:space-between;gap:8px;align-items:center;color:#e3c48b;font-size:10px;letter-spacing:1.4px;font-weight:bold;padding-bottom:8px;border-bottom:1px solid #59442b;margin-bottom:8px}.sideHeading span+span{color:#9d7b49}.turnOrder{display:flex;flex-direction:column;gap:6px;max-height:390px;overflow:auto}.turnEntry{display:flex;align-items:center;gap:7px;padding:6px;background:#17120e;border:1px solid #473723;border-radius:6px;min-width:0}.turnEntry.active{border-color:#e0b86e;background:#3a2a19;box-shadow:inset 0 0 12px #d6b16c22}.turnEntry.dead{opacity:.35;filter:grayscale(1)}.turnPortrait{width:31px;height:42px;object-fit:contain;background:#090807;border:1px solid #80623a;border-radius:4px;flex:none}.turnText{min-width:0;flex:1}.turnText b{display:block;font-size:10px;color:#f0d49b;overflow-wrap:anywhere}.turnText small{display:block;font-size:9px;color:#b9a98b;margin-top:3px}.turnNumber{font-size:10px;color:#c49b55}.battleDiary .log{max-height:300px;font-size:11px;padding:8px}.battleDiary .log p{padding:4px 0;border-bottom:1px solid #34291d;margin:0}.sideEmpty{color:#8f8067;font-size:11px;line-height:1.5}.sideResources{font-size:12px;line-height:1.9;color:#d6c29e}
 #missionPanel{position:relative;isolation:isolate;overflow:hidden;background:linear-gradient(135deg,rgba(38,30,21,.93),rgba(15,12,9,.96));border-color:#80613a}
-#missionPanel:before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.18;background:url("./assets/battle/valle_battaglia.webp") center/cover no-repeat;filter:saturate(.75)}
-#missionPanel[data-scene="forest"]:before{background-image:url("./assets/battle/foresta_imboscata.webp")}
-#missionPanel[data-scene="crypt"]:before{background-image:url("./assets/battle/cripta_antica.webp")}
-#missionPanel[data-scene="boss"]:before{background-image:url("./assets/battle/sala_custode.webp")}
-#missionPanel[data-scene="ending"]:before{background-image:url("./assets/battle/valle_battaglia.webp")}
+#missionPanel:before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.18;background-image:var(--mission-scene-image,url("./assets/battle/valle_battaglia.webp"));background-position:center;background-size:cover;background-repeat:no-repeat;filter:saturate(.75)}
+#missionPanel[data-scene="forest"]:before{background-image:var(--mission-scene-image,url("./assets/battle/foresta_imboscata.webp"))}
+#missionPanel[data-scene="crypt"]:before{background-image:var(--mission-scene-image,url("./assets/battle/cripta_antica.webp"))}
+#missionPanel[data-scene="boss"]:before{background-image:var(--mission-scene-image,url("./assets/battle/sala_custode.webp"))}
+#missionPanel[data-scene="ending"]:before{background-image:var(--mission-scene-image,url("./assets/battle/valle_battaglia.webp"))}
 #missionPanel>*{position:relative;z-index:1}#missionPanel h2{font-size:20px}#combat{min-width:0}.battleTopline{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:7px 4px 9px}.battleTopline h2{margin:3px 0 0;font-size:21px}.battleTopline .badge{font-size:11px;padding:7px 12px;background:#251b12}.battlefield{margin:8px 0 10px;padding:12px;background:radial-gradient(ellipse at center,#302519 0%,#19140f 62%,#100d0a 100%);border:1px solid #927044;box-shadow:inset 0 0 35px #000a,0 7px 20px #0008}.battleSideTitle{font-size:11px;letter-spacing:2px;color:#e6c88f;margin:7px 0 8px}.battleFormation{justify-content:center;gap:clamp(6px,1vw,13px);padding:8px 3px 12px}.battleUnit{flex:0 1 126px;width:126px;max-width:18%;padding:7px 6px 8px;background:linear-gradient(180deg,#34291d,#15110d);border-color:#705633;box-shadow:0 4px 12px #0008}.battleUnit.active{border:2px solid #f0d49b;box-shadow:0 0 18px #d6b16c66,0 4px 12px #0009}.battleFace{height:clamp(105px,15vw,178px);max-height:178px;aspect-ratio:2/3;background:radial-gradient(ellipse,#30271d,#090807);border-color:#9b7846}.battleName{font-size:12px;min-height:28px}.battleHP{font-size:10px}.battleBar{height:7px}.battleAP{font-size:10px}.battleDivider{margin:8px 0 10px;background:linear-gradient(90deg,transparent,#9d7845,transparent)}
 .dicePanel{margin:9px auto 12px;max-width:480px;padding:9px 14px;background:linear-gradient(115deg,rgba(46,35,23,.98),rgba(15,12,9,.98));border:1px solid #a17b45;border-radius:9px;box-shadow:0 0 22px #000a,inset 0 0 20px #d6b16c12}.diceHeading{display:flex;justify-content:space-between;align-items:center;color:#e9c98e;font-size:10px;letter-spacing:2px;border-bottom:1px solid #59442b;padding-bottom:6px}.diceHeading small{font-size:9px;color:#a88a5b}.diceContent{display:flex;align-items:center;justify-content:center;gap:13px;padding:5px 0 0}.diceContent img{width:66px;height:66px;object-fit:contain;filter:drop-shadow(0 4px 6px #000b)}.diceContent div{min-width:130px}.diceContent div div{font-size:10px;color:#bca780}.diceContent strong{display:block;font-size:27px;line-height:1.15;color:#f4d79f;text-shadow:0 0 12px #d6b16c66}.diceContent small{font-size:9px;color:#a99470}.diceRolling{animation:diceSpin 1.2s cubic-bezier(.35,.05,.25,1) both}@keyframes diceSpin{0%{transform:rotate(0) scale(1)}35%{transform:rotate(270deg) scale(1.18)}70%{transform:rotate(540deg) scale(1.12)}100%{transform:rotate(720deg) scale(1)}}
 .actionPanel{padding:12px;background:linear-gradient(145deg,rgba(37,29,21,.98),rgba(15,12,9,.98));border-color:#80613a}.activeTurn{display:flex;justify-content:space-between;align-items:center;gap:8px}.activeTurn h3{margin:3px 0 7px}.activeTurn .small{text-align:right}.actionPanel .actions{grid-template-columns:repeat(3,minmax(0,1fr));margin:8px 0}.actionPanel .btn{min-height:42px;padding:9px 6px;font-size:12px}.actionPanel .target{margin:8px 0}.actionPanel .target button{font-size:11px;padding:8px}.actionPanel #actionMessage{margin:7px 0 0}
@@ -1419,7 +1419,7 @@ const sceneDepth={
  boss:"<p>Oltre la cripta, una porta di ferro si apre con un lamento profondo. Catene pendono dal soffitto, candele azzurre bruciano senza consumarsi e, al centro, la campana oscilla appena pur senza emettere alcun suono.</p><p>Il cavaliere porta sul petto lo stesso simbolo trovato nella cripta. «Siete arrivati fin qui credendo di poter spezzare il richiamo» dice. «Ma la campana non chiama i morti. Li tiene lontani da ciò che dorme sotto questa valle.» La campana vibra e tutte le fiamme si piegano verso di voi.</p>",
  ending:"<p>Quando tornate a Rovoscuro, le imposte si aprono una dopo l'altra. Gli abitanti escono nelle strade senza sapere se festeggiare o piangere per chi non è tornato. L'anziana donna vi cerca tra la folla e stringe al petto il ciondolo appartenuto al nipote.</p><p>Avete spezzato il richiamo, ma le parole del Custode continuano a tormentare i vostri pensieri. Se la campana teneva qualcosa lontano, cosa accadrà ora che non suonerà più? La Valle di Velmora ha ancora molti segreti, e il vostro viaggio è appena cominciato.</p>"
 };
-function showScene(key){$("combat").classList.add("hidden");$("afterCombat").classList.add("hidden");let sc=scenes[key];if(!sc)return;$("missionPanel").dataset.scene=key;$("chapterBadge").textContent=sc.badge;$("sceneTitle").textContent=sc.title;$("sceneText").innerHTML=sc.text+(sceneDepth[key]||"");$("sceneChoices").innerHTML=sc.choices.map(([label,act])=>`<button class="btn" onclick="sceneAction('${act}')">${label}</button>`).join("");updateHUD()}
+function showScene(key){$("combat").classList.add("hidden");$("afterCombat").classList.add("hidden");let sc=scenes[key];if(!sc)return;$("missionPanel").dataset.scene=key;applyPainterlySceneBackground(key);$("chapterBadge").textContent=sc.badge;$("sceneTitle").textContent=sc.title;$("sceneText").innerHTML=sc.text+(sceneDepth[key]||"");$("sceneChoices").innerHTML=sc.choices.map(([label,act])=>`<button class="btn" onclick="sceneAction('${act}')">${label}</button>`).join("");updateHUD()}
 function sceneAction(act){
 if(act==="wolf"){if(!G.companions.wolf){G.companions.wolf=true;G.party.push(makeCompanion("Rauk",36,7,3,4,"uomo_lupo_m_base.png.JPG"))}showScene("prologue");$("sceneText").innerHTML+='<p><em>Rauk abbassa il capo.</em> «Verrò con te.»</p>';return}
 if(act==="lion"){if(!G.companions.lion){G.companions.lion=true;G.party.push(makeCompanion("Leona",40,7,4,4,"uomo_leone_f_base.png.JPG"))}showScene("prologue");$("sceneText").innerHTML+='<p><em>Leona stringe l’elsa.</em> «Combatterò al tuo fianco.»</p>';return}
@@ -2199,27 +2199,81 @@ renderCharacterScreen();if(battle)renderBattle();
 function addStatPoint(key){if(!G||G.statPoints<1||!(key in G.hero.stats))return;G.hero.stats[key]++;G.statPoints--;if(key==="vitalita"){G.hero.maxhp+=3;G.hero.hp+=3}showMenu("statistics");updateHUD()}
 let equipmentManifest={};
 fetch('./assets/equip/manifest.json').then(r=>r.ok?r.json():{}).then(m=>{equipmentManifest=m;if(G){if(battle)renderBattle();if(document.querySelector('#characterScreen.open'))renderCharacterScreen();}}).catch(()=>{});
-let duskforgeBackgroundManifest=null;
+
+let duskforgeBackgroundManifest=null,kalponicBackgroundManifest=null,gegxBackgroundManifest=null;
+function collectPainterlyBackgrounds(manifest,source){
+ const out=[];
+ if(!manifest)return out;
+ if(Array.isArray(manifest.sources)){
+  manifest.sources.forEach(pack=>{
+   (Array.isArray(pack.images)?pack.images:[]).forEach(item=>{
+    if(item&&item.file&&!/preview|contact|sheet/i.test(String(item.sourceFile||item.file)))out.push({...item,source,pack:pack.pack||""});
+   });
+  });
+ }else if(Array.isArray(manifest.images)){
+  manifest.images.forEach(item=>{if(item&&item.file)out.push({...item,source,pack:manifest.pack||""});});
+ }
+ return out;
+}
+function painterlyImageMatches(item,scene){
+ if(Array.isArray(item.scenes)&&item.scenes.includes(scene))return true;
+ const text=(String(item.sourceFile||"")+" "+String(item.file||"")).toLowerCase();
+ if(item.source==="Duskforge"){
+  if(scene==="forest")return item.pack==="forest.zip";
+  if(scene==="crypt")return item.pack==="dungeon.zip"&&!/boss_room/i.test(text);
+  if(scene==="boss")return item.pack==="dungeon.zip"&&/boss_room/i.test(text);
+  return false;
+ }
+ return false;
+}
 function applyDuskforgeBattleBackground(){
- if(!battle||!duskforgeBackgroundManifest||!Array.isArray(duskforgeBackgroundManifest.sources))return;
- const packName=Number(battle.n)===1?"forest.zip":"dungeon.zip";
- const pack=duskforgeBackgroundManifest.sources.find(x=>x.pack===packName);
- if(!pack||!Array.isArray(pack.images))return;
- let images=pack.images.filter(x=>x&&x.file&&!/preview_sheet/i.test(String(x.sourceFile||x.file)));
- if(Number(battle.n)>=3){images=images.filter(x=>/boss_room/i.test(String(x.sourceFile||x.file)));}
- else if(Number(battle.n)===2){images=images.filter(x=>!/boss_room/i.test(String(x.sourceFile||x.file)));}
+ if(!battle)return;
+ const scene=Number(battle.n)===1?"forest":Number(battle.n)===2?"crypt":"boss";
+ const all=[
+  ...collectPainterlyBackgrounds(duskforgeBackgroundManifest,"Duskforge"),
+  ...collectPainterlyBackgrounds(kalponicBackgroundManifest,"Kalponic Studio"),
+  ...collectPainterlyBackgrounds(gegxBackgroundManifest,"GegX")
+ ];
+ let images=all.filter(item=>painterlyImageMatches(item,scene));
+ if(!images.length)images=collectPainterlyBackgrounds(duskforgeBackgroundManifest,"Duskforge").filter(item=>painterlyImageMatches(item,scene));
  if(!images.length)return;
  const seed=(Number(battle.backgroundSeed)||Number(battle.proceduralSeed)||Number(G&&G.proceduralSeed)||Number(battle.n)||1)>>>0;
  const selected=images[seed%images.length];
- const stage=document.querySelector('#combat .battlefield');
+ const stage=document.querySelector("#combat .battlefield");
  if(!stage||!selected||!selected.file)return;
  stage.style.backgroundImage='url("'+selected.file+'")';
- stage.style.backgroundSize='cover';
- stage.style.backgroundPosition='center';
- stage.style.backgroundRepeat='no-repeat';
- stage.dataset.backgroundSource='Duskforge';
+ stage.style.backgroundSize="cover";
+ stage.style.backgroundPosition="center";
+ stage.style.backgroundRepeat="no-repeat";
+ stage.dataset.backgroundSource=selected.source||"Duskforge";
+ stage.dataset.backgroundScene=scene;
 }
-fetch('./assets/battle/duskforge/manifest.json').then(r=>r.ok?r.json():null).then(m=>{if(!m)return;duskforgeBackgroundManifest=m;if(battle)applyDuskforgeBattleBackground();}).catch(()=>{});
+function applyPainterlySceneBackground(key){
+ const panel=$("missionPanel");if(!panel)return;
+ const wanted=key==="prologue"?"tavern":key==="forest"?"forest":key==="crypt"?"crypt":key==="boss"?"boss":"forest";
+ const all=[
+  ...collectPainterlyBackgrounds(kalponicBackgroundManifest,"Kalponic Studio"),
+  ...collectPainterlyBackgrounds(gegxBackgroundManifest,"GegX")
+ ];
+ const images=all.filter(item=>Array.isArray(item.scenes)&&item.scenes.includes(wanted));
+ if(!images.length){panel.style.removeProperty("--mission-scene-image");delete panel.dataset.sceneBackgroundSource;return}
+ const offset=String(key).split("").reduce((sum,ch)=>sum+ch.charCodeAt(0),0);
+ const seed=((Number(G&&G.proceduralSeed)||1)+offset)>>>0;
+ const selected=images[seed%images.length];
+ panel.style.setProperty("--mission-scene-image",'url("'+selected.file+'")');
+ panel.dataset.sceneBackgroundSource=selected.source||"";
+}
+function loadPainterlyManifest(path,setter){
+ fetch(path).then(r=>r.ok?r.json():null).then(m=>{
+  if(!m)return;setter(m);
+  if(battle)applyDuskforgeBattleBackground();
+  const panel=$("missionPanel");if(panel&&panel.dataset.scene)applyPainterlySceneBackground(panel.dataset.scene);
+ }).catch(()=>{});
+}
+loadPainterlyManifest("./assets/battle/duskforge/manifest.json",m=>duskforgeBackgroundManifest=m);
+loadPainterlyManifest("./assets/battle/kalponic/manifest.json",m=>kalponicBackgroundManifest=m);
+loadPainterlyManifest("./assets/battle/gegx/manifest.json",m=>gegxBackgroundManifest=m);
+
 renderCreator();musicLabel();
 </script>
 </body>

@@ -374,6 +374,32 @@ try {
   fail("Test sfondi Duskforge: " + error.message);
 }
 
+const extraPainterlyPacks=[
+  {id:"kalponic",minimum:40,author:"Kalponic Studio",source:"kalponic-studio.itch.io/painterly-battle-backgrounds"},
+  {id:"gegx",minimum:6,author:"GegX",source:"gegx.itch.io/painterly-backgrounds-free"}
+];
+const extraManifestsReady=extraPainterlyPacks.every(pack=>fs.existsSync(path.join(root,"assets","battle",pack.id,"manifest.json")));
+if(extraManifestsReady){
+  try{
+    const credits=fs.readFileSync(path.join(root,"assets/battle/CREDITS.md"),"utf8").toLowerCase();
+    for(const pack of extraPainterlyPacks){
+      const manifestPath=path.join(root,"assets","battle",pack.id,"manifest.json");
+      const manifest=JSON.parse(fs.readFileSync(manifestPath,"utf8"));
+      if(!Array.isArray(manifest.images)||manifest.images.length<pack.minimum)throw new Error(pack.id+": immagini insufficienti ("+(manifest.images||[]).length+")");
+      if(!String(manifest.license||"").toLowerCase().includes("commercial"))throw new Error(pack.id+": licenza commerciale non documentata");
+      if(!credits.includes(pack.author.toLowerCase())||!credits.includes(pack.source))throw new Error(pack.id+": credito o pagina ufficiale mancante");
+      for(const item of manifest.images){
+        if(!item.file||!item.file.endsWith(".webp")||!fs.existsSync(path.join(root,item.file)))throw new Error(pack.id+": file WebP mancante: "+(item.file||"senza percorso"));
+        if(!Array.isArray(item.scenes)||!item.scenes.length)throw new Error(pack.id+": classificazione scena assente per "+item.file);
+      }
+    }
+    pass("Sfondi Kalponic e GegX: manifest, licenze commerciali, crediti e WebP verificati");
+  }catch(error){fail("Test pacchetti painterly aggiuntivi: "+error.message);}
+}else{
+  if(!html.includes('loadPainterlyManifest("./assets/battle/kalponic/manifest.json"')||!html.includes('loadPainterlyManifest("./assets/battle/gegx/manifest.json"'))fail("Loader per i pacchetti painterly aggiuntivi assente");
+  else pass("Loader Kalponic e GegX pronto; i manifest saranno verificati dopo l'importazione ufficiale");
+}
+
 if (failures) {
   console.error("\nVerifica terminata con " + failures + " errore/i.");
   process.exit(1);
