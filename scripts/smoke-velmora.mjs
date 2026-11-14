@@ -44,6 +44,16 @@ page.on("requestfailed", req => {
 try {
   await page.goto("http://127.0.0.1:4173/", {waitUntil:"domcontentloaded",timeout:30000});
   await page.locator("#heroName").waitFor({state:"visible",timeout:15000});
+  const creatorClassChecks=await page.locator("[data-class]").evaluateAll(nodes=>nodes.map(node=>({id:node.dataset.class,name:node.textContent.trim()})));
+  const requiredCreatorClasses=["warrior","mage","archer","druid","darkknight","cleric","berserker","thief","assassin","paladin"];
+  for(const id of requiredCreatorClasses)if(!creatorClassChecks.some(item=>item.id===id))throw new Error("classe non presente nel creatore: "+id);
+  const newClassAbilities=await page.evaluate(()=>["Cavaliere oscuro","Berserker","Assassino"].map(name=>({name,count:classAbilities({class:name}).length,starter:classAbilities({class:name}).filter(a=>a.unlockLevel===1).length})));
+  if(newClassAbilities.some(item=>item.count!==4||item.starter<2))throw new Error("abilità iniziali o progressione incompleta per le nuove classi: "+JSON.stringify(newClassAbilities));
+  await page.locator('[data-class="darkknight"]').click();
+  await page.locator('[data-class="berserker"]').click();
+  await page.locator('[data-class="assassin"]').click();
+  await page.locator('[data-class="warrior"]').click();
+  console.log("PASS: creatore e abilità delle dieci classi giocabili",creatorClassChecks,newClassAbilities);
   await page.locator("#heroName").fill("Prova Browser Velmora");
   await page.getByRole("button",{name:/INIZIA IL VIAGGIO/i}).click();
   await page.locator("#game").waitFor({state:"visible",timeout:10000});
@@ -584,6 +594,7 @@ try {
   }
   if (!saved?.battle?.backgroundSeed) throw new Error("backgroundSeed non presente nel salvataggio");
   const seed = saved.battle.backgroundSeed;
+  const backgroundBeforeReload=await page.evaluate(()=>document.querySelector("#combat .battlefield")?.style.backgroundImage||"");
 
   await page.setViewportSize({width:390,height:844});
   const mobile = await page.evaluate(() => ({
@@ -601,8 +612,10 @@ try {
   await page.waitForFunction(() => {
     const field=document.querySelector("#combat .battlefield");
     return field && !document.querySelector("#combat").classList.contains("hidden") &&
-      field.style.backgroundImage.includes("duskforge_dungeon_");
+      field.style.backgroundImage.includes("assets/battle/") && field.dataset.backgroundScene==="crypt";
   }, {timeout:20000});
+  const backgroundAfterReload=await page.evaluate(()=>document.querySelector("#combat .battlefield")?.style.backgroundImage||"");
+  if(backgroundAfterReload!==backgroundBeforeReload)throw new Error("lo sfondo non è stato ripristinato dallo stesso seed dopo reload");
   const restored = await page.evaluate(() => JSON.parse(localStorage.getItem("velmoraDemoSave")||"null"));
   if (restored?.battle?.backgroundSeed !== seed) throw new Error("backgroundSeed cambiato dopo reload/loadGame");
   const restoredRoster=await page.evaluate(()=>G.proceduralRoster.map(p=>({id:p.id,seed:p.seed,name:p.name,race:p.race,raceId:p.raceId,gender:p.gender,class:p.class,equipment:p.equipment,abilities:p.equippedAbilities})));

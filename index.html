@@ -1183,7 +1183,10 @@ const classes=[
 {id:"cleric",name:"Chierico",description:"Custode della fede, capace di proteggere e curare gli alleati.",mod:{volonta:2,vitalita:1,intelletto:1},armor:"Sacra e media"},
 {id:"druid",name:"Druido",description:"Alleato della natura, unisce magia, resistenza e creature evocate.",mod:{volonta:1,intelletto:1,percezione:2},armor:"Naturale"},
 {id:"archer",name:"Arciere",description:"Combattente agile e attento, maestro dell'arco e della distanza.",mod:{agilita:2,percezione:2},armor:"Leggera"},
-{id:"paladin",name:"Paladino",description:"Difensore consacrato: combatte in prima linea, protegge e cura gli alleati.",mod:{forza:1,vitalita:2,volonta:1},armor:"Pesante e sacra"}
+{id:"paladin",name:"Paladino",description:"Difensore consacrato: combatte in prima linea, protegge e cura gli alleati.",mod:{forza:1,vitalita:2,volonta:1},armor:"Pesante e sacra"},
+{id:"darkknight",name:"Cavaliere oscuro",description:"Un guerriero segnato dalle arti proibite: resiste in prima linea e incanala energia oscura.",mod:{forza:1,vitalita:1,volonta:2},armor:"Pesante e runica"},
+{id:"berserker",name:"Berserker",description:"Un assaltatore feroce che trasforma le ferite in furia e travolge le difese nemiche.",mod:{forza:3,vitalita:1},armor:"Pesante"},
+{id:"assassin",name:"Assassino",description:"Un predatore silenzioso, rapido e preciso, specializzato in pugnali e attacchi improvvisi.",mod:{agilita:2,percezione:2},armor:"Leggera e furtiva"}
 ];
 const statNames={forza:"Forza",agilita:"Agilità",vitalita:"Vitalità",intelletto:"Intelletto",volonta:"Volontà",percezione:"Percezione",carisma:"Carisma"};
 let selectedRace=races[0],selectedClass=classes[0],gender="male",G=null,battle=null,selectedTarget=0,busy=false;
@@ -1206,7 +1209,7 @@ const s=statsFor();$("stats").innerHTML=Object.keys(statNames).map(k=>`<div clas
 function startAdventure(){
 let name=$("heroName").value.trim();if(!name){alert("Scrivi il nome del tuo eroe prima di partire!");return}
 let s=statsFor(),maxhp=26+s.vitalita*3;
-G={hero:{id:"hero",name,race:selectedRace.name,class:selectedClass.name,gender,portrait:imageForRace(selectedRace),stats:s,level:1,xp:0,hp:maxhp,maxhp,ap:5,maxap:5,armor:selectedClass.id==="warrior"||selectedClass.id==="paladin"?4:selectedClass.id==="cleric"?3:1,baseArmor:selectedClass.id==="warrior"||selectedClass.id==="paladin"?4:selectedClass.id==="cleric"?3:1,weapon:selectedClass.id==="mage"||selectedClass.id==="druid"?4:6,alive:true,down:0,isHero:true,equipment:{hair:"",armor:"",head:"",weapon:selectedClass.id==="archer"?"Arco":selectedClass.id==="mage"||selectedClass.id==="druid"?"Bastone":selectedClass.id==="thief"?"Pugnale":selectedClass.id==="cleric"||selectedClass.id==="paladin"?"Spada":"Spada",physicalBonus:selectedClass.id==="archer"?3:selectedClass.id==="thief"?1:2,magicBonus:selectedClass.id==="mage"||selectedClass.id==="druid"?5:0}},party:[],inventory:{Pozione:2,Antidoto:1,Benda:1,Purificazione:1},gold:12,chapter:0,companions:{wolf:false,lion:false},battleWon:0,finished:false,statPoints:0};
+G={hero:{id:"hero",name,race:selectedRace.name,class:selectedClass.name,gender,portrait:imageForRace(selectedRace),stats:s,level:1,xp:0,hp:maxhp,maxhp,ap:5,maxap:5,armor:["warrior","paladin","darkknight","berserker"].includes(selectedClass.id)?4:selectedClass.id==="cleric"?3:1,baseArmor:["warrior","paladin","darkknight","berserker"].includes(selectedClass.id)?4:selectedClass.id==="cleric"?3:1,weapon:selectedClass.id==="mage"||selectedClass.id==="druid"?4:selectedClass.id==="assassin"?5:selectedClass.id==="berserker"?7:6,alive:true,down:0,isHero:true,equipment:{hair:"",armor:"",head:"",weapon:selectedClass.id==="archer"?"Arco":selectedClass.id==="mage"||selectedClass.id==="druid"?"Bastone":selectedClass.id==="thief"||selectedClass.id==="assassin"?"Pugnale":selectedClass.id==="berserker"?"Ascia":selectedClass.id==="cleric"||selectedClass.id==="paladin"?"Spada":"Spada",physicalBonus:selectedClass.id==="archer"?3:selectedClass.id==="thief"||selectedClass.id==="assassin"?1:selectedClass.id==="berserker"?3:2,magicBonus:selectedClass.id==="mage"||selectedClass.id==="druid"?5:selectedClass.id==="darkknight"?2:0}},party:[],inventory:{Pozione:2,Antidoto:1,Benda:1,Purificazione:1},gold:12,chapter:0,companions:{wolf:false,lion:false},battleWon:0,finished:false,statPoints:0};
 ensureSideQuestState();ensureProceduralRoster();
 $("creator").classList.add("hidden");$("game").classList.remove("hidden");$("bottomNav").classList.add("visible");showGuildIntro();openTab("mission");
 }
@@ -1240,7 +1243,10 @@ const proceduralClasses=[
  {id:"cleric",role:"Guaritore",weapons:["Martello","Spada"],armor:"Armatura_guerriero",heads:["Elmo_leone"],stats:{forza:4,agilita:4,vitalita:6,intelletto:6,volonta:8,percezione:5,carisma:7}},
  {id:"druid",role:"Custode della natura",weapons:["Bastone","Pugnale"],armor:"Armatura_druido",heads:["Cappello_mago"],stats:{forza:4,agilita:6,vitalita:5,intelletto:7,volonta:7,percezione:6,carisma:5}},
  {id:"archer",role:"Tiratore",weapons:["Arco","Pugnale"],armor:"Armatura_arciere",heads:["Elmo_leone"],stats:{forza:5,agilita:8,vitalita:5,intelletto:4,volonta:5,percezione:8,carisma:4}},
- {id:"paladin",role:"Difesa e supporto",weapons:["Spada","Martello","Scudo","Lancia"],armor:"Armatura_guerriero",heads:["Elmo_leone","Elmo_drago"],stats:{forza:7,agilita:4,vitalita:8,intelletto:5,volonta:7,percezione:5,carisma:7}}
+ {id:"paladin",role:"Difesa e supporto",weapons:["Spada","Martello","Scudo","Lancia"],armor:"Armatura_guerriero",heads:["Elmo_leone","Elmo_drago"],stats:{forza:7,agilita:4,vitalita:8,intelletto:5,volonta:7,percezione:5,carisma:7}},
+ {id:"darkknight",role:"Guardia del crepuscolo",weapons:["Spada","Ascia","Lancia","Scudo"],armor:"Armatura_guerriero",heads:["Elmo_drago","Elmo_leone"],stats:{forza:7,agilita:4,vitalita:7,intelletto:5,volonta:8,percezione:5,carisma:5}},
+ {id:"berserker",role:"Assaltatore",weapons:["Ascia","Martello","Spada","Lancia"],armor:"Armatura_guerriero",heads:["Elmo_drago"],stats:{forza:9,agilita:5,vitalita:8,intelletto:2,volonta:4,percezione:4,carisma:4}},
+ {id:"assassin",role:"Eliminatore",weapons:["Pugnale","Arco","Spada"],armor:"Armatura_arciere",heads:["Cappello_punk"],stats:{forza:5,agilita:9,vitalita:4,intelletto:5,volonta:5,percezione:9,carisma:4}}
 ];
 function seededRandom(seed){
  let state=(Number(seed)>>>0)||1;
@@ -1250,8 +1256,8 @@ function proceduralPick(list,rng){return list[Math.floor(rng()*list.length)]}
 function makeProceduralPerson(rng,index,side,baseLevel,seed){
  const gender=rng()<.5?"F":"M",race=proceduralPick(proceduralRaces,rng),raceId=race[0],raceName=race[1];
  const def=proceduralPick(proceduralClasses,rng);
- const className=def.id==="mage"?"Mago":def.id==="druid"?"Druido":def.id==="paladin"?"Paladino":def.id==="cleric"?"Chierico":def.id==="archer"?"Arciere":def.id==="thief"?"Ladro":"Guerriero";
- const starterAbilities={Guerriero:["warrior_1","warrior_2"],Ladro:["thief_1","thief_2"],Mago:["mage_1","mage_2"],Chierico:["cleric_1","cleric_heal"],Druido:["druid_1","druid_heal"],Arciere:["archer_1","archer_2"],Paladino:["paladin_1","paladin_heal"]};
+ const className=def.id==="mage"?"Mago":def.id==="druid"?"Druido":def.id==="paladin"?"Paladino":def.id==="cleric"?"Chierico":def.id==="archer"?"Arciere":def.id==="thief"?"Ladro":def.id==="darkknight"?"Cavaliere oscuro":def.id==="berserker"?"Berserker":def.id==="assassin"?"Assassino":"Guerriero";
+ const starterAbilities={Guerriero:["warrior_1","warrior_2"],Ladro:["thief_1","thief_2"],Mago:["mage_1","mage_2"],Chierico:["cleric_1","cleric_heal"],Druido:["druid_1","druid_heal"],Arciere:["archer_1","archer_2"],Paladino:["paladin_1","paladin_heal"],"Cavaliere oscuro":["darkknight_1","darkknight_2"],Berserker:["berserker_1","berserker_2"],Assassino:["assassin_1","assassin_2"]};
  const rarityRoll=rng(),rarity=rarityRoll<.50?proceduralRarity[0]:rarityRoll<.78?proceduralRarity[1]:rarityRoll<.92?proceduralRarity[2]:rarityRoll<.985?proceduralRarity[3]:proceduralRarity[4],bonus=rarity[1];
  const level=side==="enemy"?Math.max(1,baseLevel+Math.floor(rng()*2)-1):1+Math.floor(rng()*3);
  const stats={};Object.keys(def.stats).forEach(k=>stats[k]=def.stats[k]+Math.floor((level-1)/2)+Math.floor(bonus/2));
@@ -1447,7 +1453,7 @@ function log(t){if(!battle)return;battle.log.unshift(t);if(battle.log.length>35)
 function weaponNameFor(u){
  const eq=u&&u.equipment||{};
  let name=String(eq.weapon||u.weaponType||"").toLowerCase();
- if(!name){const c=String(u&&u.class||"").toLowerCase();name=c.includes("arciere")?"arco":c.includes("mago")||c.includes("maga")||c.includes("druido")||c.includes("druida")?"bastone":c.includes("ladro")?"pugnale":c.includes("paladin")||c.includes("chierico")?"martello":u&&u.kind==="orc"?"ascia":u&&u.kind==="priest"?"bastone":"spada"}
+ if(!name){const c=String(u&&u.class||"").toLowerCase();name=c.includes("arciere")?"arco":c.includes("mago")||c.includes("maga")||c.includes("druido")||c.includes("druida")?"bastone":c.includes("ladro")||c.includes("assassino")?"pugnale":c.includes("berserker")?"ascia":c.includes("cavaliere oscuro")?"spada":c.includes("paladin")||c.includes("chierico")?"martello":u&&u.kind==="orc"?"ascia":u&&u.kind==="priest"?"bastone":"spada"}
  return name;
 }
 function weaponAnchorFor(u){
@@ -1533,6 +1539,9 @@ function finisherMotionFor(u){
  if(weapon==="bow")return "ranged";
  if(weapon==="staff")return c.includes("druid")||c.includes("druido")?"nature":"arcane";
  if(weapon==="dagger")return "quick";
+ if(c.includes("assassino")||c.includes("assassin"))return "quick";
+ if(c.includes("berserker"))return "heavy";
+ if(c.includes("cavaliere oscuro"))return "blade";
  if(c.includes("druid")||c.includes("druido"))return "nature";
  if(c.includes("paladin")||c.includes("chier"))return "holy";
  if(c.includes("mage")||c.includes("mago")||c.includes("maga"))return "arcane";
@@ -1573,7 +1582,7 @@ async function playFinisher(attacker,target,magical=false){
    ctx.restore();
   };
   const cls=String(attacker.class||attacker.classKey||"").toLowerCase(),weaponKind=finisherWeaponKind(attacker),motion=finisherMotionFor(attacker);
-  const style=cls.includes("guerr")?{name:"GUERRIERO · FENDENTE DEVASTANTE",color:"#f2a34b",flash:"rgba(255,150,55,.48)"}:cls.includes("mago")?{name:"MAGO · DETONAZIONE ARCANA",color:"#75caff",flash:"rgba(100,190,255,.48)"}:cls.includes("ladro")?{name:"LADRO · ASSALTO D'OMBRA",color:"#bd8aff",flash:"rgba(120,65,190,.42)"}:cls.includes("arcier")?{name:"ARCIERE · FRECCIA ETEREA",color:"#8de4b0",flash:"rgba(120,255,185,.42)"}:cls.includes("paladin")?{name:"PALADINO · GIUDIZIO SACRO",color:"#ffe28a",flash:"rgba(255,225,125,.5)"}:cls.includes("chier")?{name:"CHIERICO · SIGILLO DIVINO",color:"#fff0c2",flash:"rgba(255,245,200,.48)"}:cls.includes("druid")?{name:"DRUIDO · RADICI ANTICHE",color:"#8fd66b",flash:"rgba(100,210,90,.42)"}:{name:"COLPO DI GRAZIA",color:magical?"#75caff":"#edbe6f",flash:"rgba(255,228,171,.45)"};
+  const style=cls.includes("cavaliere oscuro")?{name:"CAVALIERE OSCURO · ECLISSI NERA",color:"#b58bd6",flash:"rgba(145,85,205,.48)"}:cls.includes("berserker")?{name:"BERSERKER · FURIA INARRESTABILE",color:"#ef7650",flash:"rgba(225,80,45,.5)"}:cls.includes("assassino")||cls.includes("assassin")?{name:"ASSASSINO · ESECUZIONE SILENZIOSA",color:"#bd8aff",flash:"rgba(120,65,190,.42)"}:cls.includes("guerr")?{name:"GUERRIERO · FENDENTE DEVASTANTE",color:"#f2a34b",flash:"rgba(255,150,55,.48)"}:cls.includes("mago")?{name:"MAGO · DETONAZIONE ARCANA",color:"#75caff",flash:"rgba(100,190,255,.48)"}:cls.includes("ladro")?{name:"LADRO · ASSALTO D'OMBRA",color:"#bd8aff",flash:"rgba(120,65,190,.42)"}:cls.includes("arcier")?{name:"ARCIERE · FRECCIA ETEREA",color:"#8de4b0",flash:"rgba(120,255,185,.42)"}:cls.includes("paladin")?{name:"PALADINO · GIUDIZIO SACRO",color:"#ffe28a",flash:"rgba(255,225,125,.5)"}:cls.includes("chier")?{name:"CHIERICO · SIGILLO DIVINO",color:"#fff0c2",flash:"rgba(255,245,200,.48)"}:cls.includes("druid")?{name:"DRUIDO · RADICI ANTICHE",color:"#8fd66b",flash:"rgba(100,210,90,.42)"}:{name:"COLPO DI GRAZIA",color:magical?"#75caff":"#edbe6f",flash:"rgba(255,228,171,.45)"};
   const frames=16,frameImages=[];
   canvas.style.opacity="0";
   window.__velmoraFinisherFrameCount=0;
@@ -2077,7 +2086,19 @@ const abilityCatalog=[
 {id:"archer_guard",classKey:"Arciere",name:"Passo evasivo",type:"Difensiva",cost:2,guardAmount:5,effect:"guard",unlockLevel:1,description:"Un movimento rapido riduce i danni ricevuti."},
 {id:"archer_focus",classKey:"Arciere",name:"Mira paziente",type:"Concentrazione",cost:2,focusAmount:6,effect:"focus",unlockLevel:3,description:"L'arciere prende la mira per un colpo più preciso."},
 {id:"thief_guard",classKey:"Ladro",name:"Fumo d'ombra",type:"Difensiva",cost:2,guardAmount:5,effect:"guard",unlockLevel:1,description:"Il ladro si cela nell'ombra e riduce i danni ricevuti."},
-{id:"thief_focus",classKey:"Ladro",name:"Sangue freddo",type:"Concentrazione",cost:2,focusAmount:6,effect:"focus",unlockLevel:3,description:"Il ladro attende l'istante perfetto per colpire."}];
+{id:"thief_focus",classKey:"Ladro",name:"Sangue freddo",type:"Concentrazione",cost:2,focusAmount:6,effect:"focus",unlockLevel:3,description:"Il ladro attende l'istante perfetto per colpire."},
+{id:"darkknight_1",classKey:"Cavaliere oscuro",name:"Fendente del crepuscolo",type:"Oscura",cost:2,damageBonus:7,unlockLevel:1,description:"Una lama tinta d'ombra ferisce il nemico e ne indebolisce la volontà."},
+{id:"darkknight_2",classKey:"Cavaliere oscuro",name:"Guardia funebre",type:"Difensiva",cost:2,guardAmount:6,effect:"guard",unlockLevel:1,description:"Un velo oscuro avvolge l'armatura e assorbe parte dei colpi."},
+{id:"darkknight_3",classKey:"Cavaliere oscuro",name:"Marchio della notte",type:"Oscura",cost:3,damageBonus:12,unlockLevel:3,description:"Un sigillo maledetto esplode sul bersaglio."},
+{id:"darkknight_4",classKey:"Cavaliere oscuro",name:"Eclissi nera",type:"Oscura",cost:4,damageBonus:17,unlockLevel:5,description:"Un fendente arcano apre una frattura di tenebra."},
+{id:"berserker_1",classKey:"Berserker",name:"Ira crescente",type:"Fisica",cost:2,damageBonus:8,unlockLevel:1,description:"Il berserker trasforma la rabbia in un colpo brutale."},
+{id:"berserker_2",classKey:"Berserker",name:"Sangue bollente",type:"Concentrazione",cost:2,focusAmount:5,effect:"focus",unlockLevel:1,description:"La furia alimenta il prossimo attacco."},
+{id:"berserker_3",classKey:"Berserker",name:"Frantumaossa",type:"Fisica",cost:3,damageBonus:12,unlockLevel:3,description:"Un colpo pesante spezza la guardia del nemico."},
+{id:"berserker_4",classKey:"Berserker",name:"Frenesia del massacro",type:"Fisica",cost:4,damageBonus:18,unlockLevel:5,description:"Una scarica di colpi travolge il bersaglio."},
+{id:"assassin_1",classKey:"Assassino",name:"Affondo silenzioso",type:"Tecnica",cost:2,damageBonus:7,unlockLevel:1,description:"Un affondo rapido colpisce un punto scoperto."},
+{id:"assassin_2",classKey:"Assassino",name:"Passo senza traccia",type:"Difensiva",cost:2,guardAmount:5,effect:"guard",unlockLevel:1,description:"L'assassino svanisce per un istante e riduce i danni ricevuti."},
+{id:"assassin_3",classKey:"Assassino",name:"Lama avvelenata",type:"Tecnica",cost:3,damageBonus:12,unlockLevel:3,description:"Un taglio preciso lascia una tossina che indebolisce il bersaglio."},
+{id:"assassin_4",classKey:"Assassino",name:"Esecuzione perfetta",type:"Tecnica",cost:4,damageBonus:18,unlockLevel:5,description:"Un colpo letale sfrutta ogni apertura."}];
 function classAbilities(p){return abilityCatalog.filter(a=>a.classKey===p.class)}
 function unlockedAbilities(p){return classAbilities(p).filter(a=>(p.level||1)>=a.unlockLevel)}
 let combatAbilityMenuOpen=false;
@@ -2096,19 +2117,19 @@ function changeCharacter(direction){const members=characterMembers();if(!members
 const lootGear=[
 {name:"Arco del Crepuscolo",slot:"weapon",classes:["Arciere","Ladro"],physical:6,magic:0,defense:0,rarity:"Raro"},
 {name:"Pugnali Gemelli",slot:"weapon",classes:["Arciere","Ladro","Druido"],physical:5,magic:0,defense:0,rarity:"Non comune"},
-{name:"Spada del Giuramento",slot:"weapon",classes:["Guerriero","Paladino","Paladina","Chierico"],physical:6,magic:0,defense:0,rarity:"Raro"},
-{name:"Ascia Spezzamura",slot:"weapon",classes:["Guerriero"],physical:7,magic:0,defense:0,rarity:"Raro"},
-{name:"Lancia del Guardiano",slot:"weapon",classes:["Guerriero","Paladino","Paladina"],physical:7,magic:0,defense:1,rarity:"Epico"},
-{name:"Martello delle Radici",slot:"weapon",classes:["Guerriero","Paladino","Paladina","Chierico"],physical:5,magic:2,defense:0,rarity:"Epico"},
+{name:"Spada del Giuramento",slot:"weapon",classes:["Guerriero","Paladino","Paladina","Chierico","Cavaliere oscuro","Berserker"],physical:6,magic:0,defense:0,rarity:"Raro"},
+{name:"Ascia Spezzamura",slot:"weapon",classes:["Guerriero","Cavaliere oscuro","Berserker"],physical:7,magic:0,defense:0,rarity:"Raro"},
+{name:"Lancia del Guardiano",slot:"weapon",classes:["Guerriero","Paladino","Paladina","Cavaliere oscuro"],physical:7,magic:0,defense:1,rarity:"Epico"},
+{name:"Martello delle Radici",slot:"weapon",classes:["Guerriero","Paladino","Paladina","Chierico","Berserker"],physical:5,magic:2,defense:0,rarity:"Epico"},
 {name:"Bastone delle Stelle",slot:"weapon",classes:["Mago","Maga","Druido","Druida"],physical:1,magic:8,defense:0,rarity:"Epico"},
 {name:"Bastone di Cenere",slot:"weapon",classes:["Mago","Maga","Druido","Druida"],physical:1,magic:5,defense:0,rarity:"Non comune"},
-{name:"Armatura di Scaglie",slot:"armor",classes:["Guerriero","Paladino","Paladina","Chierico"],physical:0,magic:0,defense:5,rarity:"Raro"},
-{name:"Corazza del Viandante",slot:"armor",classes:["Guerriero","Paladino","Paladina","Chierico"],physical:0,magic:0,defense:4,rarity:"Non comune"},
+{name:"Armatura di Scaglie",slot:"armor",classes:["Guerriero","Paladino","Paladina","Chierico","Cavaliere oscuro","Berserker"],physical:0,magic:0,defense:5,rarity:"Raro"},
+{name:"Corazza del Viandante",slot:"armor",classes:["Guerriero","Paladino","Paladina","Chierico","Cavaliere oscuro","Berserker"],physical:0,magic:0,defense:4,rarity:"Non comune"},
 {name:"Veste Lunare",slot:"armor",classes:["Mago","Maga","Druido","Druida"],physical:0,magic:2,defense:3,rarity:"Raro"},
-{name:"Mantello del Bosco",slot:"armor",classes:["Arciere","Ladro","Druido","Druida"],physical:0,magic:0,defense:4,rarity:"Non comune"},
+{name:"Mantello del Bosco",slot:"armor",classes:["Arciere","Ladro","Assassino","Druido","Druida"],physical:0,magic:0,defense:4,rarity:"Non comune"},
 {name:"Cappuccio dell'Oracolo",slot:"head",classes:["Mago","Maga","Druido","Druida"],physical:0,magic:3,defense:1,rarity:"Raro"},
-{name:"Elmo del Drago Antico",slot:"head",classes:["Guerriero","Paladino","Paladina","Chierico"],physical:0,magic:0,defense:3,rarity:"Epico"},
-{name:"Maschera del Predatore",slot:"head",classes:["Arciere","Ladro"],physical:2,magic:0,defense:2,rarity:"Raro"}
+{name:"Elmo del Drago Antico",slot:"head",classes:["Guerriero","Paladino","Paladina","Chierico","Cavaliere oscuro","Berserker"],physical:0,magic:0,defense:3,rarity:"Epico"},
+{name:"Maschera del Predatore",slot:"head",classes:["Arciere","Ladro","Assassino"],physical:2,magic:0,defense:2,rarity:"Raro"}
 ];
 function lootMeta(name){return lootGear.find(x=>x.name===name)||null}
 function rollMissionLoot(boss=false,enemies=[]){
@@ -2141,7 +2162,9 @@ if(c.includes("arciere"))base={weapons:["Arco","Pugnale"],armors:["Armatura_arci
 else if(c.includes("mago")||c.includes("maga"))base={weapons:["Bastone"],armors:["Armatura_mago"],heads:["Cappello_mago"]};
 else if(c.includes("druido")||c.includes("druida"))base={weapons:["Bastone","Pugnale"],armors:["Armatura_druido"],heads:["Cappello_mago"]};
 else if(c.includes("paladin")||c.includes("paladino")||c.includes("paladina")||c.includes("chierico"))base={weapons:["Spada","Martello","Scudo","Lancia"],armors:["Armatura_guerriero"],heads:["Elmo_leone","Elmo_drago"]};
-else if(c.includes("ladro"))base={weapons:["Pugnale","Arco"],armors:["Armatura_arciere"],heads:["Cappello_punk"]};
+else if(c.includes("ladro")||c.includes("assassino"))base={weapons:["Pugnale","Arco","Spada"],armors:["Armatura_arciere"],heads:["Cappello_punk"]};
+else if(c.includes("berserker"))base={weapons:["Ascia","Martello","Spada","Lancia"],armors:["Armatura_guerriero"],heads:["Elmo_drago"]};
+else if(c.includes("cavaliere oscuro"))base={weapons:["Spada","Ascia","Lancia","Scudo"],armors:["Armatura_guerriero"],heads:["Elmo_drago","Elmo_leone"]};
 else base={weapons:["Spada","Ascia","Martello","Scudo","Lancia"],armors:["Armatura_guerriero"],heads:["Elmo_drago","Elmo_leone"]};
 (G.equipmentBag||[]).forEach(x=>{if(x.classes.includes(p.class)){if(x.slot==="weapon")base.weapons.push(x.name);if(x.slot==="armor")base.armors.push(x.name);if(x.slot==="head"&&supportsHumanoidHairAndHeadgear(p))base.heads.push(x.name)}});
 if(!supportsHumanoidHairAndHeadgear(p))base.heads=[];

@@ -213,6 +213,19 @@ try {
   fail("Test bacheca Gilda: "+error.message);
 }
 
+
+try{
+  const creatorStart=html.indexOf("const classes=[");
+  const creatorEnd=html.indexOf("\n];",creatorStart);
+  if(creatorStart<0||creatorEnd<0)throw new Error("lista classi del creatore non individuata");
+  const creatorClasses=html.slice(creatorStart,creatorEnd);
+  const expected=["Guerriero","Mago","Arciere","Druido","Cavaliere oscuro","Chierico","Berserker","Ladro","Assassino","Paladino"];
+  for(const name of expected)if(!creatorClasses.includes('name:"'+name+'"'))throw new Error("classe giocabile assente: "+name);
+  const abilityClasses=new Set([...html.matchAll(/classKey:"([^"]+)"/g)].map(x=>x[1]));
+  for(const name of expected)if(!abilityClasses.has(name))throw new Error("abilità di classe assenti: "+name);
+  pass("Creatore e catalogo abilità coprono tutte e dieci le classi");
+}catch(error){fail("Test classi giocabili: "+error.message)}
+
 if (!html.includes('"Lancia"') || !html.includes('name.includes("lancia")') ||
     !html.includes('name:"Lancia del Guardiano"')) {
   fail("Supporto della lancia incompleto tra generazione, grafica e bottino.");
@@ -248,9 +261,11 @@ try {
   const proc = new Function(procCode + ";return {seededRandom,makeProceduralPerson};")();
   const abilityClasses=new Map([...html.matchAll(/id:"([^"]+)",classKey:"([^"]+)"/g)].map(match=>[match[1],match[2]]));
   let generated = 0;
-  for (let seed = 1; seed <= 120; seed++) {
+  const generatedClassNames=new Set();
+  for (let seed = 1; seed <= 500; seed++) {
     const person = proc.makeProceduralPerson(proc.seededRandom(seed), 0, "ally", 1, seed);
     const beastfolk = ["lion","wolf","rabbit"].includes(person.raceId);
+    generatedClassNames.add(person.class);
     if(!Array.isArray(person.equippedAbilities)||person.equippedAbilities.length!==2||person.equippedAbilities.some(id=>abilityClasses.get(id)!==person.class)){
       throw new Error("abilità iniziali assenti o non coerenti per "+person.class+" seed "+seed+": "+JSON.stringify(person.equippedAbilities));
     }
@@ -268,7 +283,8 @@ try {
     }
     generated++;
   }
-  pass("Test generazione procedurale: " + generated + " seed, equipaggiamento e abilità iniziali coerenti con razza/classe");
+  for(const name of ["Guerriero","Mago","Arciere","Druido","Cavaliere oscuro","Chierico","Berserker","Ladro","Assassino","Paladino"])if(!generatedClassNames.has(name))throw new Error("classe non generata nei seed di verifica: "+name);
+  pass("Test generazione procedurale: " + generated + " seed, tutte e dieci le classi, equipaggiamento e abilità coerenti");
 } catch (error) {
   fail("Test generazione procedurale: " + error.message);
 }
