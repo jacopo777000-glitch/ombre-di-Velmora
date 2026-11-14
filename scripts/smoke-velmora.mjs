@@ -594,7 +594,15 @@ try {
   }
   if (!saved?.battle?.backgroundSeed) throw new Error("backgroundSeed non presente nel salvataggio");
   const seed = saved.battle.backgroundSeed;
-  const backgroundBeforeReload=await page.evaluate(()=>document.querySelector("#combat .battlefield")?.style.backgroundImage||"");
+  if(!saved.battle || saved.battle.ended) throw new Error("il salvataggio non contiene un combattimento attivo");
+  const expectedScene = Number(saved.battle.n)===1 ? "forest" : Number(saved.battle.n)===2 ? "crypt" : "boss";
+  const backgroundBeforeReload=await page.evaluate(()=>({
+    image:document.querySelector("#combat .battlefield")?.style.backgroundImage||"",
+    scene:document.querySelector("#combat .battlefield")?.dataset.backgroundScene||""
+  }));
+  if(!backgroundBeforeReload.image.includes("assets/battle/") || backgroundBeforeReload.scene!==expectedScene) {
+    throw new Error("lo sfondo prima del salvataggio non corrisponde allo scontro attivo: "+JSON.stringify({expectedScene,backgroundBeforeReload,battleN:saved.battle.n}));
+  }
 
   await page.setViewportSize({width:390,height:844});
   const mobile = await page.evaluate(() => ({
@@ -609,13 +617,18 @@ try {
   await page.reload({waitUntil:"domcontentloaded",timeout:30000});
   await page.locator("#heroName").waitFor({state:"visible",timeout:15000}).catch(()=>{});
   await page.evaluate(() => { window.alert=()=>{}; window.loadGame(); });
-  await page.waitForFunction(() => {
+  await page.waitForFunction(scene => {
     const field=document.querySelector("#combat .battlefield");
     return field && !document.querySelector("#combat").classList.contains("hidden") &&
-      field.style.backgroundImage.includes("assets/battle/") && field.dataset.backgroundScene==="crypt";
-  }, {timeout:20000});
-  const backgroundAfterReload=await page.evaluate(()=>document.querySelector("#combat .battlefield")?.style.backgroundImage||"");
-  if(backgroundAfterReload!==backgroundBeforeReload)throw new Error("lo sfondo non è stato ripristinato dallo stesso seed dopo reload");
+      field.style.backgroundImage.includes("assets/battle/") && field.dataset.backgroundScene===scene;
+  }, expectedScene, {timeout:30000});
+  const backgroundAfterReload=await page.evaluate(()=>({
+    image:document.querySelector("#combat .battlefield")?.style.backgroundImage||"",
+    scene:document.querySelector("#combat .battlefield")?.dataset.backgroundScene||""
+  }));
+  if(backgroundAfterReload.image!==backgroundBeforeReload.image || backgroundAfterReload.scene!==expectedScene) {
+    throw new Error("lo sfondo non è stato ripristinato dallo stesso seed dopo reload: "+JSON.stringify({before:backgroundBeforeReload,after:backgroundAfterReload,seed}));
+  }
   const restored = await page.evaluate(() => JSON.parse(localStorage.getItem("velmoraDemoSave")||"null"));
   if (restored?.battle?.backgroundSeed !== seed) throw new Error("backgroundSeed cambiato dopo reload/loadGame");
   const restoredRoster=await page.evaluate(()=>G.proceduralRoster.map(p=>({id:p.id,seed:p.seed,name:p.name,race:p.race,raceId:p.raceId,gender:p.gender,class:p.class,equipment:p.equipment,abilities:p.equippedAbilities})));
