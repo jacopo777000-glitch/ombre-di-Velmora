@@ -156,6 +156,12 @@ try {
         if(!head||head.w<.14||head.w>.28||!hair||hair.x<0||hair.y<0||hair.x+hair.w>1||hair.y+hair.h>1){
           throw new Error("fit capelli/copricapo non valido per "+name+" "+gender);
         }
+        const hairOptions=["Capelli coda ciuffi","Capelli coda lunga","Capelli lunghi","Capelli mossi","Capelli rasati lato","Capelli rasta","Capelli spettinati","Capelli trecce"];
+        const hairLayers=hairOptions.map(style=>renderer.equipmentHairData({...person,equipment:{...person.equipment,head:"",hair:style}}));
+        const centers=hairLayers.map(layer=>layer&&layer.x+layer.w/2);
+        if(hairLayers.some(layer=>!layer||layer.x<0||layer.y<0||layer.x+layer.w>1||layer.y+layer.h>1)||Math.max(...centers)-Math.min(...centers)>.001){
+          throw new Error("acconciature non centrate in modo uniforme su "+name+" "+gender+": "+JSON.stringify(centers));
+        }
       }else if(renderer.equipmentLayerData(person,"head")||renderer.equipmentHairData(person)){
         throw new Error("overlay testa umano applicato a "+name);
       }
@@ -175,7 +181,7 @@ try {
   const humanM=renderer.equipmentLayerData({race:"Umano",gender:"M",equipment:{armor:"Armatura_guerriero"}},"armor")[0];
   const humanF=renderer.equipmentLayerData({race:"Umano",gender:"F",equipment:{armor:"Armatura_guerriero"}},"armor")[0];
   if(humanM.y===humanF.y||humanM.h===humanF.h)throw new Error("fit maschile e femminile non differenziato");
-  pass("Fit geometrico armature per 12 modelli; silhouette modulari ritagliate, hair/headgear e impugnatura armi per razza e sesso");
+  pass("Fit armature su 12 modelli; 8 acconciature centrate per razza/sesso; copricapi e impugnatura armi distinti");
 } catch (error) {
   fail("Test renderer equipaggiamento: " + error.message);
 }
