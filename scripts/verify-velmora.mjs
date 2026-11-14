@@ -146,7 +146,7 @@ try {
         const raw=renderer.equipmentLayerData(person,partSlot),parts=Array.isArray(raw)?raw:raw?[raw]:[];
         if(!parts.length)throw new Error("parte armatura assente per "+name+" "+gender+" "+partSlot);
         for(const armor of parts){
-          if(armor.modular?(!String(armor.src||"").includes("assets/equip/modular/")||armor.w<=0||armor.h<=0||armor.x<0||armor.y<0||armor.x+armor.w>1||armor.y+armor.h>1):(armor.w<.40||armor.w>.52||armor.h<.68||armor.h>.82||armor.x<0||armor.y<.14||armor.y>.30||armor.x+armor.w>1||armor.y+armor.h>1||!armor.clip||!Array.isArray(armor.points)||armor.points.length<4)){
+          if(armor.modular?(!String(armor.src||"").includes("assets/equip/modular/")||armor.w<=0||armor.h<=0||armor.x<0||armor.y<0||armor.x+armor.w>1||armor.y+armor.h>1||!armor.clip||!Array.isArray(armor.points)||armor.points.length<3):(armor.w<.40||armor.w>.52||armor.h<.68||armor.h>.82||armor.x<0||armor.y<.14||armor.y>.30||armor.x+armor.w>1||armor.y+armor.h>1||!armor.clip||!Array.isArray(armor.points)||armor.points.length<4)){
             throw new Error("fit parte armatura fuori area per "+name+" "+gender+" "+partSlot+": "+JSON.stringify(armor));
           }
         }
@@ -175,7 +175,7 @@ try {
   const humanM=renderer.equipmentLayerData({race:"Umano",gender:"M",equipment:{armor:"Armatura_guerriero"}},"armor")[0];
   const humanF=renderer.equipmentLayerData({race:"Umano",gender:"F",equipment:{armor:"Armatura_guerriero"}},"armor")[0];
   if(humanM.y===humanF.y||humanM.h===humanF.h)throw new Error("fit maschile e femminile non differenziato");
-  pass("Fit geometrico armature per 12 modelli; hair/headgear e impugnatura armi distinti per razza e sesso");
+  pass("Fit geometrico armature per 12 modelli; silhouette modulari ritagliate, hair/headgear e impugnatura armi per razza e sesso");
 } catch (error) {
   fail("Test renderer equipaggiamento: " + error.message);
 }
