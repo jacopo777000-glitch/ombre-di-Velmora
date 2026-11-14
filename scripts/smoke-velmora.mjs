@@ -305,8 +305,10 @@ try {
         const rects=armorLayers.map(el=>el.getBoundingClientRect());
         const union=rects.length?{left:Math.min(...rects.map(r=>r.left)),top:Math.min(...rects.map(r=>r.top)),right:Math.max(...rects.map(r=>r.right)),bottom:Math.max(...rects.map(r=>r.bottom))}:null;
         const geometry=union?{x:(union.left-artRect.left)/artRect.width,y:(union.top-artRect.top)/artRect.height,w:(union.right-union.left)/artRect.width,h:(union.bottom-union.top)/artRect.height}:null;
-        if(!loaded||!geometry||geometry.w<.40||geometry.w>.52||geometry.h<.68||geometry.h>.82||geometry.x<0||geometry.y<.14||geometry.y>.25||geometry.x+geometry.w>1||geometry.y+geometry.h>1){
-          throw new Error("armatura fuori geometria o asset non caricato su "+race+" "+gender+": "+JSON.stringify({loaded,geometry}));
+        const weapon=art.querySelector(".weaponLayer"),weaponRect=weapon&&weapon.getBoundingClientRect();
+        const weaponGeometry=weaponRect?{x:(weaponRect.left-artRect.left)/artRect.width,y:(weaponRect.top-artRect.top)/artRect.height,w:weaponRect.width/artRect.width,h:weaponRect.height/artRect.height}:null;
+        if(!loaded||!geometry||geometry.w<.40||geometry.w>.52||geometry.h<.68||geometry.h>.82||geometry.x<0||geometry.y<.14||geometry.y>.25||geometry.x+geometry.w>1||geometry.y+geometry.h>1||!weaponGeometry||weaponGeometry.x<0||weaponGeometry.y<0||weaponGeometry.x+weaponGeometry.w>1||weaponGeometry.y+weaponGeometry.h>1||getComputedStyle(weapon).zIndex!=="7"){
+          throw new Error("armatura fuori geometria o asset non caricato su "+race+" "+gender+": "+JSON.stringify({loaded,geometry,weaponGeometry}));
         }
         for(const armorName of armorOptions){
           hero.equipment.armor=armorName;
@@ -357,7 +359,7 @@ try {
         }
         const base=art.querySelector(".unitBase");
         if(!base.naturalWidth||Math.abs(base.naturalWidth/base.naturalHeight-(912/1168))>.01)throw new Error("proporzioni modello base inattese su "+race+" "+gender+": "+base.naturalWidth+"x"+base.naturalHeight);
-        results.push({race,gender,geometry,head:!!head,hair:!!hair});
+        results.push({race,gender,geometry,weaponGeometry,head:!!head,hair:!!hair});
       }
     }
     if(armorFits!==48||armorPartFits!==432||headFits!==24||hairFits!==48)throw new Error("conteggio fit non completo: "+JSON.stringify({armorFits,armorPartFits,headFits,hairFits}));
