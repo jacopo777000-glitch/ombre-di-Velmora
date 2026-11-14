@@ -113,7 +113,10 @@ try {
         sideQuestAction(item.id,choice);
         const state=G.sideQuests[item.id];
         if(state.status!=="completed"||!state.outcome||!state.history.length||G.gold<=0)throw new Error("esito/ricompensa non assegnati: "+item.id+" "+choice);
-        results.push({quest:item.id,choice,outcome:state.outcome,gold:G.gold,reputation:G.sideQuestReputation});
+        const factionSnapshot=JSON.parse(JSON.stringify(G.factionReputation||{}));
+        if(!Object.values(factionSnapshot).some(value=>Number(value)!==0))throw new Error("la scelta non modifica la reputazione di alcuna fazione: "+item.id+" "+choice);
+        if(JSON.stringify(saved?.G?.factionReputation)!==JSON.stringify(factionSnapshot))throw new Error("reputazione delle fazioni non persistita: "+item.id+" "+choice);
+        results.push({quest:item.id,choice,outcome:state.outcome,gold:G.gold,reputation:G.sideQuestReputation,factions:factionSnapshot});
       }
     }finally{
       Math.random=originalRandom;G=original;
@@ -122,8 +125,13 @@ try {
     return results;
   });
   if(sideQuestBranchChecks.length!==10)throw new Error("rami missione secondaria non verificati: "+JSON.stringify(sideQuestBranchChecks));
-  console.log("PASS: 10 finali alternativi delle cinque missioni principali",sideQuestBranchChecks);
-
+  console.log("PASS: 10 finali alternativi delle cinque missioni principali e reputazione persistente delle fazioni",sideQuestBranchChecks);
+  const factionUi=await page.evaluate(()=>{
+    showMenu("factions");
+    return {count:document.querySelectorAll("#menuContent .factionCard").length,labels:[...document.querySelectorAll("#menuContent .factionCard strong")].map(x=>x.textContent.trim())};
+  });
+  if(factionUi.count!==7)throw new Error("schermata fazioni incompleta: "+JSON.stringify(factionUi));
+  console.log("PASS: schermata reputazione mostra tutte le sette fazioni",factionUi);
 
   async function checkBattle(n, expectedScene) {
     await page.evaluate(value => window.startBattle(value), n);
