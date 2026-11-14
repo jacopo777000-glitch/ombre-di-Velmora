@@ -107,7 +107,7 @@ try {
   if (femaleStart < 0 || femaleEnd < 0 || layerStart < 0 || layerEnd < 0) throw new Error("renderer equipment o helper sesso non individuati");
   const helperCode = html.slice(femaleStart, femaleEnd);
   const layerCode = html.slice(layerStart, layerEnd);
-  const makeRenderer = new Function("asset", "equipmentManifest", "weaponSvgFor", helperCode + ";" + layerCode + "; return {equipmentLayers,equipmentLayerData,equipmentHairData};");
+  const makeRenderer = new Function("asset", "equipmentManifest", "weaponSvgFor", helperCode + ";" + layerCode + "; return {equipmentLayers,equipmentLayerData,equipmentHairData,weaponAnchorFor,weaponSvgFor};");
   const sample = {};
   for (const key of ["Armatura_arciere.JPG", "Armatura_druido.JPG", "Armatura_guerriero.JPG", "Armatura_mago.JPG", "Cappello_mago.JPG", "Cappello_punk.JPG", "Elmo_drago.JPG", "Capelli_mossi.jpg"]) {
     if(!manifest[key])throw new Error("voce manifest non trovata per "+key);
@@ -132,7 +132,9 @@ try {
   ];
   for(const [id,name] of models){
     for(const gender of ["M","F"]){
-      const person={raceId:id,race:name,gender,equipment:{armor:"Armatura_guerriero",shouldersStyle:"Armatura_guerriero",armsStyle:"Armatura_guerriero",legsStyle:"Armatura_guerriero",bootsStyle:"Armatura_guerriero",head:["human","elf","orc"].includes(id)?"Elmo_drago":"",hair:"Capelli mossi"}};
+      const person={raceId:id,race:name,gender,equipment:{armor:"Armatura_guerriero",shouldersStyle:"Armatura_guerriero",armsStyle:"Armatura_guerriero",legsStyle:"Armatura_guerriero",bootsStyle:"Armatura_guerriero",head:["human","elf","orc"].includes(id)?"Elmo_drago":"",hair:"Capelli mossi",weapon:"Spada"}};
+      const weaponAnchor=renderer.weaponAnchorFor(person),weaponSvg=renderer.weaponSvgFor(person);
+      if(!weaponAnchor||weaponAnchor.x<0||weaponAnchor.y<0||weaponAnchor.w<=0||weaponAnchor.h<=0||weaponAnchor.x+weaponAnchor.w>1||weaponAnchor.y+weaponAnchor.h>1||!weaponSvg.includes('style="left:'))throw new Error("ancoraggio arma fuori modello per "+name+" "+gender+": "+JSON.stringify(weaponAnchor));
       for(const partSlot of ["armor","shoulders","arms","legs","boots"]){
         const raw=renderer.equipmentLayerData(person,partSlot),parts=Array.isArray(raw)?raw:raw?[raw]:[];
         if(!parts.length)throw new Error("parte armatura assente per "+name+" "+gender+" "+partSlot);
@@ -166,7 +168,7 @@ try {
   const humanM=renderer.equipmentLayerData({race:"Umano",gender:"M",equipment:{armor:"Armatura_guerriero"}},"armor")[0];
   const humanF=renderer.equipmentLayerData({race:"Umano",gender:"F",equipment:{armor:"Armatura_guerriero"}},"armor")[0];
   if(humanM.y===humanF.y||humanM.h===humanF.h)throw new Error("fit maschile e femminile non differenziato");
-  pass("Fit geometrico armature per 12 modelli; hair/headgear distinti per razza e sesso");
+  pass("Fit geometrico armature per 12 modelli; hair/headgear e impugnatura armi distinti per razza e sesso");
 } catch (error) {
   fail("Test renderer equipaggiamento: " + error.message);
 }
