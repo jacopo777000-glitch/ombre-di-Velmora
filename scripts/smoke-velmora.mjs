@@ -115,7 +115,8 @@ try {
         if(state.status!=="completed"||!state.outcome||!state.history.length||G.gold<=0)throw new Error("esito/ricompensa non assegnati: "+item.id+" "+choice);
         const factionSnapshot=JSON.parse(JSON.stringify(G.factionReputation||{}));
         if(!Object.values(factionSnapshot).some(value=>Number(value)!==0))throw new Error("la scelta non modifica la reputazione di alcuna fazione: "+item.id+" "+choice);
-        if(JSON.stringify(saved?.G?.factionReputation)!==JSON.stringify(factionSnapshot))throw new Error("reputazione delle fazioni non persistita: "+item.id+" "+choice);
+        const persisted=JSON.parse(localStorage.getItem("velmoraDemoSave")||"null");
+        if(JSON.stringify(persisted?.G?.factionReputation)!==JSON.stringify(factionSnapshot))throw new Error("reputazione delle fazioni non persistita: "+item.id+" "+choice);
         results.push({quest:item.id,choice,outcome:state.outcome,gold:G.gold,reputation:G.sideQuestReputation,factions:factionSnapshot});
       }
     }finally{
