@@ -107,13 +107,17 @@ try {
   if (femaleStart < 0 || femaleEnd < 0 || layerStart < 0 || layerEnd < 0) throw new Error("renderer equipment o helper sesso non individuati");
   const helperCode = html.slice(femaleStart, femaleEnd);
   const layerCode = html.slice(layerStart, layerEnd);
-  const makeRenderer = new Function("asset", "equipmentManifest", "weaponSvgFor", helperCode + ";" + layerCode + "; return {equipmentLayers,equipmentLayerData,equipmentHairData,weaponAnchorFor,weaponSvgFor};");
+  const weaponStart=html.indexOf("function weaponNameFor(u){");
+  const weaponEnd=html.indexOf("\nconst finisherImageCache",weaponStart);
+  if(weaponStart<0||weaponEnd<0)throw new Error("helper ancoraggio armi non individuati");
+  const weaponCode=html.slice(weaponStart,weaponEnd);
+  const makeRenderer = new Function("asset", "equipmentManifest", helperCode + ";" + layerCode + ";" + weaponCode + "; return {equipmentLayers,equipmentLayerData,equipmentHairData,weaponAnchorFor,weaponSvgFor};");
   const sample = {};
   for (const key of ["Armatura_arciere.JPG", "Armatura_druido.JPG", "Armatura_guerriero.JPG", "Armatura_mago.JPG", "Cappello_mago.JPG", "Cappello_punk.JPG", "Elmo_drago.JPG", "Capelli_mossi.jpg"]) {
     if(!manifest[key])throw new Error("voce manifest non trovata per "+key);
     sample[key] = manifest[key];
   }
-  const renderer = makeRenderer(name => name, sample, () => '<svg class="weaponLayer"></svg>');
+  const renderer = makeRenderer(name => name, sample);
   const render = renderer.equipmentLayers;
   const equipped = render({portrait:"hero.png",name:"Prova",race:"Umano",gender:"M",equipment:{armor:"Armatura_guerriero",shouldersStyle:"Armatura_guerriero",armsStyle:"Armatura_guerriero",legsStyle:"Armatura_guerriero",bootsStyle:"Armatura_guerriero",head:"Elmo_drago",hair:"Capelli mossi",weapon:"Spada"}});
   for(const slot of ["armor","shoulders","arms","legs","boots"])if(!equipped.includes('data-equipment-slot="'+slot+'"'))throw new Error("parte modulare non renderizzata: "+slot);
