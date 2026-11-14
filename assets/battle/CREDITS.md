@@ -15,3 +15,7 @@ The source artwork remains credited to its respective authors. Changes made here
 
 - duskforge/ — Duskforge Studio, Enchanted Forest RPG Backgrounds and Dark Dungeon RPG Backgrounds (20 illustrated PNG backgrounds, converted to optimized WebP). Official pages: https://doomguizz.itch.io/enchanted-forest-rpg-backgrounds and https://doomguizz.itch.io/dark-dungeon-rpg-backgrounds.
   - License stated by the author: free for commercial use, no attribution required, no redistribution of raw files. The repository contains only converted, optimized game-ready images, not the original ZIP/PNG files.
+
+- kalponic/ — Kalponic Studio, Painterly Battle Backgrounds (Free Pack, 50 battle backgrounds). Official page: https://kalponic-studio.itch.io/painterly-battle-backgrounds. The author permits personal and commercial game use, editing and inclusion in finished projects; standalone resale/repackaging is prohibited. The artwork is disclosed as AI-assisted. Only optimized WebP game resources are included here; the original ZIP is not redistributed.
+
+- gegx/ — GegX, Painterly Backgrounds Free (six painted fantasy backgrounds plus a parallax set). Official page: https://gegx.itch.io/painterly-backgrounds-free. The author permits commercial and non-commercial game use and modification; redistribution as an asset pack or image collection and AI training are prohibited. Credit is not required. The artwork is disclosed as AI-generated and hand-curated. Only optimized WebP game resources are included here; the original ZIP is not redistributed.

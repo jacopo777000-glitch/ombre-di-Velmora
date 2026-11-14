@@ -1,7 +1,610 @@
 {
   "author": "Kalponic Studio",
+  "title": "Painterly Battle Backgrounds — Free Pack",
   "source": "https://kalponic-studio.itch.io/painterly-battle-backgrounds",
-  "license": "Commercial game use permitted; standalone redistribution prohibited.",
-  "pendingImport": true,
-  "images": []
+  "pack": "kalponic.zip",
+  "license": "Free for personal and commercial projects; images may be edited and included in finished games; do not resell or repackage as standalone backgrounds.",
+  "conversion": "Originali ridimensionati/croppati a 1920x1080 e convertiti in WebP per l'integrazione nel gioco; i pacchetti ZIP originali non sono inclusi.",
+  "images": [
+    {
+      "file": "assets/battle/kalponic/kalponic_01_painterly_battle_backgrounds_1.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (1).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 156288,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_02_painterly_battle_backgrounds_10.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (10).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 152516,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_03_painterly_battle_backgrounds_11.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (11).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 117988,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_04_painterly_battle_backgrounds_12.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (12).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 79806,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_05_painterly_battle_backgrounds_13.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (13).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 143586,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_06_painterly_battle_backgrounds_14.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (14).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 121302,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_07_painterly_battle_backgrounds_15.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (15).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 267472,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_08_painterly_battle_backgrounds_16.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (16).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 205988,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_09_painterly_battle_backgrounds_17.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (17).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 165550,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_10_painterly_battle_backgrounds_18.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (18).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 159406,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_11_painterly_battle_backgrounds_19.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (19).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 225196,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_12_painterly_battle_backgrounds_2.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (2).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 97050,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_13_painterly_battle_backgrounds_20.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (20).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 121296,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_14_painterly_battle_backgrounds_21.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (21).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 135186,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_15_painterly_battle_backgrounds_22.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (22).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 207932,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_16_painterly_battle_backgrounds_23.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (23).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 131564,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_17_painterly_battle_backgrounds_24.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (24).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 260594,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_18_painterly_battle_backgrounds_25.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (25).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 76236,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_19_painterly_battle_backgrounds_26.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (26).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 221404,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_20_painterly_battle_backgrounds_27.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (27).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 105502,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_21_painterly_battle_backgrounds_28.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (28).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 151512,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_22_painterly_battle_backgrounds_29.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (29).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 164760,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_23_painterly_battle_backgrounds_3.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (3).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 54998,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_24_painterly_battle_backgrounds_30.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (30).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 91828,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_25_painterly_battle_backgrounds_31.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (31).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 121252,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_26_painterly_battle_backgrounds_32.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (32).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 230192,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_27_painterly_battle_backgrounds_33.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (33).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 82900,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_28_painterly_battle_backgrounds_34.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (34).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 115548,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_29_painterly_battle_backgrounds_35.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (35).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 82150,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_30_painterly_battle_backgrounds_36.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (36).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 116798,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_31_painterly_battle_backgrounds_37.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (37).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 72068,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_32_painterly_battle_backgrounds_38.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (38).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 191296,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_33_painterly_battle_backgrounds_39.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (39).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 213040,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_34_painterly_battle_backgrounds_4.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (4).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 46538,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_35_painterly_battle_backgrounds_40.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (40).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 93038,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_36_painterly_battle_backgrounds_41.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (41).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 157466,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_37_painterly_battle_backgrounds_42.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (42).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 69160,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_38_painterly_battle_backgrounds_43.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (43).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 78492,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_39_painterly_battle_backgrounds_44.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (44).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 85170,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_40_painterly_battle_backgrounds_45.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (45).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 97910,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_41_painterly_battle_backgrounds_46.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (46).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 91082,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_42_painterly_battle_backgrounds_47.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (47).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 101452,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_43_painterly_battle_backgrounds_48.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (48).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 90806,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_44_painterly_battle_backgrounds_49.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (49).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 77262,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_45_painterly_battle_backgrounds_5.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (5).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 35634,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_46_painterly_battle_backgrounds_50.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (50).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 69806,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_47_painterly_battle_backgrounds_6.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (6).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 72810,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_48_painterly_battle_backgrounds_7.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (7).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 82286,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_49_painterly_battle_backgrounds_8.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (8).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 105410,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/kalponic/kalponic_50_painterly_battle_backgrounds_9.webp",
+      "sourceFile": "Free Battle Backgrounds/Painterly Battle Backgrounds (9).png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 164422,
+      "scenes": [
+        "boss",
+        "crypt",
+        "forest"
+      ]
+    }
+  ]
 }

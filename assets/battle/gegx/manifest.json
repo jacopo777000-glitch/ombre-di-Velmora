@@ -1,7 +1,70 @@
 {
   "author": "GegX",
+  "title": "Painterly Backgrounds Free",
   "source": "https://gegx.itch.io/painterly-backgrounds-free",
-  "license": "Commercial game use permitted; asset-pack redistribution prohibited.",
-  "pendingImport": true,
-  "images": []
+  "pack": "gegx.zip",
+  "license": "Free for commercial and non-commercial projects including games; modification permitted; do not resell or redistribute the files as an asset pack or image collection; no AI training.",
+  "conversion": "Originali ridimensionati/croppati a 1920x1080 e convertiti in WebP per l'integrazione nel gioco; i pacchetti ZIP originali non sono inclusi.",
+  "images": [
+    {
+      "file": "assets/battle/gegx/gegx_01_forest_day.webp",
+      "sourceFile": "painterly-backgrounds-free-v1.0/backgrounds/forest/forest_day.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 226084,
+      "scenes": [
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/gegx/gegx_02_forest_fog.webp",
+      "sourceFile": "painterly-backgrounds-free-v1.0/backgrounds/forest/forest_fog.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 247942,
+      "scenes": [
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/gegx/gegx_03_forest_night.webp",
+      "sourceFile": "painterly-backgrounds-free-v1.0/backgrounds/forest/forest_night.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 207006,
+      "scenes": [
+        "forest"
+      ]
+    },
+    {
+      "file": "assets/battle/gegx/gegx_04_tavern_day.webp",
+      "sourceFile": "painterly-backgrounds-free-v1.0/backgrounds/tavern/tavern_day.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 193904,
+      "scenes": [
+        "tavern"
+      ]
+    },
+    {
+      "file": "assets/battle/gegx/gegx_05_tavern_fog.webp",
+      "sourceFile": "painterly-backgrounds-free-v1.0/backgrounds/tavern/tavern_fog.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 144046,
+      "scenes": [
+        "tavern"
+      ]
+    },
+    {
+      "file": "assets/battle/gegx/gegx_06_tavern_night.webp",
+      "sourceFile": "painterly-backgrounds-free-v1.0/backgrounds/tavern/tavern_night.png",
+      "width": 1920,
+      "height": 1080,
+      "bytes": 150524,
+      "scenes": [
+        "tavern"
+      ]
+    }
+  ]
 }
