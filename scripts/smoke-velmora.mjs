@@ -616,6 +616,22 @@ try {
   }
   console.log("PASS: bottino dei nemici filtrato per classe e rarità",proceduralLootCheck);
 
+  await page.evaluate(() => startBattle(2,generateProceduralEnemies(2,7788),7788));
+  await page.waitForFunction(() => {
+    const field=document.querySelector("#combat .battlefield");
+    return field && field.dataset.backgroundScene==="crypt" && field.style.backgroundImage.includes("assets/battle/");
+  }, {timeout:30000});
+  const enemyIdentity = items => items.map(p=>({
+    id:p.id,seed:p.seed,name:p.name,race:p.race,raceId:p.raceId,gender:p.gender,class:p.class,
+    level:p.level,rarity:p.rarity,portrait:p.portrait,equipment:p.equipment,appearance:p.appearance,
+    stats:p.stats,abilities:p.equippedAbilities
+  }));
+  const generatedEnemySnapshot=await page.evaluate(()=>battle.units.map(p=>({
+    id:p.id,seed:p.seed,name:p.name,race:p.race,raceId:p.raceId,gender:p.gender,class:p.class,
+    level:p.level,rarity:p.rarity,portrait:p.portrait,equipment:p.equipment,appearance:p.appearance,
+    stats:p.stats,abilities:p.equippedAbilities
+  })));
+  if(generatedEnemySnapshot.length<2||generatedEnemySnapshot.some(p=>!p.id||!p.seed||!p.equipment?.weapon))throw new Error("nemici procedurali incompleti prima del salvataggio: "+JSON.stringify(generatedEnemySnapshot));
   const rosterSnapshot = await page.evaluate(() => {
     ensureProceduralRoster();
     const snapshot=G.proceduralRoster.map(p=>({
@@ -634,6 +650,10 @@ try {
     window.__velmoraRosterSnapshot=snapshot;
     return snapshot;
   });
+  const factionSnapshot=await page.evaluate(()=>{
+    ensureSideQuestState();G.factionReputation.guard=4;G.factionReputation.pack=-2;
+    return JSON.parse(JSON.stringify(G.factionReputation));
+  });
   await page.evaluate(() => { window.alert=()=>{}; window.saveGame(); });
   const saved = await page.evaluate(() => JSON.parse(localStorage.getItem("velmoraDemoSave")||"null"));
   if (JSON.stringify(saved?.G?.proceduralRoster?.map(p=>({
@@ -642,6 +662,9 @@ try {
   }))) !== JSON.stringify(rosterSnapshot)) {
     throw new Error("il salvataggio non conserva l'identità dei compagni generati");
   }
+  if(JSON.stringify(saved?.G?.factionReputation)!==JSON.stringify(factionSnapshot))throw new Error("il salvataggio non conserva la reputazione delle fazioni");
+  if(saved?.battle?.proceduralSeed!==7788)throw new Error("seed dei nemici procedurali non conservato nel combattimento");
+  if(JSON.stringify(enemyIdentity(saved?.battle?.units||[]))!==JSON.stringify(generatedEnemySnapshot))throw new Error("identità/equipaggiamento dei nemici procedurali non conservati nel salvataggio");
   if (!saved?.battle?.backgroundSeed) throw new Error("backgroundSeed non presente nel salvataggio");
   const seed = saved.battle.backgroundSeed;
   if(!saved.battle || saved.battle.ended) throw new Error("il salvataggio non contiene un combattimento attivo");
@@ -683,7 +706,15 @@ try {
   if (restored?.battle?.backgroundSeed !== seed) throw new Error("backgroundSeed cambiato dopo reload/loadGame");
   const restoredRoster=await page.evaluate(()=>G.proceduralRoster.map(p=>({id:p.id,seed:p.seed,name:p.name,race:p.race,raceId:p.raceId,gender:p.gender,class:p.class,equipment:p.equipment,abilities:p.equippedAbilities})));
   if (JSON.stringify(restoredRoster)!==JSON.stringify(rosterSnapshot)) throw new Error("identità/equipaggiamento dei compagni generati non ripristinati");
-  console.log("PASS: ricaricamento partita mantiene combattimento, sfondo e roster procedurale");
+  const restoredFaction=await page.evaluate(()=>JSON.parse(JSON.stringify(G.factionReputation||{})));
+  if(JSON.stringify(restoredFaction)!==JSON.stringify(factionSnapshot))throw new Error("reputazione delle fazioni non ripristinata dopo reload");
+  const restoredEnemies=await page.evaluate(()=>battle.units.map(p=>({
+    id:p.id,seed:p.seed,name:p.name,race:p.race,raceId:p.raceId,gender:p.gender,class:p.class,
+    level:p.level,rarity:p.rarity,portrait:p.portrait,equipment:p.equipment,appearance:p.appearance,
+    stats:p.stats,abilities:p.equippedAbilities
+  })));
+  if(JSON.stringify(restoredEnemies)!==JSON.stringify(generatedEnemySnapshot))throw new Error("identità/equipaggiamento dei nemici procedurali non ripristinati dopo reload");
+  console.log("PASS: ricaricamento mantiene combattimento, sfondo, roster e nemici procedurali, equipaggiamento e reputazione delle fazioni");
 
   if (failures.length) throw new Error(failures.join("\n"));
   console.log("Smoke test browser Velmora completato senza errori.");
