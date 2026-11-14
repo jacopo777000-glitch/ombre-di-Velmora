@@ -269,6 +269,46 @@ try {
     if(b){Object.assign(G.hero,b);delete window.__velmoraArmorPreviewBackup;renderBattle();}
   });
 
+  // Capture a separate hair-fit contact sheet for the six humanoid model variants.
+  await page.evaluate(async () => {
+    const hero=G.hero;
+    const backup={race:hero.race,raceId:hero.raceId,gender:hero.gender,portrait:hero.portrait,equipment:JSON.parse(JSON.stringify(hero.equipment||{}))};
+    const samples=[
+      {raceId:"human",race:"Umano",gender:"M",portrait:"modello_umano_maschile.png.JPG.JPG",label:"UMANO M"},
+      {raceId:"human",race:"Umano",gender:"F",portrait:"modello_umano_femminile.png.JPG.JPG",label:"UMANO F"},
+      {raceId:"elf",race:"Elfo",gender:"M",portrait:"elfo_m_base.png.JPG",label:"ELFO M"},
+      {raceId:"elf",race:"Elfo",gender:"F",portrait:"elfo_f_base.png.JPG",label:"ELFO F"},
+      {raceId:"orc",race:"Orco",gender:"M",portrait:"orco_m_base.png.JPG",label:"ORCO M"},
+      {raceId:"orc",race:"Orco",gender:"F",portrait:"orco_f_base.png.JPG",label:"ORCO F"}
+    ];
+    const panel=document.createElement("div");
+    panel.id="__velmoraHairPreview";
+    panel.style.cssText="position:fixed;z-index:999999;left:12px;top:12px;display:grid;grid-template-columns:repeat(3,230px);gap:12px;padding:18px;background:#100e0c;border:2px solid #d6b16c;border-radius:12px;box-shadow:0 0 30px #000;color:#f0d49b;font:13px Georgia,serif";
+    for(const sample of samples){
+      hero.race=sample.race;hero.raceId=sample.raceId;hero.gender=sample.gender;hero.portrait=sample.portrait;
+      hero.equipment={hair:"Capelli mossi",head:"",armor:"",weapon:""};
+      renderBattle();
+      const source=document.querySelector('#partyList [data-unit-id="hero"] .unitArt');
+      const clone=source.cloneNode(true);
+      clone.querySelector(".weaponLayer")?.remove();
+      clone.style.cssText="width:230px;height:294px;aspect-ratio:912/1168;flex:none;background:#17120d;border:1px solid #96713b";
+      const card=document.createElement("div");
+      card.style.cssText="display:flex;flex-direction:column;gap:5px;align-items:center";
+      const label=document.createElement("strong");label.textContent=sample.label;
+      card.append(label,clone);panel.append(card);
+    }
+    document.body.append(panel);
+    await Promise.all([...panel.querySelectorAll("img")].map(img=>img.decode().catch(()=>null)));
+    window.__velmoraHairPreviewBackup=backup;
+  });
+  const hairPreview=await page.locator("#__velmoraHairPreview").screenshot({type:"jpeg",quality:78});
+  console.log("VELMORA_HAIR_PREVIEW_BASE64="+hairPreview.toString("base64"));
+  await page.evaluate(() => {
+    document.querySelector("#__velmoraHairPreview")?.remove();
+    const b=window.__velmoraHairPreviewBackup;
+    if(b){Object.assign(G.hero,b);delete window.__velmoraHairPreviewBackup;renderBattle();}
+  });
+
   const allRaceEquipment = await page.evaluate(async () => {
     const hero=G.hero;
     const backup={race:hero.race,raceId:hero.raceId,gender:hero.gender,portrait:hero.portrait,equipment:JSON.parse(JSON.stringify(hero.equipment||{}))};
