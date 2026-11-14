@@ -65,6 +65,8 @@ else pass("Parti armatura modulari nel manifest: " + modularPartCount);
 
 for (const file of [...referenced].sort()) {
   const full = path.resolve(root, file);
+  const optionalPainterlyManifest=["assets/battle/kalponic/manifest.json","assets/battle/gegx/manifest.json"].includes(file);
+  if(optionalPainterlyManifest&&!fs.existsSync(full))continue;
   if (!full.startsWith(root + path.sep) || !fs.existsSync(full) || !fs.statSync(full).isFile()) {
     fail("Asset locale assente o path con maiuscole/minuscole errate: " + file);
   }
@@ -362,7 +364,7 @@ try {
   }
   if (!html.includes("function applyDuskforgeBattleBackground") ||
       !html.includes("backgroundSeed:") ||
-      !html.includes("fetch('./assets/battle/duskforge/manifest.json')")) {
+      !html.includes('loadPainterlyManifest("./assets/battle/duskforge/manifest.json"')) {
     throw new Error("selezione e caricamento sfondi non collegati alle battaglie");
   }
   const credits=fs.readFileSync(path.join(root,"assets/battle/CREDITS.md"),"utf8");

@@ -7,6 +7,8 @@ on:
       - ".github/workflows/import-painterly-backgrounds.yml"
       - "scripts/download_painterly_packs.mjs"
       - "scripts/process_painterly_packs.py"
+      - "scripts/verify-velmora.mjs"
+      - "scripts/smoke-velmora.mjs"
   workflow_dispatch:
 
 permissions:
