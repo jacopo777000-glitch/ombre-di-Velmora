@@ -129,7 +129,7 @@ try {
     if (!result.image.includes("assets/battle/") || !["Duskforge","Kalponic Studio","GegX"].includes(result.source) || result.scene!==expectedScene) {
       throw new Error("Sfondo painterly non applicato per battaglia "+n+": "+JSON.stringify(result));
     }
-    const assetUrl=(result.image.match(/url\\(["']?(.*?)["']?\\)/)||[])[1];
+    const assetUrl=(result.image.match(/url\(["']?(.*?)["']?\)/)||[])[1];
     const response=assetUrl?await page.evaluate(async url=>{const r=await fetch(url,{cache:"no-store"});return {ok:r.ok,status:r.status}},assetUrl):{ok:false,status:0};
     if(!response.ok)throw new Error("Asset di battaglia non raggiungibile: "+assetUrl+" HTTP "+response.status);
     console.log("PASS: battaglia "+n+" usa uno sfondo "+result.source+" per la scena "+expectedScene+": "+assetUrl);
