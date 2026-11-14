@@ -1668,13 +1668,14 @@ function equipmentHairData(u){
  const eq=u&&u.equipment||{},files={"Capelli coda ciuffi":"Capelli_coda_ciuffi.jpg","Capelli coda lunga":"Capelli_coda_lunga.jpg","Capelli lunghi":"Capelli_lunghi.jpg","Capelli mossi":"Capelli_mossi.jpg","Capelli rasati lato":"Capelli_rasati_lato.jpg","Capelli rasta":"Capelli_rasta.jpg","Capelli spettinati":"Capelli_spettinati.jpg","Capelli trecce":"Capelli_trecce.jpg"};
  const race=equipmentRaceId(u),gender=isFemaleCharacter(u)?"F":"M";
  const anchors={
-  human:{M:{x:125,y:5,scale:1.12},F:{x:121,y:4,scale:1.08}},
-  elf:{M:{x:130,y:2,scale:1.14},F:{x:126,y:1,scale:1.10}},
-  orc:{M:{x:120,y:7,scale:1.12},F:{x:122,y:5,scale:1.08}}
+  human:{M:{centerX:.642,top:.025,scale:1.12},F:{centerX:.641,top:.024,scale:1.08}},
+  elf:{M:{centerX:.646,top:.020,scale:1.14},F:{centerX:.644,top:.018,scale:1.10}},
+  orc:{M:{centerX:.640,top:.027,scale:1.12},F:{centerX:.642,top:.025,scale:1.08}}
  };
  const a=anchors[race]&&anchors[race][gender],d=eq.hair&&!eq.head&&equipmentManifest[files[eq.hair]];
  if(!a||!d||!d.file||!Number(d.sourceWidth)||!Number(d.sourceHeight))return null;
- return {src:d.file,x:(Number(d.x||0)+a.x)/Number(d.sourceWidth),y:(Number(d.y||0)+a.y)/Number(d.sourceHeight),w:(Number(d.width)*a.scale)/Number(d.sourceWidth),h:(Number(d.height)*a.scale)/Number(d.sourceHeight)};
+ const w=(Number(d.width)*a.scale)/Number(d.sourceWidth),h=(Number(d.height)*a.scale)/Number(d.sourceHeight);
+ return {src:d.file,x:a.centerX-w/2,y:a.top,w,h};
 }
 const armorPartPolygons={
  Armatura_guerriero:{
