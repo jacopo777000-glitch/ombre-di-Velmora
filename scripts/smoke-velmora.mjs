@@ -144,6 +144,25 @@ try {
     }finally{G=original;updateHUD();}
   });
   if(factionEventCheck!=="Il lasciapassare della Guardia")throw new Error("la reputazione non sblocca l'evento della Guardia: "+factionEventCheck);
+  const factionEventChecks=await page.evaluate(()=>{
+    const original=JSON.parse(JSON.stringify(G));
+    const cases=[
+      {id:"guard",title:"Il lasciapassare della Guardia"},
+      {id:"caravans",title:"La mappa dei carovanieri"},
+      {id:"blackMarket",title:"L'informatore sotto la pioggia"},
+      {id:"pack",title:"Un richiamo tra i pini"},
+      {id:"ashCompany",title:"Il segno della cenere"}
+    ];
+    try{
+      return cases.map(item=>{
+        G.factionReputation={[item.id]:3};G.party=[{id:"faction-test",name:"Compagno di prova"}];
+        G.activeGuildMission={...guildMissions[0],seed:123,step:0,score:0,loot:[],flags:{},events:[],usedEventTitles:["La partenza dalla Gilda","Un committente nervoso"]};
+        guildRouteEvent();
+        return {faction:item.id,title:$("sceneTitle").textContent,expected:item.title};
+      });
+    }finally{G=original;updateHUD();}
+  });
+  if(factionEventChecks.some(item=>item.title!==item.expected))throw new Error("eventi dinamici di fazione incompleti: "+JSON.stringify(factionEventChecks));
   const guildFactionReward=await page.evaluate(()=>{
     const original=JSON.parse(JSON.stringify(G)),originalSave=localStorage.getItem("velmoraDemoSave");
     try{
@@ -154,7 +173,7 @@ try {
     }finally{G=original;if(originalSave===null)localStorage.removeItem("velmoraDemoSave");else localStorage.setItem("velmoraDemoSave",originalSave);updateHUD();}
   });
   for(const [id,min] of [["guild",2],["village",1],["caravans",1],["guard",1],["pack",1]])if(Number(guildFactionReward[id]||0)<min)throw new Error("ricompensa Gilda non aggiorna la fazione "+id+": "+JSON.stringify(guildFactionReward));
-  console.log("PASS: reputazione sblocca eventi dinamici e viene aggiornata dagli incarichi della Gilda",factionEventCheck,guildFactionReward);
+  console.log("PASS: tutte le cinque fazioni sbloccano eventi dinamici e ricevono reputazione dagli incarichi della Gilda",factionEventChecks,guildFactionReward);
 
   async function checkBattle(n, expectedScene) {
     await page.evaluate(value => window.startBattle(value), n);
