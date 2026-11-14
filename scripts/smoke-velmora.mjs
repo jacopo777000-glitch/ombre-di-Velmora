@@ -307,8 +307,9 @@ try {
         const geometry=union?{x:(union.left-artRect.left)/artRect.width,y:(union.top-artRect.top)/artRect.height,w:(union.right-union.left)/artRect.width,h:(union.bottom-union.top)/artRect.height}:null;
         const weapon=art.querySelector(".weaponLayer"),weaponRect=weapon&&weapon.getBoundingClientRect();
         const weaponGeometry=weaponRect?{x:(weaponRect.left-artRect.left)/artRect.width,y:(weaponRect.top-artRect.top)/artRect.height,w:weaponRect.width/artRect.width,h:weaponRect.height/artRect.height}:null;
-        if(!loaded||!geometry||geometry.w<.40||geometry.w>.52||geometry.h<.68||geometry.h>.82||geometry.x<0||geometry.y<.14||geometry.y>.25||geometry.x+geometry.w>1||geometry.y+geometry.h>1||!weaponGeometry||weaponGeometry.x<0||weaponGeometry.y<0||weaponGeometry.x+weaponGeometry.w>1||weaponGeometry.y+weaponGeometry.h>1||getComputedStyle(weapon).zIndex!=="7"){
-          throw new Error("armatura fuori geometria o asset non caricato su "+race+" "+gender+": "+JSON.stringify({loaded,geometry,weaponGeometry}));
+        const clippedArmor=armorLayers.every(el=>getComputedStyle(el).clipPath.includes("polygon"));
+        if(!loaded||!geometry||geometry.w<.40||geometry.w>.52||geometry.h<.68||geometry.h>.82||geometry.x<0||geometry.y<.14||geometry.y>.25||geometry.x+geometry.w>1||geometry.y+geometry.h>1||!weaponGeometry||weaponGeometry.x<0||weaponGeometry.y<0||weaponGeometry.x+weaponGeometry.w>1||weaponGeometry.y+weaponGeometry.h>1||getComputedStyle(weapon).zIndex!=="7"||!clippedArmor){
+          throw new Error("armatura fuori geometria o asset non caricato su "+race+" "+gender+": "+JSON.stringify({loaded,geometry,weaponGeometry,clippedArmor}));
         }
         for(const armorName of armorOptions){
           hero.equipment.armor=armorName;
