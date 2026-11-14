@@ -476,6 +476,19 @@ try {
   await page.evaluate(() => window.__velmoraFinisherTest);
   console.log("PASS: colpo di grazia saltato e personaggi ripristinati");
 
+  const navigationCheck=await page.evaluate(()=>{
+    if(!battle||battle.ended)throw new Error("battaglia non attiva durante il test dei menu");
+    const snapshot=()=>({round:battle.round,order:battle.order.map(unit=>String(unit.id)),current:current()?.id,target:selectedTarget,units:battle.units.map(unit=>({id:String(unit.id),hp:unit.hp,alive:unit.alive}))});
+    const before=snapshot();
+    openTab("inventory");openTab("squad");openTab("more");
+    openAbilitiesScreen();closeAbilitiesScreen();
+    openCharacterScreen();closeCharacterScreen();
+    openTab("mission");
+    return {before,after:snapshot()};
+  });
+  if(JSON.stringify(navigationCheck.before)!==JSON.stringify(navigationCheck.after))throw new Error("la navigazione nei menu ha alterato lo stato del combattimento: "+JSON.stringify(navigationCheck));
+  console.log("PASS: navigazione inventario/squadra/abilità/personaggio senza reset del combattimento",navigationCheck);
+
   const proceduralLootCheck = await page.evaluate(() => {
     const originalRandom=Math.random,originalBag=G.equipmentBag;
     G.equipmentBag=[];
