@@ -274,12 +274,12 @@ try {
     const hero=G.hero;
     const backup={race:hero.race,raceId:hero.raceId,gender:hero.gender,portrait:hero.portrait,equipment:JSON.parse(JSON.stringify(hero.equipment||{}))};
     const samples=[
-      {raceId:"human",race:"Umano",gender:"M",portrait:"modello_umano_maschile.png.JPG.JPG",label:"UMANO M"},
-      {raceId:"human",race:"Umano",gender:"F",portrait:"modello_umano_femminile.png.JPG.JPG",label:"UMANO F"},
-      {raceId:"elf",race:"Elfo",gender:"M",portrait:"elfo_m_base.png.JPG",label:"ELFO M"},
-      {raceId:"elf",race:"Elfo",gender:"F",portrait:"elfo_f_base.png.JPG",label:"ELFO F"},
-      {raceId:"orc",race:"Orco",gender:"M",portrait:"orco_m_base.png.JPG",label:"ORCO M"},
-      {raceId:"orc",race:"Orco",gender:"F",portrait:"orco_f_base.png.JPG",label:"ORCO F"}
+      {raceId:"human",race:"Umano",gender:"M",portrait:"modello_umano_maschile.png.JPG.JPG",hair:"Capelli coda ciuffi",label:"UMANO M"},
+      {raceId:"human",race:"Umano",gender:"F",portrait:"modello_umano_femminile.png.JPG.JPG",hair:"Capelli lunghi",label:"UMANO F"},
+      {raceId:"elf",race:"Elfo",gender:"M",portrait:"elfo_m_base.png.JPG",hair:"Capelli rasati lato",label:"ELFO M"},
+      {raceId:"elf",race:"Elfo",gender:"F",portrait:"elfo_f_base.png.JPG",hair:"Capelli trecce",label:"ELFO F"},
+      {raceId:"orc",race:"Orco",gender:"M",portrait:"orco_m_base.png.JPG",hair:"Capelli rasta",label:"ORCO M"},
+      {raceId:"orc",race:"Orco",gender:"F",portrait:"orco_f_base.png.JPG",hair:"Capelli spettinati",label:"ORCO F"}
     ];
     const panel=document.createElement("div");
     panel.id="__velmoraHairPreview";
