@@ -27,7 +27,12 @@ for pack_id, archive_name, title in packs:
         raise SystemExit(f"Archivio ufficiale mancante: {archive}")
     entries = []
     with zipfile.ZipFile(archive) as zf:
-        names = sorted(n for n in zf.namelist() if n.lower().endswith((".png", ".jpg", ".jpeg", ".webp")) and not n.endswith("/"))
+        names = sorted(
+            n for n in zf.namelist()
+            if n.lower().endswith((".png", ".jpg", ".jpeg", ".webp"))
+            and not n.endswith("/")
+            and not re.search(r"preview|contact|thumbnail|thumb|sheet|demo|sample|parallax", n, re.I)
+        )
         for index, name in enumerate(names, 1):
             try:
                 image = Image.open(io.BytesIO(zf.read(name)))
