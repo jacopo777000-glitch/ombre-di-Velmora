@@ -35,7 +35,8 @@ page.on("console", msg => { if (msg.type()==="error") failures.push("console: "+
 page.on("requestfailed", req => {
   const error=req.failure()?.errorText||"unknown";
   // Chromium aborts the background music request when the test reloads the page.
-  if (!(req.resourceType()==="media" && error==="net::ERR_ABORTED")) {
+  const expectedBackgroundSwap=req.url().includes("/assets/battle/")&&error==="net::ERR_ABORTED";
+  if (!(req.resourceType()==="media" && error==="net::ERR_ABORTED")&&!expectedBackgroundSwap) {
     failures.push("request failed: "+req.url()+" — "+error);
   }
  });

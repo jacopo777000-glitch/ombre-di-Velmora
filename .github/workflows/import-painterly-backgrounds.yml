@@ -9,6 +9,8 @@ on:
       - "scripts/process_painterly_packs.py"
       - "scripts/verify-velmora.mjs"
       - "scripts/smoke-velmora.mjs"
+      - "assets/battle/kalponic/manifest.json"
+      - "assets/battle/gegx/manifest.json"
   workflow_dispatch:
 
 permissions:

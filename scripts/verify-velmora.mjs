@@ -380,7 +380,7 @@ const extraPainterlyPacks=[
   {id:"kalponic",minimum:40,author:"Kalponic Studio",source:"kalponic-studio.itch.io/painterly-battle-backgrounds"},
   {id:"gegx",minimum:6,author:"GegX",source:"gegx.itch.io/painterly-backgrounds-free"}
 ];
-const extraManifestsReady=extraPainterlyPacks.every(pack=>fs.existsSync(path.join(root,"assets","battle",pack.id,"manifest.json")));
+const extraManifestsReady=extraPainterlyPacks.every(pack=>{const file=path.join(root,"assets","battle",pack.id,"manifest.json");if(!fs.existsSync(file))return false;try{return (JSON.parse(fs.readFileSync(file,"utf8")).images||[]).length>0}catch{return false}});
 if(extraManifestsReady){
   try{
     const credits=fs.readFileSync(path.join(root,"assets/battle/CREDITS.md"),"utf8").toLowerCase();
