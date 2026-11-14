@@ -267,7 +267,7 @@ main{width:min(1900px,99%);margin:10px auto 28px;padding:0 10px 100px}
 }
 
 .equipLabel{display:block;color:#e9c98e;font-size:12px;margin:10px 0 3px}.equipPartControls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:9px 0;padding:10px;background:#100d0a;border:1px solid #72552f;border-radius:8px}.equipPartToggle{display:flex;align-items:center;gap:7px;color:#ead6ae;font-size:12px;min-height:28px}.equipPartToggle input{width:17px;height:17px;accent-color:#c49a55}
-.unitArt{position:relative;display:block;width:100%;aspect-ratio:912/1168;overflow:hidden;background:#17120d;border:1px solid #80623a;border-radius:6px;flex:0 0 auto}.unitArt img{position:absolute;display:block;object-fit:contain;pointer-events:none}.unitBase{inset:0;width:100%;height:100%;z-index:1}.equipLayer{z-index:2}.legLayer{z-index:2;object-fit:fill}.bootLayer{z-index:3;object-fit:fill}.armorLayer{z-index:4;object-fit:fill}.shoulderLayer{z-index:5;object-fit:fill}.armLayer{z-index:6;object-fit:fill}.hairLayer{z-index:7}.headLayer{z-index:8;object-fit:fill}.weaponLayer{position:absolute;left:70%;top:55%;width:25%;height:42%;z-index:5;overflow:visible;pointer-events:none;filter:drop-shadow(0 2px 2px #000b)}.finisherOverlay{position:fixed;inset:0;z-index:5000;background:rgba(5,4,3,.72);touch-action:manipulation;cursor:pointer}.finisherCanvas{position:absolute;inset:0;display:block}.finisherSkip{position:absolute;left:0;right:0;bottom:calc(22px + env(safe-area-inset-bottom));text-align:center;color:#f0d49b;font:12px Georgia,serif;letter-spacing:2px;text-shadow:0 2px 6px #000;pointer-events:none}.characterCard .unitArt{width:72px;flex:0 0 72px}.battleUnit .unitArt{width:100%;height:auto;aspect-ratio:912/1168}.equipLabel{display:block;color:#e9c98e;font-size:12px;margin:10px 0 3px}
+.unitArt{position:relative;display:block;width:100%;aspect-ratio:912/1168;overflow:hidden;background:#17120d;border:1px solid #80623a;border-radius:6px;flex:0 0 auto}.unitArt img{position:absolute;display:block;object-fit:contain;pointer-events:none}.unitBase{inset:0;width:100%;height:100%;z-index:1}.equipLayer{z-index:2}.legLayer{z-index:2;object-fit:fill}.bootLayer{z-index:3;object-fit:fill}.armorLayer{z-index:4;object-fit:fill}.shoulderLayer{z-index:5;object-fit:fill}.armLayer{z-index:6;object-fit:fill}.hairLayer{z-index:7}.headLayer{z-index:8;object-fit:fill}.weaponLayer{position:absolute;z-index:7;overflow:visible;pointer-events:none;filter:drop-shadow(0 2px 2px #000b);transform-origin:50% 50%}.finisherOverlay{position:fixed;inset:0;z-index:5000;background:rgba(5,4,3,.72);touch-action:manipulation;cursor:pointer}.finisherCanvas{position:absolute;inset:0;display:block}.finisherSkip{position:absolute;left:0;right:0;bottom:calc(22px + env(safe-area-inset-bottom));text-align:center;color:#f0d49b;font:12px Georgia,serif;letter-spacing:2px;text-shadow:0 2px 6px #000;pointer-events:none}.characterCard .unitArt{width:72px;flex:0 0 72px}.battleUnit .unitArt{width:100%;height:auto;aspect-ratio:912/1168}.equipLabel{display:block;color:#e9c98e;font-size:12px;margin:10px 0 3px}
 
 /* Velmora battle presentation — painterly illustrated scenes */
 .gameLayout{grid-template-columns:168px minmax(0,1fr);gap:14px}
@@ -1443,10 +1443,32 @@ $("battleHint").textContent="Ordine dei turni determinato dall'Agilità. I nemic
 $("battleLog").innerHTML="";$("diceWho").textContent="In attesa del lancio…";$("diceNumber").textContent="—";$("diceResult").textContent="Il dado deciderà l'esito dell'azione";log("Lo scontro ha inizio. L'ordine è stabilito dall'Agilità.");renderBattle();advanceToPlayer();
 }
 function log(t){if(!battle)return;battle.log.unshift(t);if(battle.log.length>35)battle.log.pop();$("battleLog").innerHTML=battle.log.map(x=>`<p>${x}</p>`).join("")}
-function weaponSvgFor(u){
+function weaponNameFor(u){
  const eq=u&&u.equipment||{};
  let name=String(eq.weapon||u.weaponType||"").toLowerCase();
  if(!name){const c=String(u&&u.class||"").toLowerCase();name=c.includes("arciere")?"arco":c.includes("mago")||c.includes("maga")||c.includes("druido")||c.includes("druida")?"bastone":c.includes("ladro")?"pugnale":c.includes("paladin")||c.includes("chierico")?"martello":u&&u.kind==="orc"?"ascia":u&&u.kind==="priest"?"bastone":"spada"}
+ return name;
+}
+function weaponAnchorFor(u){
+ const race=equipmentRaceId(u),gender=isFemaleCharacter(u)?"F":"M";
+ const profiles={
+  human:{M:{x:.58,y:.62,w:.26,h:.36},F:{x:.59,y:.63,w:.25,h:.35}},
+  elf:{M:{x:.58,y:.61,w:.25,h:.37},F:{x:.59,y:.62,w:.25,h:.36}},
+  orc:{M:{x:.56,y:.61,w:.28,h:.37},F:{x:.57,y:.62,w:.27,h:.36}},
+  lion:{M:{x:.57,y:.62,w:.28,h:.36},F:{x:.58,y:.63,w:.26,h:.35}},
+  wolf:{M:{x:.57,y:.62,w:.28,h:.36},F:{x:.58,y:.63,w:.26,h:.35}},
+  rabbit:{M:{x:.59,y:.63,w:.25,h:.35},F:{x:.60,y:.64,w:.24,h:.34}}
+ };
+ const base=profiles[race]&&profiles[race][gender]||profiles.human.M,name=weaponNameFor(u);
+ if(name.includes("scudo"))return {x:Math.max(.12,base.x-.36),y:base.y-.03,w:base.w,h:base.h*.9};
+ if(name.includes("bastone")||name.includes("lancia"))return {x:base.x+.015,y:base.y-.24,w:base.w*.72,h:base.h*1.55};
+ if(name.includes("arco"))return {x:base.x-.035,y:base.y-.14,w:base.w*1.18,h:base.h*1.18};
+ if(name.includes("pugnale"))return {x:base.x+.015,y:base.y+.02,w:base.w*.82,h:base.h*.85};
+ if(name.includes("ascia")||name.includes("martello"))return {x:base.x,y:base.y-.04,w:base.w*1.12,h:base.h*1.1};
+ return base;
+}
+function weaponSvgFor(u){
+ const name=weaponNameFor(u),anchor=weaponAnchorFor(u);
  let shape="";
  if(name.includes("arco"))shape='<path d="M58 8 Q5 88 58 170" fill="none" stroke="#b98548" stroke-width="7"/><path d="M58 8 L58 170" stroke="#d8c9a4" stroke-width="2"/><path d="M58 62 L94 62" stroke="#d8c9a4" stroke-width="3"/>';
  else if(name.includes("bastone"))shape='<path d="M48 12 L52 170" stroke="#8a6137" stroke-width="11" stroke-linecap="round"/><path d="M50 10 L50 33" stroke="#d8bc7b" stroke-width="9" stroke-linecap="round"/><circle cx="50" cy="9" r="9" fill="#72a7b4" stroke="#e0ca8c" stroke-width="3"/>';
@@ -1456,7 +1478,7 @@ function weaponSvgFor(u){
  else if(name.includes("scudo"))shape='<path d="M15 12 L85 12 L79 105 Q50 155 21 105 Z" fill="#765331" stroke="#d8bc7b" stroke-width="6"/><path d="M50 20 L50 120 M22 65 L78 65" stroke="#d8bc7b" stroke-width="4"/>';
  else if(name.includes("pugnale"))shape='<path d="M50 42 L65 100 L50 118 L35 100 Z" fill="#d0d3d0" stroke="#f0dfb4" stroke-width="3"/><path d="M50 5 L50 43" stroke="#80562f" stroke-width="10"/><path d="M30 43 L70 43" stroke="#d5b56e" stroke-width="6"/>';
  else shape='<path d="M50 170 L65 78 L50 45 L35 78 Z" fill="#c6cbd0" stroke="#f0dfb4" stroke-width="3"/><path d="M50 5 L50 48" stroke="#80562f" stroke-width="10"/><path d="M27 48 L73 48" stroke="#d5b56e" stroke-width="7"/><circle cx="50" cy="5" r="6" fill="#d5b56e"/>';
- return '<svg class="weaponLayer" width="100" height="180" viewBox="0 0 100 180" aria-hidden="true" focusable="false">'+shape+'</svg>';
+ return '<svg class="weaponLayer" style="left:'+(anchor.x*100)+'%;top:'+(anchor.y*100)+'%;width:'+(anchor.w*100)+'%;height:'+(anchor.h*100)+'%" width="100" height="180" viewBox="0 0 100 180" aria-hidden="true" focusable="false">'+shape+'</svg>';
 }
 const finisherImageCache=new Map();
 function loadFinisherImage(src){
@@ -1468,7 +1490,7 @@ function loadFinisherImage(src){
 function finisherHairSource(u){return equipmentHairData(u)}
 async function finisherVisual(u){
  const base=await loadFinisherImage(asset(u.portrait||""));
- const svg=weaponSvgFor(u).replace('class="weaponLayer"',"");
+ const svg=weaponSvgFor(u).replace('class="weaponLayer"',"").replace(/ style="[^"]*"/,"");
  const weapon=await loadFinisherImage("data:image/svg+xml;charset=utf-8,"+encodeURIComponent(svg));
  const hairData=finisherHairSource(u),hair=hairData?await loadFinisherImage(hairData.src):null;
  const armorParts=[];
@@ -1477,7 +1499,7 @@ async function finisherVisual(u){
   for(const data of layers)armorParts.push({slot,data,image:await loadFinisherImage(data.src)});
  }
  const headData=equipmentLayerData(u,"head"),head=headData?await loadFinisherImage(headData.src):null;
- return {base,weapon,hair,hairData,armorParts,head,headData};
+ return {base,weapon,weaponAnchor:weaponAnchorFor(u),hair,hairData,armorParts,head,headData};
 }
 
 function playFinisherSound(u,magical){
@@ -1495,7 +1517,7 @@ function playFinisherSound(u,magical){
  }catch(e){}
 }
 function finisherWeaponKind(u){
- const raw=String(u&&u.equipment&&u.equipment.weapon||u&&u.weaponType||"Spada").toLowerCase();
+ const raw=weaponNameFor(u);
  if(raw.includes("arco"))return "bow";
  if(raw.includes("bastone"))return "staff";
  if(raw.includes("pugnale"))return "dagger";
@@ -1546,7 +1568,7 @@ async function playFinisher(attacker,target,magical=false){
    for(const part of (v.armorParts||[])){if(!part.image||!part.data)continue;const d=part.data,px=x+w*d.x,py=y+h*d.y,pw=w*d.w,ph=h*d.h;ctx.save();if(d.points&&d.points.length){ctx.beginPath();d.points.forEach((pt,i)=>{const qx=px+pw*pt[0]/100,qy=py+ph*pt[1]/100;if(i===0)ctx.moveTo(qx,qy);else ctx.lineTo(qx,qy)});ctx.closePath();ctx.clip()}ctx.drawImage(part.image,px,py,pw,ph);ctx.restore()}
    if(v.hair&&v.hairData){const d=v.hairData;ctx.drawImage(v.hair,x+w*d.x,y+h*d.y,w*d.w,h*d.h)}
    if(v.head&&v.headData){const d=v.headData;ctx.drawImage(v.head,x+w*d.x,y+h*d.y,w*d.w,h*d.h)}
-   if(v.weapon){ctx.save();ctx.translate(x+w*.70,y+h*.55);ctx.rotate(rotation);ctx.drawImage(v.weapon,0,0,w*.25,h*.42);ctx.restore()}
+   if(v.weapon){const a=v.weaponAnchor||{x:.58,y:.62,w:.26,h:.36};ctx.save();ctx.translate(x+w*(a.x+a.w/2),y+h*(a.y+a.h/2));ctx.rotate(rotation);ctx.drawImage(v.weapon,-w*a.w/2,-h*a.h/2,w*a.w,h*a.h);ctx.restore()}
    ctx.restore();
   };
   const cls=String(attacker.class||attacker.classKey||"").toLowerCase(),weaponKind=finisherWeaponKind(attacker),motion=finisherMotionFor(attacker);
