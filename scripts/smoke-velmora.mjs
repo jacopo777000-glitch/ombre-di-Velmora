@@ -79,6 +79,40 @@ try {
   });
   console.log("PASS: due missioni personali, requisiti compagno, prove del compagno e legami persistenti",companionQuestChecks);
 
+  const sideQuestBranchChecks=await page.evaluate(()=>{
+    const original=G,originalSave=localStorage.getItem("velmoraDemoSave"),originalRandom=Math.random,results=[];
+    const cases=[
+      {id:"lume_bruma",choices:["seal","take"]},
+      {id:"morso_ponte",choices:["spare","slay"]},
+      {id:"conto_mugnaio",choices:["forgive","expose"]},
+      {id:"prezzo_nomi",choices:["deliver","burn"]},
+      {id:"pozzo_vuoto",choices:["seal","collect"]}
+    ];
+    try{
+      for(const item of cases)for(const choice of item.choices){
+        G=JSON.parse(JSON.stringify(original));G.sideQuests={};G.battleWon=3;G.party=[];G.gold=0;G.sideQuestReputation=0;G.equipmentBag=[];
+        ensureSideQuestState();
+        const quest=sideQuestCatalog.find(q=>q.id===item.id);
+        if(!quest||!sideQuestUnlocked(quest))throw new Error("missione non disponibile: "+item.id);
+        sideQuestAction(item.id,"accept");
+        Math.random=()=>.99;
+        sideQuestAction(item.id,quest.checkAction);
+        const active=G.sideQuests[item.id];
+        if(active.stage!==2||!active.lastRoll)throw new Error("prova non completata: "+item.id);
+        sideQuestAction(item.id,choice);
+        const state=G.sideQuests[item.id];
+        if(state.status!=="completed"||!state.outcome||!state.history.length||G.gold<=0)throw new Error("esito/ricompensa non assegnati: "+item.id+" "+choice);
+        results.push({quest:item.id,choice,outcome:state.outcome,gold:G.gold,reputation:G.sideQuestReputation});
+      }
+    }finally{
+      Math.random=originalRandom;G=original;
+      if(originalSave===null)localStorage.removeItem("velmoraDemoSave");else localStorage.setItem("velmoraDemoSave",originalSave);
+    }
+    return results;
+  });
+  if(sideQuestBranchChecks.length!==10)throw new Error("rami missione secondaria non verificati: "+JSON.stringify(sideQuestBranchChecks));
+  console.log("PASS: 10 finali alternativi delle cinque missioni principali",sideQuestBranchChecks);
+
   async function checkBattle(n, expected) {
     await page.evaluate(value => window.startBattle(value), n);
     await page.waitForFunction((needle) => {
