@@ -133,6 +133,28 @@ try {
   });
   if(factionUi.count!==7)throw new Error("schermata fazioni incompleta: "+JSON.stringify(factionUi));
   console.log("PASS: schermata reputazione mostra tutte le sette fazioni",factionUi);
+  const factionEventCheck=await page.evaluate(()=>{
+    const original=JSON.parse(JSON.stringify(G));
+    try{
+      G.factionReputation={...(G.factionReputation||{}),guard:3};
+      G.party=[{id:"faction-test",name:"Compagno di prova"}];
+      G.activeGuildMission={...guildMissions[0],seed:123,step:0,score:0,loot:[],flags:{},events:[],usedEventTitles:["La partenza dalla Gilda","Un committente nervoso"]};
+      guildRouteEvent();
+      return $("sceneTitle").textContent;
+    }finally{G=original;updateHUD();}
+  });
+  if(factionEventCheck!=="Il lasciapassare della Guardia")throw new Error("la reputazione non sblocca l'evento della Guardia: "+factionEventCheck);
+  const guildFactionReward=await page.evaluate(()=>{
+    const original=JSON.parse(JSON.stringify(G)),originalSave=localStorage.getItem("velmoraDemoSave");
+    try{
+      G.factionReputation={};G.gold=0;G.hero.xp=0;G.party=[{id:"rauk",name:"Rauk"}];
+      G.activeGuildMission={...guildMissions[0],score:22,flags:{help:true,trade:true,question:true,companion:true},events:["Prova"],loot:[]};
+      guildFinishMission();
+      return {...G.factionReputation};
+    }finally{G=original;if(originalSave===null)localStorage.removeItem("velmoraDemoSave");else localStorage.setItem("velmoraDemoSave",originalSave);updateHUD();}
+  });
+  for(const [id,min] of [["guild",2],["village",1],["caravans",1],["guard",1],["pack",1]])if(Number(guildFactionReward[id]||0)<min)throw new Error("ricompensa Gilda non aggiorna la fazione "+id+": "+JSON.stringify(guildFactionReward));
+  console.log("PASS: reputazione sblocca eventi dinamici e viene aggiornata dagli incarichi della Gilda",factionEventCheck,guildFactionReward);
 
   async function checkBattle(n, expectedScene) {
     await page.evaluate(value => window.startBattle(value), n);
