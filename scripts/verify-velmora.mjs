@@ -233,10 +233,17 @@ try {
   if (procStart < 0 || procEnd < 0) throw new Error("motore procedurale non individuato");
   const procCode = "function seededRandom(seed){let state=(Number(seed)>>>0)||1;return function(){state=(Math.imul(state,1664525)+1013904223)>>>0;return state/4294967296}}function proceduralPick(list,rng){return list[Math.floor(rng()*list.length)]}" + html.slice(procStart, procEnd);
   const proc = new Function(procCode + ";return {seededRandom,makeProceduralPerson};")();
+  const abilityClasses=new Map([...html.matchAll(/id:"([^"]+)",classKey:"([^"]+)"/g)].map(match=>[match[1],match[2]]));
   let generated = 0;
   for (let seed = 1; seed <= 120; seed++) {
     const person = proc.makeProceduralPerson(proc.seededRandom(seed), 0, "ally", 1, seed);
     const beastfolk = ["lion","wolf","rabbit"].includes(person.raceId);
+    if(!Array.isArray(person.equippedAbilities)||person.equippedAbilities.length!==2||person.equippedAbilities.some(id=>abilityClasses.get(id)!==person.class)){
+      throw new Error("abilità iniziali assenti o non coerenti per "+person.class+" seed "+seed+": "+JSON.stringify(person.equippedAbilities));
+    }
+    if(["Chierico","Druido","Paladino"].includes(person.class)&&!person.equippedAbilities.some(id=>id.endsWith("_heal"))){
+      throw new Error("personaggio di supporto senza cura iniziale: "+person.class);
+    }
     if (beastfolk && (person.equipment.hair || person.equipment.head)) {
       throw new Error("personaggio " + seed + " (" + person.raceId + ") ha ricevuto capelli/copricapo umano");
     }
@@ -248,7 +255,7 @@ try {
     }
     generated++;
   }
-  pass("Test generazione procedurale: " + generated + " seed, equipaggiamento coerente con la razza");
+  pass("Test generazione procedurale: " + generated + " seed, equipaggiamento e abilità iniziali coerenti con razza/classe");
 } catch (error) {
   fail("Test generazione procedurale: " + error.message);
 }
