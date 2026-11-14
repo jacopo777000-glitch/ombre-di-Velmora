@@ -1840,7 +1840,7 @@ if(target.hp<=0){target.hp=0;if(target.isHero){target.hp=1;log(`${target.name} c
 function applyStartStatus(u){if(!u.status)return;let s=u.status;if(s.damage){u.hp-=s.damage;log(`${u.name} subisce ${s.damage} danni da ${s.name.toLowerCase()}.`)}s.turns--;if(s.turns<=0){log(`L'effetto ${s.name.toLowerCase()} termina su ${u.name}.`);u.status=null}if(u.hp<=0){if(u.isHero){u.hp=1;log(`${u.name} resiste alla morte.`)}else{u.hp=0;u.alive=false;u.down=3;log(`${u.name} cade a terra!`)}}}
 function tickDowned(){[G.hero,...G.party].forEach(p=>{if(!p.alive&&p.down>0){p.down--;if(p.down===0)log(`${p.name} non è stato soccorso in tempo: è perduto.`)}})}
 function winBattle(){
-if(!battle||battle.ended)return;battle.ended=true;busy=false;let n=battle.n;if(G.activeGuildMission){$("combat").classList.add("hidden");document.body.classList.remove("battle-mode");G.hero.xp+=n===1?18:n===2?28:40;G.activeGuildMission.battles=(G.activeGuildMission.battles||0)+1;const found=rollMissionLoot(n===3);let box=$("afterCombat");box.classList.remove("hidden");box.innerHTML='<h2>Vittoria!</h2><p>Lo scontro è terminato. Il gruppo riprende fiato: le decisioni prese finora hanno cambiato il corso dell’incarico.</p><p><b>Bottino trovato: '+found.name+'</b> · '+found.rarity+'. Aggiunto all’inventario della squadra.</p><button class="btn" onclick="guildAfterBattle()">Prosegui</button>';updateHUD();return}G.battleWon++;let reward=n===1?{xp:35,gold:18}:n===2?{xp:55,gold:28}:{xp:100,gold:60};G.hero.xp+=reward.xp;G.gold+=reward.gold;let levelUp="";
+if(!battle||battle.ended)return;battle.ended=true;busy=false;let n=battle.n;if(G.activeGuildMission){$("combat").classList.add("hidden");document.body.classList.remove("battle-mode");G.hero.xp+=n===1?18:n===2?28:40;G.activeGuildMission.battles=(G.activeGuildMission.battles||0)+1;const found=rollMissionLoot(n===3,battle.units);let box=$("afterCombat");box.classList.remove("hidden");box.innerHTML='<h2>Vittoria!</h2><p>Lo scontro è terminato. Il gruppo riprende fiato: le decisioni prese finora hanno cambiato il corso dell’incarico.</p><p><b>Bottino trovato: '+found.name+'</b> · '+found.rarity+'. Aggiunto all’inventario della squadra.</p><button class="btn" onclick="guildAfterBattle()">Prosegui</button>';updateHUD();return}G.battleWon++;let reward=n===1?{xp:35,gold:18}:n===2?{xp:55,gold:28}:{xp:100,gold:60};G.hero.xp+=reward.xp;G.gold+=reward.gold;let levelUp="";
 if(G.hero.xp>=G.hero.level*60){G.hero.xp-=G.hero.level*60;G.hero.level++;G.hero.maxhp+=8;G.hero.hp=Math.min(G.hero.maxhp,G.hero.hp+8);G.hero.stats.forza++;G.statPoints=(G.statPoints||0)+2;levelUp=` ${G.hero.name} sale al livello ${G.hero.level}! Hai ottenuto 2 punti caratteristica.`}
 if(n===3){G.inventory["Lama dell'Eco Perduto"]=1;G.finished=true}
 $("combat").classList.add("hidden");document.body.classList.remove("battle-mode");let box=$("afterCombat");box.classList.remove("hidden");
@@ -2111,7 +2111,20 @@ const lootGear=[
 {name:"Maschera del Predatore",slot:"head",classes:["Arciere","Ladro"],physical:2,magic:0,defense:2,rarity:"Raro"}
 ];
 function lootMeta(name){return lootGear.find(x=>x.name===name)||null}
-function rollMissionLoot(boss=false){if(!G)return null;G.equipmentBag=G.equipmentBag||[];const pool=lootGear.filter(x=>!boss||x.rarity==="Raro"||x.rarity==="Epico");const item=pool[Math.floor(Math.random()*pool.length)];G.equipmentBag.push({...item,id:"loot_"+Date.now()+"_"+Math.floor(Math.random()*9999)});return item}
+function rollMissionLoot(boss=false,enemies=[]){
+ if(!G)return null;G.equipmentBag=G.equipmentBag||[];
+ const rank={"Comune":0,"Non comune":1,"Raro":2,"Epico":3,"Mitico":4};
+ const classSet=new Set((Array.isArray(enemies)?enemies:[]).map(enemy=>String(enemy&&enemy.class||"")).filter(Boolean));
+ const enemyRank=Math.max(0,...(Array.isArray(enemies)?enemies:[]).map(enemy=>rank[enemy&&enemy.rarity]??0));
+ const maxRank=classSet.size?Math.min(3,enemyRank+1):3;
+ let pool=lootGear.filter(item=>(!classSet.size||!item.classes||item.classes.some(name=>classSet.has(name)))&&(rank[item.rarity]??0)<=maxRank);
+ if(boss)pool=pool.filter(item=>(rank[item.rarity]??0)>=2);
+ if(!pool.length)pool=lootGear.filter(item=>!boss||item.rarity==="Raro"||item.rarity==="Epico");
+ if(!pool.length)return null;
+ const item=pool[Math.floor(Math.random()*pool.length)];
+ G.equipmentBag.push({...item,id:"loot_"+Date.now()+"_"+Math.floor(Math.random()*9999)});
+ return item;
+}
 
 function supportsHumanoidHairAndHeadgear(p){
 const raceId=String(p&&p.raceId||"").toLowerCase(),race=String(p&&p.race||"").toLowerCase();
