@@ -1734,13 +1734,17 @@ function equipmentLayerData(u,slot){
   const styleFit=styles[style]||styles.Armatura_guerriero,w=fit.w*styleFit.w,h=fit.h*styleFit.h,left=fit.cx-w/2,top=fit.top;
   const modularParts=d.parts&&d.parts[slot];
   if(Array.isArray(modularParts)&&modularParts.length){
-   return modularParts.map(part=>{
+   const silhouettes=armorPartPolygons[style]&&armorPartPolygons[style][slot]||[];
+   return modularParts.map((part,index)=>{
     if(!part||!part.file||!Number(part.width)||!Number(part.height))return null;
     const partX=(Number(part.x)-Number(d.x||0))/Number(d.width)*w;
     const partY=(Number(part.y)-Number(d.y||0))/Number(d.height)*h;
     const partW=Number(part.width)/Number(d.width)*w;
     const partH=Number(part.height)/Number(d.height)*h;
-    return {src:part.file,x:(left+partX)/912,y:(top+partY)/1168,w:partW/912,h:partH/1168,modular:true};
+    const sourcePolygon=silhouettes[index];
+    const points=Array.isArray(sourcePolygon)&&sourcePolygon.length>=3?sourcePolygon.map(([px,py])=>[((Number(px)-Number(part.x))/Number(part.width))*100,((Number(py)-Number(part.y))/Number(part.height))*100]):null;
+    const clip=points?'polygon('+points.map(point=>point[0].toFixed(2)+'% '+point[1].toFixed(2)+'%').join(',')+')':null;
+    return {src:part.file,x:(left+partX)/912,y:(top+partY)/1168,w:partW/912,h:partH/1168,modular:true,points,clip};
    }).filter(Boolean);
   }
   return null;
