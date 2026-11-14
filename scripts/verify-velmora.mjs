@@ -137,8 +137,11 @@ try {
   for(const [id,name] of models){
     for(const gender of ["M","F"]){
       const person={raceId:id,race:name,gender,equipment:{armor:"Armatura_guerriero",shouldersStyle:"Armatura_guerriero",armsStyle:"Armatura_guerriero",legsStyle:"Armatura_guerriero",bootsStyle:"Armatura_guerriero",head:["human","elf","orc"].includes(id)?"Elmo_drago":"",hair:"Capelli mossi",weapon:"Spada"}};
-      const weaponAnchor=renderer.weaponAnchorFor(person),weaponSvg=renderer.weaponSvgFor(person);
-      if(!weaponAnchor||weaponAnchor.x<0||weaponAnchor.y<0||weaponAnchor.w<=0||weaponAnchor.h<=0||weaponAnchor.x+weaponAnchor.w>1||weaponAnchor.y+weaponAnchor.h>1||!weaponSvg.includes('style="left:'))throw new Error("ancoraggio arma fuori modello per "+name+" "+gender+": "+JSON.stringify(weaponAnchor));
+      for(const weaponName of ["Spada","Arco","Bastone","Lancia","Ascia","Martello","Pugnale","Scudo"]){
+        const armed={...person,equipment:{...person.equipment,weapon:weaponName}};
+        const weaponAnchor=renderer.weaponAnchorFor(armed),weaponSvg=renderer.weaponSvgFor(armed);
+        if(!weaponAnchor||weaponAnchor.x<0||weaponAnchor.y<0||weaponAnchor.w<=0||weaponAnchor.h<=0||weaponAnchor.x+weaponAnchor.w>1||weaponAnchor.y+weaponAnchor.h>1||!weaponSvg.includes('style="left:'))throw new Error("ancoraggio "+weaponName+" fuori modello per "+name+" "+gender+": "+JSON.stringify(weaponAnchor));
+      }
       for(const partSlot of ["armor","shoulders","arms","legs","boots"]){
         const raw=renderer.equipmentLayerData(person,partSlot),parts=Array.isArray(raw)?raw:raw?[raw]:[];
         if(!parts.length)throw new Error("parte armatura assente per "+name+" "+gender+" "+partSlot);
@@ -338,7 +341,11 @@ try {
       !html.includes("fetch('./assets/battle/duskforge/manifest.json')")) {
     throw new Error("selezione e caricamento sfondi non collegati alle battaglie");
   }
-  pass("Sfondi Duskforge: 20 WebP ottimizzati, manifest e collegamento alle battaglie");
+  const credits=fs.readFileSync(path.join(root,"assets/battle/CREDITS.md"),"utf8");
+  for(const term of ["Duskforge Studio","free for commercial use","no attribution required","raw files","doomguizz.itch.io/enchanted-forest-rpg-backgrounds","doomguizz.itch.io/dark-dungeon-rpg-backgrounds"]){
+    if(!credits.toLowerCase().includes(term.toLowerCase()))throw new Error("credito/licenza ufficiale mancante: "+term);
+  }
+  pass("Sfondi Duskforge: 20 WebP ottimizzati, manifest, collegamento alle battaglie e licenza documentata");
 } catch (error) {
   fail("Test sfondi Duskforge: " + error.message);
 }
