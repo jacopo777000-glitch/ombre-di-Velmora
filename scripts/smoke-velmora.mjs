@@ -476,6 +476,24 @@ try {
   await page.evaluate(() => window.__velmoraFinisherTest);
   console.log("PASS: colpo di grazia saltato e personaggi ripristinati");
 
+  const proceduralLootCheck = await page.evaluate(() => {
+    const originalRandom=Math.random,originalBag=G.equipmentBag;
+    G.equipmentBag=[];
+    try{
+      Math.random=()=>0;
+      const mageDrop=rollMissionLoot(false,[{class:"Mago",rarity:"Comune"}]);
+      const paladinDrop=rollMissionLoot(true,[{class:"Paladino",rarity:"Epico"}]);
+      return {mageDrop,paladinDrop};
+    }finally{
+      Math.random=originalRandom;
+      G.equipmentBag=originalBag;
+    }
+  });
+  if(!proceduralLootCheck.mageDrop?.classes?.includes("Mago")||proceduralLootCheck.mageDrop.rarity==="Epico"||!proceduralLootCheck.paladinDrop?.classes?.includes("Paladino")||!["Raro","Epico"].includes(proceduralLootCheck.paladinDrop.rarity)){
+    throw new Error("bottino non coerente con classe/rarità dei nemici generati: "+JSON.stringify(proceduralLootCheck));
+  }
+  console.log("PASS: bottino dei nemici filtrato per classe e rarità",proceduralLootCheck);
+
   const rosterSnapshot = await page.evaluate(() => {
     ensureProceduralRoster();
     const snapshot=G.proceduralRoster.map(p=>({
