@@ -200,6 +200,17 @@ if (html.includes('id:"prezzo_nomi"') && html.includes('id:"pozzo_vuoto"')) {
   pass("Due nuove missioni secondarie ramificate presenti");
 }
 
+try {
+  const guildStart=html.indexOf("const guildMissions=["),guildEnd=html.indexOf("\n];",guildStart);
+  if(guildStart<0||guildEnd<0)throw new Error("bacheca Gilda non individuata");
+  const guildBlock=html.slice(guildStart,guildEnd);
+  const count=(guildBlock.match(/\{id:/g)||[]).length;
+  if(count!==5||!html.includes("if(m.step>=10)guildFinishMission()"))throw new Error("attese cinque missioni con dieci tappe, trovate "+count);
+  pass("Bacheca Gilda: cinque incarichi con percorso di dieci tappe");
+} catch(error) {
+  fail("Test bacheca Gilda: "+error.message);
+}
+
 if (!html.includes('"Lancia"') || !html.includes('name.includes("lancia")') ||
     !html.includes('name:"Lancia del Guardiano"')) {
   fail("Supporto della lancia incompleto tra generazione, grafica e bottino.");
