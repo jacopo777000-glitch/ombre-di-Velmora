@@ -74,13 +74,6 @@
           "width": 1376,
           "height": 768,
           "bytes": 127422
-        },
-        {
-          "file": "assets/battle/duskforge/duskforge_forest_11_preview_sheet.webp",
-          "sourceFile": "Enchanted_Forest_RPG_Backgrounds/preview_sheet.png",
-          "width": 1376,
-          "height": 768,
-          "bytes": 88104
         }
       ]
     },
@@ -157,13 +150,6 @@
           "width": 1376,
           "height": 768,
           "bytes": 97134
-        },
-        {
-          "file": "assets/battle/duskforge/duskforge_dungeon_11_preview_sheet.webp",
-          "sourceFile": "Dark_Dungeon_RPG_Backgrounds/preview_sheet.png",
-          "width": 1376,
-          "height": 768,
-          "bytes": 83100
         }
       ]
     }
