@@ -159,7 +159,7 @@ try {
     selectedEquipmentMember="hero";openCharacterScreen();renderCharacterScreen();
     const screen=document.getElementById("characterScreen"),body=document.getElementById("characterScreenBody");
     const names=[...body.querySelectorAll("[data-armor-part]")].map(x=>x.dataset.armorPart).sort();
-    if(names.join(",")!=="arms,armor,boots,legs,shoulders")throw new Error("tendine modulari non presenti: "+JSON.stringify({names,screenOpen:screen?.classList.contains("open"),bodyExists:!!body,bodyHtml:body?.innerHTML?.slice(0,900),hero:!!G.hero,party:G.party?.length,selectedEquipmentMember}));
+    if(names.join(",")!=="armor,arms,boots,legs,shoulders")throw new Error("tendine modulari non presenti: "+JSON.stringify({names,screenOpen:screen?.classList.contains("open"),bodyExists:!!body,bodyHtml:body?.innerHTML?.slice(0,900),hero:!!G.hero,party:G.party?.length,selectedEquipmentMember}));
     let art=document.querySelector('#partyList [data-unit-id="hero"] .unitArt');
     const torsoOnly=!!art.querySelector('[data-equipment-slot="armor"]')&&!art.querySelector('[data-equipment-slot="shoulders"],[data-equipment-slot="arms"],[data-equipment-slot="legs"],[data-equipment-slot="boots"]');
     if(!torsoOnly)throw new Error("selezionare il torso equipaggia ancora automaticamente altri pezzi");
