@@ -235,20 +235,36 @@ if (failures === 0) pass("Punti di aggancio salvataggio, equipaggiamento, colpi 
 try {
   const compatStart = html.indexOf("function supportsHumanoidHairAndHeadgear(p){");
   const compatEnd = html.indexOf("\nfunction renderCharacterScreen", compatStart);
-  if (compatStart < 0 || compatEnd < 0) throw new Error("helper di compatibilità razza non individuati");
+  const gearStart = html.indexOf("const lootGear=[");
+  const gearEnd = html.indexOf("\nfunction lootMeta", gearStart);
+  if (compatStart < 0 || compatEnd < 0 || gearStart < 0 || gearEnd < 0) throw new Error("helper o catalogo equipaggiamento non individuati");
   const compatCode = html.slice(compatStart, compatEnd);
-  const compat = new Function("G", compatCode + ";return {supportsHumanoidHairAndHeadgear,isFemaleCharacter,equipmentRules};")({equipmentBag:[]});
-  for (const race of ["Umano","Elfo","Orco"]) {
+  const gearCode = html.slice(gearStart, gearEnd);
+  const gearCatalog = new Function(gearCode + ";return lootGear;")();
+  const compat = new Function("G","lootGear",compatCode + ";return {supportsHumanoidHairAndHeadgear,isFemaleCharacter,equipmentRules,isTwoHandedWeapon};")({equipmentBag:[]},gearCatalog);
+  const humanoid=["Umano","Elfo","Orco"],beastfolk=["Popolo Leone","Popolo Lupo","Popolo Coniglio"];
+  const classes=["Guerriero","Mago","Arciere","Druido","Cavaliere oscuro","Chierico","Berserker","Ladro","Assassino","Paladino"];
+  for (const race of humanoid) {
     if (!compat.supportsHumanoidHairAndHeadgear({race})) throw new Error(race + " deve supportare capelli e copricapi");
   }
-  for (const race of ["Popolo Leone","Popolo Lupo","Popolo Coniglio"]) {
+  for (const race of beastfolk) {
     if (compat.supportsHumanoidHairAndHeadgear({race})) throw new Error(race + " non deve ricevere overlay umani");
-    if (compat.equipmentRules({race,class:"Guerriero"}).heads.length) throw new Error(race + " ha ricevuto un copricapo non compatibile");
+  }
+  for (const race of [...humanoid,...beastfolk]) for (const className of classes) {
+    const rules=compat.equipmentRules({race,class:className});
+    for (const item of gearCatalog) {
+      if (item.slot==="weapon"&&!rules.weapons.includes(item.name)) throw new Error(item.name + " non equipaggiabile da " + race + " · " + className);
+      if (item.slot==="armor"&&!rules.armors.includes(item.name)) throw new Error(item.name + " non equipaggiabile da " + race + " · " + className);
+      if (item.slot==="head"&&humanoid.includes(race)&&!rules.heads.includes(item.name)) throw new Error(item.name + " non disponibile al modello " + race);
+      if (item.slot==="head"&&beastfolk.includes(race)&&rules.heads.includes(item.name)) throw new Error(race + " ha ricevuto un copricapo non compatibile");
+      if (item.slot==="weapon"&&compat.isTwoHandedWeapon(item.name)&&rules.offhand.includes(item.name)) throw new Error(item.name + " occupa entrambe le mani");
+      if (item.slot==="weapon"&&!compat.isTwoHandedWeapon(item.name)&&!rules.offhand.includes(item.name)) throw new Error(item.name + " non disponibile nella mano secondaria");
+    }
   }
   if (!compat.isFemaleCharacter({gender:"female"}) || !compat.isFemaleCharacter({gender:"F"}) || compat.isFemaleCharacter({gender:"male"})) {
     throw new Error("riconoscimento sesso femminile non coerente tra eroe e personaggi procedurali");
   }
-  pass("Compatibilità razza: capelli/copricapi limitati ai modelli adatti; sesso femminile riconosciuto");
+  pass("Compatibilità razza/equipaggiamento: tutte le armi e armature universali per 6 razze e 10 classi; copricapi limitati ai modelli adatti; vincolo due mani rispettato");
 } catch (error) {
   fail("Test compatibilità razza/equipaggiamento: " + error.message);
 }
