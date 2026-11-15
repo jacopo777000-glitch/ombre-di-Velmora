@@ -255,7 +255,7 @@ try {
   if(!iconCode.includes("weaponSvgFor")||!iconCode.includes("inventoryArmorIcon")||!iconCode.includes("inventoryIconImage")||/[\u{1F300}-\u{1FAFF}]/u.test(iconCode)) {
     throw new Error("icone non renderizzate come SVG/immagini o emoji ancora presenti");
   }
-  if(!html.includes("const armorStyles=rules.armors;")||!html.includes('["armor","shoulders","arms","legs","boots"].includes(slot)&&value&&!rules.armors.includes(value)')) {
+  if(!html.includes("const armorStyles=rules.armors;")||!html.includes('["armor","shoulders","arms","legs","boots"].includes(slot)&&typeof value!=="boolean"&&value&&!rules.armors.includes(value)')) {
     throw new Error("selettori e validazione non espongono tutte le armature a ogni personaggio");
   }
   pass("Inventario: icone SVG/PNG reali, armi/armature coerenti con i modelli e rarità visibili; armature universali");
