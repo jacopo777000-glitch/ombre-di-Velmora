@@ -1072,6 +1072,25 @@ body.battle-mode .actionPanel .actions{grid-template-columns:repeat(2,minmax(0,1
 }
 
 .lootCard{border:1px solid #725634;border-radius:8px;background:linear-gradient(120deg,#292016,#15110d);padding:9px;margin:8px 0;color:#ead9b8}.lootCard b{display:block;color:#f0d49b}.lootCard small{display:block;color:#c5ad83;margin:4px 0}.lootCard p{font-size:12px;color:#bfae8d;margin:5px 0}.lootActions{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}.lootActions .btn{flex:1;min-width:70px;padding:7px;font-size:11px}.inventoryResources{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}.inventoryResources span{border:1px solid #59442b;background:#17120e;border-radius:5px;padding:5px 7px;color:#d9c59f;font-size:11px}#inventory h3{color:#e7c98f;margin:12px 0 6px;font-size:14px}
+
+/* Inventario a griglia: icone in riquadri neri, tre categorie indipendenti */
+#inventoryPanel{padding:clamp(12px,2vw,22px)}
+#inventoryPanel>h2{color:#efd49a;letter-spacing:2px;text-transform:uppercase}
+.inventoryTabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:12px 0 15px}
+.inventoryTab{min-width:0;padding:10px 5px;border:1px solid #80613a;border-radius:3px 10px 3px 10px;background:linear-gradient(145deg,#20292b,#080d0f);color:#d9c59f;font:600 11px Georgia,serif}
+.inventoryTab.active{border-color:#e6c783;background:linear-gradient(145deg,#55432a,#1a1712);color:#ffe4a9;box-shadow:0 0 12px #d6b16c44,inset 0 0 0 1px #e8ca8b55}
+.inventoryGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(135px,1fr));gap:9px}
+.inventoryTile{min-width:0;min-height:150px;padding:9px 7px;border:1px solid #705634;border-radius:3px 11px 3px 11px;background:linear-gradient(145deg,rgba(25,32,34,.94),rgba(5,8,9,.98));box-shadow:inset 0 0 0 2px #000,0 4px 12px #0008;text-align:center;display:flex;flex-direction:column;align-items:stretch;gap:5px}
+.inventoryIcon{width:58px;height:58px;margin:0 auto 3px;display:grid;place-items:center;background:#030506;border:2px solid #8c7046;border-radius:3px 9px 3px 9px;box-shadow:inset 0 0 12px #000,0 0 10px #0008;font-size:30px}
+.inventoryTile>b{color:#f0d49b;font:600 12px Georgia,serif;overflow-wrap:anywhere}
+.inventoryTile>small{font-size:10px;color:#c2ae88;line-height:1.35}
+.inventoryTile>p{font-size:10px;color:#b9a98b;margin:2px 0}
+.inventoryMemberSelect{width:100%;padding:6px 4px;background:#050809;color:#e9dfc8;border:1px solid #675337;border-radius:3px;font-size:10px}
+.inventoryTile .lootActions{margin-top:auto;display:flex;flex-wrap:wrap;gap:4px}
+.inventoryTile .lootActions .btn{min-width:0;padding:6px 4px;font-size:10px}
+.inventoryEmpty{grid-column:1/-1;text-align:center;padding:25px 8px;border:1px dashed #705634;background:#080b0c}
+@media(max-width:480px){.inventoryTabs{gap:4px}.inventoryTab{font-size:10px;padding:9px 2px}.inventoryGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.inventoryTile{padding:8px 5px}.inventoryIcon{width:52px;height:52px}}
+
 </style>
 </head>
 <body>
@@ -1149,7 +1168,7 @@ body.battle-mode .actionPanel .actions{grid-template-columns:repeat(2,minmax(0,1
   <section class="sideCard quickInventory"><div class="sideHeading"><span>RISORSE</span><span>◇</span></div><div id="sideResources" class="sideResources">Pozioni: 0<br>Oro: 0</div></section>
 </div>
 <div id="afterCombat" class="panel hidden"></div>
-<div class="panel" id="inventoryPanel"><h2>Inventario</h2><div id="inventory" class="inventory"></div></div>
+<div class="panel" id="inventoryPanel"><h2>Inventario · Zaino</h2><div id="inventory" class="inventory"></div></div>
 <div class="row"><button class="btn secondary" onclick="saveGame()">SALVA PARTITA</button><button class="btn secondary" onclick="loadGame()">CARICA PARTITA</button><button class="btn secondary" onclick="backToCreator()">Torna alla creazione</button></div>
 <p class="note">I progressi vengono salvati in questo browser su questo dispositivo.</p>
 </div>
@@ -1899,22 +1918,52 @@ function restartBattle(){const seed=battle&&battle.proceduralSeed;startBattle(ba
 function lootItemEquipped(item){
  return [G.hero,...(G.party||[])].some(p=>{const e=p&&p.equipment||{};return [e.weapon,e.weapon2,e.armor,e.head,e.shouldersStyle,e.armsStyle,e.legsStyle,e.bootsStyle].includes(item.name)});
 }
+let inventoryCategory="usable";
+function inventoryIcon(item){
+ const name=String(item.name||"").toLowerCase();
+ if(item.slot==="weapon"||/spada|daga|pugn|ascia|martello|lancia|arco|bastone|scudo/.test(name))return /arco/.test(name)?"🏹":/bastone/.test(name)?"🪄":/scudo/.test(name)?"🛡️":/lancia/.test(name)?"🔱":"⚔️";
+ if(item.slot==="armor"||/armatura|corazza|mantello/.test(name))return "🛡️";
+ if(item.slot==="head")return "⛑️";
+ if(item.effect==="heal"||/pozione|cura|benda/.test(name))return "🧪";
+ if(item.effect==="attack"||/dardo|runa/.test(name))return "📜";
+ if(item.effect==="defense"||/barriera|antidoto|purificazione/.test(name))return "✨";
+ return "💎";
+}
+function setInventoryCategory(category){inventoryCategory=category;renderInventoryManagement()}
+function inventoryMemberOptions(){return [G.hero,...(G.party||[])].map(p=>'<option value="'+(p.isHero?"hero":p.id)+'">'+p.name+' · '+p.class+'</option>').join("")}
 function renderInventoryManagement(){
  if(!G)return;G.equipmentBag=G.equipmentBag||[];G.lootBag=G.lootBag||[];
+ const members=inventoryMemberOptions();
  const gear=G.equipmentBag.map(item=>{
   const equipped=lootItemEquipped(item),hands=item.slot==="weapon"&&!isTwoHandedWeapon(item.name);
-  const actions=item.slot==="weapon"?'<button class="btn secondary" onclick="equipLootItem(\''+item.id+'\',\'weapon\')">Destra</button>'+(hands?'<button class="btn secondary" onclick="equipLootItem(\''+item.id+'\',\'weapon2\')">Sinistra</button>':''):'<button class="btn secondary" onclick="equipLootItem(\''+item.id+'\',\'main\')">Equipaggia</button>';
   const value=item.value||Math.max(8,(item.physical||0)*4+(item.magic||0)*4+(item.defense||0)*5);
-  return '<article class="lootCard"><b>'+item.name+'</b><small>'+item.rarity+' · '+(item.slot==="weapon"?"Arma":item.slot==="armor"?"Armatura":"Copricapo")+' · '+value+' oro</small><div class="lootActions">'+actions+'<button class="btn danger" '+(equipped?'disabled title="Oggetto equipaggiato"':'')+' onclick="sellLootItem(\''+item.id+'\')">Vendi</button></div>'+(equipped?'<small>Equipaggiato: non vendibile</small>':'')+'</article>';
+  const slot=item.slot==="weapon"?"weapon":item.slot==="armor"?"armor":"head";
+  const actions=item.slot==="weapon"?'<button class="btn secondary" onclick="equipLootItem(\''+item.id+'\',\'weapon\',document.getElementById(\'member_'+item.id+'\').value)">Destra</button>'+(hands?'<button class="btn secondary" onclick="equipLootItem(\''+item.id+'\',\'weapon2\',document.getElementById(\'member_'+item.id+'\').value)">Sinistra</button>':''):'<button class="btn secondary" onclick="equipLootItem(\''+item.id+'\',\''+slot+'\',document.getElementById(\'member_'+item.id+'\').value)">Equipaggia</button>';
+  return '<article class="inventoryTile"><div class="inventoryIcon">'+inventoryIcon(item)+'</div><b>'+item.name+'</b><small>'+item.rarity+' · '+(item.slot==="weapon"?"Arma":item.slot==="armor"?"Armatura":"Copricapo")+' · '+value+' oro</small><select id="member_'+item.id+'" class="inventoryMemberSelect">'+members+'</select><div class="lootActions">'+actions+'<button class="btn danger" '+(equipped?'disabled title="Oggetto equipaggiato"':'')+' onclick="sellLootItem(\''+item.id+'\')">Vendi</button></div>'+(equipped?'<small>Equipaggiato: non vendibile</small>':'')+'</article>';
  }).join("");
- const goods=(G.lootBag||[]).map(item=>'<article class="lootCard"><b>'+item.name+' × '+(item.quantity||1)+'</b><small>'+item.rarity+' · '+(item.kind==="scroll"?"Pergamena":"Materiale")+' · '+item.value+' oro</small><p>'+item.description+'</p><div class="lootActions">'+(item.kind==="scroll"&&item.effect==="heal"?'<button class="btn secondary" onclick="useInventoryItem(\''+item.id+'\')">Usa fuori combattimento</button>':'')+'<button class="btn danger" onclick="sellLootItem(\''+item.id+'\')">Vendi</button></div></article>').join("");
- $("inventory").innerHTML='<div class="inventoryResources">'+Object.entries(G.inventory||{}).map(([k,v])=>'<span>'+k+': '+v+'</span>').join("")+'<span>Oro: '+(G.gold||0)+'</span></div><h3>Equipaggiamento recuperato</h3>'+(gear||'<p class="menuHint">Nessuna arma o armatura nello zaino.</p>')+'<h3>Pergamene e materiali</h3>'+(goods||'<p class="menuHint">Nessun oggetto raccolto.</p>');
+ const scrolls=(G.lootBag||[]).filter(item=>item.kind==="scroll").map(item=>{
+  const canOutside=item.effect==="heal"&&(!battle||battle.ended);
+  const canBattle=!!(battle&&!battle.ended&&current()&&!isEnemy(current()));
+  const action=canOutside?'<button class="btn secondary" onclick="useInventoryItem(\''+item.id+'\')">Usa</button>':canBattle?'<button class="btn secondary" onclick="playerAction(\'scroll\',\''+item.id+'\')">Usa in battaglia</button>':'<button class="btn secondary" disabled>Usabile in battaglia</button>';
+  return '<article class="inventoryTile"><div class="inventoryIcon">'+inventoryIcon(item)+'</div><b>'+item.name+' × '+(item.quantity||1)+'</b><small>'+item.rarity+' · '+item.value+' oro</small><p>'+item.description+'</p><div class="lootActions">'+action+'<button class="btn danger" onclick="sellLootItem(\''+item.id+'\')">Vendi</button></div></article>';
+ }).join("");
+ const consumables=Object.entries(G.inventory||{}).filter(([,count])=>Number(count)>0).map(([name,count])=>{
+  const icon=inventoryIcon({name});
+  const usable=battle&&!battle.ended&&current()&&!isEnemy(current())&&(name==="Pozione"||["Antidoto","Benda","Purificazione"].includes(name));
+  const action=usable?'<button class="btn secondary" onclick="playerAction(\''+(name==="Pozione"?"potion":"cure")+'\')">Usa in battaglia</button>':'<button class="btn secondary" disabled>Usabile in battaglia</button>';
+  return '<article class="inventoryTile"><div class="inventoryIcon">'+icon+'</div><b>'+name+' × '+count+'</b><small>Oggetto utilizzabile</small><div class="lootActions">'+action+'</div></article>';
+ }).join("");
+ const goods=(G.lootBag||[]).filter(item=>item.kind!=="scroll").map(item=>'<article class="inventoryTile"><div class="inventoryIcon">'+inventoryIcon(item)+'</div><b>'+item.name+' × '+(item.quantity||1)+'</b><small>'+item.rarity+' · '+item.value+' oro</small><p>'+item.description+'</p><div class="lootActions"><button class="btn danger" onclick="sellLootItem(\''+item.id+'\')">Vendi</button></div></article>').join("");
+ const empty='<p class="menuHint inventoryEmpty">Nessun oggetto in questa sezione.</p>';
+ const tabs='<div class="inventoryTabs"><button class="inventoryTab '+(inventoryCategory==="usable"?"active":"")+'" onclick="setInventoryCategory(\'usable\')">✦ Utilizzabili</button><button class="inventoryTab '+(inventoryCategory==="gear"?"active":"")+'" onclick="setInventoryCategory(\'gear\')">⚔ Armi e armature</button><button class="inventoryTab '+(inventoryCategory==="sellable"?"active":"")+'" onclick="setInventoryCategory(\'sellable\')">◇ Oggetti vendibili</button></div>';
+ let content=inventoryCategory==="gear"?(gear||empty):inventoryCategory==="sellable"?(goods||empty):((consumables+scrolls)||empty);
+ $("inventory").innerHTML='<div class="inventoryResources"><span>Oro: '+(G.gold||0)+'</span><span>Equipaggiamento: '+G.equipmentBag.length+'</span><span>Oggetti: '+G.lootBag.reduce((n,x)=>n+(x.quantity||1),0)+'</span></div>'+tabs+'<div class="inventoryGrid">'+content+'</div>';
 }
-function equipLootItem(id,slot){
+function equipLootItem(id,slot,memberId){
  if(!G)return;const item=(G.equipmentBag||[]).find(x=>String(x.id)===String(id));if(!item)return;
- const candidates=[G.hero,...(G.party||[])].filter(p=>Array.isArray(item.classes)&&item.classes.includes(p.class));
- if(!candidates.length){alert("Nessun membro della squadra può utilizzare questo oggetto.");return}
- const p=candidates.find(x=>x.isHero)||candidates[0];selectedEquipmentMember=p.isHero?"hero":String(p.id);
+ const members=[G.hero,...(G.party||[])];
+ const p=members.find(x=>(x.isHero?"hero":String(x.id))===String(memberId))||members.find(x=>x.isHero)||members[0];if(!p)return;
+ selectedEquipmentMember=p.isHero?"hero":String(p.id);
  if(item.slot==="weapon")setEquipment(slot==="weapon2"?"weapon2":"weapon",item.name);
  else if(item.slot==="armor")setEquipment("armor",item.name);
  else if(item.slot==="head")setEquipment("head",item.name);
@@ -2270,7 +2319,7 @@ function rollMissionLoot(boss=false,enemies=[]){
  const classSet=new Set((Array.isArray(enemies)?enemies:[]).map(enemy=>String(enemy&&enemy.class||"")).filter(Boolean));
  const enemyRank=Math.max(0,...(Array.isArray(enemies)?enemies:[]).map(enemy=>rank[enemy&&enemy.rarity]??0));
  const maxRank=classSet.size?Math.min(3,enemyRank+1):3;
- const gearPool=lootGear.filter(item=>(!classSet.size||!item.classes||item.classes.some(name=>classSet.has(name)))&&(rank[item.rarity]??0)<=maxRank);
+ const gearPool=lootGear.filter(item=>(rank[item.rarity]??0)<=maxRank);
  if(boss||Math.random()<.62){
   let pool=gearPool;if(boss)pool=pool.filter(item=>(rank[item.rarity]??0)>=2);
   if(!pool.length)pool=lootGear.filter(item=>!boss||item.rarity==="Raro"||item.rarity==="Epico");
@@ -2293,16 +2342,9 @@ return gender==="f"||gender==="female"||gender.startsWith("fem");
 }
 function isTwoHandedWeapon(name){const n=String(name||"").toLowerCase();return n.includes("arco")||n.includes("bastone")||n.includes("lancia");}
 function equipmentRules(p){
-const c=String(p.class||"").toLowerCase();let base;
-if(c.includes("arciere"))base={weapons:["Arco","Pugnale"],armors:["Armatura_arciere"],heads:["Elmo_leone"]};
-else if(c.includes("mago")||c.includes("maga"))base={weapons:["Bastone"],armors:["Armatura_mago"],heads:["Cappello_mago"]};
-else if(c.includes("druido")||c.includes("druida"))base={weapons:["Bastone","Pugnale"],armors:["Armatura_druido"],heads:["Cappello_mago"]};
-else if(c.includes("paladin")||c.includes("paladino")||c.includes("paladina")||c.includes("chierico"))base={weapons:["Spada","Martello","Scudo","Lancia"],armors:["Armatura_guerriero"],heads:["Elmo_leone","Elmo_drago"]};
-else if(c.includes("ladro")||c.includes("assassino"))base={weapons:["Pugnale","Arco","Spada"],armors:["Armatura_arciere"],heads:["Cappello_punk"]};
-else if(c.includes("berserker"))base={weapons:["Ascia","Martello","Spada","Lancia"],armors:["Armatura_guerriero"],heads:["Elmo_drago"]};
-else if(c.includes("cavaliere oscuro"))base={weapons:["Spada","Ascia","Lancia","Scudo"],armors:["Armatura_guerriero"],heads:["Elmo_drago","Elmo_leone"]};
-else base={weapons:["Spada","Ascia","Martello","Scudo","Lancia"],armors:["Armatura_guerriero"],heads:["Elmo_drago","Elmo_leone"]};
-(G.equipmentBag||[]).forEach(x=>{if(Array.isArray(x.classes)&&x.classes.includes(p.class)){if(x.slot==="weapon")base.weapons.push(x.name);if(x.slot==="armor")base.armors.push(x.name);if(x.slot==="head"&&supportsHumanoidHairAndHeadgear(p))base.heads.push(x.name)}});
+const base={weapons:["Spada","Ascia","Martello","Pugnale","Arco","Bastone","Scudo","Lancia"],armors:["Armatura_guerriero","Armatura_arciere","Armatura_druido","Armatura_mago"],heads:["Elmo_leone","Elmo_drago","Cappello_mago","Cappello_punk"]};
+(lootGear||[]).forEach(x=>{if(x.slot==="weapon")base.weapons.push(x.name);if(x.slot==="armor")base.armors.push(x.name);if(x.slot==="head")base.heads.push(x.name)});
+(G.equipmentBag||[]).forEach(x=>{if(x.slot==="weapon")base.weapons.push(x.name);if(x.slot==="armor")base.armors.push(x.name);if(x.slot==="head")base.heads.push(x.name)});
 base.weapons=[...new Set(base.weapons)];base.armors=[...new Set(base.armors)];base.heads=[...new Set(base.heads)];base.offhand=base.weapons.filter(name=>!isTwoHandedWeapon(name));
 if(!supportsHumanoidHairAndHeadgear(p))base.heads=[];return base;
 }
