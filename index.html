@@ -2429,7 +2429,7 @@ const p=selectedEquipmentMember==="hero"?G.hero:G.party.find(x=>String(x.id)===S
 if(!p)return;
 if(!p.equipment)p.equipment={hair:"",armor:"",weapon:"",weapon2:"",head:""};
 const rules=equipmentRules(p);
-if(["armor","shoulders","arms","legs","boots"].includes(slot)&&value&&!rules.armors.includes(value))return;
+if(["armor","shoulders","arms","legs","boots"].includes(slot)&&typeof value!=="boolean"&&value&&!rules.armors.includes(value))return;
 if(slot==="weapon"&&value&&!rules.weapons.includes(value))return;
 if(slot==="weapon2"&&value&&(!rules.offhand.includes(value)||isTwoHandedWeapon(p.equipment.weapon)))return;
 if(slot==="weapon"&&isTwoHandedWeapon(value))p.equipment.weapon2="";
