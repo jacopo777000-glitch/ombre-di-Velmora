@@ -1944,7 +1944,8 @@ function inventoryIcon(item){
  if(item&&item.slot==="armor"){
   const style=armorVisualMap[item.name]||item.name,key=style+".JPG",entry=equipmentManifest[key];
   const part=entry&&entry.parts&&entry.parts.armor&&entry.parts.armor[0];
-  const src=part&&part.file||"assets/equip/modular/"+style+"_armor_01.png";
+  const armorFallback={Armatura_guerriero:"assets/equip/modular/Armatura_guerriero_armor_01.png",Armatura_arciere:"assets/equip/modular/Armatura_arciere_armor_01.png",Armatura_druido:"assets/equip/modular/Armatura_druido_armor_01.png",Armatura_mago:"assets/equip/modular/Armatura_mago_armor_01.png"};
+  const src=part&&part.file||armorFallback[style]||"assets/equip/modular/Armatura_guerriero_armor_01.png";
   return '<img class="inventoryIconImage inventoryArmorIcon" src="'+asset(src)+'" alt="" draggable="false">';
  }
  if(item&&item.slot==="head"){
