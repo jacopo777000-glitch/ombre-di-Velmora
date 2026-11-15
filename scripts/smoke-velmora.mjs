@@ -605,14 +605,14 @@ try {
       Math.random=()=>0;
       const mageDrop=rollMissionLoot(false,[{class:"Mago",rarity:"Comune"}]);
       const paladinDrop=rollMissionLoot(true,[{class:"Paladino",rarity:"Epico"}]);
-      return {mageDrop,paladinDrop};
+      return {mageDrop,paladinDrop,catalogNames:lootGear.map(item=>item.name)};
     }finally{
       Math.random=originalRandom;
       G.equipmentBag=originalBag;
     }
   });
   const lootRank={"Comune":0,"Non comune":1,"Raro":2,"Epico":3,"Mitico":4};
-  const catalogNames=new Set(lootGear.map(item=>item.name));
+  const catalogNames=new Set(proceduralLootCheck.catalogNames||[]);
   if(!catalogNames.has(proceduralLootCheck.mageDrop?.name)||lootRank[proceduralLootCheck.mageDrop.rarity]>1||!catalogNames.has(proceduralLootCheck.paladinDrop?.name)||!["Raro","Epico"].includes(proceduralLootCheck.paladinDrop.rarity)){
     throw new Error("bottino non coerente con catalogo e rarità dei nemici: "+JSON.stringify(proceduralLootCheck));
   }
