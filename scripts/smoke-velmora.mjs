@@ -616,6 +616,34 @@ try {
   }
   console.log("PASS: bottino dei nemici filtrato per classe e rarità",proceduralLootCheck);
 
+  const offhandLootChecks=await page.evaluate(()=>{
+    const original=JSON.parse(JSON.stringify(G)),oldBattle=battle,oldSelected=selectedEquipmentMember,oldRandom=Math.random;
+    try{
+      battle=null;G.hero.class="Guerriero";G.hero.equipment={weapon:"Spada",weapon2:""};
+      G.equipmentBag=[{id:"offhand-test",name:"Daga del Velo",slot:"weapon",classes:["Guerriero"],physical:5,magic:0,defense:0,rarity:"Non comune"}];
+      G.lootBag=[];selectedEquipmentMember="hero";$("characterScreen").classList.add("open");renderCharacterScreen();
+      const selects=[...document.querySelectorAll("#characterScreenBody .equipSlots select")].slice(0,2);
+      if(selects.length!==2||selects[0].value!=="Spada"||!selects[1].querySelector('option[value="Daga del Velo"]'))throw new Error("selettori arma destra/sinistra o arma loot mancanti");
+      setEquipment("weapon2","Daga del Velo");
+      const dualWield=G.hero.equipment.weapon2==="Daga del Velo"&&G.hero.equipment.physicalBonus>=3;
+      const layers=equipmentLayers(G.hero),twoVisible=(layers.match(/class="weaponLayer"/g)||[]).length===2;
+      setEquipment("weapon","Lancia");const twoHandClears=G.hero.equipment.weapon2==="";
+      G.hero.hp=Math.max(1,G.hero.maxhp-20);G.lootBag=[{id:"scroll_heal",name:"Pergamena di Cura",kind:"scroll",effect:"heal",power:26,rarity:"Comune",value:18,quantity:1,description:"cura"}];
+      const hpBefore=G.hero.hp;useInventoryItem("scroll_heal");const scrollHeal=G.hero.hp>hpBefore&&G.lootBag.length===0;
+      G.lootBag=[{id:"material_test",name:"Zanna di orco",kind:"material",rarity:"Comune",value:8,quantity:2,description:"trofeo"}];G.gold=0;
+      sellLootItem("material_test");const sellWorks=G.gold===8&&G.lootBag[0].quantity===1;
+      const seq=[.9,.4];Math.random=()=>seq.length?seq.shift():.4;
+      const goodsDrop=rollMissionLoot(false,[{class:"Mago",rarity:"Comune"}]);
+      const mixedDrop=goodsDrop.kind==="scroll"||goodsDrop.kind==="material";
+      return {dualWield,twoVisible,twoHandClears,scrollHeal,sellWorks,mixedDrop,goodsDrop:goodsDrop.name};
+    }finally{
+      Math.random=oldRandom;G=original;battle=oldBattle;selectedEquipmentMember=oldSelected;
+      $("characterScreen").classList.remove("open");updateHUD();renderBattle();
+    }
+  });
+  if(Object.entries(offhandLootChecks).some(([k,v])=>k!=="goodsDrop"&&!v))throw new Error("equipaggiamento a due mani, bottino o pergamene non funzionanti: "+JSON.stringify(offhandLootChecks));
+  console.log("PASS: doppia arma, vincolo armi a due mani, pergamene curative, vendita e drop misti",offhandLootChecks);
+
   await page.evaluate(() => startBattle(2,generateProceduralEnemies(2,7788),7788));
   await page.waitForFunction(() => {
     const field=document.querySelector("#combat .battlefield");
