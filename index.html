@@ -1473,6 +1473,7 @@ function log(t){if(!battle)return;battle.log.unshift(t);if(battle.log.length>35)
 function weaponNameFor(u){
  const eq=u&&u.equipment||{};
  let name=String(eq.weapon||u.weaponType||"").toLowerCase();
+ if(name.includes("daga")||name.includes("pugnali"))name="pugnale";
  if(!name){const c=String(u&&u.class||"").toLowerCase();name=c.includes("arciere")?"arco":c.includes("mago")||c.includes("maga")||c.includes("druido")||c.includes("druida")?"bastone":c.includes("ladro")||c.includes("assassino")?"pugnale":c.includes("berserker")?"ascia":c.includes("cavaliere oscuro")?"spada":c.includes("paladin")||c.includes("chierico")?"martello":u&&u.kind==="orc"?"ascia":u&&u.kind==="priest"?"bastone":"spada"}
  return name;
 }
