@@ -611,10 +611,12 @@ try {
       G.equipmentBag=originalBag;
     }
   });
-  if(!proceduralLootCheck.mageDrop?.classes?.includes("Mago")||proceduralLootCheck.mageDrop.rarity==="Epico"||!proceduralLootCheck.paladinDrop?.classes?.includes("Paladino")||!["Raro","Epico"].includes(proceduralLootCheck.paladinDrop.rarity)){
-    throw new Error("bottino non coerente con classe/rarità dei nemici generati: "+JSON.stringify(proceduralLootCheck));
+  const lootRank={"Comune":0,"Non comune":1,"Raro":2,"Epico":3,"Mitico":4};
+  const catalogNames=new Set(lootGear.map(item=>item.name));
+  if(!catalogNames.has(proceduralLootCheck.mageDrop?.name)||lootRank[proceduralLootCheck.mageDrop.rarity]>1||!catalogNames.has(proceduralLootCheck.paladinDrop?.name)||!["Raro","Epico"].includes(proceduralLootCheck.paladinDrop.rarity)){
+    throw new Error("bottino non coerente con catalogo e rarità dei nemici: "+JSON.stringify(proceduralLootCheck));
   }
-  console.log("PASS: bottino dei nemici filtrato per classe e rarità",proceduralLootCheck);
+  console.log("PASS: bottino misto non vincolato alla classe, con rarità limitata al grado degli avversari",proceduralLootCheck);
 
   const offhandLootChecks=await page.evaluate(()=>{
     const original=JSON.parse(JSON.stringify(G)),oldBattle=battle,oldSelected=selectedEquipmentMember,oldRandom=Math.random;
