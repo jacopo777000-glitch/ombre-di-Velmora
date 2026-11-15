@@ -1883,11 +1883,12 @@ if(target.hp<=0){target.hp=0;if(target.isHero){target.hp=1;log(`${target.name} c
 function applyStartStatus(u){if(!u.status)return;let s=u.status;if(s.damage){u.hp-=s.damage;log(`${u.name} subisce ${s.damage} danni da ${s.name.toLowerCase()}.`)}s.turns--;if(s.turns<=0){log(`L'effetto ${s.name.toLowerCase()} termina su ${u.name}.`);u.status=null}if(u.hp<=0){if(u.isHero){u.hp=1;log(`${u.name} resiste alla morte.`)}else{u.hp=0;u.alive=false;u.down=3;log(`${u.name} cade a terra!`)}}}
 function tickDowned(){[G.hero,...G.party].forEach(p=>{if(!p.alive&&p.down>0){p.down--;if(p.down===0)log(`${p.name} non è stato soccorso in tempo: è perduto.`)}})}
 function winBattle(){
-if(!battle||battle.ended)return;battle.ended=true;busy=false;let n=battle.n;if(G.activeGuildMission){$("combat").classList.add("hidden");document.body.classList.remove("battle-mode");G.hero.xp+=n===1?18:n===2?28:40;G.activeGuildMission.battles=(G.activeGuildMission.battles||0)+1;const found=rollMissionLoot(n===3,battle.units);let box=$("afterCombat");box.classList.remove("hidden");box.innerHTML='<h2>Vittoria!</h2><p>Lo scontro è terminato. Il gruppo riprende fiato: le decisioni prese finora hanno cambiato il corso dell’incarico.</p><p><b>Bottino trovato: '+found.name+'</b> · '+found.rarity+'. Aggiunto all’inventario della squadra.</p><button class="btn" onclick="guildAfterBattle()">Prosegui</button>';updateHUD();return}G.battleWon++;let reward=n===1?{xp:35,gold:18}:n===2?{xp:55,gold:28}:{xp:100,gold:60};G.hero.xp+=reward.xp;G.gold+=reward.gold;let levelUp="";
+if(!battle||battle.ended)return;battle.ended=true;busy=false;let n=battle.n;if(G.activeGuildMission){$("combat").classList.add("hidden");document.body.classList.remove("battle-mode");G.hero.xp+=n===1?18:n===2?28:40;G.activeGuildMission.battles=(G.activeGuildMission.battles||0)+1;const found=rollMissionLoot(n===3,battle.units.filter(isEnemy));let box=$("afterCombat");box.classList.remove("hidden");box.innerHTML='<h2>Vittoria!</h2><p>Lo scontro è terminato. Il gruppo riprende fiato: le decisioni prese finora hanno cambiato il corso dell’incarico.</p><p><b>Bottino trovato: '+found.name+'</b> · '+found.rarity+'. '+(found.kind==="scroll"?"Pergamena aggiunta alla borsa.":found.kind==="material"?"Oggetto vendibile aggiunto alla borsa.":"Equipaggiamento aggiunto allo zaino e utilizzabile dai membri compatibili.")+'</p><button class="btn" onclick="guildAfterBattle()">Prosegui</button>';updateHUD();return}G.battleWon++;let reward=n===1?{xp:35,gold:18}:n===2?{xp:55,gold:28}:{xp:100,gold:60};G.hero.xp+=reward.xp;G.gold+=reward.gold;let levelUp="";
 if(G.hero.xp>=G.hero.level*60){G.hero.xp-=G.hero.level*60;G.hero.level++;G.hero.maxhp+=8;G.hero.hp=Math.min(G.hero.maxhp,G.hero.hp+8);G.hero.stats.forza++;G.statPoints=(G.statPoints||0)+2;levelUp=` ${G.hero.name} sale al livello ${G.hero.level}! Hai ottenuto 2 punti caratteristica.`}
+const found=rollMissionLoot(n===3,battle.units.filter(isEnemy));
 if(n===3){G.inventory["Lama dell'Eco Perduto"]=1;G.finished=true}
 $("combat").classList.add("hidden");document.body.classList.remove("battle-mode");let box=$("afterCombat");box.classList.remove("hidden");
-box.innerHTML=`<h2>${n===3?"Vittoria! Il Custode è caduto.":"Vittoria!"}</h2><p>Hai ottenuto ${reward.xp} XP e ${reward.gold} monete d'oro.${levelUp}</p>${n===3?'<p><b>Oggetto unico leggendario ottenuto: Lama dell’Eco Perduto.</b> La campana tace.</p>':''}<button class="btn" onclick="continueAfter(${n})">${n===1?"Prosegui verso la cripta":n===2?"Apri la sala della campana":"Concludi l'avventura"}</button>`;
+box.innerHTML=`<h2>${n===3?"Vittoria! Il Custode è caduto.":"Vittoria!"}</h2><p>Hai ottenuto ${reward.xp} XP e ${reward.gold} monete d'oro.${levelUp}</p><p><b>Bottino:</b> ${found.name} · ${found.rarity}. ${found.kind==="scroll"?"Pergamena utilizzabile in battaglia.":found.kind==="material"?"Oggetto vendibile per oro.":"Arma/armatura equipaggiabile da un membro compatibile."}</p>${n===3?'<p><b>Oggetto unico leggendario ottenuto: Lama dell’Eco Perduto.</b> La campana tace.</p>':''}<button class="btn" onclick="continueAfter(${n})">${n===1?"Prosegui verso la cripta":n===2?"Apri la sala della campana":"Concludi l'avventura"}</button>`;
 renderBattle();updateHUD()
 }
 function continueAfter(n){if(n===1)showScene("crypt");else if(n===2)showScene("boss");else showScene("ending")}
@@ -2247,7 +2248,9 @@ const lootGear=[
 {name:"Mantello del Bosco",slot:"armor",classes:["Arciere","Ladro","Assassino","Druido","Druida"],physical:0,magic:0,defense:4,rarity:"Non comune"},
 {name:"Cappuccio dell'Oracolo",slot:"head",classes:["Mago","Maga","Druido","Druida"],physical:0,magic:3,defense:1,rarity:"Raro"},
 {name:"Elmo del Drago Antico",slot:"head",classes:["Guerriero","Paladino","Paladina","Chierico","Cavaliere oscuro","Berserker"],physical:0,magic:0,defense:3,rarity:"Epico"},
-{name:"Maschera del Predatore",slot:"head",classes:["Arciere","Ladro","Assassino"],physical:2,magic:0,defense:2,rarity:"Raro"}
+{name:"Maschera del Predatore",slot:"head",classes:["Arciere","Ladro","Assassino"],physical:2,magic:0,defense:2,rarity:"Raro"},
+{name:"Daga del Velo",slot:"weapon",classes:["Ladro","Assassino","Arciere"],physical:5,magic:0,defense:0,rarity:"Non comune"},
+{name:"Scudo del Bastione",slot:"weapon",classes:["Guerriero","Paladino","Paladina","Chierico","Cavaliere oscuro"],physical:0,magic:0,defense:3,rarity:"Raro"}
 ];
 function lootMeta(name){return lootGear.find(x=>x.name===name)||null}
 const lootGoods=[
@@ -2335,10 +2338,10 @@ function setEquipment(slot,value){
 if(!G)return;
 const p=selectedEquipmentMember==="hero"?G.hero:G.party.find(x=>String(x.id)===String(selectedEquipmentMember));
 if(!p)return;
-if(!p.equipment)p.equipment={hair:"",armor:"",weapon:"",head:""};
+if(!p.equipment)p.equipment={hair:"",armor:"",weapon:"",weapon2:"",head:""};
 const rules=equipmentRules(p);
 if(slot==="weapon"&&value&&!rules.weapons.includes(value))return;
-if(slot==="weapon2"&&value&&!rules.offhand.includes(value))return;
+if(slot==="weapon2"&&value&&(!rules.offhand.includes(value)||isTwoHandedWeapon(p.equipment.weapon)))return;
 if(slot==="weapon"&&isTwoHandedWeapon(value))p.equipment.weapon2="";
 if(slot==="head"&&value&&!rules.heads.includes(value))return;
 if(slot==="hair"&&value&&!supportsHumanoidHairAndHeadgear(p))return;
@@ -2355,7 +2358,7 @@ const mainPhysical=wm?wm.physical:(({Spada:2,Ascia:3,Martello:3,Pugnale:1,Arco:3
 const offPhysical=off?off.physical:(({Spada:2,Ascia:3,Martello:3,Pugnale:1,Scudo:0})[p.equipment.weapon2]||0);
 p.equipment.physicalBonus=mainPhysical+(p.equipment.weapon2&&!isTwoHandedWeapon(p.equipment.weapon)?Math.floor(offPhysical*.35):0);
 p.equipment.magicBonus=(wm?wm.magic:(p.equipment.weapon==="Bastone"?5:0))+(off?Math.floor(off.magic*.35):0);
-if(p.equipment.weapon2==="Scudo")p.armor+=1;
+if(String(p.equipment.weapon2||"").toLowerCase().includes("scudo"))p.armor+=(off?off.defense:1);
 renderCharacterScreen();if(battle)renderBattle();
 }
 
