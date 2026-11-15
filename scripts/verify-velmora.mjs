@@ -250,9 +250,9 @@ if (failures === 0) pass("Punti di aggancio salvataggio, equipaggiamento, colpi 
 
 try {
   const iconStart=html.indexOf("function inventoryIcon(item){");
-  const iconEnd=html.indexOf("\\nfunction inventoryRarityClass",iconStart);
+  const iconEnd=html.indexOf("\nfunction inventoryRarityClass",iconStart);
   const iconCode=iconStart>=0&&iconEnd>iconStart?html.slice(iconStart,iconEnd):"";
-  if(!iconCode.includes("weaponSvgFor")||!iconCode.includes("inventoryArmorIcon")||!iconCode.includes("inventoryIconImage")||/[\\u{1F300}-\\u{1FAFF}]/u.test(iconCode)) {
+  if(!iconCode.includes("weaponSvgFor")||!iconCode.includes("inventoryArmorIcon")||!iconCode.includes("inventoryIconImage")||/[\u{1F300}-\u{1FAFF}]/u.test(iconCode)) {
     throw new Error("icone non renderizzate come SVG/immagini o emoji ancora presenti");
   }
   if(!html.includes("const armorStyles=rules.armors;")||!html.includes('["armor","shoulders","arms","legs","boots"].includes(slot)&&value&&!rules.armors.includes(value)')) {
