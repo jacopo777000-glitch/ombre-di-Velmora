@@ -49,5 +49,7 @@
       "sourcePath": "svg/no-padding/2-items/coin.svg",
       "usage": "Monete e valuta"
     }
-  }
+  },
+  "license": "CC0-1.0",
+  "licenseFile": "assets/inventory/CC0-1.0.txt"
 }
