@@ -40,6 +40,20 @@ try {
   fail("Manifest JSON non valido: " + error.message);
 }
 
+let inventoryManifest = {};
+try {
+  inventoryManifest = JSON.parse(fs.readFileSync(path.join(root, "assets/inventory/manifest.json"), "utf8"));
+  if (inventoryManifest.license !== "CC0-1.0" || !inventoryManifest.icons || Object.keys(inventoryManifest.icons).length < 7) {
+    throw new Error("licenza CC0 o catalogo icone incompleto");
+  }
+  if (!inventoryManifest.licenseFile || !fs.existsSync(path.join(root, inventoryManifest.licenseFile))) {
+    throw new Error("testo completo della licenza CC0 non presente");
+  }
+  pass("Manifest icone inventario valido (" + Object.keys(inventoryManifest.icons).length + " icone CC0)");
+} catch (error) {
+  fail("Manifest icone inventario non valido: " + error.message);
+}
+
 const referenced = new Set();
 const addPath = (value) => {
   if (!value || /^(?:https?:|data:|blob:|javascript:|#)/i.test(value)) return;
@@ -59,6 +73,8 @@ for (const entry of Object.values(manifest)) {
   if (entry && entry.file) referenced.add(entry.file);
   for (const list of Object.values(entry?.parts || {})) for (const part of (list || [])) if (part && part.file) referenced.add(part.file);
 }
+for (const entry of Object.values(inventoryManifest.icons || {})) if (entry && entry.file) referenced.add(entry.file);
+if (inventoryManifest.licenseFile) referenced.add(inventoryManifest.licenseFile);
 const modularPartCount = Object.values(manifest).flatMap(entry => Object.values(entry?.parts || {}).flat()).length;
 if (modularPartCount !== 36) fail("Attese 36 parti PNG modulari, trovate " + modularPartCount);
 else pass("Parti armatura modulari nel manifest: " + modularPartCount);
@@ -231,6 +247,21 @@ if (!html.includes('"Lancia"') || !html.includes('name.includes("lancia")') ||
   fail("Supporto della lancia incompleto tra generazione, grafica e bottino.");
 } else pass("Lancia disponibile per classi compatibili, resa SVG e bottino");
 if (failures === 0) pass("Punti di aggancio salvataggio, equipaggiamento, colpi di grazia e generazione presenti");
+
+try {
+  const iconStart=html.indexOf("function inventoryIcon(item){");
+  const iconEnd=html.indexOf("\\nfunction inventoryRarityClass",iconStart);
+  const iconCode=iconStart>=0&&iconEnd>iconStart?html.slice(iconStart,iconEnd):"";
+  if(!iconCode.includes("weaponSvgFor")||!iconCode.includes("inventoryArmorIcon")||!iconCode.includes("inventoryIconImage")||/[\\u{1F300}-\\u{1FAFF}]/u.test(iconCode)) {
+    throw new Error("icone non renderizzate come SVG/immagini o emoji ancora presenti");
+  }
+  if(!html.includes("const armorStyles=rules.armors;")||!html.includes('["armor","shoulders","arms","legs","boots"].includes(slot)&&value&&!rules.armors.includes(value)')) {
+    throw new Error("selettori e validazione non espongono tutte le armature a ogni personaggio");
+  }
+  pass("Inventario: icone SVG/PNG reali, armi/armature coerenti con i modelli e rarità visibili; armature universali");
+} catch(error) {
+  fail("Test icone inventario/equipaggiamento: "+error.message);
+}
 
 try {
   const compatStart = html.indexOf("function supportsHumanoidHairAndHeadgear(p){");

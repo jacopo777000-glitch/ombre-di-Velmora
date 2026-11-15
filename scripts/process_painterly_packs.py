@@ -97,9 +97,20 @@ for pack in PACKS:
     print(pack["id"] + ": " + str(len(images)) + " sfondi WebP ottimizzati")
 
 credits = ROOT / "assets" / "battle" / "CREDITS.md"
-text = credits.read_text(encoding="utf-8")
+original_text = credits.read_text(encoding="utf-8")
+lines = original_text.splitlines()
+unique_lines = []
+seen_credit_lines = set()
+for line in lines:
+    if line.startswith("- ") and "itch.io/" in line:
+        key = line.strip()
+        if key in seen_credit_lines:
+            continue
+        seen_credit_lines.add(key)
+    unique_lines.append(line)
+text = "\n".join(unique_lines)
 additions = []
-if "Painterly Battle Backgrounds — Free Pack" not in text:
+if "kalponic-studio.itch.io/painterly-battle-backgrounds" not in text:
     additions.append(
         "\n- kalponic/ — Kalponic Studio, Painterly Battle Backgrounds (Free Pack, 50 battle backgrounds). "
         "Official page: https://kalponic-studio.itch.io/painterly-battle-backgrounds. "
@@ -107,7 +118,7 @@ if "Painterly Battle Backgrounds — Free Pack" not in text:
         "standalone resale/repackaging is prohibited. The artwork is disclosed as AI-assisted. "
         "Only optimized WebP game resources are included here; the original ZIP is not redistributed.\n"
     )
-if "Painterly Backgrounds Free" not in text:
+if "gegx.itch.io/painterly-backgrounds-free" not in text:
     additions.append(
         "\n- gegx/ — GegX, Painterly Backgrounds Free (six painted fantasy backgrounds plus a parallax set). "
         "Official page: https://gegx.itch.io/painterly-backgrounds-free. "
@@ -115,6 +126,6 @@ if "Painterly Backgrounds Free" not in text:
         "or image collection and AI training are prohibited. Credit is not required. The artwork is disclosed as AI-generated "
         "and hand-curated. Only optimized WebP game resources are included here; the original ZIP is not redistributed.\n"
     )
-if additions:
+if additions or text.rstrip() != original_text.rstrip():
     credits.write_text(text.rstrip() + "\n" + "".join(additions), encoding="utf-8")
 print("Importazione completata:", total)

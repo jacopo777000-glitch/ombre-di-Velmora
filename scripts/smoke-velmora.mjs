@@ -598,6 +598,64 @@ try {
   if(JSON.stringify(navigationCheck.before)!==JSON.stringify(navigationCheck.after))throw new Error("la navigazione nei menu ha alterato lo stato del combattimento: "+JSON.stringify(navigationCheck));
   console.log("PASS: navigazione inventario/squadra/abilità/personaggio senza reset del combattimento",navigationCheck);
 
+  const universalEquipmentCheck=await page.evaluate(()=>{
+    const originalG=G,originalBattle=battle,oldSelected=selectedEquipmentMember,wasOpen=$("characterScreen").classList.contains("open");
+    try{
+      G=JSON.parse(JSON.stringify(G));battle=null;G.hero.class="Mago";G.hero.equipment={};
+      G.equipmentBag=[
+        {id:"universal-armor",name:"Armatura di Scaglie",slot:"armor",classes:["Guerriero"],physical:0,magic:0,defense:5,rarity:"Raro"},
+        {id:"universal-weapon",name:"Spada del Giuramento",slot:"weapon",classes:["Guerriero"],physical:6,magic:0,defense:0,rarity:"Raro"}
+      ];
+      equipLootItem("universal-armor","armor","hero");
+      setEquipment("weapon","Spada del Giuramento");
+      const options=[...document.querySelectorAll('#characterScreenBody select[data-armor-part="armor"] option')].map(option=>option.value);
+      return {class:G.hero.class,armor:G.hero.equipment.armor,weapon:G.hero.equipment.weapon,armorOption:options.includes("Armatura di Scaglie")};
+    }finally{
+      G=originalG;battle=originalBattle;selectedEquipmentMember=oldSelected;
+      if(!wasOpen)closeCharacterScreen();
+      renderInventoryManagement();
+    }
+  });
+  if(universalEquipmentCheck.class!=="Mago"||universalEquipmentCheck.armor!=="Armatura di Scaglie"||universalEquipmentCheck.weapon!=="Spada del Giuramento"||!universalEquipmentCheck.armorOption)throw new Error("un personaggio Mago non ha potuto equipaggiare armi/armature di altra classe: "+JSON.stringify(universalEquipmentCheck));
+  console.log("PASS: qualsiasi classe può equipaggiare armi e armature trovate",universalEquipmentCheck);
+
+  const inventoryIconCheck=await page.evaluate(async()=>{
+    const originalG=G,originalBattle=battle,oldCategory=inventoryCategory;
+    try{
+      G=JSON.parse(JSON.stringify(G));battle=null;
+      G.equipmentBag=[
+        {id:"icon-weapon",name:"Daga del Velo",slot:"weapon",physical:5,magic:0,defense:0,rarity:"Non comune"},
+        {id:"icon-armor",name:"Armatura di Scaglie",slot:"armor",physical:0,magic:0,defense:5,rarity:"Raro"},
+        {id:"icon-head",name:"Elmo del Drago Antico",slot:"head",physical:0,magic:0,defense:3,rarity:"Epico"}
+      ];
+      G.lootBag=[
+        {id:"scroll-heal-test",name:"Pergamena di Cura",kind:"scroll",effect:"heal",power:26,rarity:"Comune",value:18,description:"Cura",quantity:1},
+        {id:"scroll-attack-test",name:"Pergamena del Dardo Runico",kind:"scroll",effect:"attack",power:16,rarity:"Non comune",value:24,description:"Attacco",quantity:1},
+        {id:"scroll-defense-test",name:"Pergamena della Barriera",kind:"scroll",effect:"defense",power:6,rarity:"Raro",value:32,description:"Difesa",quantity:1},
+        {id:"material_orc",name:"Zanna di orco",kind:"material",rarity:"Comune",value:8,description:"Trofeo",quantity:2},
+        {id:"material_ember",name:"Frammento d'ossidiana",kind:"material",rarity:"Non comune",value:15,description:"Pietra",quantity:1},
+        {id:"material_sigil",name:"Sigillo antico",kind:"material",rarity:"Raro",value:28,description:"Reperto",quantity:1},
+        {id:"material_hide",name:"Cuoio delle tenebre",kind:"material",rarity:"Comune",value:10,description:"Materiale",quantity:1}
+      ];
+      G.inventory={Pozione:2,Antidoto:1,Benda:1,Purificazione:1};
+      const results=[];
+      for(const category of ["usable","gear","sellable"]){
+        setInventoryCategory(category);
+        const tiles=[...document.querySelectorAll("#inventory .inventoryTile")];
+        const images=tiles.flatMap(tile=>[...tile.querySelectorAll(".inventoryIcon img")]);
+        const svgs=tiles.flatMap(tile=>[...tile.querySelectorAll(".inventoryIcon svg")]);
+        await Promise.all(images.map(img=>img.decode?img.decode().catch(()=>{}):Promise.resolve()));
+        const broken=images.filter(img=>!img.naturalWidth).map(img=>img.src);
+        results.push({category,tiles:tiles.length,images:images.length,svgs:svgs.length,broken,rarityTagged:tiles.every(tile=>/rarity-/.test(tile.className))});
+      }
+      return results;
+    }finally{
+      G=originalG;battle=originalBattle;inventoryCategory=oldCategory;renderInventoryManagement();
+    }
+  });
+  if(inventoryIconCheck.some(result=>result.tiles===0||result.images+result.svgs<result.tiles||result.broken.length||!result.rarityTagged))throw new Error("icone/rarità inventario incomplete: "+JSON.stringify(inventoryIconCheck));
+  console.log("PASS: tre categorie inventario con icone PNG/SVG caricate e indicatori di rarità",inventoryIconCheck);
+
   const proceduralLootCheck = await page.evaluate(() => {
     const originalRandom=Math.random,originalBag=G.equipmentBag;
     G.equipmentBag=[];

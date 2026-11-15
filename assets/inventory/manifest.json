@@ -1,0 +1,53 @@
+{
+  "source": {
+    "name": "Game Icon Pack",
+    "author": "Nieobie",
+    "repository": "https://github.com/Nieobie/Game-Icon-Pack",
+    "commit": "b1a5fec8b68c99e7b46484db707610ab2414ad4c",
+    "license": "CC0-1.0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "licenseFile": "assets/inventory/CC0-1.0.txt"
+  },
+  "icons": {
+    "potion": {
+      "file": "assets/inventory/potion.svg",
+      "sourcePath": "svg/no-padding/5-food/potion.svg",
+      "usage": "Pozioni, antidoti e purificazione"
+    },
+    "scroll": {
+      "file": "assets/inventory/scroll.svg",
+      "sourcePath": "svg/no-padding/9-media/paper.svg",
+      "usage": "Pergamene"
+    },
+    "bone": {
+      "file": "assets/inventory/bone.svg",
+      "sourcePath": "svg/no-padding/2-items/bone.svg",
+      "usage": "Zanna di orco"
+    },
+    "stone": {
+      "file": "assets/inventory/stone.svg",
+      "sourcePath": "svg/no-padding/4-nature/stone.svg",
+      "usage": "Frammento d'ossidiana"
+    },
+    "diamond": {
+      "file": "assets/inventory/diamond.svg",
+      "sourcePath": "svg/no-padding/2-items/diamond.svg",
+      "usage": "Sigillo antico"
+    },
+    "leather": {
+      "file": "assets/inventory/leather.svg",
+      "sourcePath": "svg/no-padding/3-gear/coat.svg",
+      "usage": "Cuoio delle tenebre"
+    },
+    "bandage": {
+      "file": "assets/inventory/bandage.svg",
+      "sourcePath": "svg/no-padding/2-items/medical-kit.svg",
+      "usage": "Bende"
+    },
+    "coin": {
+      "file": "assets/inventory/coin.svg",
+      "sourcePath": "svg/no-padding/2-items/coin.svg",
+      "usage": "Monete e valuta"
+    }
+  }
+}

@@ -1081,7 +1081,20 @@ body.battle-mode .actionPanel .actions{grid-template-columns:repeat(2,minmax(0,1
 .inventoryTab.active{border-color:#e6c783;background:linear-gradient(145deg,#55432a,#1a1712);color:#ffe4a9;box-shadow:0 0 12px #d6b16c44,inset 0 0 0 1px #e8ca8b55}
 .inventoryGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(135px,1fr));gap:9px}
 .inventoryTile{min-width:0;min-height:150px;padding:9px 7px;border:1px solid #705634;border-radius:3px 11px 3px 11px;background:linear-gradient(145deg,rgba(25,32,34,.94),rgba(5,8,9,.98));box-shadow:inset 0 0 0 2px #000,0 4px 12px #0008;text-align:center;display:flex;flex-direction:column;align-items:stretch;gap:5px}
-.inventoryIcon{width:58px;height:58px;margin:0 auto 3px;display:grid;place-items:center;background:#030506;border:2px solid #8c7046;border-radius:3px 9px 3px 9px;box-shadow:inset 0 0 12px #000,0 0 10px #0008;font-size:30px}
+.inventoryIcon{width:58px;height:58px;margin:0 auto 3px;display:grid;place-items:center;position:relative;overflow:hidden;background:#030506;border:2px solid #8c7046;border-radius:3px 9px 3px 9px;box-shadow:inset 0 0 12px #000,0 0 10px #0008}
+.inventoryIconImage{display:block;width:84%;height:84%;object-fit:contain;filter:drop-shadow(0 2px 3px #000b)}
+.inventoryArmorIcon{width:100%;height:100%;object-fit:contain}
+.inventoryHeadIcon{width:100%;height:100%;object-fit:contain;transform:scale(2.15);transform-origin:50% 12%}
+.inventoryWeaponSvg{position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.inventoryTile.rarity-common{border-color:#705634}
+.inventoryTile.rarity-uncommon{border-color:#718f72;box-shadow:inset 0 0 0 2px #000,0 4px 12px #0008,0 0 7px #718f7255}
+.inventoryTile.rarity-rare{border-color:#608db7;box-shadow:inset 0 0 0 2px #000,0 4px 12px #0008,0 0 8px #608db755}
+.inventoryTile.rarity-epic{border-color:#9a78c6;box-shadow:inset 0 0 0 2px #000,0 4px 12px #0008,0 0 9px #9a78c655}
+.inventoryTile.rarity-mythic{border-color:#c79b48;box-shadow:inset 0 0 0 2px #000,0 4px 12px #0008,0 0 11px #c79b4877}
+.inventoryTile.rarity-uncommon .inventoryIcon{border-color:#8ea77d}
+.inventoryTile.rarity-rare .inventoryIcon{border-color:#7ca8d1}
+.inventoryTile.rarity-epic .inventoryIcon{border-color:#b194d8}
+.inventoryTile.rarity-mythic .inventoryIcon{border-color:#d5b36c}
 .inventoryTile>b{color:#f0d49b;font:600 12px Georgia,serif;overflow-wrap:anywhere}
 .inventoryTile>small{font-size:10px;color:#c2ae88;line-height:1.35}
 .inventoryTile>p{font-size:10px;color:#b9a98b;margin:2px 0}
@@ -1919,15 +1932,47 @@ function lootItemEquipped(item){
  return [G.hero,...(G.party||[])].some(p=>{const e=p&&p.equipment||{};return [e.weapon,e.weapon2,e.armor,e.head,e.shouldersStyle,e.armsStyle,e.legsStyle,e.bootsStyle].includes(item.name)});
 }
 let inventoryCategory="usable";
+let inventoryIconManifest={icons:{}};
 function inventoryIcon(item){
- const name=String(item.name||"").toLowerCase();
- if(item.slot==="weapon"||/spada|daga|pugn|ascia|martello|lancia|arco|bastone|scudo/.test(name))return /arco/.test(name)?"🏹":/bastone/.test(name)?"🪄":/scudo/.test(name)?"🛡️":/lancia/.test(name)?"🔱":"⚔️";
- if(item.slot==="armor"||/armatura|corazza|mantello/.test(name))return "🛡️";
- if(item.slot==="head")return "⛑️";
- if(item.effect==="heal"||/pozione|cura|benda/.test(name))return "🧪";
- if(item.effect==="attack"||/dardo|runa/.test(name))return "📜";
- if(item.effect==="defense"||/barriera|antidoto|purificazione/.test(name))return "✨";
- return "💎";
+ const name=String(item&&item.name||"").toLowerCase();
+ if(item&&item.slot==="weapon"){
+  const dummy={equipment:{weapon:item.name},race:"Umano",raceId:"human",gender:"M",class:"Guerriero"};
+  return weaponSvgFor(dummy).replace(/class="weaponLayer" style="[^"]*"/,'class="inventoryWeaponSvg" style="left:0;top:0;width:100%;height:100%"');
+ }
+ const armorVisualMap={"Armatura di Scaglie":"Armatura_guerriero","Corazza del Viandante":"Armatura_arciere","Veste Lunare":"Armatura_mago","Mantello del Bosco":"Armatura_druido"};
+ const headVisualMap={"Cappuccio dell'Oracolo":"Cappello_mago","Elmo del Drago Antico":"Elmo_drago","Maschera del Predatore":"Cappello_punk"};
+ if(item&&item.slot==="armor"){
+  const style=armorVisualMap[item.name]||item.name,key=style+".JPG",entry=equipmentManifest[key];
+  const part=entry&&entry.parts&&entry.parts.armor&&entry.parts.armor[0];
+  const src=part&&part.file||"assets/equip/modular/"+style+"_armor_01.png";
+  return '<img class="inventoryIconImage inventoryArmorIcon" src="'+asset(src)+'" alt="" draggable="false">';
+ }
+ if(item&&item.slot==="head"){
+  const style=headVisualMap[item.name]||item.name,entry=equipmentManifest[style+".JPG"];
+  const fallback={Cappello_mago:"assets/equip/Cappello_mago.png",Cappello_punk:"assets/equip/Cappello_punk.png",Elmo_drago:"assets/equip/Elmo_drago.png",Elmo_leone:"assets/equip/Elmo_leone.png"};
+  const src=entry&&entry.file||fallback[style];
+  return src?'<img class="inventoryIconImage inventoryHeadIcon" src="'+asset(src)+'" alt="" draggable="false">':'';
+ }
+ let key="stone";
+ if(item&&item.kind==="scroll")key="scroll";
+ else if(name.includes("pozione")||name.includes("antidoto")||name.includes("purificazione"))key="potion";
+ else if(name.includes("benda"))key="bandage";
+ else if(name.includes("zanna")||name.includes("osso"))key="bone";
+ else if(name.includes("ossidiana")||name.includes("pietra"))key="stone";
+ else if(name.includes("sigillo")||name.includes("gemma")||name.includes("cristallo"))key="diamond";
+ else if(name.includes("cuoio")||name.includes("pelle"))key="leather";
+ else if(name.includes("moneta")||name.includes("oro"))key="coin";
+ const entry=inventoryIconManifest.icons&&inventoryIconManifest.icons[key];
+ const src=entry&&entry.file||"assets/inventory/"+key+".svg";
+ return '<img class="inventoryIconImage" src="'+asset(src)+'" alt="" draggable="false">';
+}
+function inventoryRarityClass(item){
+ const rarity=String(item&&item.rarity||"Comune").toLowerCase();
+ if(rarity.includes("mit"))return "rarity-mythic";
+ if(rarity.includes("epic"))return "rarity-epic";
+ if(rarity.includes("rar"))return "rarity-rare";
+ if(rarity.includes("non"))return "rarity-uncommon";
+ return "rarity-common";
 }
 function setInventoryCategory(category){inventoryCategory=category;renderInventoryManagement()}
 function inventoryMemberOptions(){return [G.hero,...(G.party||[])].map(p=>'<option value="'+(p.isHero?"hero":p.id)+'">'+p.name+' · '+p.class+'</option>').join("")}
@@ -1939,21 +1984,21 @@ function renderInventoryManagement(){
   const value=item.value||Math.max(8,(item.physical||0)*4+(item.magic||0)*4+(item.defense||0)*5);
   const slot=item.slot==="weapon"?"weapon":item.slot==="armor"?"armor":"head";
   const actions=item.slot==="weapon"?'<button class="btn secondary" onclick="equipLootItem(\''+item.id+'\',\'weapon\',document.getElementById(\'member_'+item.id+'\').value)">Destra</button>'+(hands?'<button class="btn secondary" onclick="equipLootItem(\''+item.id+'\',\'weapon2\',document.getElementById(\'member_'+item.id+'\').value)">Sinistra</button>':''):'<button class="btn secondary" onclick="equipLootItem(\''+item.id+'\',\''+slot+'\',document.getElementById(\'member_'+item.id+'\').value)">Equipaggia</button>';
-  return '<article class="inventoryTile"><div class="inventoryIcon">'+inventoryIcon(item)+'</div><b>'+item.name+'</b><small>'+item.rarity+' · '+(item.slot==="weapon"?"Arma":item.slot==="armor"?"Armatura":"Copricapo")+' · '+value+' oro</small><select id="member_'+item.id+'" class="inventoryMemberSelect">'+members+'</select><div class="lootActions">'+actions+'<button class="btn danger" '+(equipped?'disabled title="Oggetto equipaggiato"':'')+' onclick="sellLootItem(\''+item.id+'\')">Vendi</button></div>'+(equipped?'<small>Equipaggiato: non vendibile</small>':'')+'</article>';
+  return '<article class="inventoryTile '+inventoryRarityClass(item)+'"><div class="inventoryIcon">'+inventoryIcon(item)+'</div><b>'+item.name+'</b><small>'+item.rarity+' · '+(item.slot==="weapon"?"Arma":item.slot==="armor"?"Armatura":"Copricapo")+' · '+value+' oro</small><select id="member_'+item.id+'" class="inventoryMemberSelect">'+members+'</select><div class="lootActions">'+actions+'<button class="btn danger" '+(equipped?'disabled title="Oggetto equipaggiato"':'')+' onclick="sellLootItem(\''+item.id+'\')">Vendi</button></div>'+(equipped?'<small>Equipaggiato: non vendibile</small>':'')+'</article>';
  }).join("");
  const scrolls=(G.lootBag||[]).filter(item=>item.kind==="scroll").map(item=>{
   const canOutside=item.effect==="heal"&&(!battle||battle.ended);
   const canBattle=!!(battle&&!battle.ended&&current()&&!isEnemy(current()));
   const action=canOutside?'<button class="btn secondary" onclick="useInventoryItem(\''+item.id+'\')">Usa</button>':canBattle?'<button class="btn secondary" onclick="playerAction(\'scroll\',\''+item.id+'\')">Usa in battaglia</button>':'<button class="btn secondary" disabled>Usabile in battaglia</button>';
-  return '<article class="inventoryTile"><div class="inventoryIcon">'+inventoryIcon(item)+'</div><b>'+item.name+' × '+(item.quantity||1)+'</b><small>'+item.rarity+' · '+item.value+' oro</small><p>'+item.description+'</p><div class="lootActions">'+action+'<button class="btn danger" onclick="sellLootItem(\''+item.id+'\')">Vendi</button></div></article>';
+  return '<article class="inventoryTile '+inventoryRarityClass(item)+'"><div class="inventoryIcon">'+inventoryIcon(item)+'</div><b>'+item.name+' × '+(item.quantity||1)+'</b><small>'+item.rarity+' · '+item.value+' oro</small><p>'+item.description+'</p><div class="lootActions">'+action+'<button class="btn danger" onclick="sellLootItem(\''+item.id+'\')">Vendi</button></div></article>';
  }).join("");
  const consumables=Object.entries(G.inventory||{}).filter(([,count])=>Number(count)>0).map(([name,count])=>{
   const icon=inventoryIcon({name});
   const usable=battle&&!battle.ended&&current()&&!isEnemy(current())&&(name==="Pozione"||["Antidoto","Benda","Purificazione"].includes(name));
   const action=usable?'<button class="btn secondary" onclick="playerAction(\''+(name==="Pozione"?"potion":"cure")+'\')">Usa in battaglia</button>':'<button class="btn secondary" disabled>Usabile in battaglia</button>';
-  return '<article class="inventoryTile"><div class="inventoryIcon">'+icon+'</div><b>'+name+' × '+count+'</b><small>Oggetto utilizzabile</small><div class="lootActions">'+action+'</div></article>';
+  return '<article class="inventoryTile rarity-common"><div class="inventoryIcon">'+icon+'</div><b>'+name+' × '+count+'</b><small>Oggetto utilizzabile</small><div class="lootActions">'+action+'</div></article>';
  }).join("");
- const goods=(G.lootBag||[]).filter(item=>item.kind!=="scroll").map(item=>'<article class="inventoryTile"><div class="inventoryIcon">'+inventoryIcon(item)+'</div><b>'+item.name+' × '+(item.quantity||1)+'</b><small>'+item.rarity+' · '+item.value+' oro</small><p>'+item.description+'</p><div class="lootActions"><button class="btn danger" onclick="sellLootItem(\''+item.id+'\')">Vendi</button></div></article>').join("");
+ const goods=(G.lootBag||[]).filter(item=>item.kind!=="scroll").map(item=>'<article class="inventoryTile '+inventoryRarityClass(item)+'"><div class="inventoryIcon">'+inventoryIcon(item)+'</div><b>'+item.name+' × '+(item.quantity||1)+'</b><small>'+item.rarity+' · '+item.value+' oro</small><p>'+item.description+'</p><div class="lootActions"><button class="btn danger" onclick="sellLootItem(\''+item.id+'\')">Vendi</button></div></article>').join("");
  const empty='<p class="menuHint inventoryEmpty">Nessun oggetto in questa sezione.</p>';
  const tabs='<div class="inventoryTabs"><button class="inventoryTab '+(inventoryCategory==="usable"?"active":"")+'" onclick="setInventoryCategory(\'usable\')">✦ Utilizzabili</button><button class="inventoryTab '+(inventoryCategory==="gear"?"active":"")+'" onclick="setInventoryCategory(\'gear\')">⚔ Armi e armature</button><button class="inventoryTab '+(inventoryCategory==="sellable"?"active":"")+'" onclick="setInventoryCategory(\'sellable\')">◇ Oggetti vendibili</button></div>';
  let content=inventoryCategory==="gear"?(gear||empty):inventoryCategory==="sellable"?(goods||empty):((consumables+scrolls)||empty);
@@ -2366,7 +2411,7 @@ if(p.equipment.weapon&&!rules.weapons.includes(p.equipment.weapon))p.equipment.w
 if(p.equipment.weapon2&&!rules.offhand.includes(p.equipment.weapon2))p.equipment.weapon2="";
 if(isTwoHandedWeapon(p.equipment.weapon))p.equipment.weapon2="";
 if(p.equipment.head&&!rules.heads.includes(p.equipment.head))p.equipment.head="";
-const armorStyles=["Armatura_guerriero","Armatura_arciere","Armatura_druido","Armatura_mago"];
+const armorStyles=rules.armors;
 const makeOpts=(items,current,empty)=>'<option value="">'+empty+'</option>'+items.map(x=>'<option value="'+x+'" '+(current===x?'selected':'')+'>'+x.replaceAll("_"," ")+'</option>').join("");
 const armorSelect=(slot,label)=>{const current=slot==="armor"?p.equipment.armor:p.equipment[slot+"Style"];return '<div class="equipSlot"><b>'+label+'</b><select class="input" data-armor-part="'+slot+'" aria-label="'+label+'" onchange="setEquipment(\''+slot+'\',this.value)">'+makeOpts(armorStyles,current,"Nessun pezzo")+'</select></div>'};
 const weaponSelect=(slot,label,items,current,empty)=>'<div class="equipSlot"><b>'+label+'</b><select class="input" onchange="setEquipment(\''+slot+'\',this.value)">'+makeOpts(items,current,empty)+'</select></div>';
@@ -2384,6 +2429,7 @@ const p=selectedEquipmentMember==="hero"?G.hero:G.party.find(x=>String(x.id)===S
 if(!p)return;
 if(!p.equipment)p.equipment={hair:"",armor:"",weapon:"",weapon2:"",head:""};
 const rules=equipmentRules(p);
+if(["armor","shoulders","arms","legs","boots"].includes(slot)&&value&&!rules.armors.includes(value))return;
 if(slot==="weapon"&&value&&!rules.weapons.includes(value))return;
 if(slot==="weapon2"&&value&&(!rules.offhand.includes(value)||isTwoHandedWeapon(p.equipment.weapon)))return;
 if(slot==="weapon"&&isTwoHandedWeapon(value))p.equipment.weapon2="";
@@ -2408,7 +2454,8 @@ renderCharacterScreen();if(battle)renderBattle();
 
 function addStatPoint(key){if(!G||G.statPoints<1||!(key in G.hero.stats))return;G.hero.stats[key]++;G.statPoints--;if(key==="vitalita"){G.hero.maxhp+=3;G.hero.hp+=3}showMenu("statistics");updateHUD()}
 let equipmentManifest={};
-fetch('./assets/equip/manifest.json').then(r=>r.ok?r.json():{}).then(m=>{equipmentManifest=m;if(G){if(battle)renderBattle();if(document.querySelector('#characterScreen.open'))renderCharacterScreen();}}).catch(()=>{});
+fetch('./assets/equip/manifest.json').then(r=>r.ok?r.json():{}).then(m=>{equipmentManifest=m;if(G){if(battle)renderBattle();if(document.querySelector('#characterScreen.open'))renderCharacterScreen();renderInventoryManagement();}}).catch(()=>{});
+fetch('./assets/inventory/manifest.json').then(r=>r.ok?r.json():{}).then(m=>{inventoryIconManifest=m;if(G)renderInventoryManagement();}).catch(()=>{});
 
 let duskforgeBackgroundManifest=null,kalponicBackgroundManifest=null,gegxBackgroundManifest=null;
 function collectPainterlyBackgrounds(manifest,source){
