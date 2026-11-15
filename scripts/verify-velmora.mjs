@@ -103,7 +103,7 @@ if (!html.includes("armorParts") || !html.includes("headData") ||
 
 try {
   const femaleStart = html.indexOf("function supportsHumanoidHairAndHeadgear(p){");
-  const femaleEnd = html.indexOf("\nfunction equipmentRules", femaleStart);
+  const femaleEnd = html.indexOf("\nfunction equipmentArmorDefense", femaleStart);
   const layerStart = html.indexOf("function equipmentRaceId(u){");
   const layerEnd = html.indexOf("\nfunction unitHTML", layerStart);
   if (femaleStart < 0 || femaleEnd < 0 || layerStart < 0 || layerEnd < 0) throw new Error("renderer equipment o helper sesso non individuati");
