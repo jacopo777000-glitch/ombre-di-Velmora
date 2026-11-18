@@ -1493,7 +1493,7 @@ busy=false;document.body.classList.add("battle-mode");const sets={
 2:[{name:"Orco veterano",hp:34,atk:7,armor:3,kind:"orc",portrait:"orco_m_base.png.JPG"},{name:"Guardiano della cripta",hp:32,atk:6,armor:4,kind:"guard",portrait:"orco_f_base.png.JPG"},{name:"Sciamano della cripta",hp:29,atk:7,armor:2,kind:"priest",portrait:"elfo_f_base.png.JPG"}],
 3:[{name:"Custode della Campana",hp:145,atk:10,armor:5,kind:"boss",portrait:"modello_umano_maschile.png.JPG.JPG"}]};
 const encounterUnits=Array.isArray(enemyOverride)?enemyOverride:sets[n];
-battle={n,backgroundSeed:(Number(proceduralSeed)||((Number(G.proceduralSeed)||1)+Date.now()+n*101))>>>0,round:1,units:encounterUnits.map((e,i)=>({...e,id:e.id||"e"+i,maxhp:e.maxhp||e.hp,alive:true,down:0})),proceduralSeed:proceduralSeed||null,order:[],idx:0,log:[],ended:false,turnPrepared:false};
+battle={n,backgroundSeed:(Number(proceduralSeed)||((Number(G.proceduralSeed)||1)+Date.now()+n*101))>>>0,round:1,units:encounterUnits.map((e,i)=>{const pool=typeof lootGear!=="undefined"?lootGear.filter(x=>x.slot==="armor"):[];const chosen=pool.length?pool[(n*7+i*5)%pool.length]:null;const armor=chosen&&chosen.name;const equipment=e.equipment||(armor?{armor,shouldersStyle:armor,armsStyle:armor,legsStyle:armor,bootsStyle:armor}:undefined);return {...e,...(equipment?{equipment}:{}),id:e.id||"e"+i,maxhp:e.maxhp||e.hp,alive:true,down:0};}),proceduralSeed:proceduralSeed||null,order:[],idx:0,log:[],ended:false,turnPrepared:false};
 let allies=[G.hero,...G.party];allies.forEach(p=>{p.ap=5;if(p.hp<=0&&p.isHero)p.hp=1});
 battle.order=[...allies.filter(p=>p.alive&&p.hp>0),...battle.units].sort((a,b)=>(b.stats?.agilita||3)-(a.stats?.agilita||3));
 selectedTarget=0;$("combat").classList.remove("hidden");$("afterCombat").classList.add("hidden");
@@ -1777,10 +1777,10 @@ function equipmentLayerData(u,slot){
  if(slot==="head"&&!supportsHumanoidHairAndHeadgear(u))return null;
  const eq=u&&u.equipment||{};
  const maps={
-  armor:{Armatura_arciere:"Armatura_arciere.JPG",Armatura_druido:"Armatura_druido.JPG",Armatura_guerriero:"Armatura_guerriero.JPG",Armatura_mago:"Armatura_mago.JPG"},
+  armor:{Armatura_arciere:"Armatura_arciere.JPG",Armatura_druido:"Armatura_druido.JPG",Armatura_guerriero:"Armatura_guerriero.JPG",Armatura_mago:"Armatura_mago.JPG",Set_LupoGrigio:"Set_LupoGrigio.SVG",Set_Cacciatore:"Set_Cacciatore.SVG",Set_Smeraldo:"Set_Smeraldo.SVG",Set_Basilisco:"Set_Basilisco.SVG",Set_FerroNero:"Set_FerroNero.SVG",Set_Alba:"Set_Alba.SVG",Set_RosaRossa:"Set_RosaRossa.SVG",Set_Brina:"Set_Brina.SVG",Set_Stelle:"Set_Stelle.SVG",Set_Radici:"Set_Radici.SVG",Set_Tuono:"Set_Tuono.SVG",Set_SoleVelato:"Set_SoleVelato.SVG",Set_Ceneri:"Set_Ceneri.SVG",Set_Corvo:"Set_Corvo.SVG",Set_Cremisi:"Set_Cremisi.SVG",Set_Necromante:"Set_Necromante.SVG",Set_DragoAntico:"Set_DragoAntico.SVG",Set_Titano:"Set_Titano.SVG",Set_Santuario:"Set_Santuario.SVG",Set_Giuramento:"Set_Giuramento.SVG",Set_Mercenario:"Set_Mercenario.SVG",Set_PredatoreNotturno:"Set_PredatoreNotturno.SVG",Set_ReSepolto:"Set_ReSepolto.SVG",Set_Araldo:"Set_Araldo.SVG"},
   head:{Cappello_mago:"Cappello_mago.JPG",Cappello_punk:"Cappello_punk.JPG",Elmo_drago:"Elmo_drago.JPG",Elmo_leone:"Elmo_leone.JPG"}
  };
- const armorVisualMap={"Armatura di Scaglie":"Armatura_guerriero","Corazza del Viandante":"Armatura_arciere","Veste Lunare":"Armatura_mago","Mantello del Bosco":"Armatura_druido"};
+ const armorVisualMap={"Armatura di Scaglie":"Armatura_guerriero","Corazza del Viandante":"Armatura_arciere","Veste Lunare":"Armatura_mago","Mantello del Bosco":"Armatura_druido","Corazza del Lupo Grigio":"Set_LupoGrigio","Pelle del Cacciatore":"Set_Cacciatore","Guardia di Smeraldo":"Set_Smeraldo","Scaglie del Basilisco":"Set_Basilisco","Maglia del Ferro Nero":"Set_FerroNero","Cavaliere dell'Alba":"Set_Alba","Ordine della Rosa Rossa":"Set_RosaRossa","Sentinella di Brina":"Set_Brina","Veste delle Stelle":"Set_Stelle","Mantello delle Radici":"Set_Radici","Piastre del Tuono":"Set_Tuono","Armatura del Sole Velato":"Set_SoleVelato","Predone delle Ceneri":"Set_Ceneri","Maschera del Corvo":"Set_Corvo","Ombra Cremisi":"Set_Cremisi","Velo del Necromante":"Set_Necromante","Scaglie del Drago Antico":"Set_DragoAntico","Piastra del Titano":"Set_Titano","Custode del Santuario":"Set_Santuario","Giuramento del Paladino":"Set_Giuramento","Brigantino del Mercenario":"Set_Mercenario","Pelle del Predatore Notturno":"Set_PredatoreNotturno","Armatura del Re Sepolto":"Set_ReSepolto","Vestiario dell'Araldo":"Set_Araldo"};
  const headVisualMap={"Cappuccio dell'Oracolo":"Cappello_mago","Elmo del Drago Antico":"Elmo_drago","Maschera del Predatore":"Cappello_punk"};
  if(["armor","shoulders","arms","legs","boots"].includes(slot)){
   if(slot!=="armor"&&eq[slot]===false)return null;
@@ -1801,7 +1801,7 @@ function equipmentLayerData(u,slot){
   const styleFit=styles[style]||styles.Armatura_guerriero,w=fit.w*styleFit.w,h=fit.h*styleFit.h,left=fit.cx-w/2,top=fit.top;
   const modularParts=d.parts&&d.parts[slot];
   if(Array.isArray(modularParts)&&modularParts.length){
-   const silhouettes=armorPartPolygons[style]&&armorPartPolygons[style][slot]||[];
+   const silhouettes=(armorPartPolygons[style]||armorPartPolygons.Armatura_guerriero)[slot]||[];
    return modularParts.map((part,index)=>{
     if(!part||!part.file||!Number(part.width)||!Number(part.height))return null;
     const partX=(Number(part.x)-Number(d.x||0))/Number(d.width)*w;
@@ -2331,6 +2331,30 @@ function closeCharacterScreen(){$("characterScreen").classList.remove("open")}
 function changeCharacter(direction){const members=characterMembers();if(!members.length)return;let i=members.findIndex(x=>(x.isHero?"hero":String(x.id))===String(selectedEquipmentMember));i=(i+direction+members.length)%members.length;selectedEquipmentMember=members[i].isHero?"hero":String(members[i].id);renderCharacterScreen()}
 
 const lootGear=[
+{name:"Vestiario dell'Araldo",slot:"armor",classes:["Guerriero","Mago","Arciere","Druido","Cavaliere oscuro","Chierico","Berserker","Ladro","Assassino","Paladino","Paladina","Maga","Druida"],physical:1,magic:2,defense:3,rarity:"Raro"},
+{name:"Armatura del Re Sepolto",slot:"armor",classes:["Guerriero","Mago","Arciere","Druido","Cavaliere oscuro","Chierico","Berserker","Ladro","Assassino","Paladino","Paladina","Maga","Druida"],physical:2,magic:0,defense:6,rarity:"Mitico"},
+{name:"Pelle del Predatore Notturno",slot:"armor",classes:["Guerriero","Mago","Arciere","Druido","Cavaliere oscuro","Chierico","Berserker","Ladro","Assassino","Paladino","Paladina","Maga","Druida"],physical:1,magic:0,defense:3,rarity:"Raro"},
+{name:"Brigantino del Mercenario",slot:"armor",classes:["Guerriero","Mago","Arciere","Druido","Cavaliere oscuro","Chierico","Berserker","Ladro","Assassino","Paladino","Paladina","Maga","Druida"],physical:1,magic:0,defense:3,rarity:"Non comune"},
+{name:"Giuramento del Paladino",slot:"armor",classes:["Guerriero","Mago","Arciere","Druido","Cavaliere oscuro","Chierico","Berserker","Ladro","Assassino","Paladino","Paladina","Maga","Druida"],physical:2,magic:0,defense:5,rarity:"Epico"},
+{name:"Custode del Santuario",slot:"armor",classes:["Guerriero","Mago","Arciere","Druido","Cavaliere oscuro","Chierico","Berserker","Ladro","Assassino","Paladino","Paladina","Maga","Druida"],physical:2,magic:2,defense:4,rarity:"Epico"},
+{name:"Piastra del Titano",slot:"armor",classes:["Guerriero","Mago","Arciere","Druido","Cavaliere oscuro","Chierico","Berserker","Ladro","Assassino","Paladino","Paladina","Maga","Druida"],physical:2,magic:0,defense:6,rarity:"Mitico"},
+{name:"Scaglie del Drago Antico",slot:"armor",classes:["Guerriero","Mago","Arciere","Druido","Cavaliere oscuro","Chierico","Berserker","Ladro","Assassino","Paladino","Paladina","Maga","Druida"],physical:2,magic:0,defense:6,rarity:"Mitico"},
+{name:"Velo del Necromante",slot:"armor",classes:["Guerriero","Mago","Arciere","Druido","Cavaliere oscuro","Chierico","Berserker","Ladro","Assassino","Paladino","Paladina","Maga","Druida"],physical:1,magic:2,defense:3,rarity:"Raro"},
+{name:"Ombra Cremisi",slot:"armor",classes:["Guerriero","Mago","Arciere","Druido","Cavaliere oscuro","Chierico","Berserker","Ladro","Assassino","Paladino","Paladina","Maga","Druida"],physical:2,magic:0,defense:4,rarity:"Epico"},
+{name:"Maschera del Corvo",slot:"armor",classes:["Guerriero","Mago","Arciere","Druido","Cavaliere oscuro","Chierico","Berserker","Ladro","Assassino","Paladino","Paladina","Maga","Druida"],physical:1,magic:0,defense:3,rarity:"Raro"},
+{name:"Predone delle Ceneri",slot:"armor",classes:["Guerriero","Mago","Arciere","Druido","Cavaliere oscuro","Chierico","Berserker","Ladro","Assassino","Paladino","Paladina","Maga","Druida"],physical:1,magic:0,defense:3,rarity:"Non comune"},
+{name:"Armatura del Sole Velato",slot:"armor",classes:["Guerriero","Mago","Arciere","Druido","Cavaliere oscuro","Chierico","Berserker","Ladro","Assassino","Paladino","Paladina","Maga","Druida"],physical:2,magic:0,defense:5,rarity:"Epico"},
+{name:"Piastre del Tuono",slot:"armor",classes:["Guerriero","Mago","Arciere","Druido","Cavaliere oscuro","Chierico","Berserker","Ladro","Assassino","Paladino","Paladina","Maga","Druida"],physical:2,magic:0,defense:5,rarity:"Epico"},
+{name:"Mantello delle Radici",slot:"armor",classes:["Guerriero","Mago","Arciere","Druido","Cavaliere oscuro","Chierico","Berserker","Ladro","Assassino","Paladino","Paladina","Maga","Druida"],physical:1,magic:2,defense:2,rarity:"Non comune"},
+{name:"Veste delle Stelle",slot:"armor",classes:["Guerriero","Mago","Arciere","Druido","Cavaliere oscuro","Chierico","Berserker","Ladro","Assassino","Paladino","Paladina","Maga","Druida"],physical:1,magic:2,defense:2,rarity:"Raro"},
+{name:"Sentinella di Brina",slot:"armor",classes:["Guerriero","Mago","Arciere","Druido","Cavaliere oscuro","Chierico","Berserker","Ladro","Assassino","Paladino","Paladina","Maga","Druida"],physical:1,magic:0,defense:4,rarity:"Raro"},
+{name:"Ordine della Rosa Rossa",slot:"armor",classes:["Guerriero","Mago","Arciere","Druido","Cavaliere oscuro","Chierico","Berserker","Ladro","Assassino","Paladino","Paladina","Maga","Druida"],physical:1,magic:0,defense:4,rarity:"Raro"},
+{name:"Cavaliere dell'Alba",slot:"armor",classes:["Guerriero","Mago","Arciere","Druido","Cavaliere oscuro","Chierico","Berserker","Ladro","Assassino","Paladino","Paladina","Maga","Druida"],physical:2,magic:0,defense:5,rarity:"Epico"},
+{name:"Maglia del Ferro Nero",slot:"armor",classes:["Guerriero","Mago","Arciere","Druido","Cavaliere oscuro","Chierico","Berserker","Ladro","Assassino","Paladino","Paladina","Maga","Druida"],physical:1,magic:0,defense:4,rarity:"Raro"},
+{name:"Scaglie del Basilisco",slot:"armor",classes:["Guerriero","Mago","Arciere","Druido","Cavaliere oscuro","Chierico","Berserker","Ladro","Assassino","Paladino","Paladina","Maga","Druida"],physical:2,magic:0,defense:4,rarity:"Epico"},
+{name:"Guardia di Smeraldo",slot:"armor",classes:["Guerriero","Mago","Arciere","Druido","Cavaliere oscuro","Chierico","Berserker","Ladro","Assassino","Paladino","Paladina","Maga","Druida"],physical:1,magic:0,defense:3,rarity:"Raro"},
+{name:"Pelle del Cacciatore",slot:"armor",classes:["Guerriero","Mago","Arciere","Druido","Cavaliere oscuro","Chierico","Berserker","Ladro","Assassino","Paladino","Paladina","Maga","Druida"],physical:0,magic:0,defense:2,rarity:"Comune"},
+{name:"Corazza del Lupo Grigio",slot:"armor",classes:["Guerriero","Mago","Arciere","Druido","Cavaliere oscuro","Chierico","Berserker","Ladro","Assassino","Paladino","Paladina","Maga","Druida"],physical:1,magic:0,defense:2,rarity:"Non comune"},
 {name:"Arco del Crepuscolo",slot:"weapon",classes:["Arciere","Ladro"],physical:6,magic:0,defense:0,rarity:"Raro"},
 {name:"Pugnali Gemelli",slot:"weapon",classes:["Arciere","Ladro","Druido"],physical:5,magic:0,defense:0,rarity:"Non comune"},
 {name:"Spada del Giuramento",slot:"weapon",classes:["Guerriero","Paladino","Paladina","Chierico","Cavaliere oscuro","Berserker"],physical:6,magic:0,defense:0,rarity:"Raro"},

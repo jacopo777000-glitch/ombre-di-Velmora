@@ -490,5 +490,2093 @@
     "sourceHeight": 1162,
     "transparentRatio": 0.836,
     "opaqueRatio": 0.164
+  },
+  "Set_LupoGrigio.SVG": {
+    "file": "assets/equip/sets/LupoGrigio.svg",
+    "group": "armor",
+    "x": 0,
+    "y": 0,
+    "width": 912,
+    "height": 1168,
+    "sourceWidth": 912,
+    "sourceHeight": 1168,
+    "transparentRatio": 0.72,
+    "opaqueRatio": 0.28,
+    "parts": {
+      "armor": [
+        {
+          "file": "assets/equip/sets/LupoGrigio.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "shoulders": [
+        {
+          "file": "assets/equip/sets/LupoGrigio.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/LupoGrigio.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "arms": [
+        {
+          "file": "assets/equip/sets/LupoGrigio.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/LupoGrigio.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "legs": [
+        {
+          "file": "assets/equip/sets/LupoGrigio.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/LupoGrigio.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "boots": [
+        {
+          "file": "assets/equip/sets/LupoGrigio.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/LupoGrigio.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ]
+    }
+  },
+  "Set_Cacciatore.SVG": {
+    "file": "assets/equip/sets/Cacciatore.svg",
+    "group": "armor",
+    "x": 0,
+    "y": 0,
+    "width": 912,
+    "height": 1168,
+    "sourceWidth": 912,
+    "sourceHeight": 1168,
+    "transparentRatio": 0.72,
+    "opaqueRatio": 0.28,
+    "parts": {
+      "armor": [
+        {
+          "file": "assets/equip/sets/Cacciatore.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "shoulders": [
+        {
+          "file": "assets/equip/sets/Cacciatore.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Cacciatore.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "arms": [
+        {
+          "file": "assets/equip/sets/Cacciatore.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Cacciatore.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "legs": [
+        {
+          "file": "assets/equip/sets/Cacciatore.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Cacciatore.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "boots": [
+        {
+          "file": "assets/equip/sets/Cacciatore.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Cacciatore.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ]
+    }
+  },
+  "Set_Smeraldo.SVG": {
+    "file": "assets/equip/sets/Smeraldo.svg",
+    "group": "armor",
+    "x": 0,
+    "y": 0,
+    "width": 912,
+    "height": 1168,
+    "sourceWidth": 912,
+    "sourceHeight": 1168,
+    "transparentRatio": 0.72,
+    "opaqueRatio": 0.28,
+    "parts": {
+      "armor": [
+        {
+          "file": "assets/equip/sets/Smeraldo.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "shoulders": [
+        {
+          "file": "assets/equip/sets/Smeraldo.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Smeraldo.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "arms": [
+        {
+          "file": "assets/equip/sets/Smeraldo.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Smeraldo.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "legs": [
+        {
+          "file": "assets/equip/sets/Smeraldo.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Smeraldo.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "boots": [
+        {
+          "file": "assets/equip/sets/Smeraldo.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Smeraldo.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ]
+    }
+  },
+  "Set_Basilisco.SVG": {
+    "file": "assets/equip/sets/Basilisco.svg",
+    "group": "armor",
+    "x": 0,
+    "y": 0,
+    "width": 912,
+    "height": 1168,
+    "sourceWidth": 912,
+    "sourceHeight": 1168,
+    "transparentRatio": 0.72,
+    "opaqueRatio": 0.28,
+    "parts": {
+      "armor": [
+        {
+          "file": "assets/equip/sets/Basilisco.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "shoulders": [
+        {
+          "file": "assets/equip/sets/Basilisco.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Basilisco.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "arms": [
+        {
+          "file": "assets/equip/sets/Basilisco.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Basilisco.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "legs": [
+        {
+          "file": "assets/equip/sets/Basilisco.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Basilisco.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "boots": [
+        {
+          "file": "assets/equip/sets/Basilisco.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Basilisco.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ]
+    }
+  },
+  "Set_FerroNero.SVG": {
+    "file": "assets/equip/sets/FerroNero.svg",
+    "group": "armor",
+    "x": 0,
+    "y": 0,
+    "width": 912,
+    "height": 1168,
+    "sourceWidth": 912,
+    "sourceHeight": 1168,
+    "transparentRatio": 0.72,
+    "opaqueRatio": 0.28,
+    "parts": {
+      "armor": [
+        {
+          "file": "assets/equip/sets/FerroNero.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "shoulders": [
+        {
+          "file": "assets/equip/sets/FerroNero.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/FerroNero.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "arms": [
+        {
+          "file": "assets/equip/sets/FerroNero.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/FerroNero.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "legs": [
+        {
+          "file": "assets/equip/sets/FerroNero.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/FerroNero.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "boots": [
+        {
+          "file": "assets/equip/sets/FerroNero.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/FerroNero.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ]
+    }
+  },
+  "Set_Alba.SVG": {
+    "file": "assets/equip/sets/Alba.svg",
+    "group": "armor",
+    "x": 0,
+    "y": 0,
+    "width": 912,
+    "height": 1168,
+    "sourceWidth": 912,
+    "sourceHeight": 1168,
+    "transparentRatio": 0.72,
+    "opaqueRatio": 0.28,
+    "parts": {
+      "armor": [
+        {
+          "file": "assets/equip/sets/Alba.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "shoulders": [
+        {
+          "file": "assets/equip/sets/Alba.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Alba.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "arms": [
+        {
+          "file": "assets/equip/sets/Alba.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Alba.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "legs": [
+        {
+          "file": "assets/equip/sets/Alba.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Alba.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "boots": [
+        {
+          "file": "assets/equip/sets/Alba.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Alba.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ]
+    }
+  },
+  "Set_RosaRossa.SVG": {
+    "file": "assets/equip/sets/RosaRossa.svg",
+    "group": "armor",
+    "x": 0,
+    "y": 0,
+    "width": 912,
+    "height": 1168,
+    "sourceWidth": 912,
+    "sourceHeight": 1168,
+    "transparentRatio": 0.72,
+    "opaqueRatio": 0.28,
+    "parts": {
+      "armor": [
+        {
+          "file": "assets/equip/sets/RosaRossa.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "shoulders": [
+        {
+          "file": "assets/equip/sets/RosaRossa.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/RosaRossa.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "arms": [
+        {
+          "file": "assets/equip/sets/RosaRossa.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/RosaRossa.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "legs": [
+        {
+          "file": "assets/equip/sets/RosaRossa.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/RosaRossa.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "boots": [
+        {
+          "file": "assets/equip/sets/RosaRossa.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/RosaRossa.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ]
+    }
+  },
+  "Set_Brina.SVG": {
+    "file": "assets/equip/sets/Brina.svg",
+    "group": "armor",
+    "x": 0,
+    "y": 0,
+    "width": 912,
+    "height": 1168,
+    "sourceWidth": 912,
+    "sourceHeight": 1168,
+    "transparentRatio": 0.72,
+    "opaqueRatio": 0.28,
+    "parts": {
+      "armor": [
+        {
+          "file": "assets/equip/sets/Brina.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "shoulders": [
+        {
+          "file": "assets/equip/sets/Brina.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Brina.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "arms": [
+        {
+          "file": "assets/equip/sets/Brina.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Brina.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "legs": [
+        {
+          "file": "assets/equip/sets/Brina.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Brina.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "boots": [
+        {
+          "file": "assets/equip/sets/Brina.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Brina.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ]
+    }
+  },
+  "Set_Stelle.SVG": {
+    "file": "assets/equip/sets/Stelle.svg",
+    "group": "armor",
+    "x": 0,
+    "y": 0,
+    "width": 912,
+    "height": 1168,
+    "sourceWidth": 912,
+    "sourceHeight": 1168,
+    "transparentRatio": 0.72,
+    "opaqueRatio": 0.28,
+    "parts": {
+      "armor": [
+        {
+          "file": "assets/equip/sets/Stelle.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "shoulders": [
+        {
+          "file": "assets/equip/sets/Stelle.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Stelle.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "arms": [
+        {
+          "file": "assets/equip/sets/Stelle.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Stelle.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "legs": [
+        {
+          "file": "assets/equip/sets/Stelle.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Stelle.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "boots": [
+        {
+          "file": "assets/equip/sets/Stelle.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Stelle.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ]
+    }
+  },
+  "Set_Radici.SVG": {
+    "file": "assets/equip/sets/Radici.svg",
+    "group": "armor",
+    "x": 0,
+    "y": 0,
+    "width": 912,
+    "height": 1168,
+    "sourceWidth": 912,
+    "sourceHeight": 1168,
+    "transparentRatio": 0.72,
+    "opaqueRatio": 0.28,
+    "parts": {
+      "armor": [
+        {
+          "file": "assets/equip/sets/Radici.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "shoulders": [
+        {
+          "file": "assets/equip/sets/Radici.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Radici.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "arms": [
+        {
+          "file": "assets/equip/sets/Radici.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Radici.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "legs": [
+        {
+          "file": "assets/equip/sets/Radici.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Radici.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "boots": [
+        {
+          "file": "assets/equip/sets/Radici.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Radici.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ]
+    }
+  },
+  "Set_Tuono.SVG": {
+    "file": "assets/equip/sets/Tuono.svg",
+    "group": "armor",
+    "x": 0,
+    "y": 0,
+    "width": 912,
+    "height": 1168,
+    "sourceWidth": 912,
+    "sourceHeight": 1168,
+    "transparentRatio": 0.72,
+    "opaqueRatio": 0.28,
+    "parts": {
+      "armor": [
+        {
+          "file": "assets/equip/sets/Tuono.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "shoulders": [
+        {
+          "file": "assets/equip/sets/Tuono.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Tuono.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "arms": [
+        {
+          "file": "assets/equip/sets/Tuono.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Tuono.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "legs": [
+        {
+          "file": "assets/equip/sets/Tuono.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Tuono.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "boots": [
+        {
+          "file": "assets/equip/sets/Tuono.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Tuono.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ]
+    }
+  },
+  "Set_SoleVelato.SVG": {
+    "file": "assets/equip/sets/SoleVelato.svg",
+    "group": "armor",
+    "x": 0,
+    "y": 0,
+    "width": 912,
+    "height": 1168,
+    "sourceWidth": 912,
+    "sourceHeight": 1168,
+    "transparentRatio": 0.72,
+    "opaqueRatio": 0.28,
+    "parts": {
+      "armor": [
+        {
+          "file": "assets/equip/sets/SoleVelato.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "shoulders": [
+        {
+          "file": "assets/equip/sets/SoleVelato.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/SoleVelato.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "arms": [
+        {
+          "file": "assets/equip/sets/SoleVelato.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/SoleVelato.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "legs": [
+        {
+          "file": "assets/equip/sets/SoleVelato.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/SoleVelato.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "boots": [
+        {
+          "file": "assets/equip/sets/SoleVelato.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/SoleVelato.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ]
+    }
+  },
+  "Set_Ceneri.SVG": {
+    "file": "assets/equip/sets/Ceneri.svg",
+    "group": "armor",
+    "x": 0,
+    "y": 0,
+    "width": 912,
+    "height": 1168,
+    "sourceWidth": 912,
+    "sourceHeight": 1168,
+    "transparentRatio": 0.72,
+    "opaqueRatio": 0.28,
+    "parts": {
+      "armor": [
+        {
+          "file": "assets/equip/sets/Ceneri.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "shoulders": [
+        {
+          "file": "assets/equip/sets/Ceneri.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Ceneri.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "arms": [
+        {
+          "file": "assets/equip/sets/Ceneri.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Ceneri.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "legs": [
+        {
+          "file": "assets/equip/sets/Ceneri.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Ceneri.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "boots": [
+        {
+          "file": "assets/equip/sets/Ceneri.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Ceneri.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ]
+    }
+  },
+  "Set_Corvo.SVG": {
+    "file": "assets/equip/sets/Corvo.svg",
+    "group": "armor",
+    "x": 0,
+    "y": 0,
+    "width": 912,
+    "height": 1168,
+    "sourceWidth": 912,
+    "sourceHeight": 1168,
+    "transparentRatio": 0.72,
+    "opaqueRatio": 0.28,
+    "parts": {
+      "armor": [
+        {
+          "file": "assets/equip/sets/Corvo.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "shoulders": [
+        {
+          "file": "assets/equip/sets/Corvo.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Corvo.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "arms": [
+        {
+          "file": "assets/equip/sets/Corvo.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Corvo.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "legs": [
+        {
+          "file": "assets/equip/sets/Corvo.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Corvo.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "boots": [
+        {
+          "file": "assets/equip/sets/Corvo.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Corvo.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ]
+    }
+  },
+  "Set_Cremisi.SVG": {
+    "file": "assets/equip/sets/Cremisi.svg",
+    "group": "armor",
+    "x": 0,
+    "y": 0,
+    "width": 912,
+    "height": 1168,
+    "sourceWidth": 912,
+    "sourceHeight": 1168,
+    "transparentRatio": 0.72,
+    "opaqueRatio": 0.28,
+    "parts": {
+      "armor": [
+        {
+          "file": "assets/equip/sets/Cremisi.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "shoulders": [
+        {
+          "file": "assets/equip/sets/Cremisi.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Cremisi.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "arms": [
+        {
+          "file": "assets/equip/sets/Cremisi.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Cremisi.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "legs": [
+        {
+          "file": "assets/equip/sets/Cremisi.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Cremisi.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "boots": [
+        {
+          "file": "assets/equip/sets/Cremisi.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Cremisi.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ]
+    }
+  },
+  "Set_Necromante.SVG": {
+    "file": "assets/equip/sets/Necromante.svg",
+    "group": "armor",
+    "x": 0,
+    "y": 0,
+    "width": 912,
+    "height": 1168,
+    "sourceWidth": 912,
+    "sourceHeight": 1168,
+    "transparentRatio": 0.72,
+    "opaqueRatio": 0.28,
+    "parts": {
+      "armor": [
+        {
+          "file": "assets/equip/sets/Necromante.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "shoulders": [
+        {
+          "file": "assets/equip/sets/Necromante.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Necromante.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "arms": [
+        {
+          "file": "assets/equip/sets/Necromante.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Necromante.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "legs": [
+        {
+          "file": "assets/equip/sets/Necromante.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Necromante.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "boots": [
+        {
+          "file": "assets/equip/sets/Necromante.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Necromante.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ]
+    }
+  },
+  "Set_DragoAntico.SVG": {
+    "file": "assets/equip/sets/DragoAntico.svg",
+    "group": "armor",
+    "x": 0,
+    "y": 0,
+    "width": 912,
+    "height": 1168,
+    "sourceWidth": 912,
+    "sourceHeight": 1168,
+    "transparentRatio": 0.72,
+    "opaqueRatio": 0.28,
+    "parts": {
+      "armor": [
+        {
+          "file": "assets/equip/sets/DragoAntico.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "shoulders": [
+        {
+          "file": "assets/equip/sets/DragoAntico.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/DragoAntico.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "arms": [
+        {
+          "file": "assets/equip/sets/DragoAntico.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/DragoAntico.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "legs": [
+        {
+          "file": "assets/equip/sets/DragoAntico.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/DragoAntico.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "boots": [
+        {
+          "file": "assets/equip/sets/DragoAntico.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/DragoAntico.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ]
+    }
+  },
+  "Set_Titano.SVG": {
+    "file": "assets/equip/sets/Titano.svg",
+    "group": "armor",
+    "x": 0,
+    "y": 0,
+    "width": 912,
+    "height": 1168,
+    "sourceWidth": 912,
+    "sourceHeight": 1168,
+    "transparentRatio": 0.72,
+    "opaqueRatio": 0.28,
+    "parts": {
+      "armor": [
+        {
+          "file": "assets/equip/sets/Titano.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "shoulders": [
+        {
+          "file": "assets/equip/sets/Titano.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Titano.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "arms": [
+        {
+          "file": "assets/equip/sets/Titano.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Titano.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "legs": [
+        {
+          "file": "assets/equip/sets/Titano.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Titano.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "boots": [
+        {
+          "file": "assets/equip/sets/Titano.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Titano.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ]
+    }
+  },
+  "Set_Santuario.SVG": {
+    "file": "assets/equip/sets/Santuario.svg",
+    "group": "armor",
+    "x": 0,
+    "y": 0,
+    "width": 912,
+    "height": 1168,
+    "sourceWidth": 912,
+    "sourceHeight": 1168,
+    "transparentRatio": 0.72,
+    "opaqueRatio": 0.28,
+    "parts": {
+      "armor": [
+        {
+          "file": "assets/equip/sets/Santuario.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "shoulders": [
+        {
+          "file": "assets/equip/sets/Santuario.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Santuario.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "arms": [
+        {
+          "file": "assets/equip/sets/Santuario.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Santuario.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "legs": [
+        {
+          "file": "assets/equip/sets/Santuario.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Santuario.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "boots": [
+        {
+          "file": "assets/equip/sets/Santuario.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Santuario.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ]
+    }
+  },
+  "Set_Giuramento.SVG": {
+    "file": "assets/equip/sets/Giuramento.svg",
+    "group": "armor",
+    "x": 0,
+    "y": 0,
+    "width": 912,
+    "height": 1168,
+    "sourceWidth": 912,
+    "sourceHeight": 1168,
+    "transparentRatio": 0.72,
+    "opaqueRatio": 0.28,
+    "parts": {
+      "armor": [
+        {
+          "file": "assets/equip/sets/Giuramento.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "shoulders": [
+        {
+          "file": "assets/equip/sets/Giuramento.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Giuramento.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "arms": [
+        {
+          "file": "assets/equip/sets/Giuramento.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Giuramento.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "legs": [
+        {
+          "file": "assets/equip/sets/Giuramento.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Giuramento.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "boots": [
+        {
+          "file": "assets/equip/sets/Giuramento.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Giuramento.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ]
+    }
+  },
+  "Set_Mercenario.SVG": {
+    "file": "assets/equip/sets/Mercenario.svg",
+    "group": "armor",
+    "x": 0,
+    "y": 0,
+    "width": 912,
+    "height": 1168,
+    "sourceWidth": 912,
+    "sourceHeight": 1168,
+    "transparentRatio": 0.72,
+    "opaqueRatio": 0.28,
+    "parts": {
+      "armor": [
+        {
+          "file": "assets/equip/sets/Mercenario.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "shoulders": [
+        {
+          "file": "assets/equip/sets/Mercenario.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Mercenario.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "arms": [
+        {
+          "file": "assets/equip/sets/Mercenario.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Mercenario.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "legs": [
+        {
+          "file": "assets/equip/sets/Mercenario.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Mercenario.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "boots": [
+        {
+          "file": "assets/equip/sets/Mercenario.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Mercenario.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ]
+    }
+  },
+  "Set_PredatoreNotturno.SVG": {
+    "file": "assets/equip/sets/PredatoreNotturno.svg",
+    "group": "armor",
+    "x": 0,
+    "y": 0,
+    "width": 912,
+    "height": 1168,
+    "sourceWidth": 912,
+    "sourceHeight": 1168,
+    "transparentRatio": 0.72,
+    "opaqueRatio": 0.28,
+    "parts": {
+      "armor": [
+        {
+          "file": "assets/equip/sets/PredatoreNotturno.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "shoulders": [
+        {
+          "file": "assets/equip/sets/PredatoreNotturno.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/PredatoreNotturno.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "arms": [
+        {
+          "file": "assets/equip/sets/PredatoreNotturno.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/PredatoreNotturno.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "legs": [
+        {
+          "file": "assets/equip/sets/PredatoreNotturno.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/PredatoreNotturno.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "boots": [
+        {
+          "file": "assets/equip/sets/PredatoreNotturno.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/PredatoreNotturno.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ]
+    }
+  },
+  "Set_ReSepolto.SVG": {
+    "file": "assets/equip/sets/ReSepolto.svg",
+    "group": "armor",
+    "x": 0,
+    "y": 0,
+    "width": 912,
+    "height": 1168,
+    "sourceWidth": 912,
+    "sourceHeight": 1168,
+    "transparentRatio": 0.72,
+    "opaqueRatio": 0.28,
+    "parts": {
+      "armor": [
+        {
+          "file": "assets/equip/sets/ReSepolto.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "shoulders": [
+        {
+          "file": "assets/equip/sets/ReSepolto.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/ReSepolto.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "arms": [
+        {
+          "file": "assets/equip/sets/ReSepolto.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/ReSepolto.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "legs": [
+        {
+          "file": "assets/equip/sets/ReSepolto.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/ReSepolto.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "boots": [
+        {
+          "file": "assets/equip/sets/ReSepolto.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/ReSepolto.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ]
+    }
+  },
+  "Set_Araldo.SVG": {
+    "file": "assets/equip/sets/Araldo.svg",
+    "group": "armor",
+    "x": 0,
+    "y": 0,
+    "width": 912,
+    "height": 1168,
+    "sourceWidth": 912,
+    "sourceHeight": 1168,
+    "transparentRatio": 0.72,
+    "opaqueRatio": 0.28,
+    "parts": {
+      "armor": [
+        {
+          "file": "assets/equip/sets/Araldo.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "shoulders": [
+        {
+          "file": "assets/equip/sets/Araldo.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Araldo.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "arms": [
+        {
+          "file": "assets/equip/sets/Araldo.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Araldo.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "legs": [
+        {
+          "file": "assets/equip/sets/Araldo.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Araldo.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ],
+      "boots": [
+        {
+          "file": "assets/equip/sets/Araldo.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        },
+        {
+          "file": "assets/equip/sets/Araldo.svg",
+          "x": 0,
+          "y": 0,
+          "width": 912,
+          "height": 1168
+        }
+      ]
+    }
   }
 }
