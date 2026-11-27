@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "status": "integrated-preview",
-  "note": "I 12 modelli PNG sono collegati al creatore e ai ritratti dei personaggi sul ramo work/personaggi-pittorici. I livelli modulari delle armature esistenti sono mantenuti e ricentrati sui nuovi modelli; serve ancora una verifica visiva in gioco delle sovrapposizioni per ciascuna razza e sesso prima della pubblicazione su main.",
+  "status": "fit-calibration-required",
+  "note": "I 12 modelli PNG sono collegati al creatore e ai ritratti sul ramo work/personaggi-pittorici. La calibrazione delle armature NON è ancora completata: le immagini sorgente dei set e alcuni ritagli modulari conservano uno sfondo opaco; le maschere poligonali attuali non bastano a garantire bordi trasparenti puliti sui 12 corpi. Prima dell'attivazione occorre ricavare o ridisegnare pezzi realmente trasparenti e poi calibrare ogni slot per razza e genere. Non pubblicare su main finché la verifica visiva non è superata.",
   "canvas": {
     "width": 256,
     "height": 512,
