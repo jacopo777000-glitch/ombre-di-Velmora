@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "status": "staging-not-active",
+  "note": "Nuovi modelli pittorici derivati dalla tavola IMG_0998.jpeg. Non collegare al gioco finché i PNG non sono stati verificati visivamente e caricati.",
+  "canvas": {
+    "width": 256,
+    "height": 512,
+    "format": "PNG",
+    "colorMode": "RGBA"
+  },
+  "races": [
+    {
+      "id": "human",
+      "name": "Umano",
+      "models": {
+        "male": "human_male.png",
+        "female": "human_female.png"
+      }
+    },
+    {
+      "id": "elf",
+      "name": "Elfo",
+      "models": {
+        "male": "elf_male.png",
+        "female": "elf_female.png"
+      }
+    },
+    {
+      "id": "orc",
+      "name": "Orco",
+      "models": {
+        "male": "orc_male.png",
+        "female": "orc_female.png"
+      }
+    },
+    {
+      "id": "lion",
+      "name": "Popolo Leone",
+      "models": {
+        "male": "lion_male.png",
+        "female": "lion_female.png"
+      }
+    },
+    {
+      "id": "wolf",
+      "name": "Popolo Lupo",
+      "models": {
+        "male": "wolf_male.png",
+        "female": "wolf_female.png"
+      }
+    },
+    {
+      "id": "rabbit",
+      "name": "Popolo Coniglio",
+      "models": {
+        "male": "rabbit_male.png",
+        "female": "rabbit_female.png"
+      }
+    }
+  ],
+  "equipmentSlots": [
+    "head",
+    "face",
+    "arms",
+    "legs",
+    "boots",
+    "accessory1",
+    "accessory2",
+    "weaponRight",
+    "weaponLeft"
+  ],
+  "overlayOrder": [
+    "legs",
+    "boots",
+    "arms",
+    "torso",
+    "face",
+    "head",
+    "accessories",
+    "weapons"
+  ],
+  "fitPolicy": {
+    "coordinates": "normalized 0..1 relative to 256x512 model canvas",
+    "perRaceAndGender": true,
+    "doNotReuseGenericOffsetsWithoutVisualFitTest": true,
+    "preserveOriginalModelAspectRatio": true
+  }
+}
