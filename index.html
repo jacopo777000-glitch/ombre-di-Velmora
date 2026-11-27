@@ -1125,7 +1125,7 @@ body.battle-mode .actionPanel .actions{grid-template-columns:repeat(2,minmax(0,1
 <h2>01 · Crea il tuo eroe</h2>
 <div class="layout">
 <div><h3>Scegli la razza</h3><div class="grid" id="races"></div><p class="small" id="raceDescription"></p></div>
-<div class="preview"><img class="portrait" id="portrait" src="./modello_umano_maschile.png.JPG.JPG" alt="Anteprima personaggio"><div><h2 id="heroTitle">Umano</h2><p class="small" id="heroDescription"></p></div></div>
+<div class="preview"><img class="portrait" id="portrait" src="./assets/characters/umano_maschile.png" alt="Anteprima personaggio"><div><h2 id="heroTitle">Umano</h2><p class="small" id="heroDescription"></p></div></div>
 </div>
 <hr><h3>Sesso</h3><div class="row"><button class="choice selected" data-gender="male">Maschio</button><button class="choice" data-gender="female">Femmina</button></div>
 </div>
@@ -1202,12 +1202,12 @@ body.battle-mode .actionPanel .actions{grid-template-columns:repeat(2,minmax(0,1
 const asset=name=>new URL("./"+name,document.baseURI).href;
 const $=id=>document.getElementById(id);
 const races=[
-{id:"human",name:"Umano",description:"Versatile e adattabile. Gli umani sono presenti in ogni angolo di Velmora.",trait:"Adattabilità",male:"modello_umano_maschile.png.JPG.JPG",female:"modello_umano_femminile.png.JPG.JPG",mod:{percezione:1,carisma:1}},
-{id:"elf",name:"Elfo",description:"Antica stirpe legata alla magia e alla natura. Agili e intelligenti.",trait:"Eredità arcana",male:"elfo_m_base.png.JPG",female:"elfo_f_base.png.JPG",mod:{agilita:1,vitalita:-1,intelletto:1}},
-{id:"orc",name:"Orco",description:"Una razza fiera e resistente, dotata di grande forza fisica.",trait:"Sangue indomito",male:"orco_m_base.png.JPG",female:"orco_f_base.png.JPG",mod:{forza:1,vitalita:1,intelletto:-1}},
-{id:"lion",name:"Popolo Leone",description:"Una stirpe fiera e imponente, conosciuta per il coraggio e la forza in battaglia.",trait:"Ruggito intimidatorio",male:"uomo_leone_m_base.png.JPG",female:"uomo_leone_f_base.png.JPG",mod:{forza:1,agilita:-1,carisma:1}},
-{id:"wolf",name:"Popolo Lupo",description:"Predatori vigili, dotati di sensi affinati e grande agilità.",trait:"Istinto predatorio",male:"uomo_lupo_m_base.png.JPG",female:"uomo_lupo_f_base.png.JPG",mod:{agilita:1,percezione:1,carisma:-1}},
-{id:"rabbit",name:"Popolo Coniglio",description:"Una stirpe agile e sorprendente, capace di movimenti rapidi e riflessi eccezionali.",trait:"Balzo fulmineo",male:"uomo_coniglio_m_base.png.JPG",female:"uomo_coniglio_f_base.png.JPG",mod:{agilita:1,percezione:1}}
+{id:"human",name:"Umano",description:"Versatile e adattabile. Gli umani sono presenti in ogni angolo di Velmora.",trait:"Adattabilità",male:"assets/characters/umano_maschile.png",female:"assets/characters/umano_femminile.png",mod:{percezione:1,carisma:1}},
+{id:"elf",name:"Elfo",description:"Antica stirpe legata alla magia e alla natura. Agili e intelligenti.",trait:"Eredità arcana",male:"assets/characters/elfo_maschile.png",female:"assets/characters/elfo_femminile.png",mod:{agilita:1,vitalita:-1,intelletto:1}},
+{id:"orc",name:"Orco",description:"Una razza fiera e resistente, dotata di grande forza fisica.",trait:"Sangue indomito",male:"assets/characters/orco_maschile.png",female:"assets/characters/orco_femminile.png",mod:{forza:1,vitalita:1,intelletto:-1}},
+{id:"lion",name:"Popolo Leone",description:"Una stirpe fiera e imponente, conosciuta per il coraggio e la forza in battaglia.",trait:"Ruggito intimidatorio",male:"assets/characters/popolo_leone_maschile.png",female:"assets/characters/popolo_leone_femminile.png",mod:{forza:1,agilita:-1,carisma:1}},
+{id:"wolf",name:"Popolo Lupo",description:"Predatori vigili, dotati di sensi affinati e grande agilità.",trait:"Istinto predatorio",male:"assets/characters/popolo_lupo_maschile.png",female:"assets/characters/popolo_lupo_femminile.png",mod:{agilita:1,percezione:1,carisma:-1}},
+{id:"rabbit",name:"Popolo Coniglio",description:"Una stirpe agile e sorprendente, capace di movimenti rapidi e riflessi eccezionali.",trait:"Balzo fulmineo",male:"assets/characters/popolo_coniglio_maschile.png",female:"assets/characters/popolo_coniglio_femminile.png",mod:{agilita:1,percezione:1}}
 ];
 const classes=[
 {id:"warrior",name:"Guerriero",description:"Combattente robusto, esperto di armature pesanti e armi da mischia.",mod:{forza:2,vitalita:2},armor:"Pesante"},
@@ -1256,12 +1256,12 @@ const guildMissions=[
 ];
 let guildRoster=[];
 const proceduralPortraits={
- human:{M:"modello_umano_maschile.png.JPG.JPG",F:"modello_umano_femminile.png.JPG.JPG"},
- elf:{M:"elfo_m_base.png.JPG",F:"elfo_f_base.png.JPG"},
- orc:{M:"orco_m_base.png.JPG",F:"orco_f_base.png.JPG"},
- lion:{M:"uomo_leone_m_base.png.JPG",F:"uomo_leone_f_base.png.JPG"},
- wolf:{M:"uomo_lupo_m_base.png.JPG",F:"uomo_lupo_f_base.png.JPG"},
- rabbit:{M:"uomo_coniglio_m_base.png.JPG",F:"uomo_coniglio_f_base.png.JPG"}
+ human:{M:"assets/characters/umano_maschile.png",F:"assets/characters/umano_femminile.png"},
+ elf:{M:"assets/characters/elfo_maschile.png",F:"assets/characters/elfo_femminile.png"},
+ orc:{M:"assets/characters/orco_maschile.png",F:"assets/characters/orco_femminile.png"},
+ lion:{M:"assets/characters/popolo_leone_maschile.png",F:"assets/characters/popolo_leone_femminile.png"},
+ wolf:{M:"assets/characters/popolo_lupo_maschile.png",F:"assets/characters/popolo_lupo_femminile.png"},
+ rabbit:{M:"assets/characters/popolo_coniglio_maschile.png",F:"assets/characters/popolo_coniglio_femminile.png"}
 };
 const proceduralRaces=[["human","Umano"],["elf","Elfo"],["orc","Orco"],["lion","Leonide"],["wolf","Lupo"],["rabbit","Coniglio"]];
 const proceduralNames=["Aldren","Mirael","Thoren","Nerys","Kaedor","Veyra","Darian","Selyne","Orvek","Liora","Maelis","Rovan","Ilyra","Bram","Edris","Tavren","Ysra","Corven","Nimue","Vaelor","Rheya","Odran","Fenrik","Saelis"];
@@ -1479,8 +1479,8 @@ const sceneDepth={
 };
 function showScene(key){$("combat").classList.add("hidden");$("afterCombat").classList.add("hidden");let sc=scenes[key];if(!sc)return;$("missionPanel").dataset.scene=key;applyPainterlySceneBackground(key);$("chapterBadge").textContent=sc.badge;$("sceneTitle").textContent=sc.title;$("sceneText").innerHTML=sc.text+(sceneDepth[key]||"");$("sceneChoices").innerHTML=sc.choices.map(([label,act])=>`<button class="btn" onclick="sceneAction('${act}')">${label}</button>`).join("");updateHUD()}
 function sceneAction(act){
-if(act==="wolf"){if(!G.companions.wolf){G.companions.wolf=true;G.party.push(makeCompanion("Rauk",36,7,3,4,"uomo_lupo_m_base.png.JPG"))}showScene("prologue");$("sceneText").innerHTML+='<p><em>Rauk abbassa il capo.</em> «Verrò con te.»</p>';return}
-if(act==="lion"){if(!G.companions.lion){G.companions.lion=true;G.party.push(makeCompanion("Leona",40,7,4,4,"uomo_leone_f_base.png.JPG"))}showScene("prologue");$("sceneText").innerHTML+='<p><em>Leona stringe l’elsa.</em> «Combatterò al tuo fianco.»</p>';return}
+if(act==="wolf"){if(!G.companions.wolf){G.companions.wolf=true;G.party.push(makeCompanion("Rauk",36,7,3,4,"assets/characters/popolo_lupo_maschile.png"))}showScene("prologue");$("sceneText").innerHTML+='<p><em>Rauk abbassa il capo.</em> «Verrò con te.»</p>';return}
+if(act==="lion"){if(!G.companions.lion){G.companions.lion=true;G.party.push(makeCompanion("Leona",40,7,4,4,"assets/characters/popolo_leone_femminile.png"))}showScene("prologue");$("sceneText").innerHTML+='<p><em>Leona stringe l’elsa.</em> «Combatterò al tuo fianco.»</p>';return}
 if(act==="forest"){showScene("forest");return}if(act==="fight1"){startBattle(1);return}if(act==="fight2"){startBattle(2);return}if(act==="fight3"){startBattle(3);return}if(act==="restart"){location.reload()}
 }
 function makeCompanion(name,hp,str,armor,intel,portrait){return{id:name.toLowerCase(),name,class:"warrior",portrait,equipment:{hair:"",armor:"",head:""},level:1,stats:{forza:str,agilita:6,vitalita:5,intelletto:intel,volonta:5,percezione:5,carisma:5},hp,maxhp:hp,ap:5,maxap:5,armor,weapon:6,alive:true,down:0,isHero:false}}
@@ -1489,9 +1489,9 @@ function isEnemy(u){return !!u.kind}
 function current(){return battle?.order?.[battle.idx]}
 function startBattle(n,enemyOverride=null,proceduralSeed=null){
 busy=false;document.body.classList.add("battle-mode");const sets={
-1:[{name:"Orco predone",hp:25,atk:6,armor:1,kind:"orc",portrait:"orco_m_base.png.JPG"},{name:"Orco predone",hp:25,atk:6,armor:1,kind:"orc",portrait:"orco_f_base.png.JPG"},{name:"Predone della valle",hp:22,atk:5,armor:2,kind:"bandit",portrait:"modello_umano_maschile.png.JPG.JPG"}],
-2:[{name:"Orco veterano",hp:34,atk:7,armor:3,kind:"orc",portrait:"orco_m_base.png.JPG"},{name:"Guardiano della cripta",hp:32,atk:6,armor:4,kind:"guard",portrait:"orco_f_base.png.JPG"},{name:"Sciamano della cripta",hp:29,atk:7,armor:2,kind:"priest",portrait:"elfo_f_base.png.JPG"}],
-3:[{name:"Custode della Campana",hp:145,atk:10,armor:5,kind:"boss",portrait:"modello_umano_maschile.png.JPG.JPG"}]};
+1:[{name:"Orco predone",hp:25,atk:6,armor:1,kind:"orc",portrait:"assets/characters/orco_maschile.png"},{name:"Orco predone",hp:25,atk:6,armor:1,kind:"orc",portrait:"assets/characters/orco_femminile.png"},{name:"Predone della valle",hp:22,atk:5,armor:2,kind:"bandit",portrait:"assets/characters/umano_maschile.png"}],
+2:[{name:"Orco veterano",hp:34,atk:7,armor:3,kind:"orc",portrait:"assets/characters/orco_maschile.png"},{name:"Guardiano della cripta",hp:32,atk:6,armor:4,kind:"guard",portrait:"assets/characters/orco_femminile.png"},{name:"Sciamano della cripta",hp:29,atk:7,armor:2,kind:"priest",portrait:"assets/characters/elfo_femminile.png"}],
+3:[{name:"Custode della Campana",hp:145,atk:10,armor:5,kind:"boss",portrait:"assets/characters/umano_maschile.png"}]};
 const encounterUnits=Array.isArray(enemyOverride)?enemyOverride:sets[n];
 battle={n,backgroundSeed:(Number(proceduralSeed)||((Number(G.proceduralSeed)||1)+Date.now()+n*101))>>>0,round:1,units:encounterUnits.map((e,i)=>{const pool=typeof lootGear!=="undefined"?lootGear.filter(x=>x.slot==="armor"):[];const chosen=pool.length?pool[(n*7+i*5)%pool.length]:null;const armor=chosen&&chosen.name;const equipment=e.equipment||(armor?{armor,shouldersStyle:armor,armsStyle:armor,legsStyle:armor,bootsStyle:armor}:undefined);return {...e,...(equipment?{equipment}:{}),id:e.id||"e"+i,maxhp:e.maxhp||e.hp,alive:true,down:0};}),proceduralSeed:proceduralSeed||null,order:[],idx:0,log:[],ended:false,turnPrepared:false};
 let allies=[G.hero,...G.party];allies.forEach(p=>{p.ap=5;if(p.hp<=0&&p.isHero)p.hp=1});
@@ -1734,9 +1734,9 @@ function equipmentHairData(u){
  const eq=u&&u.equipment||{},files={"Capelli coda ciuffi":"Capelli_coda_ciuffi.jpg","Capelli coda lunga":"Capelli_coda_lunga.jpg","Capelli lunghi":"Capelli_lunghi.jpg","Capelli mossi":"Capelli_mossi.jpg","Capelli rasati lato":"Capelli_rasati_lato.jpg","Capelli rasta":"Capelli_rasta.jpg","Capelli spettinati":"Capelli_spettinati.jpg","Capelli trecce":"Capelli_trecce.jpg"};
  const race=equipmentRaceId(u),gender=isFemaleCharacter(u)?"F":"M";
  const anchors={
-  human:{M:{centerX:.642,top:.025,scale:1.12},F:{centerX:.641,top:.024,scale:1.08}},
-  elf:{M:{centerX:.646,top:.020,scale:1.14},F:{centerX:.644,top:.018,scale:1.10}},
-  orc:{M:{centerX:.640,top:.027,scale:1.12},F:{centerX:.642,top:.025,scale:1.08}}
+  human:{M:{centerX:.5,top:.025,scale:1.12},F:{centerX:.5,top:.024,scale:1.08}},
+  elf:{M:{centerX:.5,top:.020,scale:1.14},F:{centerX:.5,top:.018,scale:1.10}},
+  orc:{M:{centerX:.5,top:.027,scale:1.12},F:{centerX:.5,top:.025,scale:1.08}}
  };
  const a=anchors[race]&&anchors[race][gender],d=eq.hair&&!eq.head&&equipmentManifest[files[eq.hair]];
  if(!a||!d||!d.file||!Number(d.sourceWidth)||!Number(d.sourceHeight))return null;
@@ -1789,12 +1789,12 @@ function equipmentLayerData(u,slot){
   if(!d||!d.file||!Number(d.width)||!Number(d.height))return null;
   const race=equipmentRaceId(u),gender=isFemaleCharacter(u)?"F":"M";
   const fits={
-   human:{M:{cx:590,top:190,w:430,h:925},F:{cx:590,top:225,w:405,h:880}},
-   elf:{M:{cx:590,top:190,w:420,h:925},F:{cx:590,top:225,w:395,h:880}},
-   orc:{M:{cx:590,top:200,w:440,h:915},F:{cx:590,top:235,w:415,h:875}},
-   lion:{M:{cx:590,top:250,w:440,h:850},F:{cx:590,top:250,w:415,h:860}},
-   wolf:{M:{cx:590,top:250,w:440,h:850},F:{cx:590,top:250,w:415,h:860}},
-   rabbit:{M:{cx:590,top:250,w:430,h:850},F:{cx:590,top:250,w:410,h:860}}
+   human:{M:{cx:456,top:190,w:430,h:925},F:{cx:456,top:225,w:405,h:880}},
+   elf:{M:{cx:456,top:190,w:420,h:925},F:{cx:456,top:225,w:395,h:880}},
+   orc:{M:{cx:456,top:200,w:440,h:915},F:{cx:456,top:235,w:415,h:875}},
+   lion:{M:{cx:456,top:250,w:440,h:850},F:{cx:456,top:250,w:415,h:860}},
+   wolf:{M:{cx:456,top:250,w:440,h:850},F:{cx:456,top:250,w:415,h:860}},
+   rabbit:{M:{cx:456,top:250,w:430,h:850},F:{cx:456,top:250,w:410,h:860}}
   };
   const styles={Armatura_guerriero:{w:1,h:1},Armatura_arciere:{w:.96,h:1},Armatura_druido:{w:1.02,h:1.02},Armatura_mago:{w:1,h:1.02}};
   const fit=fits[race]&&fits[race][gender];if(!fit)return null;
@@ -1822,7 +1822,7 @@ function equipmentLayerData(u,slot){
  const headStyle={Cappello_mago:{w:210,top:18},Cappello_punk:{w:180,top:24},Elmo_drago:{w:180,top:16},Elmo_leone:{w:215,top:42}}[visualHead];
  if(!headStyle)return null;
  const raceScale={human:1,elf:1.12,orc:1.06}[race]||1,genderScale=gender==="F"?.97:1,w=headStyle.w*raceScale*genderScale,h=w*(Number(d.height)/Number(d.width));
- const center={human:590,elf:590,orc:590}[race]||590;
+ const center={human:456,elf:456,orc:456}[race]||456;
  return {src:d.file,x:(center-w/2)/912,y:headStyle.top/1168,w:w/912,h:h/1168};
 }
 function equipmentLayerMarkup(u,slot,className){

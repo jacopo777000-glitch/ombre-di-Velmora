@@ -1,0 +1,88 @@
+{
+  "schemaVersion": 1,
+  "status": "fit-calibration-required",
+  "note": "I 12 modelli PNG sono collegati al creatore e ai ritratti sul ramo work/personaggi-pittorici. La calibrazione delle armature NON è ancora completata: le immagini sorgente dei set e alcuni ritagli modulari conservano uno sfondo opaco; le maschere poligonali attuali non bastano a garantire bordi trasparenti puliti sui 12 corpi. Prima dell'attivazione occorre ricavare o ridisegnare pezzi realmente trasparenti e poi calibrare ogni slot per razza e genere. Non pubblicare su main finché la verifica visiva non è superata.",
+  "canvas": {
+    "width": 256,
+    "height": 512,
+    "format": "PNG",
+    "colorMode": "RGBA"
+  },
+  "races": [
+    {
+      "id": "human",
+      "name": "Umano",
+      "models": {
+        "male": "umano_maschile.png",
+        "female": "umano_femminile.png"
+      }
+    },
+    {
+      "id": "elf",
+      "name": "Elfo",
+      "models": {
+        "male": "elfo_maschile.png",
+        "female": "elfo_femminile.png"
+      }
+    },
+    {
+      "id": "orc",
+      "name": "Orco",
+      "models": {
+        "male": "orco_maschile.png",
+        "female": "orco_femminile.png"
+      }
+    },
+    {
+      "id": "lion",
+      "name": "Popolo Leone",
+      "models": {
+        "male": "popolo_leone_maschile.png",
+        "female": "popolo_leone_femminile.png"
+      }
+    },
+    {
+      "id": "wolf",
+      "name": "Popolo Lupo",
+      "models": {
+        "male": "popolo_lupo_maschile.png",
+        "female": "popolo_lupo_femminile.png"
+      }
+    },
+    {
+      "id": "rabbit",
+      "name": "Popolo Coniglio",
+      "models": {
+        "male": "popolo_coniglio_maschile.png",
+        "female": "popolo_coniglio_femminile.png"
+      }
+    }
+  ],
+  "equipmentSlots": [
+    "head",
+    "face",
+    "arms",
+    "legs",
+    "boots",
+    "accessory1",
+    "accessory2",
+    "weaponRight",
+    "weaponLeft"
+  ],
+  "overlayOrder": [
+    "legs",
+    "boots",
+    "arms",
+    "torso",
+    "face",
+    "head",
+    "accessories",
+    "weapons"
+  ],
+  "fitPolicy": {
+    "coordinates": "normalized 0..1 relative to 256x512 model canvas",
+    "perRaceAndGender": true,
+    "doNotReuseGenericOffsetsWithoutVisualFitTest": true,
+    "preserveOriginalModelAspectRatio": true
+  }
+}
