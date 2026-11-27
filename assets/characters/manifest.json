@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "status": "staging-not-active",
-  "note": "Nuovi modelli pittorici derivati dalla tavola IMG_0998.jpeg. Non collegare al gioco finché i PNG non sono stati verificati visivamente e caricati.",
+  "note": "Nuovi modelli pittorici derivati dalla tavola IMG_0998.jpeg. I PNG sono caricati in questa cartella ma devono ancora essere verificati visivamente e adattati prima del collegamento al gioco.",
   "canvas": {
     "width": 256,
     "height": 512,
@@ -13,48 +13,48 @@
       "id": "human",
       "name": "Umano",
       "models": {
-        "male": "human_male.png",
-        "female": "human_female.png"
+        "male": "umano_maschile.png",
+        "female": "umano_femminile.png"
       }
     },
     {
       "id": "elf",
       "name": "Elfo",
       "models": {
-        "male": "elf_male.png",
-        "female": "elf_female.png"
+        "male": "elfo_maschile.png",
+        "female": "elfo_femminile.png"
       }
     },
     {
       "id": "orc",
       "name": "Orco",
       "models": {
-        "male": "orc_male.png",
-        "female": "orc_female.png"
+        "male": "orco_maschile.png",
+        "female": "orco_femminile.png"
       }
     },
     {
       "id": "lion",
       "name": "Popolo Leone",
       "models": {
-        "male": "lion_male.png",
-        "female": "lion_female.png"
+        "male": "popolo_leone_maschile.png",
+        "female": "popolo_leone_femminile.png"
       }
     },
     {
       "id": "wolf",
       "name": "Popolo Lupo",
       "models": {
-        "male": "wolf_male.png",
-        "female": "wolf_female.png"
+        "male": "popolo_lupo_maschile.png",
+        "female": "popolo_lupo_femminile.png"
       }
     },
     {
       "id": "rabbit",
       "name": "Popolo Coniglio",
       "models": {
-        "male": "rabbit_male.png",
-        "female": "rabbit_female.png"
+        "male": "popolo_coniglio_maschile.png",
+        "female": "popolo_coniglio_femminile.png"
       }
     }
   ],
