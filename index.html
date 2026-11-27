@@ -1125,7 +1125,7 @@ body.battle-mode .actionPanel .actions{grid-template-columns:repeat(2,minmax(0,1
 <h2>01 · Crea il tuo eroe</h2>
 <div class="layout">
 <div><h3>Scegli la razza</h3><div class="grid" id="races"></div><p class="small" id="raceDescription"></p></div>
-<div class="preview"><img class="portrait" id="portrait" src="./modello_umano_maschile.png.JPG.JPG" alt="Anteprima personaggio"><div><h2 id="heroTitle">Umano</h2><p class="small" id="heroDescription"></p></div></div>
+<div class="preview"><img class="portrait" id="portrait" src="./assets/characters/umano_maschile.png" alt="Anteprima personaggio"><div><h2 id="heroTitle">Umano</h2><p class="small" id="heroDescription"></p></div></div>
 </div>
 <hr><h3>Sesso</h3><div class="row"><button class="choice selected" data-gender="male">Maschio</button><button class="choice" data-gender="female">Femmina</button></div>
 </div>
@@ -1479,8 +1479,8 @@ const sceneDepth={
 };
 function showScene(key){$("combat").classList.add("hidden");$("afterCombat").classList.add("hidden");let sc=scenes[key];if(!sc)return;$("missionPanel").dataset.scene=key;applyPainterlySceneBackground(key);$("chapterBadge").textContent=sc.badge;$("sceneTitle").textContent=sc.title;$("sceneText").innerHTML=sc.text+(sceneDepth[key]||"");$("sceneChoices").innerHTML=sc.choices.map(([label,act])=>`<button class="btn" onclick="sceneAction('${act}')">${label}</button>`).join("");updateHUD()}
 function sceneAction(act){
-if(act==="wolf"){if(!G.companions.wolf){G.companions.wolf=true;G.party.push(makeCompanion("Rauk",36,7,3,4,"uomo_lupo_m_base.png.JPG"))}showScene("prologue");$("sceneText").innerHTML+='<p><em>Rauk abbassa il capo.</em> «Verrò con te.»</p>';return}
-if(act==="lion"){if(!G.companions.lion){G.companions.lion=true;G.party.push(makeCompanion("Leona",40,7,4,4,"uomo_leone_f_base.png.JPG"))}showScene("prologue");$("sceneText").innerHTML+='<p><em>Leona stringe l’elsa.</em> «Combatterò al tuo fianco.»</p>';return}
+if(act==="wolf"){if(!G.companions.wolf){G.companions.wolf=true;G.party.push(makeCompanion("Rauk",36,7,3,4,"assets/characters/popolo_lupo_maschile.png"))}showScene("prologue");$("sceneText").innerHTML+='<p><em>Rauk abbassa il capo.</em> «Verrò con te.»</p>';return}
+if(act==="lion"){if(!G.companions.lion){G.companions.lion=true;G.party.push(makeCompanion("Leona",40,7,4,4,"assets/characters/popolo_leone_femminile.png"))}showScene("prologue");$("sceneText").innerHTML+='<p><em>Leona stringe l’elsa.</em> «Combatterò al tuo fianco.»</p>';return}
 if(act==="forest"){showScene("forest");return}if(act==="fight1"){startBattle(1);return}if(act==="fight2"){startBattle(2);return}if(act==="fight3"){startBattle(3);return}if(act==="restart"){location.reload()}
 }
 function makeCompanion(name,hp,str,armor,intel,portrait){return{id:name.toLowerCase(),name,class:"warrior",portrait,equipment:{hair:"",armor:"",head:""},level:1,stats:{forza:str,agilita:6,vitalita:5,intelletto:intel,volonta:5,percezione:5,carisma:5},hp,maxhp:hp,ap:5,maxap:5,armor,weapon:6,alive:true,down:0,isHero:false}}
@@ -1489,9 +1489,9 @@ function isEnemy(u){return !!u.kind}
 function current(){return battle?.order?.[battle.idx]}
 function startBattle(n,enemyOverride=null,proceduralSeed=null){
 busy=false;document.body.classList.add("battle-mode");const sets={
-1:[{name:"Orco predone",hp:25,atk:6,armor:1,kind:"orc",portrait:"orco_m_base.png.JPG"},{name:"Orco predone",hp:25,atk:6,armor:1,kind:"orc",portrait:"orco_f_base.png.JPG"},{name:"Predone della valle",hp:22,atk:5,armor:2,kind:"bandit",portrait:"modello_umano_maschile.png.JPG.JPG"}],
-2:[{name:"Orco veterano",hp:34,atk:7,armor:3,kind:"orc",portrait:"orco_m_base.png.JPG"},{name:"Guardiano della cripta",hp:32,atk:6,armor:4,kind:"guard",portrait:"orco_f_base.png.JPG"},{name:"Sciamano della cripta",hp:29,atk:7,armor:2,kind:"priest",portrait:"elfo_f_base.png.JPG"}],
-3:[{name:"Custode della Campana",hp:145,atk:10,armor:5,kind:"boss",portrait:"modello_umano_maschile.png.JPG.JPG"}]};
+1:[{name:"Orco predone",hp:25,atk:6,armor:1,kind:"orc",portrait:"assets/characters/orco_maschile.png"},{name:"Orco predone",hp:25,atk:6,armor:1,kind:"orc",portrait:"assets/characters/orco_femminile.png"},{name:"Predone della valle",hp:22,atk:5,armor:2,kind:"bandit",portrait:"assets/characters/umano_maschile.png"}],
+2:[{name:"Orco veterano",hp:34,atk:7,armor:3,kind:"orc",portrait:"assets/characters/orco_maschile.png"},{name:"Guardiano della cripta",hp:32,atk:6,armor:4,kind:"guard",portrait:"assets/characters/orco_femminile.png"},{name:"Sciamano della cripta",hp:29,atk:7,armor:2,kind:"priest",portrait:"assets/characters/elfo_femminile.png"}],
+3:[{name:"Custode della Campana",hp:145,atk:10,armor:5,kind:"boss",portrait:"assets/characters/umano_maschile.png"}]};
 const encounterUnits=Array.isArray(enemyOverride)?enemyOverride:sets[n];
 battle={n,backgroundSeed:(Number(proceduralSeed)||((Number(G.proceduralSeed)||1)+Date.now()+n*101))>>>0,round:1,units:encounterUnits.map((e,i)=>{const pool=typeof lootGear!=="undefined"?lootGear.filter(x=>x.slot==="armor"):[];const chosen=pool.length?pool[(n*7+i*5)%pool.length]:null;const armor=chosen&&chosen.name;const equipment=e.equipment||(armor?{armor,shouldersStyle:armor,armsStyle:armor,legsStyle:armor,bootsStyle:armor}:undefined);return {...e,...(equipment?{equipment}:{}),id:e.id||"e"+i,maxhp:e.maxhp||e.hp,alive:true,down:0};}),proceduralSeed:proceduralSeed||null,order:[],idx:0,log:[],ended:false,turnPrepared:false};
 let allies=[G.hero,...G.party];allies.forEach(p=>{p.ap=5;if(p.hp<=0&&p.isHero)p.hp=1});
