@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "status": "staging-not-active",
-  "note": "Nuovi modelli pittorici derivati dalla tavola IMG_0998.jpeg. I PNG sono caricati in questa cartella ma devono ancora essere verificati visivamente e adattati prima del collegamento al gioco.",
+  "status": "integrated-preview",
+  "note": "I 12 modelli PNG sono collegati al creatore e ai ritratti dei personaggi sul ramo work/personaggi-pittorici. I livelli modulari delle armature esistenti sono mantenuti e ricentrati sui nuovi modelli; serve ancora una verifica visiva in gioco delle sovrapposizioni per ciascuna razza e sesso prima della pubblicazione su main.",
   "canvas": {
     "width": 256,
     "height": 512,
